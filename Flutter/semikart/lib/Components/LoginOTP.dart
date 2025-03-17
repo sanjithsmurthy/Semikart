@@ -45,7 +45,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     height: 24,
                     color: Color.fromRGBO(165,20,20,1),
                     child: SvgPicture.asset(
-                      'public/assets/images/rightarrow.svg',
+                      'assets/images/vector.svg',
                       semanticsLabel: 'vector',
                     ),
                   ),
@@ -80,12 +80,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     height: 24,
                     color: Color.fromRGBO(165,20,20,1),
                     child: SvgPicture.asset(
-<<<<<<< HEAD
                       'public/assets/images/vector.svgLogin',
-=======
-                      'public/assets/images/rightarrow.svg',
-                      
->>>>>>> ac06210d1d789a52e141de7356d2e3a82c7e4142
                       semanticsLabel: 'vector',
                     ),
                   ),
