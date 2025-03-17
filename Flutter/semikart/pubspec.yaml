@@ -79,14 +79,15 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: ProductSans 
+    - family: ProductSans
       fonts:
-        - asset: public\assets\fonts\Product Sans Bold Italic.ttf
-        - asset: public\assets\fonts\Product Sans Bold.ttf
+        - asset: public/assets/fonts/ProductSans-Regular.ttf
+        - asset: public/assets/fonts/ProductSans-Bold.ttf
           weight: 700
-        - asset: public\assets\fonts\Product Sans Italic.ttf
-        - asset: public\assets\fonts\Product Sans Regular.ttf
-
+        - asset: public/assets/fonts/ProductSans-Italic.ttf
+          style: italic
+        - asset: public/assets/fonts/ProductSans-BoldItalic.ttf
+          weight: 700
           style: italic
     
     # - family: Trajan Pro
