@@ -35,7 +35,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       color: Color.fromRGBO(34, 34, 34, 1),
-                      fontFamily: 'Product Sans',
+                      fontFamily: 'ProductSans',
                       fontSize: 14,
                       letterSpacing: 0,
                       fontWeight: FontWeight.normal,
@@ -47,7 +47,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     height: 24,
                     color: Color.fromRGBO(165,20,20,1),
                     child: SvgPicture.asset(
-                      'assets/images/vector.svg',
+                      'public/assets/images/rightarrow.svg',
                       semanticsLabel: 'vector',
                     ),
                   ),
@@ -82,7 +82,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     height: 24,
                     color: Color.fromRGBO(165,20,20,1),
                     child: SvgPicture.asset(
-                      'assets/images/vector.svg',
+                      'public/assets/images/rightarrow.svg',
                       semanticsLabel: 'vector',
                     ),
                   ),
@@ -133,7 +133,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                         width: 20,
                         height: 16,
                         child: SvgPicture.asset(
-                          'assets/images/vector.svg',
+                          'public/assets/images/vector.svg',
                           semanticsLabel: 'vector',
                         ),
                       ),
