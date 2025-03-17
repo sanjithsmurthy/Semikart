@@ -102,7 +102,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 29),
-                    child: Text(
+                    child: TextField(
                       'Password',
                       style: TextStyle(
                         color: Color.fromRGBO(165,20,20,1),
@@ -156,7 +156,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      TextField(
                         'Email',
                         style: TextStyle(
                           color: Color.fromRGBO(165,20,20,1),
