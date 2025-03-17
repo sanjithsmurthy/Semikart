@@ -4,6 +4,13 @@ import 'loginpassword.dart';
 
 
 class LoginWelcomeScreenWidget extends StatefulWidget {
+
+
+   final TextEditingController _emailController = TextEditingController();
+  String _email = '';
+  final TextEditingController _passwordController = TextEditingController();
+  String _password = '';
+  
   @override
   _LoginWelcomeScreenWidgetState createState() => _LoginWelcomeScreenWidgetState();
 }
