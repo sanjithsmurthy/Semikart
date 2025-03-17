@@ -19,9 +19,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
         color: Color.fromRGBO(255, 255, 255, 1),
     
       ),
-      child: Stack(
-        children: <Widget>[
-          // "Don't have an account?" text and icon
+      child: Stack( children: <Widget>[ // "Don't have an account?" text and icon
           Positioned(
             top: 639,
             left: 219,
@@ -82,7 +80,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     height: 24,
                     color: Color.fromRGBO(165,20,20,1),
                     child: SvgPicture.asset(
-                      'assets/images/vector.svg',
+                      'public/assets/images/vector.svg',
                       semanticsLabel: 'vector',
                     ),
                   ),
@@ -133,7 +131,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                         width: 20,
                         height: 16,
                         child: SvgPicture.asset(
-                          'assets/images/vector.svg',
+                          'public/assets/images/vector.svg',
                           semanticsLabel: 'vector',
                         ),
                       ),
@@ -322,7 +320,7 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
               width: 190,
               height: 28,
               child: SvgPicture.asset(
-                'Semikart Logo Medium.svg',
+                'public/assets/images/semikart_logo_medium.svg',
                 semanticsLabel: 'Semikart logo',
               ),
             ),
