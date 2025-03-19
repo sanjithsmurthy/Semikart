@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Login_SignUp/custom_text_field.dart';
+import '../Commons/custom_text_field.dart';
+import '../Commons/textfield_dropdown.dart';
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -7,11 +8,12 @@ class TestLayoutSanjana extends StatefulWidget {
 }
 
 class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
-  final TextEditingController _textController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  String? _selectedState;
 
   @override
   void dispose() {
-    _textController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -19,20 +21,62 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Custom TextField Test'),
+        title: Text(
+          'Component Testing',
+          style: TextStyle(fontFamily: 'Product Sans'),
+        ),
         backgroundColor: Color(0xFFA51414),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                'Custom TextField',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
               CustomTextField(
-                controller: _textController,
+                controller: _emailController,
                 label: "Email",
               ),
-              // Add more components to test here
+              SizedBox(height: 32),
+              Text(
+                'Custom Dropdown Field',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              CustomDropdownField(
+                label: "Select State",
+                value: _selectedState,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedState = newValue;
+                  });
+                },
+              ),
+              SizedBox(height: 24),
+              if (_selectedState != null)
+                Text(
+                  'Selected State: $_selectedState',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Product Sans',
+                    color: Color(0xFF757575),
+                  ),
+                ),
             ],
           ),
         ),

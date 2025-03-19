@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
-import '../shippingtextfield.dart'; // Import the BillingAddressScreen
+import '../Login_SignUp/custom_text_field.dart';  // Add this import
 
-class TestLayoutSakshi extends StatelessWidget {
+class TestLayoutSakshi extends StatefulWidget {
+  @override
+  State<TestLayoutSakshi> createState() => _TestLayoutSakshiState();  // Fixed class name
+}
+
+class _TestLayoutSakshiState extends State<TestLayoutSakshi> {  // Fixed class name
+  final TextEditingController _testController = TextEditingController();
+
+  @override
+  void dispose() {
+    _testController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
