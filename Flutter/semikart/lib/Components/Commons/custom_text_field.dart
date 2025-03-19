@@ -1,3 +1,5 @@
+//finalized red text field with email label
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -5,11 +7,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final bool isPassword;
+  final EdgeInsetsGeometry? padding;  // New padding parameter
 
   CustomTextField({
-    required this.controller,
+    required this.controller, //constructor
     required this.label,
     this.isPassword = false,
+    this.padding,  // Optional padding parameter
   });
 
   @override
@@ -66,5 +70,10 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
     );
+
+    return padding != null ? Padding(
+      padding: padding!,
+      child: textField,
+    ) : textField;
   }
 }
