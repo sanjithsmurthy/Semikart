@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Components/LoginOTP.dart';
+import 'Components/Login_SignUp/LoginOTP.dart';
 
 void main() {
   runApp(MyApp());

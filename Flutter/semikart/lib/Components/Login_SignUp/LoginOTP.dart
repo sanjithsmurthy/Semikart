@@ -6,7 +6,7 @@ import 'loginpassword.dart';
 class LoginWelcomeScreenWidget extends StatefulWidget {
 
 
-   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   String _email = '';
   final TextEditingController _passwordController = TextEditingController();
   String _password = '';
@@ -40,10 +40,9 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       color: Color.fromRGBO(34, 34, 34, 1),
-                      fontFamily: 'ProductSans',
+                      fontFamily: 'Regular',
                       fontSize: 14,
                       letterSpacing: 0,
-                      fontWeight: FontWeight.normal,
                       height: 1.4285714285714286,
                     ),
                   ),
@@ -109,12 +108,14 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                   Padding(
                     padding: const EdgeInsets.only(left: 29),
                     child: TextField(
-                      'Password',
-                      style: TextStyle(
-                        color: Color.fromRGBO(165,20,20,1),
-                        fontFamily: 'ProductSans',
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(
+                          color: Color.fromRGBO(165,20,20,1),
+                          fontFamily: 'ProductSans',
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),
@@ -163,12 +164,14 @@ class _LoginWelcomeScreenWidgetState extends State<LoginWelcomeScreenWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
-                        'Email',
-                        style: TextStyle(
-                          color: Color.fromRGBO(165,20,20,1),
-                          fontFamily: 'ProductSans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          labelStyle: TextStyle(
+                            color: Color.fromRGBO(165,20,20,1),
+                            fontFamily: 'ProductSans',
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
                       SizedBox(height: 12),
