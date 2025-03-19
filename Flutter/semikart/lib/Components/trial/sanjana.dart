@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
+>>>>>>> ce951737676315185ee86f4581e10a2789e976c6
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -77,6 +78,26 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                     color: Color(0xFF757575),
                   ),
                 ),
+              SizedBox(height: 32),
+              Text(
+                'Custom Button',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: RedButton(
+                  label: "Continue",
+                  onPressed: () {
+                    print('Button pressed!');
+                  },
+                  isLoading: false,
+                ),
+              ),
             ],
           ),
         ),
