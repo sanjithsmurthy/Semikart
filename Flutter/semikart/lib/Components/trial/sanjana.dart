@@ -7,6 +7,7 @@ import '../Commons/white_button.dart';
 import '../Commons/track_order.dart';
 import '../Commons/captcha.dart';  // Add this import
 import '../Commons/signinwith_google.dart';
+import '../Commons/rwo_radios.dart';  // Add this import with other imports
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   final TextEditingController _emailController = TextEditingController();
   String? _selectedState;
   bool _isCaptchaValid = false;  // Add this state variable
+  int _selectedRadio = 0;  // Add this state variable
 
   @override
   void dispose() {
@@ -168,6 +170,28 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                 onValidated: (isValid) {
                   setState(() {
                     _isCaptchaValid = isValid;
+                  });
+                },
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Radio Options',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              TwoRadioButtons(
+                firstLabel: 'Option One',
+                secondLabel: 'Option Two',
+                initialSelection: _selectedRadio,
+                onSelectionChanged: (selected) {
+                  setState(() {
+                    _selectedRadio = selected;
+                    print('Selected radio option: ${selected == 0 ? "One" : "Two"}');
                   });
                 },
               ),
