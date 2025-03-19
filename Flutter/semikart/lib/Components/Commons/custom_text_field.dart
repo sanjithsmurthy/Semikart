@@ -17,7 +17,7 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: 22.0),
       child: SizedBox(
-        width: 367,
+        width: 370,
         height: 72,
         child: Stack(
           children: [
