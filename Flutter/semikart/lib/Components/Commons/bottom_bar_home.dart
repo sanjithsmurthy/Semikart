@@ -22,9 +22,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue, // Selected item color
+      selectedItemColor: Color(0xFFA51414), // Updated selected item color to #A51414
       unselectedItemColor: Colors.grey, // Unselected item color
       onTap: _onItemTapped,
+      selectedLabelStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        height: 1.5, // Adjusts spacing between icon and text
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.5, // Adjusts spacing between icon and text
+      ),
       items: [
         _buildNavItem(Icons.home, "Home", 0),
         _buildNavItem(Icons.inventory, "Products", 1),
@@ -44,10 +54,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
         onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200),
-          transform: Matrix4.identity()..scale(_isPressed && _selectedIndex == index ? 0.9 : 1.2),
+          transform: Matrix4.identity()..scale(_isPressed && _selectedIndex == index ? 0.9 : 1.0),
           child: Icon(
             icon,
-            color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey,
+            color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey, // Updated color to #A51414
           ),
         ),
       ),
@@ -64,22 +74,23 @@ class _BottomNavBarState extends State<BottomNavBar> {
         onTapCancel: () => setState(() => _isPressed = false),
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200),
-          transform: Matrix4.identity()..scale(_isPressed && _selectedIndex == index ? 0.9 : 1.2),
+          transform: Matrix4.identity()..scale(_isPressed && _selectedIndex == index ? 0.9 : 1.0),
           child: Stack(
+            clipBehavior: Clip.none, // Ensures the badge is not clipped
             children: [
               Icon(
                 icon,
-                color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey,
+                color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey, // Updated color to #A51414
                 size: 30,
               ),
               if (itemCount > 0) // Show badge only if itemCount > 0
                 Positioned(
-                  right: 0,
-                  top: 0,
+                  right: -2, // Adjusted to align the badge inside the cart icon
+                  top: -2, // Adjusted to align the badge inside the cart icon
                   child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: Colors.(0xFFA51414),
+                      color: Color(0xFFA51414), // Badge color
                       shape: BoxShape.circle,
                     ),
                     constraints: BoxConstraints(
