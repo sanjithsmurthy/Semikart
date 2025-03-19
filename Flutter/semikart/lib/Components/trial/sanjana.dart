@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
 import '../Commons/red_button.dart';
-import '../Commons/inactive_button.dart';
+import '../Commons/inactive_red_button.dart';
 import '../Commons/white_button.dart';  // Add this import
 
 class TestLayoutSanjana extends StatefulWidget {
