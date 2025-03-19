@@ -8,7 +8,6 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-  bool _isPressed = false; // Track press state
   int _cartItemCount = 3; // Example cart count (Update dynamically based on cart items)
 
   void _onItemTapped(int index) {
@@ -48,18 +47,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   // General Navigation Items
   BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
     return BottomNavigationBarItem(
-      icon: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          transform: Matrix4.identity()..scale(_isPressed && _selectedIndex == index ? 0.9 : 1.0),
-          child: Icon(
-            icon,
-            color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey, // Updated color to #A51414
-          ),
-        ),
+      icon: Icon(
+        icon,
+        color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey, // Updated color to #A51414
       ),
       label: label,
     );
@@ -68,49 +58,40 @@ class _BottomNavBarState extends State<BottomNavBar> {
   // Cart Item with Badge
   BottomNavigationBarItem _buildCartNavItem(IconData icon, String label, int index, int itemCount) {
     return BottomNavigationBarItem(
-      icon: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          transform: Matrix4.identity()..scale(_isPressed && _selectedIndex == index ? 0.9 : 1.0),
-          child: Stack(
-            clipBehavior: Clip.none, // Ensures the badge is not clipped
-            children: [
-              Icon(
-                icon,
-                color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey, // Updated color to #A51414
-                size: 30,
-              ),
-              if (itemCount > 0) // Show badge only if itemCount > 0
-                Positioned(
-                  right: -2, // Adjusted to align the badge inside the cart icon
-                  top: -2, // Adjusted to align the badge inside the cart icon
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFA51414), // Badge color
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 20,
-                      minHeight: 20,
-                    ),
-                    child: Text(
-                      itemCount.toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-            ],
+      icon: Stack(
+        clipBehavior: Clip.none, // Ensures the badge is not clipped
+        children: [
+          Icon(
+            icon,
+            color: _selectedIndex == index ? Color(0xFFA51414) : Colors.grey, // Updated color to #A51414
+            size: 30,
           ),
-        ),
+          if (itemCount > 0) // Show badge only if itemCount > 0
+            Positioned(
+              right: -2, // Adjusted to align the badge inside the cart icon
+              top: -2, // Adjusted to align the badge inside the cart icon
+              child: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Color(0xFFA51414), // Badge color
+                  shape: BoxShape.circle,
+                ),
+                constraints: BoxConstraints(
+                  minWidth: 20,
+                  minHeight: 20,
+                ),
+                child: Text(
+                  itemCount.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
       ),
       label: label,
     );
