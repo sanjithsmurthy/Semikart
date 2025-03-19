@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
-<<<<<<< HEAD
-=======
 import '../Commons/red_button.dart';
 import '../Commons/inactive_button.dart';  // Add this import
->>>>>>> 702087e8aa3359e15627468f44e9da1b9f5fa22d
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
