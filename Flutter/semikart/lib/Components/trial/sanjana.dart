@@ -3,8 +3,9 @@ import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
 import '../Commons/red_button.dart';
 import '../Commons/inactive_red_button.dart';
-import '../Commons/white_button.dart';  // Add this import
-import '../Commons/track_order.dart';  // Add this import
+import '../Commons/white_button.dart';
+import '../Commons/track_order.dart';
+import '../Commons/captcha.dart';  // Add this import
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class TestLayoutSanjana extends StatefulWidget {
 class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   final TextEditingController _emailController = TextEditingController();
   String? _selectedState;
+  bool _isCaptchaValid = false;  // Add this state variable
 
   @override
   void dispose() {
@@ -131,6 +133,24 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Captcha Validation',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              CustomCaptcha(
+                onValidated: (isValid) {
+                  setState(() {
+                    _isCaptchaValid = isValid;
+                  });
+                },
               ),
               SizedBox(height: 32),
               Text(
