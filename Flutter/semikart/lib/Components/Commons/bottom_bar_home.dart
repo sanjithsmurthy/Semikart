@@ -79,7 +79,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: Colors.(0xFFA51414),
+                      color: Color(0xFFA51414),
                       shape: BoxShape.circle,
                     ),
                     constraints: BoxConstraints(
