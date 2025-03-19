@@ -17,6 +17,7 @@ class _CustomCaptchaState extends State<CustomCaptcha> {
   late String _captchaText;
   final TextEditingController _controller = TextEditingController();
   bool _isValid = false;
+  bool isChecked = false;
 
   @override
   void initState() {
@@ -48,93 +49,193 @@ class _CustomCaptchaState extends State<CustomCaptcha> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      width: 302,
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFFE4E8EC)),
-        borderRadius: BorderRadius.circular(4.0),
-        color: Colors.white,
+        color: Color(0xFFFAFAFA),
+        border: Border.all(
+          color: Color(0xFFD6D6D6),
+          width: 1,
+        ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(4.0),
+          // Captcha Text Container
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 12), // Reduced from 16
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Reduced from 20,12
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Color(0xFFD6D6D6),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    _captchaText,
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                      fontSize: 16, // Reduced from 20
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 3, // Reduced from 4
+                      color: Color(0xFF000000),
+                    ),
+                  ),
                 ),
-                child: Text(
-                  _captchaText,
-                  style: TextStyle(
-                    fontFamily: 'Product Sans',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                    color: Color(0xFFA51414),
+                SizedBox(width: 12),
+                IconButton(
+                  icon: Icon(
+                    Icons.refresh_rounded,
+                    color: Color(0xFFC1C1C1),
+                    size: 24,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _generateCaptcha();
+                      _controller.clear();
+                      _isValid = false;
+                      widget.onValidated(false);
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          // Input Field
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: TextField(
+              controller: _controller,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Product Sans',
+                fontSize: 14,
+                color: Color(0xFF000000),
+              ),
+              decoration: InputDecoration(
+                hintText: 'Enter the code above',
+                hintStyle: TextStyle(
+                  fontFamily: 'Product Sans',
+                  fontSize: 14,
+                  color: Color(0xFF757575),
+                ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    color: Color(0xFFD6D6D6),
+                    width: 1,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    color: Color(0xFFC1C1C1),
+                    width: 1,
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.refresh, color: Color(0xFFA51414)),
-                onPressed: () {
+              onChanged: (value) {
+                if (value.length == _captchaText.length) {
+                  _validateCaptcha();
+                } else {
                   setState(() {
-                    _generateCaptcha();
-                    _controller.clear();
                     _isValid = false;
                     widget.onValidated(false);
                   });
-                },
-              ),
-            ],
+                }
+              },
+            ),
           ),
-          SizedBox(height: 16.0),
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              hintText: 'Enter the code above',
-              hintStyle: TextStyle(
-                fontFamily: 'Product Sans',
-                color: Colors.grey,
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide: BorderSide(color: Color(0xFFE4E8EC)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide: BorderSide(color: Color(0xFFE4E8EC)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
-                borderSide: BorderSide(color: Color(0xFFA51414)),
+
+          // Checkbox Container (existing code)
+          Container(
+            width: 302,
+            height: 74,
+            decoration: BoxDecoration(
+              color: Color(0xFFFAFAFA),
+              border: Border.all(
+                color: Color(0xFFD6D6D6),
+                width: 1,
               ),
             ),
-            onChanged: (value) {
-              if (value.length == _captchaText.length) {
-                _validateCaptcha();
-              } else {
-                setState(() {
-                  _isValid = false;
-                  widget.onValidated(false);
-                });
-              }
-            },
-          ),
-          SizedBox(height: 8.0),
-          AnimatedSwitcher(
-            duration: Duration(milliseconds: 200),
-            child: _controller.text.isNotEmpty
-                ? Text(
-                    _isValid ? 'Correct!' : 'Incorrect, try again',
-                    style: TextStyle(
-                      color: _isValid ? Colors.green : Colors.red,
-                      fontFamily: 'Product Sans',
+            child: Stack(
+              children: [
+                // Checkbox and Text
+                Positioned(
+                  left: 12,
+                  top: (74 - 24) / 2,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Checkbox(
+                          value: isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isChecked = value ?? false;
+                              widget.onValidated(isChecked);
+                            });
+                          },
+                          side: BorderSide(
+                            color: Color(0xFFC1C1C1),
+                            width: 2,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 14),
+                      Text(
+                        "I'm not a robot",
+                        style: TextStyle(
+                          fontFamily: 'Product Sans',
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF000000),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                // ReCaptcha Image
+                Positioned(
+                  right: 10,
+                  top: (74 - 59) / 2,
+                  child: Image.asset(
+                    'public/assets/images/recaptcha.png',
+                    width: 56,
+                    height: 59,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+
+                // Invisible button for the entire container
+                Positioned.fill(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          isChecked = !isChecked;
+                          widget.onValidated(isChecked);
+                        });
+                      },
                     ),
-                  )
-                : SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

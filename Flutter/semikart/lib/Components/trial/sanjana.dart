@@ -6,6 +6,7 @@ import '../Commons/inactive_red_button.dart';
 import '../Commons/white_button.dart';
 import '../Commons/track_order.dart';
 import '../Commons/captcha.dart';  // Add this import
+import '../Commons/signinwith_google.dart';
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -132,6 +133,24 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       },
                     ),
                   ],
+                ),
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Sign in with Google',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: SignInWithGoogleButton(
+                  onPressed: () {
+                    print('Google Sign In Pressed!');
+                  },
                 ),
               ),
               SizedBox(height: 32),
