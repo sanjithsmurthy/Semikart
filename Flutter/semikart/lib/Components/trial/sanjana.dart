@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
 import '../Commons/red_button.dart';
-import '../Commons/inactive_button.dart';  // Add this import
+import '../Commons/inactive_button.dart';
+import '../Commons/white_button.dart';  // Add this import
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -71,7 +72,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               ),
               SizedBox(height: 32),
               Text(
-                'Button States',
+                'Button Types',
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'Product Sans',
@@ -81,17 +82,26 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               ),
               SizedBox(height: 16),
               Center(
-                child: RedButton(
-                  label: "Active Button",
-                  onPressed: () {
-                    print('Button pressed!');
-                  },
-                ),
-              ),
-              SizedBox(height: 16),
-              Center(
-                child: InactiveButton(
-                  label: "Inactive Button",
+                child: Column(
+                  children: [
+                    RedButton(
+                      label: "Active Button",
+                      onPressed: () {
+                        print('Red button pressed!');
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    InactiveButton(
+                      label: "Inactive Button",
+                    ),
+                    SizedBox(height: 16),
+                    WhiteButton(
+                      label: "White Button",
+                      onPressed: () {
+                        print('White button pressed!');
+                      },
+                    ),
+                  ],
                 ),
               ),
             ],
