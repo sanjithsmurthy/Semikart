@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
+import '../Commons/red_button.dart';
+import '../Commons/inactive_red_button.dart';
+import '../Commons/white_button.dart';  // Add this import
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -49,7 +52,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               ),
               SizedBox(height: 32),
               Text(
-                'Custom Dropdown Field',
+                'Custom Dropdown',
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'Product Sans',
@@ -67,16 +70,40 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                   });
                 },
               ),
-              SizedBox(height: 24),
-              if (_selectedState != null)
-                Text(
-                  'Selected State: $_selectedState',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Product Sans',
-                    color: Color(0xFF757575),
-                  ),
+              SizedBox(height: 32),
+              Text(
+                'Button Types',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: Column(
+                  children: [
+                    RedButton(
+                      label: "Active Button",
+                      onPressed: () {
+                        print('Red button pressed!');
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    InactiveButton(
+                      label: "Inactive Button",
+                    ),
+                    SizedBox(height: 16),
+                    WhiteButton(
+                      label: "White Button",
+                      onPressed: () {
+                        print('White button pressed!');
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

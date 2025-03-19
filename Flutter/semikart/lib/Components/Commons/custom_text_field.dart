@@ -15,6 +15,8 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.padding,  // Optional padding parameter
   });
+  
+  get textField => null;
 
   @override
   Widget build(BuildContext context) {

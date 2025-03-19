@@ -1,42 +1,18 @@
 import 'package:flutter/material.dart';
-import '../Commons/custom_text_field.dart';
+import '../Commons/bottom_bar_home.dart'; // Import the bottom_bar_home.dart file
 
-class TestLayoutSanjith extends StatefulWidget {
-  @override
-  State<TestLayoutSanjith> createState() => _TestLayoutSanjithState();
-}
-
-class _TestLayoutSanjithState extends State<TestLayoutSanjith> {
-  final TextEditingController _testController = TextEditingController();
-
-  @override
-  void dispose() {
-    _testController.dispose();
-    super.dispose();
-  }
-
+class TestLayoutSanjith extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test Components'),
-        backgroundColor: Color(0xFFA51414),
+        title: Text("Header Title"), // Add your desired header title here
+        backgroundColor: Color(0xFFA51414), // Optional: Set a custom background color
       ),
       body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomTextField(
-                controller: _testController,
-                label: "Test Field",
-              ),
-              // Add more components to test here
-            ],
-          ),
-        ),
+        child: Text("Main Content Goes Here"), // Replace with your main content
       ),
+      bottomNavigationBar: BottomNavBar(), // Bottom navigation bar
     );
   }
 }
