@@ -4,6 +4,7 @@ import '../Commons/textfield_dropdown.dart';
 import '../Commons/red_button.dart';
 import '../Commons/inactive_red_button.dart';
 import '../Commons/white_button.dart';  // Add this import
+import '../Commons/track_order.dart';  // Add this import
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -22,6 +23,33 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
 
   @override
   Widget build(BuildContext context) {
+    final List<OrderStep> orderSteps = [
+      OrderStep(
+        title: 'Order Confirmed',
+        location: 'Your order has been placed successfully',
+        icon: Icons.check_circle_outline,
+        timestamp: '19 Mar, 2024 10:30 AM',
+      ),
+      OrderStep(
+        title: 'Shipped',
+        location: 'Your order is on the way',
+        icon: Icons.local_shipping_outlined,
+        timestamp: null,
+      ),
+      OrderStep(
+        title: 'Out for Delivery',
+        location: 'Your order will be delivered today',
+        icon: Icons.delivery_dining_outlined,
+        timestamp: null,
+      ),
+      OrderStep(
+        title: 'Delivered',
+        location: 'Order has been delivered',
+        icon: Icons.done_all_outlined,
+        timestamp: null,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -103,6 +131,21 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Order Tracking',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              TrackOrder(
+                steps: orderSteps,
+                currentStep: 2,  // Shows progress up to Order Shipped
               ),
             ],
           ),
