@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
->>>>>>> ce951737676315185ee86f4581e10a2789e976c6
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
