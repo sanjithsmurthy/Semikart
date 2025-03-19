@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
+<<<<<<< HEAD
+=======
+import '../Commons/red_button.dart';
+import '../Commons/inactive_button.dart';  // Add this import
+>>>>>>> 702087e8aa3359e15627468f44e9da1b9f5fa22d
 
 class TestLayoutSanjana extends StatefulWidget {
   @override
@@ -49,7 +54,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               ),
               SizedBox(height: 32),
               Text(
-                'Custom Dropdown Field',
+                'Custom Dropdown',
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'Product Sans',
@@ -67,19 +72,9 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                   });
                 },
               ),
-              SizedBox(height: 24),
-              if (_selectedState != null)
-                Text(
-                  'Selected State: $_selectedState',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Product Sans',
-                    color: Color(0xFF757575),
-                  ),
-                ),
               SizedBox(height: 32),
               Text(
-                'Custom Button',
+                'Button States',
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'Product Sans',
@@ -90,11 +85,16 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               SizedBox(height: 16),
               Center(
                 child: RedButton(
-                  label: "Continue",
+                  label: "Active Button",
                   onPressed: () {
                     print('Button pressed!');
                   },
-                  isLoading: false,
+                ),
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: InactiveButton(
+                  label: "Inactive Button",
                 ),
               ),
             ],
