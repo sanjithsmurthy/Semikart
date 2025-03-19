@@ -1,28 +1,18 @@
 import 'package:flutter/material.dart';
-import '../Commons/custom_text_field.dart';  // Add this import
-import '../Commons/custom_text_field.dart';  // Ensure this import is correct
-import '../Login_SignUp/custom_text_field.dart';  // Add this import
+import '../Commons/captcha.dart'; // Import the CaptchaScreen widget
 
-
-class TestLayoutSakshi extends StatefulWidget {
-  @override
-  State<TestLayoutSakshi> createState() => _TestLayoutSakshiState();  // Fixed class name
-}
-
-class _TestLayoutSakshiState extends State<TestLayoutSakshi> {  // Fixed class name
-  final TextEditingController _testController = TextEditingController();
-
-  @override
-  void dispose() {
-    _testController.dispose();
-    super.dispose();
-  }
-
+class TestLayoutSakshi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: BillingAddressScreen(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Captcha Example'),
+          backgroundColor: Color(0xFFA51414),
+        ),
+        // body: CaptchaScreen(),
+      ),
     );
   }
 }
