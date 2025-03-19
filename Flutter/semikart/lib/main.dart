@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
-import 'Components/Login_SignUp/LoginOTP.dart';
+import 'Components/Login_SignUp/custom_text_field.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final TextEditingController _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,7 +27,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginWelcomeScreenWidget(),
+      home: Scaffold(
+        body: Center(
+          child: CustomTextField(
+            controller: _textController,
+            label: "Email",
+          ),
+        ),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
