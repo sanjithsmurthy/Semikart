@@ -44,20 +44,21 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
           value: widget.value,
           decoration: InputDecoration(
             labelText: widget.label,
+            // Unfocused/placeholder state
             labelStyle: TextStyle(
-              color: Color(0xFFA51414),
-              backgroundColor: Colors.white,
+              color: Color(0xFF757575),
               fontSize: 16,
               height: 19/16,
               fontFamily: 'Product Sans',
             ),
+            // Focused/floating state
             floatingLabelStyle: TextStyle(
               color: Color(0xFFA51414),
               backgroundColor: Colors.white,
               fontSize: 16,
               fontFamily: 'Product Sans',
             ),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
             contentPadding: EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -81,6 +82,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
               ),
             ),
           ),
+          // Keep dropdown text style
           style: TextStyle(
             color: Color(0xFF757575),
             fontSize: 18,
