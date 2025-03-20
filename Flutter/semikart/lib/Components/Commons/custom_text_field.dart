@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final EdgeInsetsGeometry? padding;  // New padding parameter
 
-  CustomTextField({
+  const CustomTextField({super.key, 
     required this.controller, //constructor
     required this.label,
     this.isPassword = false,

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomNavBar extends StatefulWidget {
+  const BottomNavBar({super.key});
+
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-  int _cartItemCount = 3; // Example cart count (Update dynamically based on cart items)
+  final int _cartItemCount = 3; // Example cart count (Update dynamically based on cart items)
 
   void _onItemTapped(int index) {
     setState(() {
