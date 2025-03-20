@@ -5,9 +5,9 @@ class CustomCaptcha extends StatefulWidget {
   final Function(bool) onValidated;
 
   const CustomCaptcha({
-    Key? key,
+    super.key,
     required this.onValidated,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomCaptcha> createState() => _CustomCaptchaState();
