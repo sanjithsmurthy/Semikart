@@ -1,7 +1,6 @@
 //finalized red text field with email label
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -9,8 +8,8 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final EdgeInsetsGeometry? padding;
 
-  CustomTextField({
-    required this.controller,
+  const CustomTextField({super.key, 
+    required this.controller, //constructor
     required this.label,
     this.isPassword = false,
     this.padding,

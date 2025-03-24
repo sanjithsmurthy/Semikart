@@ -6,7 +6,7 @@ class CustomDropdownField extends StatefulWidget {
   final Function(String?) onChanged;
   final EdgeInsetsGeometry? padding;
 
-  CustomDropdownField({
+  const CustomDropdownField({super.key, 
     required this.label,
     required this.value,
     required this.onChanged,

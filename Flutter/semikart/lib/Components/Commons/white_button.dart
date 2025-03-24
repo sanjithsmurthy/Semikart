@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class WhiteButton extends StatelessWidget {
@@ -8,12 +7,12 @@ class WhiteButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
 
   const WhiteButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.onPressed,
     this.isLoading = false,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
