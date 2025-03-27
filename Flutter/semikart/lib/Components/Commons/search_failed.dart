@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Commons/red_button.dart'; // Import the RedButton component
 
 class SearchFailed extends StatelessWidget {
   const SearchFailed({super.key});
@@ -33,25 +34,13 @@ class SearchFailed extends StatelessWidget {
             ),
             const SizedBox(height: 20), // Spacing between the text and button
             // Button
-            ElevatedButton(
+            RedButton(
+              label: "Explore Categories", // Button text
               onPressed: () {
                 // Add your button action here
+                print("Explore Categories button pressed");
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFA51414), // Button color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0), // Rounded corners
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-              ),
-              child: const Text(
-                "Explore Categories",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+              width: 200, // Optional: Set a custom width for the button
             ),
           ],
         ),
