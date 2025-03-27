@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../fullscreen/white.dart'; // Import the white.dart page
 
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});
@@ -45,9 +46,18 @@ class EditTextBox extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Icon(
-            Icons.edit,
-            color: Color(0xFFA51414), // Red color for the edit icon
+          GestureDetector(
+            onTap: () {
+              print("Edit icon tapped");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WhitePage()),
+              );
+            },
+            child: Icon(
+              Icons.edit,
+              color: Color(0xFFA51414), // Red color for the edit icon
+            ),
           ),
         ],
       ),

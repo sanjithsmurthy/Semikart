@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 
-class WhiteScreen extends StatelessWidget {
-  final Widget child;
-
-  const WhiteScreen({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+class WhitePage extends StatelessWidget {
+  const WhitePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 412,
-      height: 917,
-      decoration: BoxDecoration(
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: const Text('White Page'),
+      // ),
+      body: Container(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: child,
+        child: const Center(
+          child: Text(
+            'This is the White Page',
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        ),
       ),
     );
   }
