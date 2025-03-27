@@ -20,13 +20,10 @@ class BillingAddressScreen extends StatelessWidget {
     final TextEditingController nameController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shipping Address'),
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 255, 255, 255), // Set the app bar color
-      ),
+      
       body: Container(
         color: Colors.white, // Set the background color to white
+        height: 120,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
