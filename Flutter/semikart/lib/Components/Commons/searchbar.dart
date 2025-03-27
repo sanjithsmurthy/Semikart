@@ -18,6 +18,7 @@ class SearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: searchController,
+              cursorColor: Colors.black, // Set the cursor color to black
               decoration: InputDecoration(
                 hintText: 'Search',
                 hintStyle: TextStyle(color: Colors.grey),
