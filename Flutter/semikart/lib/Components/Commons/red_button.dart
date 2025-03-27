@@ -5,6 +5,8 @@ class RedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isLoading;
   final EdgeInsetsGeometry? padding;
+  final String variant;  // Added variant parameter
+  final double? width;   // Added width parameter
 
   const RedButton({
     super.key,
@@ -12,6 +14,8 @@ class RedButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.padding,
+    this.variant = 'big',  // Default to 'big'
+    this.width,           // Optional custom width
   });
 
   @override
@@ -19,8 +23,9 @@ class RedButton extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = MediaQuery.of(context).size.width;
-        final buttonWidth = screenWidth < 400 ? screenWidth * 0.9 : 343.0;
-        
+        final buttonWidth = width ?? (screenWidth < 400 ? screenWidth * 0.9 : 343.0);
+        final fontSize = variant == 'big' ? 20.0 : 16.0;  // Font size based on variant
+
         return SizedBox(
           width: buttonWidth,
           height: 48,
@@ -49,7 +54,7 @@ class RedButton extends StatelessWidget {
                       label,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: fontSize,  // Use dynamic font size
                         height: 1.0,
                         fontFamily: 'Product Sans',
                         fontWeight: FontWeight.normal,

@@ -4,10 +4,11 @@ import '../Commons/textfield_dropdown.dart';
 import '../Commons/red_button.dart';
 import '../Commons/inactive_red_button.dart';
 import '../Commons/white_button.dart';
-import '../Commons/track_order  .dart';
+import '../Commons/track_order.dart';
 import '../Commons/captcha.dart';  // Add this import
 import '../Commons/signinwith_google.dart';
 import '../Commons/two_radios.dart';  // Add this import with other imports
+import '../Commons/rfq_component.dart';  // Add this with other imports
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -148,6 +149,8 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       onPressed: () {
                         print('Red button pressed!');
                       },
+                      variant: 'big',     // Added variant parameter
+                      width: 343,         // Added width parameter
                     ),
                     SizedBox(height: 16),
                     InactiveButton(
@@ -238,6 +241,18 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                 steps: orderSteps,
                 currentStep: 2,  // Shows progress up to Contacted Supplier
               ),
+              SizedBox(height: 32),
+              Text(
+                'Request For Quote',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              RFQComponent(),  // RFQ component contains its own RedButton
             ],
           ),
         ),
@@ -245,3 +260,4 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
     );
   }
 }
+
