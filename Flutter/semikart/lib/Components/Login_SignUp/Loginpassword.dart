@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'LoginOTP.dart';
 
 class LoginPasswordScreen extends StatefulWidget {
+  const LoginPasswordScreen({super.key});
+
   @override
   _LoginPasswordScreenState createState() => _LoginPasswordScreenState();
 }

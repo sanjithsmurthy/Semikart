@@ -5,10 +5,10 @@ class InactiveButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
 
   const InactiveButton({
-    Key? key,
+    super.key,
     required this.label,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

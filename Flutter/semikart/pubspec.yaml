@@ -89,6 +89,9 @@ flutter:
     - family: BoldItalic
       fonts:
         - asset: public/assets/fonts/ProductSans-BoldItalic.ttf
+    # - family: GoogleIcons
+    #   fonts:
+    #     - asset: assets/fonts/GoogleIcons.ttf
     
     # - family: Trajan Pro
     #   fonts:

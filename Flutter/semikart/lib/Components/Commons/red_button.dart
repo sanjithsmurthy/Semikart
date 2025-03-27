@@ -8,13 +8,12 @@ class RedButton extends StatelessWidget {
   final double minWidth;
 
   const RedButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.onPressed,
     this.isLoading = false,
     this.padding,
-    this.minWidth = 343.0, // Default minimum width
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

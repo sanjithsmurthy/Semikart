@@ -3,6 +3,8 @@ import '../Commons/custom_text_field.dart';
 import '../rfq_bom/upload_file.dart'; // Import the CustomSquare class
 
 class TestLayoutSoma extends StatefulWidget {
+  const TestLayoutSoma({super.key});
+
   @override
   State<TestLayoutSoma> createState() => _TestLayoutSomaState();
 }

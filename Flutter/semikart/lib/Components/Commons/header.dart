@@ -1,43 +1,38 @@
 import 'package:flutter/material.dart';
 
-class Header extends StatelessWidget {
+class Header extends StatelessWidget implements PreferredSizeWidget {
+  const Header({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 412,
-      height: 70,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
+      color: Colors.white,
+      height: 56.0, // Standard AppBar height
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Menu Icon
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(Icons.menu, color: Colors.black),
             onPressed: () {},
           ),
-          Image.asset(
-            'public/assets/images/semikart_logo_medium.svg',
-            height: 40,
+          // Logo
+          Image.asset(  
+            'public/assets/images/semikart_logo_medium.png',
+            height: 40.0, // Fixed height for the logo
           ),
+          // Right-side Icons
           Row(
             children: [
               IconButton(
                 icon: Image.asset('public/assets/images/whatsapp_icon.png'),
-                iconSize: 30,
+                iconSize: 24.0, // Reduced size for WhatsApp icon
                 onPressed: () {},
               ),
               IconButton(
-                icon: Icon(Icons.phone),
+                icon: Icon(Icons.phone, color: Colors.black),
+                iconSize: 20.0, // Reduced size for phone icon
                 onPressed: () {},
               ),
             ],
@@ -46,4 +41,7 @@ class Header extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(56.0); // Standard AppBar height
 }
