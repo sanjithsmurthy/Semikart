@@ -7,15 +7,15 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final bool isPassword;
-  final EdgeInsetsGeometry? padding;  // New padding parameter
+  final EdgeInsetsGeometry? padding; // New padding parameter
 
   CustomTextField({
     required this.controller, //constructor
     required this.label,
     this.isPassword = false,
-    this.padding,  // Optional padding parameter
+    this.padding, // Optional padding parameter
   });
-  
+
   get textField => null;
 
   @override
@@ -35,7 +35,7 @@ class CustomTextField extends StatelessWidget {
                   color: Color(0xFFA51414),
                   backgroundColor: Colors.white,
                   fontSize: 16,
-                  height: 19/16, // To achieve height of 19
+                  height: 19 / 16, // To achieve height of 19
                 ),
                 floatingLabelStyle: TextStyle(
                   color: Color(0xFFA51414),
@@ -43,7 +43,8 @@ class CustomTextField extends StatelessWidget {
                   fontSize: 16,
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                contentPadding: EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
+                contentPadding:
+                    EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(
@@ -73,9 +74,11 @@ class CustomTextField extends StatelessWidget {
       ),
     );
 
-    return padding != null ? Padding(
-      padding: padding!,
-      child: textField,
-    ) : textField;
+    return padding != null
+        ? Padding(
+            padding: padding!,
+            child: textField,
+          )
+        : textField;
   }
 }

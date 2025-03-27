@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Commons/red_button.dart'; // Import the RedButton class
 
 class CustomSquare extends StatelessWidget {
   @override
@@ -17,8 +18,8 @@ class CustomSquare extends StatelessWidget {
           );
         },
         child: Container(
-          width: screenWidth * 0.9, // 90% of the screen width
-          height: screenHeight * 0.4, // 40% of the screen height
+          width: screenWidth * 0.8, // 80% of the screen width (smaller box)
+          height: screenHeight * 0.35, // 35% of the screen height (smaller box)
           decoration: BoxDecoration(
             color: Colors.white, // Background color of the square
             borderRadius: BorderRadius.circular(20), // Corner radius
@@ -34,53 +35,67 @@ class CustomSquare extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: screenWidth * 0.05), // Add horizontal padding
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Stack(
               children: [
-                SizedBox(
-                    height:
-                        screenHeight * 0.05), // Space from top of the square
-                // Insert PNG image at the top
-                Image.asset(
-                  'public/assets/images/cloud_icon.png', // Path to your PNG file
-                  width: screenWidth * 0.25, // 25% of the screen width
-                  height: screenHeight * 0.15, // 15% of the screen height
-                  fit: BoxFit.contain, // Adjust the image to fit within the box
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Insert PNG image at the top
+                    Image.asset(
+                      'public/assets/images/cloud_icon.png', // Path to your PNG file
+                      width: screenWidth * 0.25, // 25% of the screen width
+                      height: screenHeight * 0.12, // 12% of the screen height
+                      fit: BoxFit
+                          .contain, // Adjust the image to fit within the box
+                    ),
+                    SizedBox(
+                        height: screenHeight *
+                            0.01), // Reduced space between image and text
+                    Text(
+                      'Upload Parts List',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04, // 4% of the screen width
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF000000), // Black color
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                        height: screenHeight *
+                            0.008), // Reduced space between text lines
+                    Text(
+                      'All file formats supported.',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.03, // 3% of the screen width
+                        color: Color(0xFF757575), // Gray color
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                        height: screenHeight *
+                            0.008), // Reduced space between text lines
+                    Text(
+                      'click to upload files.',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.03, // 3% of the screen width
+                        color: Color(0xFFA51414), // Red color
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                        height: screenHeight *
+                            0.015), // Reduced space between text and button
+                    Center(
+                      child: RedButton(
+                        label: "Browse",
+                        onPressed: () {
+                          print('Red button pressed!');
+                        },
+                      ), // Use the RedButton widget
+                    ),
+                  ],
                 ),
-                SizedBox(
-                    height:
-                        screenHeight * 0.05), // Space between image and text
-                Text(
-                  'Upload parts list',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.045, // 4.5% of the screen width
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF000000), // Black color
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                    height: screenHeight * 0.02), // Space between text lines
-                Text(
-                  'All file formats supported.',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.035, // 3.5% of the screen width
-                    color: Color(0xFF757575), // Gray color
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                    height: screenHeight * 0.02), // Space between text lines
-                Text(
-                  'Drag and Drop files or click to upload files.',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.035, // 3.5% of the screen width
-                    color: Color(0xFFA51414), // Red color
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Spacer(), // Pushes the text to the bottom
               ],
             ),
           ),
