@@ -6,33 +6,44 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity, // Ensure the header fills the entire screen width
       color: Colors.white,
-      height: 56.0, // Standard AppBar height
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      height: 66.0, // Increased height to accommodate additional padding
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0), // Added vertical padding
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Menu Icon
           IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
+            icon: const Icon(Icons.menu, color: Colors.black),
+            iconSize: 35.0,
             onPressed: () {},
           ),
+          // Add spacing between the menu icon and the logo
+          const SizedBox(width: 15.0),
           // Logo
-          Image.asset(  
-            'public/assets/images/semikart_logo_medium.png',
-            height: 40.0, // Fixed height for the logo
+          Flexible(
+            child: Align(
+              alignment: Alignment.centerLeft, // Align the logo closer to the menu icon
+              child: Image.asset(
+                'public/assets/images/semikart_logo_medium.png',
+                height: 20.0, // Fixed height for the logo
+                fit: BoxFit.contain, // Ensure the logo scales properly
+              ),
+            ),
           ),
           // Right-side Icons
           Row(
+            mainAxisSize: MainAxisSize.min, // Prevents the row from taking extra space
             children: [
               IconButton(
                 icon: Image.asset('public/assets/images/whatsapp_icon.png'),
-                iconSize: 24.0, // Reduced size for WhatsApp icon
+                iconSize: 20.0, // Reduced size for WhatsApp icon
                 onPressed: () {},
               ),
               IconButton(
-                icon: Icon(Icons.phone, color: Colors.black),
-                iconSize: 20.0, // Reduced size for phone icon
+                icon: const Icon(Icons.phone, color: Colors.black),
+                iconSize: 27.0, // Reduced size for phone icon
                 onPressed: () {},
               ),
             ],
@@ -43,5 +54,5 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0); // Standard AppBar height
+  Size get preferredSize => const Size.fromHeight(66.0); // Updated height to match the new padding
 }
