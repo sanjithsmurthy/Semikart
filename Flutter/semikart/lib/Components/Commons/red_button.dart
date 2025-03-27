@@ -5,9 +5,10 @@ class RedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isLoading;
   final EdgeInsetsGeometry? padding;
-  final String variant; // Added variant parameter
-  final double? width; // Added width parameter
-  final bool isWhiteButton; // New attribute to trigger the white button variant
+  final double? width; // Optional custom width
+  final double? height; // Optional custom height
+  final double? fontSize; // Custom font size for the button text
+  final bool isWhiteButton; // Attribute to trigger the white button variant
 
   const RedButton({
     super.key,
@@ -15,8 +16,9 @@ class RedButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.padding,
-    this.variant = 'big', // Default to 'big'
     this.width, // Optional custom width
+    this.height, // Optional custom height
+    this.fontSize, // Optional custom font size
     this.isWhiteButton = false, // Default to false (red button is default)
   });
 
@@ -26,11 +28,12 @@ class RedButton extends StatelessWidget {
       builder: (context, constraints) {
         final screenWidth = MediaQuery.of(context).size.width;
         final buttonWidth = width ?? (screenWidth < 400 ? screenWidth * 0.9 : 343.0);
-        final fontSize = variant == 'big' ? 20.0 : 16.0; // Font size based on variant
+        final buttonHeight = height ?? 48.0; // Default height is 48
+        final textFontSize = fontSize ?? 16.0; // Default font size is 16
 
         return SizedBox(
           width: buttonWidth,
-          height: 48,
+          height: buttonHeight,
           child: ElevatedButton(
             onPressed: isLoading ? null : onPressed,
             style: ElevatedButton.styleFrom(
@@ -59,7 +62,7 @@ class RedButton extends StatelessWidget {
                       label,
                       style: TextStyle(
                         color: isWhiteButton ? const Color(0xFFA51414) : Colors.white, // Text color based on variant
-                        fontSize: fontSize, // Use dynamic font size
+                        fontSize: textFontSize, // Use custom font size
                         height: 1.0,
                         fontFamily: 'Product Sans',
                         fontWeight: FontWeight.normal,
