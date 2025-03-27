@@ -74,9 +74,11 @@ class CustomTextField extends StatelessWidget {
       ),
     );
 
-    return padding != null ? Padding(
-      padding: padding!,
-      child: textField,
-    ) : textField;
+    return padding != null
+        ? Padding(
+            padding: padding!,
+            child: textField,
+          )
+        : textField;
   }
 }

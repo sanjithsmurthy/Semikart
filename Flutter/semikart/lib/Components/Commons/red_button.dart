@@ -5,6 +5,7 @@ class RedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isLoading;
   final EdgeInsetsGeometry? padding;
+  final double minWidth;
 
   const RedButton({
     super.key,
@@ -19,8 +20,9 @@ class RedButton extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = MediaQuery.of(context).size.width;
-        final buttonWidth = screenWidth < 400 ? screenWidth * 0.9 : 343.0;
-        
+        final buttonWidth =
+            screenWidth < minWidth ? screenWidth * 0.9 : minWidth;
+
         return SizedBox(
           width: buttonWidth,
           height: 48,
