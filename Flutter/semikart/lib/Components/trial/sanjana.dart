@@ -8,7 +8,7 @@ import '../Commons/track_order.dart';
 import '../Commons/captcha.dart';  // Add this import
 import '../Commons/signinwith_google.dart';
 import '../Commons/two_radios.dart';  // Add this import with other imports
-import '../Commons/rfq_component.dart';  // Add this with other imports
+import '../Commons/RFQ_CTA.dart';  // Add this with other imports
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
