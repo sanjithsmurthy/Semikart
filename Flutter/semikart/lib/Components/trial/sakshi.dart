@@ -5,13 +5,15 @@ import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
 class TestLayoutSakshi extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
 
+  TestLayoutSakshi({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Grey Text Box Example'),
+          title: Text('Example Page'),
           backgroundColor: Color(0xFFA51414),
         ),
         body: Padding(
@@ -21,12 +23,14 @@ class TestLayoutSakshi extends StatelessWidget {
             children: [
               custom.SearchBar(searchController: searchController), // Add the SearchBar widget
               SizedBox(height: 20),
-              GreyTextBox(), // Add the GreyTextBox widget
-              SizedBox(height: 20),
-              // Text(
-              //   'Other Content Goes Here',
-              //   style: TextStyle(fontSize: 18),
-              // ),
+              // GreyTextBox(
+              //   title: 'Shipping Address',
+              //   address: 'Magadi Main Rd, next to Prasanna Theatre, Cholurpalya, Bengaluru, Karnataka 560023',
+              //   onEdit: () {
+              //     // Handle edit action here
+              //     print('Edit button pressed');
+              //   },
+              // ), // Add the GreyTextBox widget
             ],
           ),
         ),

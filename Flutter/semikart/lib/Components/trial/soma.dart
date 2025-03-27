@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
+import '../rfq_bom/upload_file.dart'; // Import the CustomSquare class
 
 class TestLayoutSoma extends StatefulWidget {
   const TestLayoutSoma({super.key});
@@ -9,14 +10,6 @@ class TestLayoutSoma extends StatefulWidget {
 }
 
 class _TestLayoutSomaState extends State<TestLayoutSoma> {
-  final TextEditingController _testController = TextEditingController();
-
-  @override
-  void dispose() {
-    _testController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,16 +20,7 @@ class _TestLayoutSomaState extends State<TestLayoutSoma> {
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomTextField(
-                controller: _testController,
-                label: "Test Field",
-              ),
-              // Add more components to test here
-            ],
-          ),
+          child: CustomSquare(), // Use the CustomSquare widget
         ),
       ),
     );
