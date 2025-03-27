@@ -164,7 +164,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                             onPressed: () {
                               print('Red button pressed!');
                             },
-                            variant: 'big',
+                            // variant: 'big',
                             width: buttonWidth,
                           ),
                         ),
