@@ -15,16 +15,42 @@ class CartEmpty extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          // Cart bag image
+          Positioned(
+            left: 121,
+            top: 0,
+            child: Image.asset(
+              'public/assets/images/cart_bag.png',
+              width: 100,
+              height: 100,
+              fit: BoxFit.contain,
+            ),
+          ),
+          // Empty cart text
+          Positioned(
+            left: 75,
+            top: 127,
+            child: Text(
+              'Your cart is empty',
+              style: TextStyle(
+                fontSize: 24,
+                fontFamily: 'Product Sans',
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          // Existing button
           Positioned(
             left: 82,
-            bottom: 20, // Space from bottom
+            bottom: 0,
             child: RedButton(
               label: "Explore Categories",
               onPressed: () {
                 print('Explore Categories pressed');
               },
-              variant: 'small', // 16px font size
-              width: 179, // Specified width
+              variant: 'small',
+              width: 179,
             ),
           ),
         ],
