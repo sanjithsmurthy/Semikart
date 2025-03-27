@@ -3,7 +3,6 @@ import 'Components/trial/sakshi.dart';
 import 'Components/trial/sanjana.dart';
 import 'Components/trial/sanjith.dart';
 import 'Components/trial/soma.dart';
-import 'Components/fullscreen/white.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,11 +35,10 @@ class _TestContainerState extends State<TestContainer> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    WhiteScreen(child: Container()), // Blank WhiteScreen
-    WhiteScreen(child: TestLayoutSakshi()),
-    WhiteScreen(child: TestLayoutSanjana()),
-    WhiteScreen(child: TestLayoutSanjith()),
-    WhiteScreen(child: TestLayoutSoma()),
+    TestLayoutSakshi(),
+    TestLayoutSanjana(),
+    TestLayoutSanjith(),
+    TestLayoutSoma(),
   ];
 
   @override
@@ -56,12 +54,7 @@ class _TestContainerState extends State<TestContainer> {
         },
         selectedItemColor: Color(0xFFA51414),
         unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed, // Add this to show all items
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.crop_square),
-            label: 'White',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Sakshi',
