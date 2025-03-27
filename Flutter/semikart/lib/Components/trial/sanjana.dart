@@ -10,6 +10,8 @@ import '../Commons/signinwith_google.dart';
 import '../Commons/two_radios.dart';  // Add this import with other imports
 import '../Commons/RFQ_CTA.dart';  // Add this with other imports
 import '../Commons/cartempty.dart';  // Add this with other imports
+import '../Commons/order_view.dart';  // Add this with other imports
+import '../Commons/profilepic.dart';  // Add this with other imports
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -99,7 +101,10 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
 
           return SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(contentPadding),
+              padding: EdgeInsets.symmetric(
+                horizontal: contentPadding,
+                vertical: 24.0, // Added vertical padding
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -282,6 +287,42 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Profile Picture',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: ProfilePicture(
+                      imageUrl: null, // Add image URL when available
+                      onEditPressed: () {
+                        print('Edit profile picture pressed');
+                        // Handle image upload here
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Order Details',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxWidth),
+                    child: OrderView(),
+                  ),
+                  SizedBox(height: 24), // Added bottom padding
                 ],
               ),
             ),
