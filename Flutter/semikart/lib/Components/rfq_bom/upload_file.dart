@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomSquare extends StatelessWidget {
+  const CustomSquare({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Get screen width and height

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../Commons/custom_text_field.dart';
 
 class TestLayoutSoma extends StatefulWidget {
+  const TestLayoutSoma({super.key});
+
   @override
   State<TestLayoutSoma> createState() => _TestLayoutSomaState();
 }

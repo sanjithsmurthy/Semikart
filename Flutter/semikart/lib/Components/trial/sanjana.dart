@@ -3,9 +3,15 @@ import '../Commons/custom_text_field.dart';
 import '../Commons/textfield_dropdown.dart';
 import '../Commons/red_button.dart';
 import '../Commons/inactive_red_button.dart';
-import '../Commons/white_button.dart';  // Add this import
+import '../Commons/white_button.dart';
+import '../Commons/track_order.dart';
+import '../Commons/captcha.dart';  // Add this import
+import '../Commons/signinwith_google.dart';
+import '../Commons/two_radios.dart';  // Add this import with other imports
 
 class TestLayoutSanjana extends StatefulWidget {
+  const TestLayoutSanjana({super.key});
+
   @override
   State<TestLayoutSanjana> createState() => _TestLayoutSanjanaState();
 }
@@ -13,6 +19,8 @@ class TestLayoutSanjana extends StatefulWidget {
 class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   final TextEditingController _emailController = TextEditingController();
   String? _selectedState;
+  bool _isCaptchaValid = false;  // Add this state variable
+  int _selectedRadio = 0;  // Add this state variable
 
   @override
   void dispose() {
@@ -22,6 +30,57 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
 
   @override
   Widget build(BuildContext context) {
+    final List<OrderStep> orderSteps = [
+      OrderStep(
+        title: 'Order Placed',
+        location: 'Your order has been placed successfully',
+        icon: Icons.shopping_cart_outlined,
+        timestamp: '24 Mar, 2024 10:30 AM',
+      ),
+      OrderStep(
+        title: 'Order Accepted',
+        location: 'Seller has accepted your order',
+        icon: Icons.check_circle_outline,
+        timestamp: '24 Mar, 2024 11:45 AM',
+      ),
+      OrderStep(
+        title: 'Contacted Supplier',
+        location: 'Processing with supplier',
+        icon: Icons.contact_phone_outlined,
+        timestamp: '24 Mar, 2024 2:30 PM',
+      ),
+      OrderStep(
+        title: 'In Transit',
+        location: 'Package in international transit',
+        icon: Icons.flight_takeoff_outlined,
+        timestamp: null,
+      ),
+      OrderStep(
+        title: 'Custom Clearance',
+        location: 'Package clearing customs',
+        icon: Icons.gavel_outlined,
+        timestamp: null,
+      ),
+      OrderStep(
+        title: 'In Fulfillment Center',
+        location: 'Package at local fulfillment center',
+        icon: Icons.warehouse_outlined,
+        timestamp: null,
+      ),
+      OrderStep(
+        title: 'Shipped',
+        location: 'Out for final delivery',
+        icon: Icons.local_shipping_outlined,
+        timestamp: null,
+      ),
+      OrderStep(
+        title: 'Order Delivered',
+        location: 'Package delivered successfully',
+        icon: Icons.done_all_outlined,
+        timestamp: null,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -103,6 +162,81 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Sign in with Google',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: SignInWithGoogleButton(
+                  onPressed: () {
+                    print('Google Sign In Pressed!');
+                  },
+                ),
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Captcha Validation',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              CustomCaptcha(
+                onValidated: (isValid) {
+                  setState(() {
+                    _isCaptchaValid = isValid;
+                  });
+                },
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Radio Options',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              TwoRadioButtons(
+                firstLabel: 'Option One',
+                secondLabel: 'Option Two',
+                initialSelection: _selectedRadio,
+                radioWidth: 343,    // Add custom width
+                radioHeight: 48,    // Add custom height
+                onSelectionChanged: (selected) {
+                  setState(() {
+                    _selectedRadio = selected;
+                    print('Selected radio option: ${selected == 0 ? "One" : "Two"}');
+                  });
+                },
+              ),
+              SizedBox(height: 32),
+              Text(
+                'Order Tracking',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Product Sans',
+                  color: Color(0xFFA51414),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16),
+              TrackOrder(
+                steps: orderSteps,
+                currentStep: 2,  // Shows progress up to Contacted Supplier
               ),
             ],
           ),
