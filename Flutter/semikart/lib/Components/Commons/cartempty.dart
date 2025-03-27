@@ -49,7 +49,7 @@ class CartEmpty extends StatelessWidget {
               onPressed: () {
                 print('Explore Categories pressed');
               },
-              variant: 'small',
+              // variant: 'small',
               width: 179,
             ),
           ),
