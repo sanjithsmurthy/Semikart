@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semikart/white.dart'; // Import the white.dart page
+import '../fullscreen/white.dart'; // Import the white.dart page
 
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});

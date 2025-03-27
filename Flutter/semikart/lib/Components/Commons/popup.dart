@@ -58,7 +58,7 @@ class CustomPopup {
                 if (message != null) SizedBox(height: 16), // Space between message and button
                 RedButton(
                   label: buttonText,
-                  variant: 'small',
+                  
                   width: popupWidth * 0.3, // Scale button width to 30% of popup width
                   onPressed: () => Navigator.of(context).pop(),
                 ),
