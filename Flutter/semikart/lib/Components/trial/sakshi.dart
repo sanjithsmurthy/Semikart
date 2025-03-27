@@ -23,10 +23,10 @@ class TestLayoutSakshi extends StatelessWidget {
               SizedBox(height: 20),
               GreyTextBox(), // Add the GreyTextBox widget
               SizedBox(height: 20),
-              Text(
-                'Other Content Goes Here',
-                style: TextStyle(fontSize: 18),
-              ),
+              // Text(
+              //   'Other Content Goes Here',
+              //   style: TextStyle(fontSize: 18),
+              // ),
             ],
           ),
         ),
