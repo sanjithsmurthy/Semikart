@@ -9,6 +9,7 @@ import '../Commons/captcha.dart';  // Add this import
 import '../Commons/signinwith_google.dart';
 import '../Commons/two_radios.dart';  // Add this import with other imports
 import '../Commons/RFQ_CTA.dart';  // Add this with other imports
+import '../Commons/cartempty.dart';  // Add this with other imports
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -90,172 +91,202 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
         ),
         backgroundColor: Color(0xFFA51414),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Custom TextField',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              CustomTextField(
-                controller: _emailController,
-                label: "Email",
-              ),
-              SizedBox(height: 32),
-              Text(
-                'Custom Dropdown',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              CustomDropdownField(
-                label: "Select State",
-                value: _selectedState,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedState = newValue;
-                  });
-                },
-              ),
-              SizedBox(height: 32),
-              Text(
-                'Button Types',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              Center(
-                child: Column(
-                  children: [
-                    RedButton(
-                      label: "Active Button",
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxWidth = constraints.maxWidth;
+          final contentPadding = maxWidth > 600 ? 40.0 : 20.0;
+          final buttonWidth = maxWidth > 343 ? 343.0 : maxWidth - 40;
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(contentPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Custom TextField',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  CustomTextField(
+                    controller: _emailController,
+                    label: "Email",
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Custom Dropdown',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  CustomDropdownField(
+                    label: "Select State",
+                    value: _selectedState,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedState = newValue;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Button Types',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: buttonWidth,
+                          child: RedButton(
+                            label: "Active Button",
+                            onPressed: () {
+                              print('Red button pressed!');
+                            },
+                            variant: 'big',
+                            width: buttonWidth,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          width: buttonWidth,
+                          child: InactiveButton(
+                            label: "Inactive Button",
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          width: buttonWidth,
+                          child: WhiteButton(
+                            label: "White Button",
+                            onPressed: () {
+                              print('White button pressed!');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Sign in with Google',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: SignInWithGoogleButton(
                       onPressed: () {
-                        print('Red button pressed!');
-                      },
-                      variant: 'big',     // Added variant parameter
-                      width: 343,         // Added width parameter
-                    ),
-                    SizedBox(height: 16),
-                    InactiveButton(
-                      label: "Inactive Button",
-                    ),
-                    SizedBox(height: 16),
-                    WhiteButton(
-                      label: "White Button",
-                      onPressed: () {
-                        print('White button pressed!');
+                        print('Google Sign In Pressed!');
                       },
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Captcha Validation',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  CustomCaptcha(
+                    onValidated: (isValid) {
+                      setState(() {
+                        _isCaptchaValid = isValid;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Radio Options',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  TwoRadioButtons(
+                    firstLabel: 'Option One',
+                    secondLabel: 'Option Two',
+                    initialSelection: _selectedRadio,
+                    radioWidth: buttonWidth,
+                    radioHeight: 48,
+                    onSelectionChanged: (selected) {
+                      setState(() {
+                        _selectedRadio = selected;
+                        print('Selected radio option: ${selected == 0 ? "One" : "Two"}');
+                      });
+                    },
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Order Tracking',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  TrackOrder(
+                    steps: orderSteps,
+                    currentStep: 2,  // Shows progress up to Contacted Supplier
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Request For Quote',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      color: Color(0xFFA51414),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: RFQComponent(),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        child: CartEmpty(),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 32),
-              Text(
-                'Sign in with Google',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              Center(
-                child: SignInWithGoogleButton(
-                  onPressed: () {
-                    print('Google Sign In Pressed!');
-                  },
-                ),
-              ),
-              SizedBox(height: 32),
-              Text(
-                'Captcha Validation',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              CustomCaptcha(
-                onValidated: (isValid) {
-                  setState(() {
-                    _isCaptchaValid = isValid;
-                  });
-                },
-              ),
-              SizedBox(height: 32),
-              Text(
-                'Radio Options',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              TwoRadioButtons(
-                firstLabel: 'Option One',
-                secondLabel: 'Option Two',
-                initialSelection: _selectedRadio,
-                radioWidth: 343,    // Add custom width
-                radioHeight: 48,    // Add custom height
-                onSelectionChanged: (selected) {
-                  setState(() {
-                    _selectedRadio = selected;
-                    print('Selected radio option: ${selected == 0 ? "One" : "Two"}');
-                  });
-                },
-              ),
-              SizedBox(height: 32),
-              Text(
-                'Order Tracking',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              TrackOrder(
-                steps: orderSteps,
-                currentStep: 2,  // Shows progress up to Contacted Supplier
-              ),
-              SizedBox(height: 32),
-              Text(
-                'Request For Quote',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'Product Sans',
-                  color: Color(0xFFA51414),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              RFQComponent(),  // RFQ component contains its own RedButton
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
