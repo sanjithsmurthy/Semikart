@@ -5,13 +5,14 @@ import '../Commons/red_button.dart';
 import '../Commons/inactive_red_button.dart';
 import '../Commons/white_button.dart';
 import '../Commons/track_order.dart';
-import '../Commons/captcha.dart';  // Add this import
+import '../Commons/captcha.dart';  
 import '../Commons/signinwith_google.dart';
-import '../Commons/two_radios.dart';  // Add this import with other imports
-import '../Commons/RFQ_CTA.dart';  // Add this with other imports
-import '../Commons/cartempty.dart';  // Add this with other imports
-import '../Commons/order_view.dart';  // Add this with other imports
-import '../Commons/profilepic.dart';  // Add this with other imports
+import '../Commons/two_radios.dart';  
+import '../Commons/RFQ_CTA.dart';  
+import '../Commons/cartempty.dart';  
+import '../Commons/order_view.dart';  
+import '../Commons/profilepic.dart';  
+import 'dart:io'; 
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -301,8 +302,8 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                   Center(
                     child: ProfilePicture(
                       imageUrl: null, // Add image URL when available
-                      onEditPressed: () {
-                        print('Edit profile picture pressed');
+                      onImageSelected: (File image) {
+                        print('Image selected: ${image.path}');
                         // Handle image upload here
                       },
                     ),
