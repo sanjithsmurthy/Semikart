@@ -51,7 +51,7 @@ class RFQComponent extends StatelessWidget {
                 onPressed: () {
                   print('RFQ button pressed');
                 },
-                variant: 'small',  // Added variant parameter for 16px font size
+                // variant: 'small',  // Added variant parameter for 16px font size
                 width: 124,        // Explicit width
               ),
             ),
