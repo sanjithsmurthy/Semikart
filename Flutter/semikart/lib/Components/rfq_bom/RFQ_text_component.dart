@@ -185,11 +185,11 @@ class RFQTextComponent extends StatelessWidget {
         ),
         // Add the RedButton below the square box
         Positioned(
-          top: 280, // Position the button below the square box
+          bottom: 10, // Adjust the position to place it below the square box
           right: 10, // Align to the right corner
           child: RedButton(
-            width: 90, // Adjusted width
-            height: 34, // Adjusted height
+            width: 90,
+            height: 34,
             label: 'Add Row',
             onPressed: () {
               print('Red button pressed!');
