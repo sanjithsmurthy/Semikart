@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../Commons/searchbar.dart' as custom; // Import the SearchBar widget with an alias
+import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
 import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
 
 class TestLayoutSakshi extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController nameController = TextEditingController(); // Controller for GreyTextBox
 
   TestLayoutSakshi({super.key});
 
@@ -13,7 +15,7 @@ class TestLayoutSakshi extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Example Page'),
+          title: Text('Components'),
           backgroundColor: Color(0xFFA51414),
         ),
         body: Padding(
@@ -21,16 +23,13 @@ class TestLayoutSakshi extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              custom.SearchBar(searchController: searchController), // Add the SearchBar widget
-              SizedBox(height: 20),
-              // GreyTextBox(
-              //   title: 'Shipping Address',
-              //   address: 'Magadi Main Rd, next to Prasanna Theatre, Cholurpalya, Bengaluru, Karnataka 560023',
-              //   onEdit: () {
-              //     // Handle edit action here
-              //     print('Edit button pressed');
-              //   },
-              // ), // Add the GreyTextBox widget
+              Padding(
+                padding: const EdgeInsets.all(10.0), // Add 10px padding around SearchBar
+                child: custom.SearchBar(searchController: searchController),
+              ),
+              const EditTextBox(), // Use the EditTextBox widget here
+              const SizedBox(height: 16), // Add spacing between components
+              GreyTextBox(nameController: nameController), // Pass the controller to GreyTextBox
             ],
           ),
         ),

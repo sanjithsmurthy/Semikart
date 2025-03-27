@@ -1,54 +1,58 @@
 import 'package:flutter/material.dart';
 
-class CustomPopup extends StatelessWidget {
-  final Widget child;
-  final VoidCallback? onClose;
-
-  const CustomPopup({
-    Key? key,
-    required this.child,
-    this.onClose,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black.withOpacity(0.5),  // Screen dimming overlay
-      child: Center(
-        child: Container(
-          width: 390,
-          height: 225,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(17),
-            border: Border.all(
-              color: Color(0xFF707070),
-              width: 1,
-            ),
-          ),
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: child,
-              ),
-              if (onClose != null)
-                Positioned(
-                  right: 16,
-                  top: 16,
-                  child: InkWell(
-                    onTap: onClose,
-                    child: Icon(
-                      Icons.close,
-                      size: 24,
-                      color: Color(0xFF707070),
-                    ),
+class CustomPopup {
+  static Future<void> show({
+    required BuildContext context,
+    required String title,
+    required String message,
+    String buttonText = 'OK',
+  }) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Color(0xFFFFFFFF),
+          child: Container(
+            width: 390,
+            height: 225,
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontFamily: 'Product Sans',
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-            ],
+                SizedBox(height: 16),
+                Text(
+                  message,
+                  style: TextStyle(
+                    fontFamily: 'Product Sans',
+                  ),
+                ),
+                Spacer(),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    child: Text(
+                      buttonText,
+                      style: TextStyle(
+                        color: Color(0xFFA51414),
+                        fontFamily: 'Product Sans',
+                      ),
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
