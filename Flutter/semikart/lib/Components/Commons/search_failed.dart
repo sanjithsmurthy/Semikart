@@ -15,7 +15,7 @@ class SearchFailed extends StatelessWidget {
           children: [
             // Illustration
             Image.asset(
-              'assets/images/search_failed.png', // Replace with your image path
+              'public/assets/images/search_failed.png', // Replace with your image path
               width: 150, // Adjust the width of the image
               height: 150, // Adjust the height of the image
               fit: BoxFit.contain,
