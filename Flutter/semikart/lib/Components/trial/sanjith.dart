@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Commons/bottom_bar_home.dart'; // Import the bottom_bar_home.dart file
+import '../Commons/bottom_bar.dart'; // Import the bottom_bar_home.dart file
 import '../Commons/header.dart'; // Import the header.dart file
 
 class TestLayoutSanjith extends StatelessWidget {
