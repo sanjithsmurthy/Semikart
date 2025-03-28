@@ -12,31 +12,38 @@ class TestLayoutSanjith extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(), // Use the updated Header as the AppBar
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // SearchFailed Component
-            const SearchFailed(),
-            const SizedBox(height: 20), // Add spacing between components
-            // White Button Variant
-            RedButton(
-              label: "Go Back",
-              onPressed: () {
-                // Add your button action here
-                print("White button pressed");
-              },
-              isWhiteButton: true, // Trigger the white button variant
-              width: 200, // Optional: Set a custom width for the button
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final screenWidth = constraints.maxWidth;
+          final padding = screenWidth * 0.05; // Dynamic padding based on screen width
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // SearchFailed Component
+                  const SearchFailed(),
+                  const SizedBox(height: 20), // Add spacing between components
+                  // White Button Variant
+                  RedButton(
+                    label: "Go Back",
+                    onPressed: () {
+                      // Add your button action here
+                      print("White button pressed");
+                    },
+                    isWhiteButton: true, // Trigger the white button variant
+                    width: screenWidth * 0.5, // Button width is 50% of screen width
+                  ),
+                  const SizedBox(height: 20), // Add spacing between components
+                  // DynamicTable Component
+                  const DynamicTable(), // Let the table expand naturally
+                ],
+              ),
             ),
-            const SizedBox(height: 20), // Add spacing between components
-            // DynamicTable Component
-            SizedBox(
-              height: 400, // Set a fixed height for the table
-              child: const DynamicTable(),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       bottomNavigationBar: BottomNavBar(), // Bottom navigation bar
     );
