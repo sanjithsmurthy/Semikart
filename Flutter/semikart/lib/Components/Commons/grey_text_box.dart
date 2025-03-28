@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 
 class GreyTextBox extends StatelessWidget {
   final TextEditingController nameController;
+  final String text; // Single parameter for both label and hint text
+  final double? width; // Optional width parameter
 
-  GreyTextBox({Key? key, required this.nameController}) : super(key: key);
+  GreyTextBox({
+    Key? key,
+    required this.nameController,
+    this.text = 'Name', // Default value for label and hint text
+    this.width, // Optional width
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Get screen width for responsiveness
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       color: Colors.white, // Set the background color to white
       height: 100,
@@ -15,7 +25,7 @@ class GreyTextBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Name',
+            text, // Use the single parameter for label text
             style: TextStyle(
               fontSize: 13,
               color: Color(0xFFA51414), // Adjust the color as needed
@@ -23,7 +33,7 @@ class GreyTextBox extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Container(
-            width: 375,
+            width: width ?? screenWidth * 0.9, // Default to 90% of screen width if width is not provided
             height: 41.54,
             decoration: BoxDecoration(
               color: Color(0xFFE4E8EC), // Grey background color
@@ -33,7 +43,7 @@ class GreyTextBox extends StatelessWidget {
               cursorColor: Colors.black, // Set the cursor color to black
               controller: nameController,
               decoration: InputDecoration(
-                hintText: 'Username', // Placeholder text
+                hintText: text, // Use the same parameter for hint text
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
