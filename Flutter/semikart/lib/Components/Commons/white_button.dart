@@ -19,11 +19,15 @@ class WhiteButton extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = MediaQuery.of(context).size.width;
-        final buttonWidth = screenWidth < 400 ? screenWidth * 0.4 : 139.0;
-        
+
+        // Dynamically calculate button width and height based on screen size
+        final buttonWidth = screenWidth * 0.4; // 40% of screen width
+        final buttonHeight = screenWidth < 400 ? 33.0 : 40.0; // Adjust height for smaller screens (cast to double)
+        final fontSize = screenWidth < 400 ? 14.0 : 16.0; // Adjust font size for smaller screens (cast to double)
+
         return Container(
           width: buttonWidth,
-          height: 33,
+          height: buttonHeight,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
@@ -44,7 +48,7 @@ class WhiteButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
               ),
               elevation: 0,
-              padding: EdgeInsets.zero,
+              padding: padding ?? EdgeInsets.zero,
             ),
             child: isLoading
                 ? SizedBox(
@@ -61,8 +65,8 @@ class WhiteButton extends StatelessWidget {
                       label,
                       style: TextStyle(
                         color: Color(0xFF000000),
-                        fontSize: 16,
-                        height: 19/16,
+                        fontSize: fontSize, // Dynamically scaled font size
+                        height: 19 / fontSize, // Line height relative to font size
                         fontFamily: 'Product Sans',
                         fontWeight: FontWeight.normal,
                       ),
