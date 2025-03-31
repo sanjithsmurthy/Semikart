@@ -80,7 +80,7 @@ class _DynamicTableState extends State<DynamicTable> {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          "Quantity*",
+                          "Qty",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize), // Scaled font size
                         ),
