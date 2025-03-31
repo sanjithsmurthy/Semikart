@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Commons/bottom_bar.dart'; // Import the bottom_bar_home.dart file
-import '../Commons/header.dart'; // Import the header.dart file
+import '../Commons/bottom_bar.dart' as BottomBar; // Alias for bottom_bar.dart
+import '../Commons/header.dart'; // Import the Header for the AppBar
 import '../Commons/search_failed.dart'; // Import the search_failed.dart file
 import '../Commons/red_button.dart'; // Import the RedButton component
 import '../Commons/forgot_password.dart'; // Import the ForgotPasswordButton component
@@ -64,7 +64,7 @@ class TestLayoutSanjith extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomNavBar(), // Bottom navigation bar
+      bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Commons/bottom_bar.dart'; // Import the BottomNavBar for navigation
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
@@ -21,14 +22,25 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           ),
           // Add spacing between the menu icon and the logo
           const SizedBox(width: 15.0),
-          // Logo
+          // Logo (Clickable)
           Flexible(
             child: Align(
               alignment: Alignment.centerLeft, // Align the logo closer to the menu icon
-              child: Image.asset(
-                'public/assets/images/semikart_logo_medium.png',
-                height: 20.0, // Fixed height for the logo
-                fit: BoxFit.contain, // Ensure the logo scales properly
+              child: GestureDetector(
+                onTap: () {
+                  // Navigate to the home tab of the bottom bar
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BottomNavBar(), // Redirect to BottomNavBar
+                    ),
+                  );
+                },
+                child: Image.asset(
+                  'public/assets/images/semikart_logo_medium.png',
+                  height: 20.0, // Fixed height for the logo
+                  fit: BoxFit.contain, // Ensure the logo scales properly
+                ),
               ),
             ),
           ),
