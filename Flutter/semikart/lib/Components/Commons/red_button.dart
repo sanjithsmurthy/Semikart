@@ -26,10 +26,13 @@ class RedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        // Get the screen width
         final screenWidth = MediaQuery.of(context).size.width;
-        final buttonWidth = width ?? (screenWidth < 400 ? screenWidth * 0.9 : 343.0);
+
+        // Dynamically calculate button width, height, and font size
+        final buttonWidth = width ?? (screenWidth < 400 ? screenWidth * 0.9 : 343.0); // 90% of screen width for small screens
         final buttonHeight = height ?? 48.0; // Default height is 48
-        final textFontSize = fontSize ?? 16.0; // Default font size is 16
+        final textFontSize = fontSize ?? (screenWidth < 400 ? 14.0 : 16.0); // Adjust font size for smaller screens
 
         return SizedBox(
           width: buttonWidth,
@@ -45,7 +48,7 @@ class RedButton extends StatelessWidget {
                     : BorderSide.none, // No border for red button
               ),
               elevation: 0,
-              padding: EdgeInsets.zero,
+              padding: padding ?? EdgeInsets.zero, // Use provided padding or default to zero
             ),
             child: isLoading
                 ? const SizedBox(
@@ -62,7 +65,7 @@ class RedButton extends StatelessWidget {
                       label,
                       style: TextStyle(
                         color: isWhiteButton ? const Color(0xFFA51414) : Colors.white, // Text color based on variant
-                        fontSize: textFontSize, // Use custom font size
+                        fontSize: textFontSize, // Dynamically calculated font size
                         height: 1.0,
                         fontFamily: 'Product Sans',
                         fontWeight: FontWeight.normal,

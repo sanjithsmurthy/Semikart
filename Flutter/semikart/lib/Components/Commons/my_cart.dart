@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import '../Commons/red_button.dart'; // Import the RedButton widget
 
 class MyCartItem extends StatefulWidget {
-  final String itemName;
-  final String itemDescription;
+  final String imageUrl;
+  final String title;
+  final String description;
+  final double price;
   final VoidCallback onDelete;
   final VoidCallback onViewDetails;
 
   const MyCartItem({
     Key? key,
-    required this.itemName,
-    required this.itemDescription,
+    required this.imageUrl,
+    required this.title,
+    required this.description,
+    required this.price,
     required this.onDelete,
     required this.onViewDetails,
   }) : super(key: key);
@@ -20,6 +25,15 @@ class MyCartItem extends StatefulWidget {
 
 class _MyCartItemState extends State<MyCartItem> {
   int _quantity = 1;
+
+  void _updateQuantity(String value) {
+    final int? newQuantity = int.tryParse(value);
+    if (newQuantity != null && newQuantity > 0) {
+      setState(() {
+        _quantity = newQuantity;
+      });
+    }
+  }
 
   void _incrementQuantity() {
     setState(() {
@@ -38,11 +52,13 @@ class _MyCartItemState extends State<MyCartItem> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final containerWidth = screenWidth < 412 ? screenWidth : 412;
+    final imageWidth = screenWidth * 0.2; // Dynamically scale image size
+    final buttonSize = screenWidth * 0.08; // Dynamically scale button size
+    final textFieldWidth = screenWidth * 0.1; // Dynamically scale text field width
+    final redButtonWidth = screenWidth * 0.25; // Dynamically scale the width of the "View Details" button
 
     return Container(
-      width: containerWidth.toDouble(), // Adjust width for smaller screens
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -56,86 +72,124 @@ class _MyCartItemState extends State<MyCartItem> {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          // Item image
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Center(
-              child: Text(
-                "No Image",
-                style: TextStyle(fontSize: 10),
-              ),
+          // Delete Button
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              onPressed: widget.onDelete,
+              icon: const Icon(Icons.delete, color: Color(0xFFA51414)),
             ),
           ),
-          const SizedBox(width: 16),
-          // Item details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.itemName,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.itemDescription,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: _decrementQuantity,
-                      icon: const Icon(Icons.remove),
-                    ),
-                    Text(
-                      '$_quantity',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    IconButton(
-                      onPressed: _incrementQuantity,
-                      icon: const Icon(Icons.add),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 16),
-          // View Details button and Delete icon
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton(
-                onPressed: widget.onViewDetails,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFA51414),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product Image
+                  Container(
+                    width: imageWidth,
+                    height: imageWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: AssetImage(widget.imageUrl), // Use AssetImage for local images
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  "View Details",
-                  style: TextStyle(color: Colors.white),
-                ),
+                  const SizedBox(width: 16),
+                  // Product Details
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis, // Truncate long text
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis, // Truncate long text
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              IconButton(
-                onPressed: widget.onDelete,
-                icon: const Icon(Icons.delete, color: Color(0xFFA51414)),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Quantity Updater
+                  Row(
+                    children: [
+                      // Decrease Button
+                      SizedBox(
+                        width: buttonSize,
+                        height: buttonSize,
+                        child: IconButton(
+                          onPressed: _decrementQuantity,
+                          icon: const Icon(Icons.remove, color: Color(0xFFA51414)),
+                        ),
+                      ),
+                      // Editable Quantity Field
+                      SizedBox(
+                        width: textFieldWidth,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(vertical: 4),
+                          ),
+                          controller: TextEditingController(text: '$_quantity'),
+                          onSubmitted: _updateQuantity,
+                        ),
+                      ),
+                      // Increase Button
+                      SizedBox(
+                        width: buttonSize,
+                        height: buttonSize,
+                        child: IconButton(
+                          onPressed: _incrementQuantity,
+                          icon: const Icon(Icons.add, color: Color(0xFFA51414)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Price
+                  Text(
+                    '₹${widget.price.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  // View Details Button (Using RedButton)
+                  SizedBox(
+                    width: redButtonWidth,
+                    child: RedButton(
+                      label: "Details",
+                      onPressed: widget.onViewDetails,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -153,10 +207,25 @@ class MyCart extends StatefulWidget {
 }
 
 class _MyCartState extends State<MyCart> {
-  final List<Map<String, String>> _cartItems = [
-    {"name": "Item 1", "description": "This is the description for item 1."},
-    {"name": "Item 2", "description": "This is the description for item 2."},
-    {"name": "Item 3", "description": "This is the description for item 3."},
+  final List<Map<String, dynamic>> _cartItems = [
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 1",
+      "description": "This is the description for item 1.",
+      "price": 10.0
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 2",
+      "description": "This is the description for item 2.",
+      "price": 20.0
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 3",
+      "description": "This is the description for item 3.",
+      "price": 30.0
+    },
   ];
 
   void _removeItem(int index) {
@@ -184,10 +253,12 @@ class _MyCartState extends State<MyCart> {
         itemCount: _cartItems.length,
         itemBuilder: (context, index) {
           return MyCartItem(
-            itemName: _cartItems[index]["name"]!,
-            itemDescription: _cartItems[index]["description"]!,
+            imageUrl: _cartItems[index]["imageUrl"],
+            title: _cartItems[index]["title"],
+            description: _cartItems[index]["description"],
+            price: _cartItems[index]["price"],
             onDelete: () => _removeItem(index),
-            onViewDetails: () => _viewDetails(_cartItems[index]["name"]!),
+            onViewDetails: () => _viewDetails(_cartItems[index]["title"]),
           );
         },
       ),

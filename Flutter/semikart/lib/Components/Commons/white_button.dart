@@ -22,8 +22,8 @@ class WhiteButton extends StatelessWidget {
 
         // Dynamically calculate button width and height based on screen size
         final buttonWidth = screenWidth * 0.4; // 40% of screen width
-        final buttonHeight = screenWidth < 400 ? 33.0 : 40.0; // Adjust height for smaller screens (cast to double)
-        final fontSize = screenWidth < 400 ? 14.0 : 16.0; // Adjust font size for smaller screens (cast to double)
+        final buttonHeight = screenWidth < 400 ? 33.0 : 40.0; // Adjust height for smaller screens
+        final fontSize = screenWidth < 400 ? 14.0 : 16.0; // Adjust font size for smaller screens
 
         return Container(
           width: buttonWidth,

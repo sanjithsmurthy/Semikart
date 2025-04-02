@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../Commons/searchbar.dart' as custom; // Import the SearchBar widget with an alias
-import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
+import '../Commons/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
-import '../Commons/my_cart.dart'; // Import the MyCartItem widget
+import '../Commons/my_cart.dart'; // Import the updated MyCartItem widget
+import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
+import '../Commons/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -14,7 +16,26 @@ class TestLayoutSakshi extends StatefulWidget {
 class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController nameController = TextEditingController(); // Controller for GreyTextBox
-  final List<String> _cartItems = ["Item 1", "Item 2", "Item 3"]; // Sample cart items
+  final List<Map<String, dynamic>> _cartItems = [
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 1",
+      "description": "This is the description for Item 1",
+      "price": 1000.0,
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 2",
+      "description": "This is the description for Item 2",
+      "price": 2000.0,
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 3",
+      "description": "This is the description for Item 3",
+      "price": 3000.0,
+    },
+  ]; // Sample cart items with image, title, description, and price
 
   void _removeItem(int index) {
     setState(() {
@@ -27,9 +48,12 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Components'),
-          backgroundColor: const Color(0xFFA51414),
+        appBar: header.CombinedAppBar(
+          title: "GO BACK", // Set the title for the page
+          onBackPressed: () {
+            // Handle back button press
+            Navigator.pop(context);
+          },
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -48,9 +72,20 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 child: ListView.builder(
                   itemCount: _cartItems.length,
                   itemBuilder: (context, index) {
-                    return MyCartItem(
-                      itemName: _cartItems[index],
-                      onDelete: () => _removeItem(index), itemDescription: 'This is the description', onViewDetails: () {  },
+                    final cartItem = _cartItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: MyCartItem(
+                        imageUrl: cartItem["imageUrl"],
+                        title: cartItem["title"],
+                        description: cartItem["description"],
+                        price: cartItem["price"],
+                        onDelete: () => _removeItem(index),
+                        onViewDetails: () {
+                          // Handle view details action
+                          print("View details for ${cartItem["title"]}");
+                        },
+                      ),
                     );
                   },
                 ),

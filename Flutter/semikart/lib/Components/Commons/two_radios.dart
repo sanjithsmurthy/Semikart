@@ -36,82 +36,90 @@ class _TwoRadioButtonsState extends State<TwoRadioButtons> {
     // Determine layout based on screen width
     final isVerticalLayout = screenWidth < 400; // Use vertical layout for small screens
 
-    return isVerticalLayout
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.options.asMap().entries.map((entry) {
-              final index = entry.key;
-              final label = entry.value;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding for responsiveness
+      child: isVerticalLayout
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.options.asMap().entries.map((entry) {
+                final index = entry.key;
+                final label = entry.value;
 
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0), // Add spacing between items
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: widget.radioWidth, // Use the passed width
-                      height: widget.radioHeight, // Use the passed height
-                      child: Radio(
-                        value: index,
-                        groupValue: _selectedValue,
-                        onChanged: (int? value) {
-                          setState(() {
-                            _selectedValue = value!;
-                            widget.onSelectionChanged(_selectedValue); // Notify parent widget
-                          });
-                        },
-                        activeColor: const Color(0xFFA51414), // Custom active color
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0), // Add spacing between items
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: widget.radioWidth, // Use the passed width
+                        height: widget.radioHeight, // Use the passed height
+                        child: Radio(
+                          value: index,
+                          groupValue: _selectedValue,
+                          onChanged: (int? value) {
+                            setState(() {
+                              _selectedValue = value!;
+                              widget.onSelectionChanged(_selectedValue); // Notify parent widget
+                            });
+                          },
+                          activeColor: const Color(0xFFA51414), // Custom active color
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8), // Spacing between radio and label
-                    Text(
-                      label,
-                      style: const TextStyle(
-                        fontFamily: 'Product Sans',
-                        fontSize: 17,
-                        color: Color(0xFF000000),
+                      const SizedBox(width: 8), // Spacing between radio and label
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: const TextStyle(
+                            fontFamily: 'Product Sans',
+                            fontSize: 17,
+                            color: Color(0xFF000000),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: widget.options.asMap().entries.map((entry) {
-              final index = entry.key;
-              final label = entry.value;
+                    ],
+                  ),
+                );
+              }).toList(),
+            )
+          : SingleChildScrollView(
+              scrollDirection: Axis.horizontal, // Allow horizontal scrolling
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: widget.options.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final label = entry.value;
 
-              return Row(
-                children: [
-                  SizedBox(
-                    width: widget.radioWidth, // Use the passed width
-                    height: widget.radioHeight, // Use the passed height
-                    child: Radio(
-                      value: index,
-                      groupValue: _selectedValue,
-                      onChanged: (int? value) {
-                        setState(() {
-                          _selectedValue = value!;
-                          widget.onSelectionChanged(_selectedValue); // Notify parent widget
-                        });
-                      },
-                      activeColor: const Color(0xFFA51414), // Custom active color
-                    ),
-                  ),
-                  const SizedBox(width: 8), // Spacing between radio and label
-                  Text(
-                    label,
-                    style: const TextStyle(
-                      fontFamily: 'Product Sans',
-                      fontSize: 17,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                  const SizedBox(width: 24), // Spacing between radio button groups
-                ],
-              );
-            }).toList(),
-          );
+                  return Row(
+                    children: [
+                      SizedBox(
+                        width: widget.radioWidth, // Use the passed width
+                        height: widget.radioHeight, // Use the passed height
+                        child: Radio(
+                          value: index,
+                          groupValue: _selectedValue,
+                          onChanged: (int? value) {
+                            setState(() {
+                              _selectedValue = value!;
+                              widget.onSelectionChanged(_selectedValue); // Notify parent widget
+                            });
+                          },
+                          activeColor: const Color(0xFFA51414), // Custom active color
+                        ),
+                      ),
+                      const SizedBox(width: 8), // Spacing between radio and label
+                      Text(
+                        label,
+                        style: const TextStyle(
+                          fontFamily: 'Product Sans',
+                          fontSize: 17,
+                          color: Color(0xFF000000),
+                        ),
+                      ),
+                      const SizedBox(width: 24), // Spacing between radio button groups
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+    );
   }
 }
