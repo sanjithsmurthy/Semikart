@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
 import '../Commons/bottom_bar.dart'; // Import the BottomNavBar for navigation
+import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
+import '../Commons/edit_textbox2.dart'; // Import the EditTextBox2 widget
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
@@ -11,8 +13,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       width: double.infinity, // Ensure the header fills the entire screen width
       color: Colors.white,
       height: 66.0, // Increased height to accommodate additional padding
-      padding: const EdgeInsets.symmetric(
-          horizontal: 8.0, vertical: 5.0), // Added vertical padding
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0), // Added vertical padding
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -27,16 +28,14 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           // Logo (Clickable)
           Flexible(
             child: Align(
-              alignment: Alignment
-                  .centerLeft, // Align the logo closer to the menu icon
+              alignment: Alignment.centerLeft, // Align the logo closer to the menu icon
               child: GestureDetector(
                 onTap: () {
                   // Navigate to the home tab of the bottom bar
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const BottomNavBar(), // Redirect to BottomNavBar
+                      builder: (context) => const BottomNavBar(), // Redirect to BottomNavBar
                     ),
                   );
                 },
@@ -50,8 +49,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           ),
           // Right-side Icons
           Row(
-            mainAxisSize:
-                MainAxisSize.min, // Prevents the row from taking extra space
+            mainAxisSize: MainAxisSize.min, // Prevents the row from taking extra space
             children: [
               IconButton(
                 icon: Image.asset('public/assets/images/whatsapp_icon.png'),
@@ -71,13 +69,19 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(66.0); // Updated height to match the new padding
+  Size get preferredSize => const Size.fromHeight(66.0); // Updated height to match the new padding
 }
 
 // EditPage Class
-class EditPage extends StatelessWidget {
+class EditPage extends StatefulWidget {
   const EditPage({super.key});
+
+  @override
+  State<EditPage> createState() => _EditPageState();
+}
+
+class _EditPageState extends State<EditPage> {
+  bool isChecked = false; // State for the checkbox
 
   @override
   Widget build(BuildContext context) {
@@ -85,16 +89,38 @@ class EditPage extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(150), // Adjust height as needed
         child: CombinedAppBar(
-          title: "Go Backk",
+          title: "Payment",
           onBackPressed: () {
             Navigator.pop(context); // Navigate back to the previous page
           },
         ),
       ),
-      body: const Center(
-        child: Text(
-          "Go back page",
-          style: TextStyle(fontSize: 18),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16), // Add spacing
+            const EditTextBox(), // Use the EditTextBox widget here
+            const SizedBox(height: 16), // Add spacing
+            CheckboxListTile(
+              value: isChecked,
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked = value ?? false; // Update the checkbox state
+                });
+              },
+              title: const Text(
+                "Billing Address same as shipping address",
+                style: TextStyle(fontSize: 16),
+              ),
+              controlAffinity: ListTileControlAffinity.leading, // Place the checkbox on the left
+              activeColor: Color(0xFFA51414), // Set the tick color to red (#A51414)
+              contentPadding: EdgeInsets.zero, // Remove extra padding
+            ),
+            const SizedBox(height: 16), // Add spacing
+            const EditTextBox2(), // Add the EditTextBox2 widget below the checkbox
+          ],
         ),
       ),
     );
@@ -142,6 +168,5 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(150); // Adjust height dynamically
+  Size get preferredSize => const Size.fromHeight(150); // Adjust height dynamically
 }
