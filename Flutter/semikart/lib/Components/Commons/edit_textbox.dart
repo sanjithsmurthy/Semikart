@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Commons/bottom_bar.dart'; // Import the Header widget
 
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});
@@ -70,8 +71,18 @@ class EditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Address"),
-        backgroundColor: const Color(0xFFA51414),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back to the previous page
+          },
+        ),
+        title: const Text(
+          "Edit Address",
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: const Center(
         child: Text(
