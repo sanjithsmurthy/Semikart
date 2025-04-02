@@ -75,64 +75,85 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          // Number
-          Text(
-            '${index + 1}.', // Dynamically update the number
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFFA51414), // Normal color, no bold
-            ),
-          ),
-          SizedBox(height: 5), // Space between number and label
-
-          // Manufacturers Part No
-          GreyTextBox(
-            nameController: controllerMap['partNo']!,
-            text: 'Enter part number',
-            backgroundColor: Colors.white, // Set background color to white
-          ),
-
-          SizedBox(height: 10), // Space between rows
-
-          // Manufacturers
-          GreyTextBox(
-            nameController: controllerMap['manufacturer']!,
-            text: 'Enter manufacturer',
-            backgroundColor: Colors.white, // Set background color to white
-          ),
-
-          SizedBox(height: 10), // Space between rows
-
-          // Row for Quantity and Target Price
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Quantity
-              Expanded(
-                flex: 1,
-                child: GreyTextBox(
-                  nameController: controllerMap['quantity']!,
-                  text: 'Enter quantity',
-                  backgroundColor:
-                      Colors.white, // Set background color to white
+              // Number
+              Text(
+                '${index + 1}.', // Dynamically update the number
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFFA51414), // Normal color, no bold
                 ),
               ),
-              SizedBox(width: 30), // Padding between Quantity and Target Price
+              SizedBox(height: 5), // Space between number and label
 
-              // Target Price
-              Expanded(
-                flex: 1,
-                child: GreyTextBox(
-                  nameController: controllerMap['price']!,
-                  text: 'Enter price',
-                  backgroundColor:
-                      Colors.white, // Set background color to white
-                ),
+              // Manufacturers Part No
+              GreyTextBox(
+                nameController: controllerMap['partNo']!,
+                text: 'Enter part number',
+                backgroundColor: Colors.white, // Set background color to white
+              ),
+
+              SizedBox(height: 10), // Space between rows
+
+              // Manufacturers
+              GreyTextBox(
+                nameController: controllerMap['manufacturer']!,
+                text: 'Enter manufacturer',
+                backgroundColor: Colors.white, // Set background color to white
+              ),
+
+              SizedBox(height: 10), // Space between rows
+
+              // Row for Quantity and Target Price
+              Row(
+                children: [
+                  // Quantity
+                  Expanded(
+                    flex: 1,
+                    child: GreyTextBox(
+                      nameController: controllerMap['quantity']!,
+                      text: 'Enter quantity',
+                      backgroundColor:
+                          Colors.white, // Set background color to white
+                    ),
+                  ),
+                  SizedBox(
+                      width: 30), // Padding between Quantity and Target Price
+
+                  // Target Price
+                  Expanded(
+                    flex: 1,
+                    child: GreyTextBox(
+                      nameController: controllerMap['price']!,
+                      text: 'Enter price',
+                      backgroundColor:
+                          Colors.white, // Set background color to white
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
+
+          // Conditionally Render Delete Button
+          if (index >
+              0) // Show delete button only for components after the first one
+            Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                icon:
+                    Icon(Icons.delete, color: Color(0xFFA51414)), // Delete icon
+                onPressed: () {
+                  _removeRFQComponent(
+                      index); // Remove the corresponding component
+                },
+              ),
+            ),
         ],
       ),
     );
