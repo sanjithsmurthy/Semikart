@@ -133,6 +133,13 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       CustomTextField(
                         controller: _emailController,
                         label: "Email",
+                        width: 160.0, // Set the width to 160
+                      ),
+                      SizedBox(height: 16),
+                      CustomTextField(
+                        controller: TextEditingController(),
+                        label: "Password",
+                        // No width parameter provided, so it will use the default width (370.0)
                       ),
                       SizedBox(height: 32),
                       Text(
