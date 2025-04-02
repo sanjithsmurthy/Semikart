@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../Commons/searchbar.dart' as custom; // Import the SearchBar widget with an alias
-import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
+import '../Commons/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
 import '../Commons/my_cart.dart'; // Import the updated MyCartItem widget
 import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
+import '../Commons/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -47,9 +48,12 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Components'),
-          backgroundColor: const Color(0xFFA51414),
+        appBar: header.CombinedAppBar(
+          title: "GO BACK", // Set the title for the page
+          onBackPressed: () {
+            // Handle back button press
+            Navigator.pop(context);
+          },
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
