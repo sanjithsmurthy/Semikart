@@ -11,7 +11,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       width: double.infinity, // Ensure the header fills the entire screen width
       color: Colors.white,
       height: 66.0, // Increased height to accommodate additional padding
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0), // Added vertical padding
+      padding: const EdgeInsets.symmetric(
+          horizontal: 8.0, vertical: 5.0), // Added vertical padding
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -26,14 +27,16 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           // Logo (Clickable)
           Flexible(
             child: Align(
-              alignment: Alignment.centerLeft, // Align the logo closer to the menu icon
+              alignment: Alignment
+                  .centerLeft, // Align the logo closer to the menu icon
               child: GestureDetector(
                 onTap: () {
                   // Navigate to the home tab of the bottom bar
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const BottomNavBar(), // Redirect to BottomNavBar
+                      builder: (context) =>
+                          const BottomNavBar(), // Redirect to BottomNavBar
                     ),
                   );
                 },
@@ -47,7 +50,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           ),
           // Right-side Icons
           Row(
-            mainAxisSize: MainAxisSize.min, // Prevents the row from taking extra space
+            mainAxisSize:
+                MainAxisSize.min, // Prevents the row from taking extra space
             children: [
               IconButton(
                 icon: Image.asset('public/assets/images/whatsapp_icon.png'),
@@ -67,7 +71,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(66.0); // Updated height to match the new padding
+  Size get preferredSize =>
+      const Size.fromHeight(66.0); // Updated height to match the new padding
 }
 
 // EditPage Class
@@ -137,5 +142,6 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(150); // Adjust height dynamically
+  Size get preferredSize =>
+      const Size.fromHeight(150); // Adjust height dynamically
 }
