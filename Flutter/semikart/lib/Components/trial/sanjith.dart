@@ -5,6 +5,7 @@ import '../Commons/search_failed.dart'; // Import the search_failed.dart file
 import '../Commons/red_button.dart'; // Import the RedButton component
 import '../Commons/forgot_password.dart'; // Import the ForgotPasswordButton component
 import '../rfq_bom/add_item_manually.dart'; // Import the DynamicTable component
+import '../Commons/signinwith_google.dart'; // Import the SignInWithGoogleButton component
 
 class TestLayoutSanjith extends StatelessWidget {
   const TestLayoutSanjith({super.key});
@@ -54,6 +55,24 @@ class TestLayoutSanjith extends StatelessWidget {
                       // Add your navigation or action here
                       print("Don't have an account button pressed");
                     },
+                  ),
+                  const SizedBox(height: 20), // Add spacing between components
+                  // Sign In with Google Button (Two-Line Text)
+                  SignInWithGoogleButton(
+                    onPressed: () {
+                      // Add your Google sign-in logic here
+                      print("Sign in with Google button (Two-Line) pressed");
+                    },
+                    isTwoLine: true, // Enable two-line text
+                  ),
+                  const SizedBox(height: 20), // Add spacing between components
+                  // Sign In with Google Button (Single-Line Text)
+                  SignInWithGoogleButton(
+                    onPressed: () {
+                      // Add your Google sign-in logic here
+                      print("Sign in with Google button (Single-Line) pressed");
+                    },
+                    isTwoLine: false, // Enable single-line text
                   ),
                   const SizedBox(height: 20), // Add spacing between components
                   // DynamicTable Component

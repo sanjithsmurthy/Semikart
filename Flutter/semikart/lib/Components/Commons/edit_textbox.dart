@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
+import '../Commons/bottom_bar.dart'; // Import the Header widget
 
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});
@@ -69,9 +71,14 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit Address"),
-        backgroundColor: const Color(0xFFA51414),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(150), // Adjust height as needed
+        child: CombinedAppBar(
+          title: "Edit Address",
+          onBackPressed: () {
+            Navigator.pop(context); // Navigate back to the previous page
+          },
+        ),
       ),
       body: const Center(
         child: Text(
@@ -81,4 +88,48 @@ class EditPage extends StatelessWidget {
       ),
     );
   }
+}
+
+// Combined AppBar Widget
+class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final VoidCallback onBackPressed;
+
+  const CombinedAppBar({
+    super.key,
+    required this.title,
+    required this.onBackPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.min, // Adjust height dynamically
+        children: [
+          const Header(), // Place the Header widget at the top
+          AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: SvgPicture.asset(
+                'public/assets/images/back.svg', // Path to the back.svg file
+                color: const Color(0xFFA51414), // Apply the custom color
+              ),
+              iconSize: 24.0, // Set the size of the SVG
+              onPressed: onBackPressed,
+            ),
+            title: Text(
+              title,
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(150); // Adjust height dynamically
 }

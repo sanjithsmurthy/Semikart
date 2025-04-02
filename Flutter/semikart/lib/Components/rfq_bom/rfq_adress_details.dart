@@ -77,8 +77,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // First Name
               GreyTextBox(
                 nameController: firstNameController,
-                labelText: 'First name',
-                hintText: 'Enter your first name',
+                text: 'First name',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -87,8 +86,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Email
               GreyTextBox(
                 nameController: emailController,
-                labelText: 'Email',
-                hintText: 'Enter your email',
+                text: 'Email',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -97,8 +95,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Mobile
               GreyTextBox(
                 nameController: mobileController,
-                labelText: 'Mobile number',
-                hintText: 'Enter your mobile number',
+                text: 'Mobile number',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -107,8 +104,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Company
               GreyTextBox(
                 nameController: companyController,
-                labelText: 'Company name',
-                hintText: 'Enter your company name',
+                text: 'Company name',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -117,8 +113,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // GST No
               GreyTextBox(
                 nameController: gstNoController,
-                labelText: 'GST number',
-                hintText: 'Enter your GST number',
+                text: 'GST number',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -127,8 +122,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Address 1
               GreyTextBox(
                 nameController: address1Controller,
-                labelText: 'Address line 1',
-                hintText: 'Enter your address line 1',
+                text: 'Address line 1',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -137,8 +131,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Address 2
               GreyTextBox(
                 nameController: address2Controller,
-                labelText: 'Address line 2',
-                hintText: 'Enter your address line 2',
+                text: 'Address line 2',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -147,8 +140,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Landmark
               GreyTextBox(
                 nameController: landmarkController,
-                labelText: 'Landmark',
-                hintText: 'Enter your landmark',
+                text: 'Landmark',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
               ),
 
@@ -160,18 +152,16 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   Flexible(
                     child: GreyTextBox(
                       nameController: zipCodeController,
-                      labelText: 'Zip code',
-                      hintText: 'Enter your zip code',
+                      text: 'Zip code',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
                     ),
                   ),
-                  SizedBox(width: 30), // Padding between Zip Code and State
+                  SizedBox(width: 10), // Adjusted padding to match other fields
                   Flexible(
                     child: GreyTextBox(
                       nameController: stateController,
-                      labelText: 'State',
-                      hintText: 'Enter your state',
+                      text: 'State',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
                     ),
@@ -179,7 +169,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                 ],
               ),
 
-              SizedBox(height: 20), // Space between rows
+              SizedBox(height: 10), // Space between rows
 
               // City and Country
               Row(
@@ -187,18 +177,16 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   Flexible(
                     child: GreyTextBox(
                       nameController: cityController,
-                      labelText: 'City',
-                      hintText: 'Enter your city',
+                      text: 'City',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
                     ),
                   ),
-                  SizedBox(width: 30), // Padding between City and Country
+                  SizedBox(width: 10), // Adjusted padding to match other fields
                   Flexible(
                     child: GreyTextBox(
                       nameController: countryController,
-                      labelText: 'Country',
-                      hintText: 'Enter your country',
+                      text: 'Country',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
                     ),
@@ -245,16 +233,14 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
 
 class GreyTextBox extends StatelessWidget {
   final TextEditingController nameController;
-  final String labelText; // Single parameter for both label and hint text
-  final String hintText; // Single parameter for both label and hint text
+  final String text; // Single parameter for both label and hint text
   final double? width; // Optional width parameter
   final Color backgroundColor; // Background color parameter
 
   GreyTextBox({
     Key? key,
     required this.nameController,
-    this.labelText = 'Name', // Default value for label and hint text
-    this.hintText = 'Enter your name', // Default value for label and hint text
+    this.text = 'Name', // Default value for label and hint text
     this.width, // Optional width
     this.backgroundColor =
         const Color(0xFFE4E8EC), // Default grey background color
@@ -269,7 +255,7 @@ class GreyTextBox extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          labelText, // Use the single parameter for label text
+          text, // Use the single parameter for label text
           style: TextStyle(
             fontSize: 13,
             color: Color(0xFFA51414), // Adjust the color as needed
@@ -289,7 +275,7 @@ class GreyTextBox extends StatelessWidget {
             cursorColor: Colors.black, // Set the cursor color to black
             controller: nameController,
             decoration: InputDecoration(
-              hintText: hintText, // Use the same parameter for hint text
+              hintText: text, // Use the same parameter for hint text
               border: InputBorder.none,
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 10, vertical: 10),

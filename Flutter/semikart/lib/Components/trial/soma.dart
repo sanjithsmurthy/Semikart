@@ -41,30 +41,7 @@ class _TestLayoutSomaState extends State<TestLayoutSoma> {
                 },
               ),
 
-              SizedBox(height: 20), // Add spacing before the link
-
-              // Link to navigate to the combined view
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CombinedViewScreen(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'View All Components in One Frame',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFFA51414), // Link color
-                      decoration:
-                          TextDecoration.underline, // Underline the text
-                    ),
-                  ),
-                ),
-              ),
+              SizedBox(height: 20), // Add spacing before the next component
             ],
           ),
         ),
