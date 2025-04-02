@@ -43,6 +43,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
               context: context,
               title: 'Invalid File Type',
               message: 'Please select an image file (JPG, PNG, GIF or WEBP)',
+              imagePath: 'public/assets/images/Alert.png',  // Add your image path here
             );
           }
           return;

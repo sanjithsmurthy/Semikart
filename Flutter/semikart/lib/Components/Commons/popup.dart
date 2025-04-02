@@ -1,52 +1,66 @@
 import 'package:flutter/material.dart';
+import 'red_button.dart';
 
 class CustomPopup {
   static Future<void> show({
     required BuildContext context,
-    required String title,
-    required String message,
-    String buttonText = 'OK',
+    String? title, // Optional title
+    String? message, // Optional message
+    String buttonText = 'OK', // Default button text
+    String? imagePath, // Optional image path
   }) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
+        final popupWidth = MediaQuery.of(context).size.width * 0.9; // 90% of screen width
+        final popupHeight = MediaQuery.of(context).size.height * 0.4; // 40% of screen height
+
         return Dialog(
           backgroundColor: Color(0xFFFFFFFF),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12), // Rounded corners
+          ),
           child: Container(
-            width: 390,
-            height: 225,
+            width: popupWidth,
             padding: EdgeInsets.all(24),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // Make height dynamic
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: 'Product Sans',
-                    fontWeight: FontWeight.bold,
+                if (imagePath != null)
+                  Image.asset(
+                    imagePath,
+                    width: popupWidth * 0.2, // Scale image width to 20% of popup width
+                    height: popupWidth * 0.2, // Scale image height to 20% of popup width
+                    fit: BoxFit.contain,
                   ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  message,
-                  style: TextStyle(
-                    fontFamily: 'Product Sans',
-                  ),
-                ),
-                Spacer(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    child: Text(
-                      buttonText,
-                      style: TextStyle(
-                        color: Color(0xFFA51414),
-                        fontFamily: 'Product Sans',
-                      ),
+                if (imagePath != null) SizedBox(height: 16), // Space between image and title
+                if (title != null)
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.bold,
                     ),
-                    onPressed: () => Navigator.of(context).pop(),
+                    textAlign: TextAlign.center,
                   ),
+                if (title != null) SizedBox(height: 8), // Space between title and message
+                if (message != null)
+                  Text(
+                    message,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Product Sans',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                if (message != null) SizedBox(height: 16), // Space between message and button
+                RedButton(
+                  label: buttonText,
+                  
+                  width: popupWidth * 0.3, // Scale button width to 30% of popup width
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
             ),
