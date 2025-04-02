@@ -31,8 +31,32 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
     super.dispose();
   }
 
-  // Method to add a new RFQ component
+  // Method to validate mandatory fields
+  bool _validateFields(int index) {
+    final controllerMap = _controllers[index];
+    if (controllerMap['partNo']!.text.isEmpty ||
+        controllerMap['manufacturer']!.text.isEmpty ||
+        controllerMap['quantity']!.text.isEmpty) {
+      return false; // Validation failed
+    }
+    return true; // Validation passed
+  }
+
+  // Method to add a new RFQ component with validation
   void _addRFQComponent() {
+    // Validate the last component before adding a new one
+    if (_rfqComponents.isNotEmpty &&
+        !_validateFields(_rfqComponents.length - 1)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Please fill all mandatory fields before adding a new row.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return; // Stop adding a new component
+    }
+
     setState(() {
       _rfqComponents.add(_rfqComponents.length + 1);
       _controllers.add({
@@ -93,7 +117,8 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
               // Manufacturers Part No
               GreyTextBox(
                 nameController: controllerMap['partNo']!,
-                text: 'Enter part number',
+                text:
+                    'Manufacturers Part No*', // Add asterisk to indicate mandatory
                 backgroundColor: Colors.white, // Set background color to white
               ),
 
@@ -102,7 +127,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
               // Manufacturers
               GreyTextBox(
                 nameController: controllerMap['manufacturer']!,
-                text: 'Enter manufacturer',
+                text: 'Manufacturer*', // Add asterisk to indicate mandatory
                 backgroundColor: Colors.white, // Set background color to white
               ),
 
@@ -116,7 +141,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                     flex: 1,
                     child: GreyTextBox(
                       nameController: controllerMap['quantity']!,
-                      text: 'Enter quantity',
+                      text: 'Quantity*', // Add asterisk to indicate mandatory
                       backgroundColor:
                           Colors.white, // Set background color to white
                     ),
@@ -129,7 +154,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                     flex: 1,
                     child: GreyTextBox(
                       nameController: controllerMap['price']!,
-                      text: 'Enter price',
+                      text: 'Price',
                       backgroundColor:
                           Colors.white, // Set background color to white
                     ),
@@ -170,6 +195,20 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Add the instruction text
+          Text(
+            "Manually enter each product\nrequirement below.",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+
+          SizedBox(
+              height:
+                  43), // Padding between the text and the first gray component
+
           // Display all RFQ components
           ..._rfqComponents.asMap().entries.map((entry) {
             int index = entry.key;
