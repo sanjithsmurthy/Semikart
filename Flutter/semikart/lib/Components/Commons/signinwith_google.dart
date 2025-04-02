@@ -12,9 +12,18 @@ class SignInWithGoogleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Dynamically calculate button width and height based on screen size
+    final buttonWidth = screenWidth * 0.45; // 45% of screen width
+    final buttonHeight = screenWidth < 400 ? 50.0 : 58.0; // Adjust height for smaller screens
+    final iconSize = screenWidth < 400 ? 35.0 : 40.0; // Adjust icon size for smaller screens
+    final fontSize = screenWidth < 400 ? 12.0 : 14.0; // Adjust font size for smaller screens
+
     return Container(
-      width: 178,
-      height: 58,
+      width: buttonWidth,
+      height: buttonHeight,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(50),
@@ -38,26 +47,26 @@ class SignInWithGoogleButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
         child: Padding(
-          padding: EdgeInsets.only(left: 13.0),  // 13px from left corner
+          padding: EdgeInsets.only(left: 13.0), // 13px from left corner
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 40,  // Icon container width
-                height: 40, // Icon container height
+                width: iconSize, // Dynamically calculated icon size
+                height: iconSize, // Dynamically calculated icon size
                 child: Icon(
                   Icons.g_mobiledata_rounded,
-                  size: 40,
+                  size: iconSize, // Dynamically calculated icon size
                   color: Color(0xFF4285F4),
                 ),
               ),
-              SizedBox(width: 12),  // 12px spacing between icon and text
+              SizedBox(width: 12), // 12px spacing between icon and text
               Text(
                 'Sign in with\nGoogle',
                 style: TextStyle(
                   color: Color(0xFF000000),
-                  fontSize: 14,
+                  fontSize: fontSize, // Dynamically calculated font size
                   height: 1.2,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.normal,

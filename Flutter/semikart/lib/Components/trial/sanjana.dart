@@ -14,6 +14,7 @@ import '../Commons/order_view.dart';
 import '../Commons/profilepic.dart';
 import '../Commons/product_search.dart'; // Import the ProductSearch page
 import '../Commons/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
+import '../Commons/mobile_number_input.dart'; // Import the MobileNumberField component
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -365,6 +366,29 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: maxWidth),
                         child: OrderView(),
+                      ),
+                      SizedBox(height: 32),
+                      Text(
+                        'Mobile Number Field',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      MobileNumberField(
+                        controller: TextEditingController(),
+                        label: 'Mobile Number',
+                        countryCodes: ['+91', '+1', '+44'], // List of country codes
+                        defaultCountryCode: '+91', // Default country code
+                        onCountryCodeChanged: (code) {
+                          print('Selected country code: $code');
+                        },
+                        onValidationFailed: (number) {
+                          print('Invalid mobile number: $number');
+                        },
                       ),
                       SizedBox(height: 32),
                       Text(

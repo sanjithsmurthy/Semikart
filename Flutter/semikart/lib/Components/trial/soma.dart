@@ -30,7 +30,7 @@ class _TestLayoutSomaState extends State<TestLayoutSoma> {
               SizedBox(height: 20), // Add spacing between components
 
               // Add the RFQTextComponent
-              RFQTextComponent(),
+              RFQTextComponent(), // Display RFQTextComponent
 
               SizedBox(height: 20), // Add spacing between components
 
@@ -96,7 +96,7 @@ class CombinedViewScreen extends StatelessWidget {
               SizedBox(height: 20), // Add spacing between components
 
               // RFQTextComponent
-              RFQTextComponent(),
+              RFQTextComponent(), // Display RFQTextComponent
 
               SizedBox(height: 20), // Add spacing between components
 

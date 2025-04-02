@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../Commons/red_button.dart'; // Import the RedButton widget
+import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
 
-class RFQAddressDetails extends StatelessWidget {
+class RFQAddressDetails extends StatefulWidget {
   final String title;
   final String submitButtonText;
   final VoidCallback onSubmit;
@@ -14,7 +15,46 @@ class RFQAddressDetails extends StatelessWidget {
   });
 
   @override
+  State<RFQAddressDetails> createState() => _RFQAddressDetailsState();
+}
+
+class _RFQAddressDetailsState extends State<RFQAddressDetails> {
+  // Controllers for each text field
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController companyController = TextEditingController();
+  final TextEditingController gstNoController = TextEditingController();
+  final TextEditingController address1Controller = TextEditingController();
+  final TextEditingController address2Controller = TextEditingController();
+  final TextEditingController landmarkController = TextEditingController();
+  final TextEditingController zipCodeController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Dispose all controllers
+    firstNameController.dispose();
+    emailController.dispose();
+    mobileController.dispose();
+    companyController.dispose();
+    gstNoController.dispose();
+    address1Controller.dispose();
+    address2Controller.dispose();
+    landmarkController.dispose();
+    zipCodeController.dispose();
+    stateController.dispose();
+    cityController.dispose();
+    countryController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+
     return Container(
       color: Colors.white, // Set the background color to white
       child: SingleChildScrollView(
@@ -25,7 +65,7 @@ class RFQAddressDetails extends StatelessWidget {
             children: [
               // Title
               Text(
-                title,
+                widget.title,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -35,51 +75,133 @@ class RFQAddressDetails extends StatelessWidget {
               SizedBox(height: 20), // Space below the title
 
               // First Name
-              _buildTextField(label: 'First Name'),
+              GreyTextBox(
+                nameController: firstNameController,
+                labelText: 'First name',
+                hintText: 'Enter your first name',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Email
-              _buildTextField(label: 'Email'),
+              GreyTextBox(
+                nameController: emailController,
+                labelText: 'Email',
+                hintText: 'Enter your email',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Mobile
-              _buildTextField(label: 'Mobile'),
+              GreyTextBox(
+                nameController: mobileController,
+                labelText: 'Mobile number',
+                hintText: 'Enter your mobile number',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Company
-              _buildTextField(label: 'Company'),
+              GreyTextBox(
+                nameController: companyController,
+                labelText: 'Company name',
+                hintText: 'Enter your company name',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // GST No
-              _buildTextField(label: 'GST No'),
+              GreyTextBox(
+                nameController: gstNoController,
+                labelText: 'GST number',
+                hintText: 'Enter your GST number',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Address 1
-              _buildTextField(label: 'Address 1'),
+              GreyTextBox(
+                nameController: address1Controller,
+                labelText: 'Address line 1',
+                hintText: 'Enter your address line 1',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Address 2
-              _buildTextField(label: 'Address 2'),
+              GreyTextBox(
+                nameController: address2Controller,
+                labelText: 'Address line 2',
+                hintText: 'Enter your address line 2',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Landmark
-              _buildTextField(label: 'Landmark'),
+              GreyTextBox(
+                nameController: landmarkController,
+                labelText: 'Landmark',
+                hintText: 'Enter your landmark',
+                backgroundColor: Color(0xFFE4E8EC), // Grey background color
+              ),
+
+              SizedBox(height: 10), // Space between fields
 
               // Zip Code and State
               Row(
                 children: [
-                  Expanded(
-                    child: _buildTextField(label: 'Zip Code'),
+                  Flexible(
+                    child: GreyTextBox(
+                      nameController: zipCodeController,
+                      labelText: 'Zip code',
+                      hintText: 'Enter your zip code',
+                      backgroundColor:
+                          Color(0xFFE4E8EC), // Grey background color
+                    ),
                   ),
-                  SizedBox(width: 10), // Space between fields
-                  Expanded(
-                    child: _buildTextField(label: 'State'),
+                  SizedBox(width: 30), // Padding between Zip Code and State
+                  Flexible(
+                    child: GreyTextBox(
+                      nameController: stateController,
+                      labelText: 'State',
+                      hintText: 'Enter your state',
+                      backgroundColor:
+                          Color(0xFFE4E8EC), // Grey background color
+                    ),
                   ),
                 ],
               ),
 
+              SizedBox(height: 20), // Space between rows
+
               // City and Country
               Row(
                 children: [
-                  Expanded(
-                    child: _buildTextField(label: 'City'),
+                  Flexible(
+                    child: GreyTextBox(
+                      nameController: cityController,
+                      labelText: 'City',
+                      hintText: 'Enter your city',
+                      backgroundColor:
+                          Color(0xFFE4E8EC), // Grey background color
+                    ),
                   ),
-                  SizedBox(width: 10), // Space between fields
-                  Expanded(
-                    child: _buildTextField(label: 'Country'),
+                  SizedBox(width: 30), // Padding between City and Country
+                  Flexible(
+                    child: GreyTextBox(
+                      nameController: countryController,
+                      labelText: 'Country',
+                      hintText: 'Enter your country',
+                      backgroundColor:
+                          Color(0xFFE4E8EC), // Grey background color
+                    ),
                   ),
                 ],
               ),
@@ -109,8 +231,8 @@ class RFQAddressDetails extends StatelessWidget {
               // Submit Button
               Center(
                 child: RedButton(
-                  label: submitButtonText,
-                  onPressed: onSubmit,
+                  label: widget.submitButtonText,
+                  onPressed: widget.onSubmit,
                 ),
               ),
             ],
@@ -119,39 +241,61 @@ class RFQAddressDetails extends StatelessWidget {
       ),
     );
   }
+}
 
-  // Helper method to build a text field
-  Widget _buildTextField({required String label}) {
+class GreyTextBox extends StatelessWidget {
+  final TextEditingController nameController;
+  final String labelText; // Single parameter for both label and hint text
+  final String hintText; // Single parameter for both label and hint text
+  final double? width; // Optional width parameter
+  final Color backgroundColor; // Background color parameter
+
+  GreyTextBox({
+    Key? key,
+    required this.nameController,
+    this.labelText = 'Name', // Default value for label and hint text
+    this.hintText = 'Enter your name', // Default value for label and hint text
+    this.width, // Optional width
+    this.backgroundColor =
+        const Color(0xFFE4E8EC), // Default grey background color
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Get screen width for responsiveness
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          labelText, // Use the single parameter for label text
           style: TextStyle(
-            fontSize: 14,
-            color: Colors.black, // Changed to black
+            fontSize: 13,
+            color: Color(0xFFA51414), // Adjust the color as needed
           ),
         ),
-        SizedBox(height: 5), // Space between label and text field
-        SizedBox(
-          height: 35, // Set height for the text field
+        const SizedBox(height: 2),
+        Container(
+          width: width ??
+              screenWidth *
+                  0.9, // Default to 90% of screen width if width is not provided
+          height: 41.54,
+          decoration: BoxDecoration(
+            color: backgroundColor, // Use the customizable background color
+            borderRadius: BorderRadius.circular(9),
+          ),
           child: TextField(
+            cursorColor: Colors.black, // Set the cursor color to black
+            controller: nameController,
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10), // Set corner radius
-                borderSide: BorderSide.none, // Remove the border
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 12,
-              ),
-              filled: true,
-              fillColor: Color(0xFFF9F9F9), // Background color
-              hintStyle: TextStyle(color: Colors.grey),
+              hintText: hintText, // Use the same parameter for hint text
+              border: InputBorder.none,
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             ),
           ),
         ),
-        SizedBox(height: 15), // Space below the text field
       ],
     );
   }
