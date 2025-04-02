@@ -191,23 +191,23 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
     return Container(
       color: Colors.white, // Set the background color to white
       width: screenWidth, // Make the container responsive to screen width
-      padding: EdgeInsets.all(8), // Padding from the left
+      padding: EdgeInsets.symmetric(
+          horizontal: 16), // Horizontal padding for alignment
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Add the instruction text
-          Text(
-            "Manually enter each product\nrequirement below.",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          Padding(
+            padding: EdgeInsets.only(bottom: 30), // Padding below the text
+            child: Text(
+              "Manually enter each product\nrequirement below.",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
-
-          SizedBox(
-              height:
-                  43), // Padding between the text and the first gray component
 
           // Display all RFQ components
           ..._rfqComponents.asMap().entries.map((entry) {
