@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Commons/red_button.dart'; // Import the RedButton widget
-import '../rfq_bom/add_item_manually.dart'; // Import the DeleteButton widget
+import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
 
 class RFQTextComponent extends StatefulWidget {
   const RFQTextComponent({super.key});
@@ -12,6 +12,8 @@ class RFQTextComponent extends StatefulWidget {
 class _RFQTextComponentState extends State<RFQTextComponent> {
   // List to hold dynamically added RFQ components
   final List<int> _rfqComponents = [];
+  final List<Map<String, TextEditingController>> _controllers =
+      []; // Controllers for each text box
 
   @override
   void initState() {
@@ -20,10 +22,25 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
     _addRFQComponent();
   }
 
+  @override
+  void dispose() {
+    // Dispose all controllers
+    for (var controllerMap in _controllers) {
+      controllerMap.values.forEach((controller) => controller.dispose());
+    }
+    super.dispose();
+  }
+
   // Method to add a new RFQ component
   void _addRFQComponent() {
     setState(() {
       _rfqComponents.add(_rfqComponents.length + 1);
+      _controllers.add({
+        'partNo': TextEditingController(),
+        'manufacturer': TextEditingController(),
+        'quantity': TextEditingController(),
+        'price': TextEditingController(),
+      }); // Add a new set of controllers for each text box
     });
   }
 
@@ -31,17 +48,19 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
   void _removeRFQComponent(int index) {
     setState(() {
       _rfqComponents.removeAt(index);
-      // Rebuild the list to update the numbering
-      for (int i = 0; i < _rfqComponents.length; i++) {
-        _rfqComponents[i] = i + 1;
-      }
+      _controllers[index].values.forEach(
+          (controller) => controller.dispose()); // Dispose the controllers
+      _controllers.removeAt(index); // Remove the controllers
     });
   }
 
   // Method to build the grey RFQ component
   Widget _buildRFQComponent(int index) {
+    final controllerMap =
+        _controllers[index]; // Get the controllers for this component
+
     return Container(
-      width: 365, // Fixed width for the grey box
+      width: double.infinity, // Make the container take full width
       padding: EdgeInsets.all(16.0), // Padding inside the grey box
       margin: EdgeInsets.only(bottom: 20), // Padding between components
       decoration: BoxDecoration(
@@ -63,7 +82,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             children: [
               // Number
               Text(
-                '$index.', // Dynamically update the number
+                '${index + 1}.', // Dynamically update the number
                 style: TextStyle(
                   fontSize: 14,
                   color: Color(0xFFA51414), // Normal color, no bold
@@ -72,145 +91,48 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
               SizedBox(height: 5), // Space between number and label
 
               // Manufacturers Part No
-              Text(
-                'Manufacturers Part No*',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFFA51414), // Normal color, no bold
-                ),
+              GreyTextBox(
+                nameController: controllerMap['partNo']!,
+                text: 'Enter part number',
+                backgroundColor: Colors.white, // Set background color to white
               ),
-              SizedBox(height: 5), // Space between label and text field
-              SizedBox(
-                width: 345, // Set width for the text field
-                height: 35, // Set height for the text field
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(10), // Set corner radius to 10
-                      borderSide: BorderSide.none, // Remove the border
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 12,
-                    ),
-                    filled: true,
-                    fillColor: Color(0xFFF9F9F9),
-                    hintText: 'Enter part number',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ),
+
               SizedBox(height: 10), // Space between rows
 
               // Manufacturers
-              Text(
-                'Manufacturers*',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFFA51414), // Normal color, no bold
-                ),
+              GreyTextBox(
+                nameController: controllerMap['manufacturer']!,
+                text: 'Enter manufacturer',
+                backgroundColor: Colors.white, // Set background color to white
               ),
-              SizedBox(height: 5), // Space between label and text field
-              SizedBox(
-                width: 345, // Set width for the text field
-                height: 35, // Set height for the text field
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(10), // Set corner radius to 10
-                      borderSide: BorderSide.none, // Remove the border
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 12,
-                    ),
-                    filled: true,
-                    fillColor: Color(0xFFF9F9F9),
-                    hintText: 'Enter manufacturer',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ),
+
               SizedBox(height: 10), // Space between rows
 
               // Row for Quantity and Target Price
               Row(
                 children: [
                   // Quantity
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Quantity*',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFA51414), // Normal color, no bold
-                        ),
-                      ),
-                      SizedBox(height: 5), // Space between label and text field
-                      SizedBox(
-                        width: 150, // Adjusted width for the text field
-                        height: 35, // Set height for the text field
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), // Set corner radius to 10
-                              borderSide: BorderSide.none, // Remove the border
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 12,
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFF9F9F9),
-                            hintText: 'Enter quantity',
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ],
+                  Expanded(
+                    flex: 1,
+                    child: GreyTextBox(
+                      nameController: controllerMap['quantity']!,
+                      text: 'Enter quantity',
+                      backgroundColor:
+                          Colors.white, // Set background color to white
+                    ),
                   ),
                   SizedBox(
-                      width:
-                          10), // Add padding between Quantity and Target Price
+                      width: 30), // Padding between Quantity and Target Price
 
                   // Target Price
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Target Price',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFA51414), // Normal color, no bold
-                        ),
-                      ),
-                      SizedBox(height: 5), // Space between label and text field
-                      SizedBox(
-                        width: 150, // Adjusted width for the text field
-                        height: 35, // Set height for the text field
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10), // Set corner radius to 10
-                              borderSide: BorderSide.none, // Remove the border
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 12,
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFF9F9F9),
-                            hintText: 'Enter price',
-                            hintStyle: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ],
+                  Expanded(
+                    flex: 1,
+                    child: GreyTextBox(
+                      nameController: controllerMap['price']!,
+                      text: 'Enter price',
+                      backgroundColor:
+                          Colors.white, // Set background color to white
+                    ),
                   ),
                 ],
               ),
@@ -219,16 +141,16 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
 
           // Conditionally Render Delete Button
           if (index >
-              1) // Show delete button only for components after the first one
+              0) // Show delete button only for components after the first one
             Positioned(
-              top: 0, // Position at the top
-              right: 0, // Position at the right corner
+              top: 0,
+              right: 0,
               child: IconButton(
                 icon:
                     Icon(Icons.delete, color: Color(0xFFA51414)), // Delete icon
                 onPressed: () {
                   _removeRFQComponent(
-                      index - 1); // Remove the corresponding component
+                      index); // Remove the corresponding component
                 },
               ),
             ),
@@ -239,15 +161,20 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+
     return Container(
       color: Colors.white, // Set the background color to white
-      width: 412, // Set the width of the white component
+      width: screenWidth, // Make the container responsive to screen width
       padding: EdgeInsets.all(8), // Padding from the left
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Display all RFQ components
-          ..._rfqComponents.map((index) => _buildRFQComponent(index)).toList(),
+          ..._rfqComponents.asMap().entries.map((entry) {
+            int index = entry.key;
+            return _buildRFQComponent(index);
+          }).toList(),
 
           // Add Row Button
           Align(
@@ -257,7 +184,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                   top: 15,
                   right: 20), // Spacing between button and last component
               child: RedButton(
-                width: 90, // Adjusted width
+                width: screenWidth * 0.25, // Make button width responsive
                 height: 34, // Adjusted height
                 label: 'Add Row',
                 onPressed: _addRFQComponent, // Add a new RFQ component
