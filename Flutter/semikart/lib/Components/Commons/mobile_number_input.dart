@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import for input formatters
 
 class MobileNumberField extends StatefulWidget {
   final TextEditingController controller;
@@ -147,7 +148,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                       flex: 7, // Adjust flex ratio as needed
                       child: TextField(
                         controller: widget.controller,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.number, // Set keyboard type to number
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Allow only numeric input
                         decoration: InputDecoration(
                           labelText: widget.label,
                           labelStyle: TextStyle(
