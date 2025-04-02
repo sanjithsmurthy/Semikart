@@ -71,8 +71,6 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
       builder: (context, constraints) {
         // Calculate responsive widths
         final totalWidth = constraints.maxWidth;
-        final dropdownWidth = totalWidth * 0.3; // Dropdown takes 30% of the width
-        final textFieldWidth = totalWidth * 0.65; // Text field takes 65% of the width
 
         return Padding(
           padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
@@ -85,8 +83,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Country Code Dropdown
-                    SizedBox(
-                      width: dropdownWidth,
+                    Flexible(
+                      flex: 3, // Adjust flex ratio as needed
                       child: DropdownButtonFormField<String>(
                         value: _selectedCountryCode,
                         decoration: InputDecoration(
@@ -145,8 +143,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                     const SizedBox(width: 8), // Spacing between dropdown and text field
 
                     // Mobile Number Input Field
-                    SizedBox(
-                      width: textFieldWidth,
+                    Flexible(
+                      flex: 7, // Adjust flex ratio as needed
                       child: TextField(
                         controller: widget.controller,
                         keyboardType: TextInputType.number,
@@ -202,12 +200,14 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        _errorMessage!,
-                        style: TextStyle(
-                          color: Color(0xFFA51414),
-                          fontSize: 14,
-                          fontFamily: 'Product Sans',
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: TextStyle(
+                            color: Color(0xFFA51414),
+                            fontSize: 14,
+                            fontFamily: 'Product Sans',
+                          ),
                         ),
                       ),
                     ],
