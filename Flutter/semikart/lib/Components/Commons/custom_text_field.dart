@@ -1,5 +1,3 @@
-//finalized red text field with email label
-
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -20,10 +18,14 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate the width dynamically based on screen size
+    final screenWidth = MediaQuery.of(context).size.width;
+    final calculatedWidth = width > screenWidth * 0.9 ? screenWidth * 0.9 : width; // Limit width to 90% of screen width
+
     final textField = Padding(
-      padding: EdgeInsets.only(left: 22.0),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
-        width: width, // Use the width parameter
+        width: calculatedWidth, // Use the dynamically calculated width
         height: 72,
         child: Stack(
           children: [
@@ -32,17 +34,15 @@ class CustomTextField extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: label,
                 labelStyle: TextStyle(
-                  color: Color(0xFFA51414),
-                  backgroundColor: Colors.white,
+                  color: Color(0xFF757575), // Grey color for placeholder
                   fontSize: 16,
                   height: 19 / 16, // To achieve height of 19
                 ),
                 floatingLabelStyle: TextStyle(
-                  color: Color(0xFFA51414),
-                  backgroundColor: Colors.white,
+                  color: Color(0xFFA51414), // Red color when focused
                   fontSize: 16,
                 ),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
+                floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
                 contentPadding: EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -73,11 +73,6 @@ class CustomTextField extends StatelessWidget {
       ),
     );
 
-    return padding != null
-        ? Padding(
-            padding: padding!,
-            child: textField,
-          )
-        : textField;
+    return textField;
   }
 }
