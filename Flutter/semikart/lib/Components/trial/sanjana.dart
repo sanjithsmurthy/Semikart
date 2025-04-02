@@ -16,6 +16,7 @@ import '../Commons/product_search.dart'; // Import the ProductSearch page
 import '../Commons/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../Commons/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../Commons/password_text_field.dart'; // Import the PasswordTextField widget
+import '../Commons/otp_text_field.dart'; // Import the OtpTextField widget
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -28,6 +29,7 @@ class TestLayoutSanjana extends StatefulWidget {
 class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController(); // Controller for the password field
+  final TextEditingController _otpController = TextEditingController(); // Controller for the OTP field
   String? _selectedState;
   bool _isCaptchaValid = false; // Add this state variable
   int _selectedRadio = 0; // Add this state variable
@@ -43,6 +45,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose(); // Dispose the password controller
+    _otpController.dispose(); // Dispose the OTP controller
     super.dispose();
   }
 
@@ -410,6 +413,22 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       ),
                       SizedBox(height: 32), // Add spacing after the password field
+                      Text(
+                        'Enter OTP',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      OtpTextField(
+                        controller: _otpController,
+                        label: "OTP",
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      ),
+                      SizedBox(height: 32), // Add spacing after the OTP field
                       Text(
                         'Product Search Page',
                         style: TextStyle(
