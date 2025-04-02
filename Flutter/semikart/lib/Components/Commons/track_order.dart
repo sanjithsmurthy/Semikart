@@ -79,8 +79,14 @@ class TrackOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Adjust the container width dynamically based on screen size
+    final containerWidth = screenWidth * 0.9; // Use 90% of the screen width
+
     return Container(
-      width: 327,
+      width: containerWidth, // Dynamically calculated width
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -133,25 +139,24 @@ class TrackOrder extends StatelessWidget {
                       ),
                     ),
                     child: Center(
-                      child: isCompleted 
-                        ? Icon(
-                            Icons.check,
-                            color: Color(0xFFA51414),
-                            size: 24.0,
-                            weight: 3.0,  // Added thickness for check icon
-                          )
-                        : null,
+                      child: isCompleted
+                          ? Icon(
+                              Icons.check,
+                              color: Color(0xFFA51414),
+                              size: 24.0,
+                            )
+                          : null,
                     ),
                   ),
                   if (!isLast)
                     Positioned(
-                      top: 50.0,    // Starts at bottom edge of circle
-                      left: 24.0,   // Centers line (50/2)
+                      top: 50.0, // Starts at bottom edge of circle
+                      left: 24.0, // Centers line (50/2)
                       child: IgnorePointer(
                         child: Container(
-                          width: 1, // Changed from 2 to 1
+                          width: 1,
                           height: 95, // Exact length to touch next circle
-                          color: isCompleted ? Color(0xFFA51414) : Colors.black, // Changed from decoration to color
+                          color: isCompleted ? Color(0xFFA51414) : Colors.black,
                         ),
                       ),
                     ),
@@ -169,8 +174,8 @@ class TrackOrder extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14.0,
                     fontFamily: 'Product Sans',
-                    fontWeight: FontWeight.bold,  // Changed from w500 to bold
-                    color: Color(0xFFA51414),     // Already red (#A51414)
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFA51414),
                   ),
                 ),
                 if (step.timestamp != null) ...[
@@ -184,7 +189,7 @@ class TrackOrder extends StatelessWidget {
                     ),
                   ),
                 ],
-                if (!isCompleted) ...[  // Only show location for unprocessed steps
+                if (!isCompleted) ...[
                   SizedBox(height: 7.0),
                   Text(
                     step.location,
