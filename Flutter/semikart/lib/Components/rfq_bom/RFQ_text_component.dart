@@ -94,6 +94,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
               GreyTextBox(
                 nameController: controllerMap['partNo']!,
                 text: 'Enter part number',
+                backgroundColor: Colors.white, // Set background color to white
               ),
 
               SizedBox(height: 10), // Space between rows
@@ -102,6 +103,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
               GreyTextBox(
                 nameController: controllerMap['manufacturer']!,
                 text: 'Enter manufacturer',
+                backgroundColor: Colors.white, // Set background color to white
               ),
 
               SizedBox(height: 10), // Space between rows
@@ -117,6 +119,8 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                         nameController: controllerMap['quantity']!,
                         text: 'Enter quantity',
                         width: 150, // Adjusted width for the text field
+                        backgroundColor:
+                            Colors.white, // Set background color to white
                       ),
                     ],
                   ),
@@ -132,6 +136,8 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                         nameController: controllerMap['price']!,
                         text: 'Enter price',
                         width: 150, // Adjusted width for the text field
+                        backgroundColor:
+                            Colors.white, // Set background color to white
                       ),
                     ],
                   ),
