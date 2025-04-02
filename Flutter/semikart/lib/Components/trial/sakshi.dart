@@ -40,7 +40,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 padding: const EdgeInsets.all(10.0), // Add 10px padding around SearchBar
                 child: custom.SearchBar(searchController: searchController),
               ),
-              // const EditTextBox(), // Use the EditTextBox widget here
+              const EditTextBox(), // Use the EditTextBox widget here
               const SizedBox(height: 16), // Add spacing between components
               GreyTextBox(nameController: nameController), // Pass the controller to GreyTextBox
               const SizedBox(height: 16), // Add spacing before cart items

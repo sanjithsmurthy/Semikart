@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
 class TwoRadioButtons extends StatefulWidget {
-  final String firstLabel;
-  final String secondLabel;
-  final Function(int) onSelectionChanged;
-  final int initialSelection;
-  final double? radioWidth;    // Add these new parameters
-  final double? radioHeight;
+  final List<String> options; // List of options for the radio buttons
+  final Function(int) onSelectionChanged; // Callback for selection change
+  final int initialSelection; // Initial selected index
+  final double radioWidth; // Width of the radio button
+  final double radioHeight; // Height of the radio button
 
   const TwoRadioButtons({
     Key? key,
-    required this.firstLabel,
-    required this.secondLabel,
+    required this.options,
     required this.onSelectionChanged,
     this.initialSelection = 0,
-    this.radioWidth = 20,     // Default width
-    this.radioHeight = 24,    // Default height
+    this.radioWidth = 20.0, // Default width
+    this.radioHeight = 24.0, // Default height
   }) : super(key: key);
 
   @override
@@ -28,71 +26,92 @@ class _TwoRadioButtonsState extends State<TwoRadioButtons> {
   @override
   void initState() {
     super.initState();
-    _selectedValue = widget.initialSelection;
+    _selectedValue = widget.initialSelection; // Initialize with the provided selection
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Row(
-          children: [
-            SizedBox(
-              width: widget.radioWidth,    // Use the passed width
-              height: widget.radioHeight,  // Use the passed height
-              child: Radio(
-                value: 0,
-                groupValue: _selectedValue,
-                onChanged: (int? value) {
-                  setState(() {
-                    _selectedValue = value!;
-                    widget.onSelectionChanged(_selectedValue);
-                  });
-                },
-                activeColor: Color(0xFFA51414),
-              ),
-            ),
-            SizedBox(width: 8),
-            Text(
-              widget.firstLabel,
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-                fontSize: 17,
-                color: Color(0xFF000000),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(width: 24),
-        Row(
-          children: [
-            SizedBox(
-              width: widget.radioWidth,    // Use the passed width
-              height: widget.radioHeight,  // Use the passed height
-              child: Radio(
-                value: 1,
-                groupValue: _selectedValue,
-                onChanged: (int? value) {
-                  setState(() {
-                    _selectedValue = value!;
-                    widget.onSelectionChanged(_selectedValue);
-                  });
-                },
-                activeColor: Color(0xFFA51414),
-              ),
-            ),
-            SizedBox(width: 8),
-            Text(
-              widget.secondLabel,
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-                fontSize: 17,
-                color: Color(0xFF000000),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Determine layout based on screen width
+    final isVerticalLayout = screenWidth < 400; // Use vertical layout for small screens
+
+    return isVerticalLayout
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.options.asMap().entries.map((entry) {
+              final index = entry.key;
+              final label = entry.value;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0), // Add spacing between items
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: widget.radioWidth, // Use the passed width
+                      height: widget.radioHeight, // Use the passed height
+                      child: Radio(
+                        value: index,
+                        groupValue: _selectedValue,
+                        onChanged: (int? value) {
+                          setState(() {
+                            _selectedValue = value!;
+                            widget.onSelectionChanged(_selectedValue); // Notify parent widget
+                          });
+                        },
+                        activeColor: const Color(0xFFA51414), // Custom active color
+                      ),
+                    ),
+                    const SizedBox(width: 8), // Spacing between radio and label
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        fontFamily: 'Product Sans',
+                        fontSize: 17,
+                        color: Color(0xFF000000),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: widget.options.asMap().entries.map((entry) {
+              final index = entry.key;
+              final label = entry.value;
+
+              return Row(
+                children: [
+                  SizedBox(
+                    width: widget.radioWidth, // Use the passed width
+                    height: widget.radioHeight, // Use the passed height
+                    child: Radio(
+                      value: index,
+                      groupValue: _selectedValue,
+                      onChanged: (int? value) {
+                        setState(() {
+                          _selectedValue = value!;
+                          widget.onSelectionChanged(_selectedValue); // Notify parent widget
+                        });
+                      },
+                      activeColor: const Color(0xFFA51414), // Custom active color
+                    ),
+                  ),
+                  const SizedBox(width: 8), // Spacing between radio and label
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontFamily: 'Product Sans',
+                      fontSize: 17,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                  const SizedBox(width: 24), // Spacing between radio button groups
+                ],
+              );
+            }).toList(),
+          );
   }
 }
