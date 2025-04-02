@@ -28,7 +28,7 @@ class EditTextBox extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  'Shipping Address',
+                  'Billing Address',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
