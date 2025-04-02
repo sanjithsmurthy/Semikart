@@ -15,6 +15,7 @@ import '../Commons/profilepic.dart';
 import '../Commons/product_search.dart'; // Import the ProductSearch page
 import '../Commons/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../Commons/mobile_number_input.dart'; // Import the MobileNumberField component
+import '../Commons/password_text_field.dart'; // Import the PasswordTextField widget
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -26,6 +27,7 @@ class TestLayoutSanjana extends StatefulWidget {
 
 class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController(); // Controller for the password field
   String? _selectedState;
   bool _isCaptchaValid = false; // Add this state variable
   int _selectedRadio = 0; // Add this state variable
@@ -40,6 +42,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
   @override
   void dispose() {
     _emailController.dispose();
+    _passwordController.dispose(); // Dispose the password controller
     super.dispose();
   }
 
@@ -139,7 +142,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       SizedBox(height: 16),
                       CustomTextField(
                         controller: TextEditingController(),
-                        label: "Password",
+                        label: "Email",
                         // No width parameter provided, so it will use the default width (370.0)
                       ),
                       SizedBox(height: 32),
@@ -391,6 +394,22 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         },
                       ),
                       SizedBox(height: 32),
+                      Text(
+                        'Password Field',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      PasswordTextField(
+                        controller: _passwordController,
+                        label: "Password",
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      ),
+                      SizedBox(height: 32), // Add spacing after the password field
                       Text(
                         'Product Search Page',
                         style: TextStyle(
