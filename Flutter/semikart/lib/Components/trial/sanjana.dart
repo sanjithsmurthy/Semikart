@@ -252,18 +252,43 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      
+                      SizedBox(height: 32),
+                      Text(
+                        'Default Two Radio Buttons',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       SizedBox(height: 16),
+                      // Default Two Radio Buttons
                       TwoRadioButtons(
-                        firstLabel: 'Option One',
-                        secondLabel: 'Option Two',
-                        initialSelection: _selectedRadio,
-                        radioWidth: buttonWidth,
-                        radioHeight: 48,
-                        onSelectionChanged: (selected) {
-                          setState(() {
-                            _selectedRadio = selected;
-                            print('Selected radio option: ${selected == 0 ? "One" : "Two"}');
-                          });
+                        options: ['Option 1', 'Option 2'], // Default two options
+                        initialSelection: 0, // Default selection (0 for the first button)
+                        onSelectionChanged: (int selectedValue) {
+                          print('Selected value (default): $selectedValue');
+                        },
+                      ),
+                      SizedBox(height: 32),
+                      Text(
+                        'Three Radio Buttons',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      // Three Radio Buttons
+                      TwoRadioButtons(
+                        options: ['Option A', 'Option B', 'Option C'], // Three options
+                        initialSelection: 1, // Default selection
+                        onSelectionChanged: (int selectedValue) {
+                          print('Selected value (three options): $selectedValue');
                         },
                       ),
                       SizedBox(height: 32),
