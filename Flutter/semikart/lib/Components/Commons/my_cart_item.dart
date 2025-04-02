@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../Commons/red_button.dart'; // Import the RedButton widget
 
 class MyCartItem extends StatefulWidget {
-  final String imageUrl;
+  final String imagePath; // Updated to use imagePath
   final String title;
   final String description;
   final double price;
@@ -11,7 +11,7 @@ class MyCartItem extends StatefulWidget {
 
   const MyCartItem({
     Key? key,
-    required this.imageUrl,
+    required this.imagePath, // Updated to use imagePath
     required this.title,
     required this.description,
     required this.price,
@@ -96,7 +96,7 @@ class _MyCartItemState extends State<MyCartItem> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: AssetImage(widget.imageUrl), // Use AssetImage for local images
+                        image: AssetImage(widget.imagePath), // Use AssetImage for local images
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -209,19 +209,19 @@ class MyCart extends StatefulWidget {
 class _MyCartState extends State<MyCart> {
   final List<Map<String, dynamic>> _cartItems = [
     {
-      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "imagePath": "public/assets/images/products/noImageFound.png", // Correct asset path
       "title": "Item 1",
       "description": "This is the description for item 1.",
       "price": 10.0
     },
     {
-      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "imagePath": "public/assets/images/products/noImageFound.png", // Correct asset path
       "title": "Item 2",
       "description": "This is the description for item 2.",
       "price": 20.0
     },
     {
-      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "imagePath": "public/assets/images/products/noImageFound.png", // Correct asset path
       "title": "Item 3",
       "description": "This is the description for item 3.",
       "price": 30.0
@@ -253,7 +253,7 @@ class _MyCartState extends State<MyCart> {
         itemCount: _cartItems.length,
         itemBuilder: (context, index) {
           return MyCartItem(
-            imageUrl: _cartItems[index]["imageUrl"],
+            imagePath: _cartItems[index]["imagePath"], // Pass the correct asset path
             title: _cartItems[index]["title"],
             description: _cartItems[index]["description"],
             price: _cartItems[index]["price"],

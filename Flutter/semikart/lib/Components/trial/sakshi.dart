@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../Commons/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../Commons/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
-import '../Commons/my_cart.dart'; // Import the updated MyCartItem widget
+import '../Commons/my_cart_item.dart'; // Import the updated MyCartItem widget
 import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
 import '../Commons/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
@@ -16,24 +16,26 @@ class TestLayoutSakshi extends StatefulWidget {
 class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController nameController = TextEditingController(); // Controller for GreyTextBox
+  final double imageWidth = 100.0; // Define imageWidth with an appropriate value
+
   final List<Map<String, dynamic>> _cartItems = [
     {
-      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "imagePath": "assets/images/products/noImageFound.png", // Correct asset path
       "title": "Item 1",
-      "description": "This is the description for Item 1",
-      "price": 1000.0,
+      "description": "This is the description for item 1.",
+      "price": 10.0
     },
     {
-      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "imagePath": "assets/images/products/noImageFound.png", // Correct asset path
       "title": "Item 2",
-      "description": "This is the description for Item 2",
-      "price": 2000.0,
+      "description": "This is the description for item 2.",
+      "price": 20.0
     },
     {
-      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "imagePath": "assets/images/products/noImageFound.png", // Correct asset path
       "title": "Item 3",
-      "description": "This is the description for Item 3",
-      "price": 3000.0,
+      "description": "This is the description for item 3.",
+      "price": 30.0
     },
   ]; // Sample cart items with image, title, description, and price
 
@@ -41,6 +43,11 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     setState(() {
       _cartItems.removeAt(index);
     });
+  }
+
+  void _viewDetails(String title) {
+    // Handle view details action
+    print("View details for $title");
   }
 
   @override
@@ -72,20 +79,13 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 child: ListView.builder(
                   itemCount: _cartItems.length,
                   itemBuilder: (context, index) {
-                    final cartItem = _cartItems[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: MyCartItem(
-                        imageUrl: cartItem["imageUrl"],
-                        title: cartItem["title"],
-                        description: cartItem["description"],
-                        price: cartItem["price"],
-                        onDelete: () => _removeItem(index),
-                        onViewDetails: () {
-                          // Handle view details action
-                          print("View details for ${cartItem["title"]}");
-                        },
-                      ),
+                    return MyCartItem(
+                      imagePath: _cartItems[index]["imagePath"], // Pass the correct asset path
+                      title: _cartItems[index]["title"],
+                      description: _cartItems[index]["description"],
+                      price: _cartItems[index]["price"],
+                      onDelete: () => _removeItem(index),
+                      onViewDetails: () => _viewDetails(_cartItems[index]["title"]),
                     );
                   },
                 ),
