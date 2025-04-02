@@ -88,7 +88,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
 
               SizedBox(height: 10), // Space between fields
 
-              // Mobile
+              // Mobileple
               GreyTextBox(
                 nameController: mobileController,
                 text: 'Enter mobile number',
@@ -139,39 +139,43 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Zip Code and State
               Row(
                 children: [
-                  Expanded(
-                    child: GreyTextBox(
-                      nameController: zipCodeController,
-                      text: 'Enter zip code',
-                    ),
+                  GreyTextBox(
+                    nameController: zipCodeController,
+                    text: 'Enter zip code',
+                    width: 150, // Set width to match "Enter Quantity"
+                    backgroundColor:
+                        Colors.white, // Set background color to white
                   ),
-                  SizedBox(width: 10), // Space between fields
-                  Expanded(
-                    child: GreyTextBox(
-                      nameController: stateController,
-                      text: 'Enter state',
-                    ),
+                  SizedBox(width: 30), // Padding between Zip Code and State
+                  GreyTextBox(
+                    nameController: stateController,
+                    text: 'Enter state',
+                    width: 150, // Set width to match "Enter Price"
+                    backgroundColor:
+                        Colors.white, // Set background color to white
                   ),
                 ],
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: 20), // Space between rows
 
               // City and Country
               Row(
                 children: [
-                  Expanded(
-                    child: GreyTextBox(
-                      nameController: cityController,
-                      text: 'Enter city',
-                    ),
+                  GreyTextBox(
+                    nameController: cityController,
+                    text: 'Enter city',
+                    width: 150, // Set width to match "Enter Quantity"
+                    backgroundColor:
+                        Colors.white, // Set background color to white
                   ),
-                  SizedBox(width: 10), // Space between fields
-                  Expanded(
-                    child: GreyTextBox(
-                      nameController: countryController,
-                      text: 'Enter country',
-                    ),
+                  SizedBox(width: 30), // Padding between City and Country
+                  GreyTextBox(
+                    nameController: countryController,
+                    text: 'Enter country',
+                    width: 150, // Set width to match "Enter Price"
+                    backgroundColor:
+                        Colors.white, // Set background color to white
                   ),
                 ],
               ),

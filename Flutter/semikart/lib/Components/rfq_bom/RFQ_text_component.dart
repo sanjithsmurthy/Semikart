@@ -60,7 +60,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
         _controllers[index]; // Get the controllers for this component
 
     return Container(
-      width: 365, // Fixed width for the grey box
+      width: double.infinity, // Make the container take full width
       padding: EdgeInsets.all(16.0), // Padding inside the grey box
       margin: EdgeInsets.only(bottom: 20), // Padding between components
       decoration: BoxDecoration(
@@ -75,92 +75,64 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
           ),
         ],
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // Number
+          Text(
+            '${index + 1}.', // Dynamically update the number
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFFA51414), // Normal color, no bold
+            ),
+          ),
+          SizedBox(height: 5), // Space between number and label
+
+          // Manufacturers Part No
+          GreyTextBox(
+            nameController: controllerMap['partNo']!,
+            text: 'Enter part number',
+            backgroundColor: Colors.white, // Set background color to white
+          ),
+
+          SizedBox(height: 10), // Space between rows
+
+          // Manufacturers
+          GreyTextBox(
+            nameController: controllerMap['manufacturer']!,
+            text: 'Enter manufacturer',
+            backgroundColor: Colors.white, // Set background color to white
+          ),
+
+          SizedBox(height: 10), // Space between rows
+
+          // Row for Quantity and Target Price
+          Row(
             children: [
-              // Number
-              Text(
-                '${index + 1}.', // Dynamically update the number
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFFA51414), // Normal color, no bold
+              // Quantity
+              Expanded(
+                flex: 1,
+                child: GreyTextBox(
+                  nameController: controllerMap['quantity']!,
+                  text: 'Enter quantity',
+                  backgroundColor:
+                      Colors.white, // Set background color to white
                 ),
               ),
-              SizedBox(height: 5), // Space between number and label
+              SizedBox(width: 30), // Padding between Quantity and Target Price
 
-              // Manufacturers Part No
-              GreyTextBox(
-                nameController: controllerMap['partNo']!,
-                text: 'Enter part number',
-                backgroundColor: Colors.white, // Set background color to white
-              ),
-
-              SizedBox(height: 10), // Space between rows
-
-              // Manufacturers
-              GreyTextBox(
-                nameController: controllerMap['manufacturer']!,
-                text: 'Enter manufacturer',
-                backgroundColor: Colors.white, // Set background color to white
-              ),
-
-              SizedBox(height: 10), // Space between rows
-
-              // Row for Quantity and Target Price
-              Row(
-                children: [
-                  // Quantity
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GreyTextBox(
-                        nameController: controllerMap['quantity']!,
-                        text: 'Enter quantity',
-                        width: 150, // Adjusted width for the text field
-                        backgroundColor:
-                            Colors.white, // Set background color to white
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                      width:
-                          10), // Add padding between Quantity and Target Price
-
-                  // Target Price
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GreyTextBox(
-                        nameController: controllerMap['price']!,
-                        text: 'Enter price',
-                        width: 150, // Adjusted width for the text field
-                        backgroundColor:
-                            Colors.white, // Set background color to white
-                      ),
-                    ],
-                  ),
-                ],
+              // Target Price
+              Expanded(
+                flex: 1,
+                child: GreyTextBox(
+                  nameController: controllerMap['price']!,
+                  text: 'Enter price',
+                  backgroundColor:
+                      Colors.white, // Set background color to white
+                ),
               ),
             ],
           ),
-
-          // Conditionally Render Delete Button
-          if (index >
-              0) // Show delete button only for components after the first one
-            Positioned(
-              top: 0, // Position at the top
-              right: 0, // Position at the right corner
-              child: IconButton(
-                icon:
-                    Icon(Icons.delete, color: Color(0xFFA51414)), // Delete icon
-                onPressed: () {
-                  _removeRFQComponent(
-                      index); // Remove the corresponding component
-                },
-              ),
-            ),
         ],
       ),
     );
@@ -168,9 +140,11 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+
     return Container(
       color: Colors.white, // Set the background color to white
-      width: 412, // Set the width of the white component
+      width: screenWidth, // Make the container responsive to screen width
       padding: EdgeInsets.all(8), // Padding from the left
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +163,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                   top: 15,
                   right: 20), // Spacing between button and last component
               child: RedButton(
-                width: 90, // Adjusted width
+                width: screenWidth * 0.25, // Make button width responsive
                 height: 34, // Adjusted height
                 label: 'Add Row',
                 onPressed: _addRFQComponent, // Add a new RFQ component
