@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- 
+
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});
 
@@ -46,19 +46,38 @@ class EditTextBox extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           GestureDetector(
-            // onTap: () {
-            //   print("Edit icon tapped");
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => const WhitePage()),
-            //   );
-            // },
-            child: Icon(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EditPage()),
+              );
+            },
+            child: const Icon(
               Icons.edit,
               color: Color(0xFFA51414), // Red color for the edit icon
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class EditPage extends StatelessWidget {
+  const EditPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Edit Address"),
+        backgroundColor: const Color(0xFFA51414),
+      ),
+      body: const Center(
+        child: Text(
+          "This is the Edit Address Page",
+          style: TextStyle(fontSize: 18),
+        ),
       ),
     );
   }

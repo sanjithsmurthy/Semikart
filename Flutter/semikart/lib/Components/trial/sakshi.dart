@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../Commons/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
 import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
-import '../Commons/my_cart.dart'; // Import the MyCartItem widget
+import '../Commons/my_cart.dart'; // Import the updated MyCartItem widget
+import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -14,7 +15,26 @@ class TestLayoutSakshi extends StatefulWidget {
 class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController nameController = TextEditingController(); // Controller for GreyTextBox
-  final List<String> _cartItems = ["Item 1", "Item 2", "Item 3"]; // Sample cart items
+  final List<Map<String, dynamic>> _cartItems = [
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 1",
+      "description": "This is the description for Item 1",
+      "price": 1000.0,
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 2",
+      "description": "This is the description for Item 2",
+      "price": 2000.0,
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 3",
+      "description": "This is the description for Item 3",
+      "price": 3000.0,
+    },
+  ]; // Sample cart items with image, title, description, and price
 
   void _removeItem(int index) {
     setState(() {
@@ -40,7 +60,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 padding: const EdgeInsets.all(10.0), // Add 10px padding around SearchBar
                 child: custom.SearchBar(searchController: searchController),
               ),
-              // const EditTextBox(), // Use the EditTextBox widget here
+              const EditTextBox(), // Use the EditTextBox widget here
               const SizedBox(height: 16), // Add spacing between components
               GreyTextBox(nameController: nameController), // Pass the controller to GreyTextBox
               const SizedBox(height: 16), // Add spacing before cart items
@@ -48,9 +68,20 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 child: ListView.builder(
                   itemCount: _cartItems.length,
                   itemBuilder: (context, index) {
-                    return MyCartItem(
-                      itemName: _cartItems[index],
-                      onDelete: () => _removeItem(index), itemDescription: 'This is the description', onViewDetails: () {  },
+                    final cartItem = _cartItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: MyCartItem(
+                        imageUrl: cartItem["imageUrl"],
+                        title: cartItem["title"],
+                        description: cartItem["description"],
+                        price: cartItem["price"],
+                        onDelete: () => _removeItem(index),
+                        onViewDetails: () {
+                          // Handle view details action
+                          print("View details for ${cartItem["title"]}");
+                        },
+                      ),
                     );
                   },
                 ),

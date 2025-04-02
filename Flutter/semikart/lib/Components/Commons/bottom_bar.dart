@@ -38,7 +38,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       items: [
         _buildNavItem(Icons.home, "Home", 0),
-        _buildNavItem(Icons.inventory, "Products", 1),
+        _buildNavItem(Icons.inventory,   "Products", 1),
         _buildNavItem(Icons.search, "Search", 2),
         _buildCartNavItem(Icons.shopping_cart, "Cart", 3, _cartItemCount), // Cart with badge
         _buildNavItem(Icons.person, "Profile", 4),
