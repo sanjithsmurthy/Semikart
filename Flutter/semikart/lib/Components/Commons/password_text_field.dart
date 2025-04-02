@@ -35,6 +35,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         child: TextField(
           controller: widget.controller,
           obscureText: !_isPasswordVisible, // Toggle password visibility
+          obscuringCharacter: '•', // Use a medium-sized dot character
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle: const TextStyle(
