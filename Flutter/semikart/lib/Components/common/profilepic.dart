@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import '../Commons/popup.dart';
+import '../common/popup.dart';
 
 class ProfilePicture extends StatefulWidget {
   final String? imageUrl;
