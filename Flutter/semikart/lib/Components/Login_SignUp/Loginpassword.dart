@@ -62,7 +62,7 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned VerticalRadios
           Positioned(
-            left: 150, // 150 from the left
+            left: 250, // 150 from the left
             top: 252, // 252 from the top
             child: VerticalRadios(), // Display the VerticalRadios widget
           ),
