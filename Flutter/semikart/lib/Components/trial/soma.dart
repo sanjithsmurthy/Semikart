@@ -4,7 +4,6 @@ import '../rfq_bom/RFQ_text_component.dart'; // Import the RFQTextComponent clas
 import '../rfq_bom/RFQ_Adress_details.dart'; // Import the RFQAddressDetails class
 import '../common/header_withback.dart'; // Import the HeaderWithBack component
 import '../common/bottom_bar.dart'; // Import the BottomNavBar component
-import '../rfq_bom/rfq_full.dart'; // Import the RFQFullPage widget
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});
@@ -60,6 +59,6 @@ class TestLayoutSoma extends StatelessWidget {
 
 void main() {
   runApp(const MaterialApp(
-    home: RFQFullPage(), // Set RFQFullPage as the initial page
+    home: TestLayoutSoma(), // Set TestLayoutSoma as the initial page
   ));
 }
