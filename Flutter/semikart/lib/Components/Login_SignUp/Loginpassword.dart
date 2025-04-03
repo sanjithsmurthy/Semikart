@@ -1,6 +1,65 @@
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
+import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
+
+class TestLayoutSanjana extends StatefulWidget {
+  const TestLayoutSanjana({super.key});
+
+  @override
+  State<TestLayoutSanjana> createState() => _TestLayoutSanjanaState();
+}
+
+class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Component Testing',
+          style: TextStyle(fontFamily: 'Product Sans'),
+        ),
+        backgroundColor: Color(0xFFA51414),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Other components...
+
+              SizedBox(height: 32),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to the LoginPasswordScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPasswordScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'LoginPassword Page',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Product Sans',
+                    color: Colors.blue, // Blue color to indicate it's clickable
+                    decoration: TextDecoration.underline, // Underline for clickable text
+                  ),
+                ),
+              ),
+              SizedBox(height: 32), // Add spacing after the text
+
+              // Other components...
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class LoginPasswordScreen extends StatelessWidget {
   @override
@@ -67,7 +126,22 @@ class LoginPasswordScreen extends StatelessWidget {
             child: VerticalRadios(), // Display the VerticalRadios widget
           ),
 
-          // First horizontal line
+          // Positioned "OR" text
+          Positioned(
+            left: 194.5, // 194.5 from the left
+            top: 361, // 361 from the top
+            child: Text(
+              'OR',
+              style: TextStyle(
+                fontSize: 16, // Font size 16
+                fontFamily: 'Product Sans', // Product Sans font
+                color: Colors.black, // Black color
+                fontWeight: FontWeight.normal, // Regular weight
+              ),
+            ),
+          ),
+
+          // First horizontal black line
           Positioned(
             left: 33.5, // 33.5 from the left
             top: 370, // 370 from the top
@@ -78,7 +152,7 @@ class LoginPasswordScreen extends StatelessWidget {
             ),
           ),
 
-          // Second horizontal line
+          // Second horizontal black line
           Positioned(
             left: 227.5, // 227.5 from the left
             top: 370, // 370 from the top
