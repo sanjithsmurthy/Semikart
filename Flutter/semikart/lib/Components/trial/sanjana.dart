@@ -1,25 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import '../Commons/custom_text_field.dart';
-import '../Commons/textfield_dropdown.dart';
-import '../Commons/red_button.dart';
-import '../Commons/inactive_red_button.dart';
-import '../Commons/white_button.dart';
-import '../Commons/track_order.dart';
-import '../Commons/captcha.dart';
-import '../Commons/signinwith_google.dart';
-import '../Commons/two_radios.dart';
-import '../Commons/RFQ_CTA.dart';
-import '../Commons/cartempty.dart';
-import '../Commons/order_view.dart';
-import '../Commons/profilepic.dart';
-import '../Commons/product_search.dart'; // Import the ProductSearch page
-import '../Commons/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
-import '../Commons/mobile_number_input.dart'; // Import the MobileNumberField component
-import '../Commons/password_text_field.dart'; // Import the PasswordTextField widget
-import '../Commons/otp_text_field.dart'; // Import the OtpTextField widget
-import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
-=======
 import '../common/custom_text_field.dart';
 import '../common/textfield_dropdown.dart';
 import '../common/red_button.dart';
@@ -38,7 +17,7 @@ import '../common/search_builtin.dart' as custom; // Import the built-in SearchB
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/otp_text_field.dart'; // Import the OtpTextField widget
->>>>>>> b66b0e8c2eb9b9cb10034284ce080bdb63abbe19
+import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
