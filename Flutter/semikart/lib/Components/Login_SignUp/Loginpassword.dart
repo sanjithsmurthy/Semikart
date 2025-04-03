@@ -66,6 +66,28 @@ class LoginPasswordScreen extends StatelessWidget {
             top: 252, // 252 from the top
             child: VerticalRadios(), // Display the VerticalRadios widget
           ),
+
+          // First horizontal line
+          Positioned(
+            left: 33.5, // 33.5 from the left
+            top: 370, // 370 from the top
+            child: Container(
+              width: 151, // Width of the line
+              height: 1, // Height of the line
+              color: Colors.black, // Line color
+            ),
+          ),
+
+          // Second horizontal line
+          Positioned(
+            left: 227.5, // 227.5 from the left
+            top: 370, // 370 from the top
+            child: Container(
+              width: 151, // Width of the line
+              height: 1, // Height of the line
+              color: Colors.black, // Line color
+            ),
+          ),
         ],
       ),
     );
