@@ -13,7 +13,7 @@ class TwoRadioButtons extends StatefulWidget {
     required this.onSelectionChanged,
     this.initialSelection = 0,
     this.radioWidth = 20.0, // Default width
-    this.radioHeight = 24.0, // Default height
+    this.radioHeight = 24.0, required String selectedValue, required String initialValue, // Default height
   }) : super(key: key);
 
   @override
