@@ -557,4 +557,3 @@ class SearchBuiltinPage extends StatelessWidget {
     );
   }
 }
-

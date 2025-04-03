@@ -17,12 +17,13 @@ class SignInWithGoogleButton extends StatelessWidget {
     // Get screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Dynamically calculate icon size and font size
+    // Dynamically calculate icon size, font size, and padding
     final iconSize = screenWidth < 400 ? 24.0 : 28.0; // Adjust icon size for smaller screens
     final fontSize = screenWidth < 400 ? 14.0 : 16.0; // Adjust font size for smaller screens
+    final dynamicPadding = screenWidth * 0.01 + 5.0; // Add 5px more padding dynamically
 
     return Padding(
-      padding: const EdgeInsets.all(5.0), // Add 5 pixels padding on all sides
+      padding: EdgeInsets.all(dynamicPadding), // Add dynamic padding on all sides
       child: IntrinsicWidth(
         child: Container(
           decoration: BoxDecoration(
@@ -37,12 +38,8 @@ class SignInWithGoogleButton extends StatelessWidget {
               ),
             ],
           ),
-          child: MaterialButton(
-            padding: const EdgeInsets.all(5.0), // Set padding inside the button
-            onPressed: isLoading ? null : onPressed,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(28),
-            ),
+          child: Padding(
+            padding: EdgeInsets.all(dynamicPadding), // Add dynamic padding inside the button
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
