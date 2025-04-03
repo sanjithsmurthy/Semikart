@@ -1,48 +1,72 @@
 import 'package:flutter/material.dart';
+import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
+import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
 
-class LoginPasswordScreen extends StatefulWidget {
-  const LoginPasswordScreen({super.key});
-
-  @override
-  _LoginPasswordScreenState createState() => _LoginPasswordScreenState();
-}
-
-class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
+class LoginPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Get the screen size using MediaQuery
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: AppBar(title: Text("Login with Password")),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: "Email"),
-              keyboardType: TextInputType.emailAddress,
+      body: Stack(
+        children: [
+          // White background
+          Container(
+            width: screenWidth,
+            height: screenHeight,
+            color: Colors.white, // Set the background color to white
+          ),
+
+          // Positioned Semikart logo
+          Positioned(
+            left: 36, // 36 from the left
+            top: 113, // 113 from the top
+            child: Image.asset(
+              'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
+              width: 190, // Set the width to 190
+              height: 28, // Set the height to 28
+              fit: BoxFit.contain, // Ensure the image fits within the dimensions
             ),
-            SizedBox(height: 15),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: "Password"),
-              obscureText: true,
+          ),
+
+          // Positioned Login text
+          Positioned(
+            left: 36, // 36 from the left
+            top: 197, // 197 from the top
+            child: Text(
+              'Login',
+              style: TextStyle(
+                fontSize: 25, // Font size 25
+                fontFamily: 'Product Sans', // Product Sans font
+                color: Colors.black, // Black color
+                fontWeight: FontWeight.normal, // Regular weight
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
+          ),
+
+          // Positioned SignInWithGoogleButton
+          Positioned(
+            left: 28, // 28 from the left
+            top: 263, // 263 from the top
+            child: SignInWithGoogleButton(
               onPressed: () {
-                // Implement login logic here
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Logging in...")),
-                );
+                // Handle the Google sign-in logic here
+                print('Google Sign-In button pressed');
               },
-              child: Text("Login"),
+              isLoading: false, // Set to true if loading state is required
+              isTwoLine: true, // Display the text in two lines
             ),
-          ],
-        ),
+          ),
+
+          // Positioned VerticalRadios
+          Positioned(
+            left: 150, // 150 from the left
+            top: 252, // 252 from the top
+            child: VerticalRadios(), // Display the VerticalRadios widget
+          ),
+        ],
       ),
     );
   }

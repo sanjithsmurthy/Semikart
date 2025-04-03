@@ -21,78 +21,81 @@ class SignInWithGoogleButton extends StatelessWidget {
     final iconSize = screenWidth < 400 ? 24.0 : 28.0; // Adjust icon size for smaller screens
     final fontSize = screenWidth < 400 ? 14.0 : 16.0; // Adjust font size for smaller screens
 
-    return IntrinsicWidth(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(28), // Rounded corners
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 2), // Shadow position
-            ),
-          ],
-        ),
-        child: MaterialButton(
-          padding: const EdgeInsets.all(5.0), // Set padding to 5 pixels
-          onPressed: isLoading ? null : onPressed,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
+    return Padding(
+      padding: const EdgeInsets.all(5.0), // Add 5 pixels padding on all sides
+      child: IntrinsicWidth(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(28), // Rounded corners
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 0,
+                blurRadius: 4,
+                offset: const Offset(0, 2), // Shadow position
+              ),
+            ],
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Google Icon
-              Container(
-                width: iconSize,
-                height: iconSize,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('public/assets/icon/google.png'), // Replace with your Google logo asset
-                    fit: BoxFit.contain,
+          child: MaterialButton(
+            padding: const EdgeInsets.all(5.0), // Set padding inside the button
+            onPressed: isLoading ? null : onPressed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Google Icon
+                Container(
+                  width: iconSize,
+                  height: iconSize,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('public/assets/icon/google.png'), // Replace with your Google logo asset
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12), // Spacing between icon and text
-              // Button Text
-              isTwoLine
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center, // Align text vertically in the center
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Sign in with',
-                          style: TextStyle(
-                            color: const Color(0xFF000000),
-                            fontSize: fontSize, // Dynamically calculated font size
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Product Sans', // Use Product Sans font if available
+                const SizedBox(width: 12), // Spacing between icon and text
+                // Button Text
+                isTwoLine
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center, // Align text vertically in the center
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Sign in with',
+                            style: TextStyle(
+                              color: const Color(0xFF000000),
+                              fontSize: fontSize, // Dynamically calculated font size
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Product Sans', // Use Product Sans font if available
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Google',
-                          style: TextStyle(
-                            color: const Color(0xFF000000),
-                            fontSize: fontSize, // Dynamically calculated font size
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Product Sans', // Use Product Sans font if available
+                          Text(
+                            'Google',
+                            style: TextStyle(
+                              color: const Color(0xFF000000),
+                              fontSize: fontSize, // Dynamically calculated font size
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Product Sans', // Use Product Sans font if available
+                            ),
                           ),
+                        ],
+                      )
+                    : Text(
+                        'Sign in with Google',
+                        style: TextStyle(
+                          color: const Color(0xFF000000),
+                          fontSize: fontSize, // Dynamically calculated font size
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Product Sans', // Use Product Sans font if available
                         ),
-                      ],
-                    )
-                  : Text(
-                      'Sign in with Google',
-                      style: TextStyle(
-                        color: const Color(0xFF000000),
-                        fontSize: fontSize, // Dynamically calculated font size
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Product Sans', // Use Product Sans font if available
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

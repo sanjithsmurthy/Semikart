@@ -17,6 +17,7 @@ import '../common/search_builtin.dart' as custom; // Import the built-in SearchB
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/otp_text_field.dart'; // Import the OtpTextField widget
+import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -460,6 +461,27 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         ),
                       ),
                       SizedBox(height: 32),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to the LoginPasswordScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPasswordScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Login Password Screen',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue, // Blue color to indicate it's clickable
+                            decoration: TextDecoration.underline, // Underline for clickable text
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32), // Add spacing after the text
                       Text(
                         'Built-in SearchBar Example',
                         style: TextStyle(
