@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../rfq_bom/upload_file.dart'; // Import the UploadFile component
 import '../rfq_bom/RFQ_text_component.dart'; // Import the RFQTextComponent class
 import '../rfq_bom/RFQ_Adress_details.dart'; // Import the RFQAddressDetails class
-import '../Commons/header_withback.dart'; // Import the HeaderWithBack component
-import '../Commons/bottom_bar.dart'; // Import the BottomNavBar component
+import '../common/header_withback.dart'; // Import the HeaderWithBack component
+import '../common/bottom_bar.dart'; // Import the BottomNavBar component
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});

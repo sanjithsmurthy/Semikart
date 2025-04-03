@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import '../Commons/custom_text_field.dart';
-import '../Commons/textfield_dropdown.dart';
-import '../Commons/red_button.dart';
-import '../Commons/inactive_red_button.dart';
-import '../Commons/white_button.dart';
-import '../Commons/track_order.dart';
-import '../Commons/captcha.dart';
-import '../Commons/signinwith_google.dart';
-import '../Commons/two_radios.dart';
-import '../Commons/RFQ_CTA.dart';
-import '../Commons/cartempty.dart';
-import '../Commons/order_view.dart';
-import '../Commons/profilepic.dart';
-import '../Commons/product_search.dart'; // Import the ProductSearch page
-import '../Commons/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
-import '../Commons/mobile_number_input.dart'; // Import the MobileNumberField component
-import '../Commons/password_text_field.dart'; // Import the PasswordTextField widget
-import '../Commons/otp_text_field.dart'; // Import the OtpTextField widget
+import '../common/custom_text_field.dart';
+import '../common/textfield_dropdown.dart';
+import '../common/red_button.dart';
+import '../common/inactive_red_button.dart';
+import '../common/white_button.dart';
+import '../common/track_order.dart';
+import '../common/captcha.dart';
+import '../common/signinwith_google.dart';
+import '../common/two_radios.dart';
+import '../common/RFQ_CTA.dart';
+import '../common/cartempty.dart';
+import '../common/order_view.dart';
+import '../common/profilepic.dart';
+import '../common/product_search.dart'; // Import the ProductSearch page
+import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
+import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
+import '../common/password_text_field.dart'; // Import the PasswordTextField widget
+import '../common/otp_text_field.dart'; // Import the OtpTextField widget
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {

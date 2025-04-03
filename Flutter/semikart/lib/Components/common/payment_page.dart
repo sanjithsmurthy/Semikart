@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
-import '../Commons/bottom_bar.dart'; // Import the BottomNavBar for navigation
-import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
-import '../Commons/edit_textbox2.dart'; // Import the EditTextBox2 widget
+import 'bottom_bar.dart'; // Import the BottomNavBar for navigation
+import 'edit_textbox.dart'; // Import the EditTextBox widget
+import 'edit_textbox2.dart'; // Import the EditTextBox2 widget
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});

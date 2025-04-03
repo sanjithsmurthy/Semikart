@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Commons/header_withback.dart'; // Import the HeaderWithBack component
-import '../Commons/bottom_bar.dart'; // Import the BottomNavBar component
+import '../common/header_withback.dart'; // Import the HeaderWithBack component
+import '../common/bottom_bar.dart'; // Import the BottomNavBar component
 
 class RFQFullPage extends StatelessWidget {
   const RFQFullPage({super.key});

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../Commons/bottom_bar.dart' as BottomBar; // Alias for bottom_bar.dart
-import '../Commons/header.dart'; // Import the Header for the AppBar
-import '../Commons/search_failed.dart'; // Import the search_failed.dart file
-import '../Commons/red_button.dart'; // Import the RedButton component
-import '../Commons/forgot_password.dart'; // Import the ForgotPasswordButton component
+import '../common/bottom_bar.dart' as BottomBar; // Alias for bottom_bar.dart
+import '../common/header.dart'; // Import the Header for the AppBar
+import '../common/search_failed.dart'; // Import the search_failed.dart file
+import '../common/red_button.dart'; // Import the RedButton component
+import '../common/forgot_password.dart'; // Import the ForgotPasswordButton component
 import '../rfq_bom/add_item_manually.dart'; // Import the DynamicTable component
-import '../Commons/signinwith_google.dart'; // Import the SignInWithGoogleButton component
+import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton component
 
 class TestLayoutSanjith extends StatelessWidget {
   const TestLayoutSanjith({super.key});

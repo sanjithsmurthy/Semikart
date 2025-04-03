@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Commons/red_button.dart'; // Import the RedButton component
+import '../common/red_button.dart'; // Import the RedButton component
 
 class DynamicTable extends StatefulWidget {
   const DynamicTable({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Commons/red_button.dart'; // Import the RedButton widget
-import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
+import '../common/red_button.dart'; // Import the RedButton widget
+import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
 
 class RFQTextComponent extends StatefulWidget {
   const RFQTextComponent({super.key});
