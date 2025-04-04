@@ -472,7 +472,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           );
                         },
                         child: Text(
-                          'Login Password Screen',
+                          'LoginPassword Page',
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'Product Sans',
