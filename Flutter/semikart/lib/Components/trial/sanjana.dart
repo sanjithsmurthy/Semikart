@@ -429,14 +429,11 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ),
                       SizedBox(height: 16),
                       OTPTextField(
-                        controller: _otpController, // Pass the controller
+                        controller: TextEditingController(), // Provide a controller
                         label: "Enter OTP", // Label for the OTP field
-                        onCompleted: (otp) {
-                          print('Entered OTP: $otp'); // Handle the completed OTP
-                        },
+                        onChanged: (otp) {  },
                       ),
                       SizedBox(height: 32),
-
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red, // Button color

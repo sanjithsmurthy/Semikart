@@ -9,7 +9,7 @@ class OTPTextField extends StatefulWidget {
   OTPTextField({
     required this.controller,
     this.label = "Enter OTP",
-    this.onCompleted,
+    this.onCompleted, required Null Function(dynamic otp) onChanged,
   });
 
   @override
@@ -18,12 +18,14 @@ class OTPTextField extends StatefulWidget {
 
 class _OTPTextFieldState extends State<OTPTextField> {
   bool isSending = false; // To track the "Send OTP" button state
+  bool canResend = true; // To track if "Send OTP" is clickable
   int countdown = 0; // Countdown timer duration in seconds
   Timer? timer; // Timer object
 
   void startCountdown() {
     setState(() {
-      countdown = 30; // Set the countdown duration to 30 seconds
+      countdown = 120; // Set the countdown duration to 2 minutes (120 seconds)
+      canResend = false; // Disable "Send OTP" button
     });
 
     timer?.cancel(); // Cancel any existing timer
@@ -34,11 +36,16 @@ class _OTPTextFieldState extends State<OTPTextField> {
         });
       } else {
         timer.cancel(); // Stop the timer when it reaches 0
+        setState(() {
+          canResend = true; // Enable "Send OTP" button
+        });
       }
     });
   }
 
   void handleSendOTP() {
+    if (!canResend) return; // Prevent clicking if the timer is active
+
     setState(() {
       isSending = true; // Change the text color to A51414
     });
@@ -69,25 +76,15 @@ class _OTPTextFieldState extends State<OTPTextField> {
         GestureDetector(
           onTap: handleSendOTP,
           child: Text(
-            'Send OTP',
+            canResend ? 'Send OTP' : 'Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}',
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Product Sans',
-              color: isSending ? Color(0xFFA51414) : Colors.black,
+              color: canResend ? Colors.black : Colors.grey, // Grey when disabled
             ),
           ),
         ),
-        SizedBox(height: 8), // Space between "Send OTP" and countdown
-        if (countdown > 0)
-          Text(
-            'Resend OTP in $countdown seconds',
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Product Sans',
-              color: Colors.grey,
-            ),
-          ),
-        SizedBox(height: 16), // Space between countdown and OTP field
+        SizedBox(height: 16), // Space between "Send OTP" and OTP field
 
         // OTP field styled like CustomTextField
         TextField(
@@ -125,7 +122,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
             color: Colors.black,
           ),
           onChanged: (value) {
-            if (widget.onCompleted != null && value.length > 0) {
+            if (widget.onCompleted != null && value.isNotEmpty) {
               widget.onCompleted!(value); // Trigger the callback when OTP is entered
             }
           },

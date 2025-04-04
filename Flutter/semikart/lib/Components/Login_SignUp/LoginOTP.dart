@@ -117,16 +117,32 @@ class LoginOTPScreen extends StatelessWidget {
             ),
           ),
 
-          // Positioned OTPTextField for OTP
+          // OTP Section
           Positioned(
             left: screenWidth * 0.06, // 6% of screen width
             top: screenHeight * 0.65, // 65% of screen height
-            child: OTPTextField(
-              controller: TextEditingController(), // Provide a controller
-              label: "Enter OTP", // Label for the OTP field
-              onCompleted: (otp) {
-                print('Entered OTP: $otp'); // Handle the completed OTP
-              },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Enter OTP',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Product Sans',
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16),
+                OTPTextField(
+                  controller: TextEditingController(), // Provide a controller
+                  label: "Enter OTP", // Label for the OTP field
+                  onChanged: (otp) {
+                    // Handle the OTP change
+                  },
+                ),
+                SizedBox(height: 32),
+              ],
             ),
           ),
 
