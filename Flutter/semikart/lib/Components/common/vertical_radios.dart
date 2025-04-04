@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen widget
+import '../Login_SignUp/LoginOTP.dart';
 
 class VerticalRadios extends StatefulWidget {
   @override
@@ -49,6 +51,13 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       onChanged: (value) {
                         setState(() {
                           _selectedOption = value!;
+                          Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPasswordScreen(), // Navigate to LoginPassword
+        ),
+      );
+
                         });
                       },
                     ),
@@ -101,6 +110,13 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       onChanged: (value) {
                         setState(() {
                           _selectedOption = value!;
+                          
+                          Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginOTPScreen(), // Navigate to LoginOTP
+        ),
+      );
                         });
                       },
                     ),
