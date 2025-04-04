@@ -18,6 +18,7 @@ import '../common/mobile_number_input.dart'; // Import the MobileNumberField com
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/otp_text_field.dart'; // Import the OtpTextField widget
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
+import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -482,6 +483,27 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         ),
                       ),
                       SizedBox(height: 32), // Add spacing after the text
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to the LoginOTPScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginOTPScreen(), // Navigate to LoginOTPScreen
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'LoginOTP Page',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue, // Blue color to indicate it's clickable
+                            decoration: TextDecoration.underline, // Underline for clickable text
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32), // Add spacing after the text
                       Text(
                         'Built-in SearchBar Example',
                         style: TextStyle(
@@ -500,7 +522,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ),
                       SizedBox(height: 24), // Added bottom padding
                     ],
-                  ),
+                  ), //column
                 ),
               );
             },
