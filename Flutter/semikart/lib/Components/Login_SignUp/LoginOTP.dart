@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
-import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
-import '../common/custom_text_field.dart'; // Import the CustomTextField widget
+import 'vertical_radios.dart'; // Import the VerticalRadios widget
+import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the ForgotPasswordButton widget
 
