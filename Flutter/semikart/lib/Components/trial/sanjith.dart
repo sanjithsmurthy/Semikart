@@ -6,6 +6,7 @@ import '../common/red_button.dart'; // Import the RedButton component
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton component
 import '../rfq_bom/add_item_manually.dart'; // Import the DynamicTable component
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton component
+import '../cart/cart_item.dart'; // Import the updated CartItem widget
 
 class TestLayoutSanjith extends StatelessWidget {
   const TestLayoutSanjith({super.key});
@@ -73,6 +74,23 @@ class TestLayoutSanjith extends StatelessWidget {
                       print("Sign in with Google button (Single-Line) pressed");
                     },
                     isTwoLine: false, // Enable single-line text
+                  ),
+                  const SizedBox(height: 20), // Add spacing between components
+                  // Updated CartItem Component
+                  CartItem(
+                    mfrPartNumber: "LSP4-480",
+                    customerPartNumber: "Customer Part Number", // Updated variable name
+                    description: "LED Protection Devices, 120VAC-480VAC, 10kA/20kA, Compact Design",
+                    vendorPartNumber: "837-LSP4-480",
+                    manufacturer: "Hatch Lighting",
+                    supplier: "Mouser Electronics",
+                    basicUnitPrice: 911.93,
+                    finalUnitPrice: 1103.3441,
+                    gstPercentage: 18.0,
+                    quantity: 1,
+                    onDelete: () {
+                      print("Delete button pressed");
+                    },
                   ),
                   const SizedBox(height: 20), // Add spacing between components
                   // DynamicTable Component

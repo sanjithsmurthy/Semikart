@@ -56,13 +56,14 @@ class _MyCartItemState extends State<MyCartItem> {
     final buttonSize = screenWidth * 0.08; // Dynamically scale button size
     final textFieldWidth = screenWidth * 0.1; // Dynamically scale text field width
     final redButtonWidth = screenWidth * 0.25; // Dynamically scale the width of the "View Details" button
+    final spacing = screenWidth * 0.02; // Dynamically scale spacing
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(16.0),
+      margin: EdgeInsets.symmetric(vertical: spacing),
+      padding: EdgeInsets.all(spacing),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(screenWidth * 0.02), // Dynamic border radius
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
@@ -94,14 +95,14 @@ class _MyCartItemState extends State<MyCartItem> {
                     width: imageWidth,
                     height: imageWidth,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       image: DecorationImage(
                         image: AssetImage(widget.imagePath), // Use AssetImage for local images
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: spacing),
                   // Product Details
                   Expanded(
                     child: Column(
@@ -109,18 +110,18 @@ class _MyCartItemState extends State<MyCartItem> {
                       children: [
                         Text(
                           widget.title,
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Dynamic font size
                             fontWeight: FontWeight.bold,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis, // Truncate long text
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: spacing * 0.5),
                         Text(
                           widget.description,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.035, // Dynamic font size
                             color: Colors.grey,
                           ),
                           maxLines: 2,
@@ -131,7 +132,7 @@ class _MyCartItemState extends State<MyCartItem> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: spacing),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -175,8 +176,8 @@ class _MyCartItemState extends State<MyCartItem> {
                   // Price
                   Text(
                     '₹${widget.price.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04, // Dynamic font size
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
