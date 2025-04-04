@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
 import '../common/custom_text_field.dart'; // Import the CustomTextField widget
-import '../common/otp_text_field.dart'; // Import the OTPTextField widget
+import '../common/otp_text_field.dart'; // Import the updated OTPTextField
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
-import '../common/red_button.dart'; // Import the RedButton widget
 
 class LoginOTPScreen extends StatelessWidget {
   @override
@@ -123,8 +122,8 @@ class LoginOTPScreen extends StatelessWidget {
             left: screenWidth * 0.06, // 6% of screen width
             top: screenHeight * 0.65, // 65% of screen height
             child: OTPTextField(
-              length: 6, // Number of OTP fields
               controller: TextEditingController(), // Provide a controller
+              label: "Enter OTP", // Label for the OTP field
               onCompleted: (otp) {
                 print('Entered OTP: $otp'); // Handle the completed OTP
               },
@@ -161,14 +160,23 @@ class LoginOTPScreen extends StatelessWidget {
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.9, // 90% of screen height
-            child: RedButton(
-              label: "Login", // Set the label to "Login"
-              width: screenWidth * 0.85, // 85% of screen width
-              height: screenHeight * 0.06, // 6% of screen height
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red, // Button color
+                minimumSize: Size(screenWidth * 0.85, screenHeight * 0.06), // Button size
+              ),
               onPressed: () {
                 // Handle the Login button click
                 print('Login button clicked');
               },
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.045, // 4.5% of screen width
+                  fontFamily: 'Product Sans',
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         ],
