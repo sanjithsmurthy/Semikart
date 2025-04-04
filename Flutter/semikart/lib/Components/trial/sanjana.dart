@@ -16,7 +16,6 @@ import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
-import '../common/otp_text_field.dart'; // Import the updated OTPTextField
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
 import 'dart:io';
@@ -152,6 +151,11 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         controller: TextEditingController(),
                         label: "Email",
                         // No width parameter provided, so it will use the default width (370.0)
+                      ),
+                      SizedBox(height: 16),
+                      CustomTextField(
+                        controller: TextEditingController(), // Provide a controller
+                        label: "OTP", // Set the label to "OTP"
                       ),
                       SizedBox(height: 32),
                       Text(
@@ -417,41 +421,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         label: "Password",
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       ),
-                      SizedBox(height: 32), // Add spacing after the password field
-                      Text(
-                        'Enter OTP',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Product Sans',
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      OTPTextField(
-                        controller: TextEditingController(), // Provide a controller
-                        label: "Enter OTP", // Label for the OTP field
-                        onChanged: (otp) {  },
-                      ),
-                      SizedBox(height: 32),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red, // Button color
-                          minimumSize: Size(screenWidth * 0.85, 50), // Button size
-                        ),
-                        onPressed: () {
-                          // Handle the OTP submission
-                          print('Submitted OTP: ${_otpController.text}');
-                        },
-                        child: Text(
-                          'Submit OTP',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Product Sans',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      
                       SizedBox(height: 32), // Add spacing after the OTP field
                       Text(
                         'Product Search Page',

@@ -1,11 +1,28 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
 import '../common/custom_text_field.dart'; // Import the CustomTextField widget
-import '../common/otp_text_field.dart'; // Import the updated OTPTextField
-import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
+import '../common/forgot_password.dart';
+import '../common/red_button.dart'; // Import the ForgotPasswordButton widget
 
-class LoginOTPScreen extends StatelessWidget {
+class LoginOTPScreen extends StatefulWidget {
+  @override
+  _LoginOTPScreenState createState() => _LoginOTPScreenState();
+}
+
+class _LoginOTPScreenState extends State<LoginOTPScreen> {
+  bool canSendOTP = true;
+  int countdown = 0;
+  Timer? timer;
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get screen dimensions
@@ -70,31 +87,22 @@ class LoginOTPScreen extends StatelessWidget {
             child: VerticalRadios(), // Display the VerticalRadios widget
           ),
 
-          // First horizontal black line
+         // First horizontal black line
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
-              width: screenWidth * 0.4 - 10, // Subtract 10px for spacing near "OR"
+              width: screenWidth * 0.4, // 40% of screen width
               height: 1, // Fixed height
               color: Colors.black, // Line color
             ),
           ),
 
-          // Second horizontal black line
-          Positioned(
-            left: screenWidth * 0.51 + 10, // Add 10px for spacing near "OR"
-            top: screenHeight * 0.46, // 46% of screen height
-            child: Container(
-              width: screenWidth * 0.4 - 10, // Subtract 10px for spacing near "OR"
-              height: 1, // Fixed height
-              color: Colors.black, // Line color
-            ),
-          ),
+         
 
           // Positioned "OR" text exactly in the middle
           Positioned(
-            left: screenWidth * 0.45, // Centered between the two lines
+            left: screenWidth * 0.50, // Centered between the two lines
             top: screenHeight * 0.445, // Slightly above the lines
             child: Text(
               'OR',
@@ -104,6 +112,18 @@ class LoginOTPScreen extends StatelessWidget {
                 color: Colors.black, // Black color
                 fontWeight: FontWeight.normal, // Regular weight
               ),
+            ),
+          ),
+
+
+           // Second horizontal black line
+          Positioned(
+            left: screenWidth * 0.57, // 51% of screen width
+            top: screenHeight * 0.46, // 46% of screen height
+            child: Container(
+              width: screenWidth * 0.4, // 40% of screen width
+              height: 1, // Fixed height
+              color: Colors.black, // Line color
             ),
           ),
 
@@ -120,28 +140,52 @@ class LoginOTPScreen extends StatelessWidget {
           // OTP Section
           Positioned(
             left: screenWidth * 0.06, // 6% of screen width
-            top: screenHeight * 0.65, // 65% of screen height
+            top: screenHeight * 0.6, // 65% of screen height
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Enter OTP',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Product Sans',
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+                // Send OTP Text
+                GestureDetector(
+                  onTap: () {
+                    if (canSendOTP) {
+                      setState(() {
+                        canSendOTP = false; // Disable the "Send OTP" button
+                        countdown = 120; // Start the 2-minute timer (120 seconds)
+                      });
+
+                      // Start the countdown timer
+                      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+                        if (countdown > 0) {
+                          setState(() {
+                            countdown--;
+                          });
+                        } else {
+                          timer.cancel(); // Stop the timer when it reaches 0
+                          setState(() {
+                            canSendOTP = true; // Re-enable the "Send OTP" button
+                          });
+                        }
+                      });
+                    }
+                  },
+                  child: Text(
+                    canSendOTP
+                        ? 'Send OTP'
+                        : 'Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Product Sans',
+                      color: canSendOTP ? Colors.black : Colors.grey, // Grey when disabled
+                    ),
                   ),
                 ),
-                SizedBox(height: 16),
-                OTPTextField(
+                SizedBox(height: 8), // Space between "Send OTP" and the text field
+
+                // OTP Input Field
+                CustomTextField(
                   controller: TextEditingController(), // Provide a controller
-                  label: "Enter OTP", // Label for the OTP field
-                  onChanged: (otp) {
-                    // Handle the OTP change
-                  },
+                  label: "OTP", // Set the label to "OTP"
                 ),
-                SizedBox(height: 32),
               ],
             ),
           ),
@@ -149,7 +193,7 @@ class LoginOTPScreen extends StatelessWidget {
           // Positioned ForgotPasswordButton
           Positioned(
             left: screenWidth * 0.6, // 70% - 10% of screen width
-            top: screenHeight * 0.78, // 78% of screen height
+            top: screenHeight * 0.76, // 78% of screen height
             child: ForgotPasswordButton(
               label: "Forgot Password", // Set the label
               onPressed: () {
@@ -176,23 +220,14 @@ class LoginOTPScreen extends StatelessWidget {
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.9, // 90% of screen height
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red, // Button color
-                minimumSize: Size(screenWidth * 0.85, screenHeight * 0.06), // Button size
-              ),
+            child: RedButton(
+              label: "Login", // Set the label to "Login"
+              width: screenWidth * 0.85, // 85% of screen width
+              height: screenHeight * 0.06, // 6% of screen height
               onPressed: () {
                 // Handle the Login button click
                 print('Login button clicked');
               },
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: screenWidth * 0.045, // 4.5% of screen width
-                  fontFamily: 'Product Sans',
-                  color: Colors.white,
-                ),
-              ),
             ),
           ),
         ],
