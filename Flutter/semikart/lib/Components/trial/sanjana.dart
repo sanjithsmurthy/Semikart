@@ -16,7 +16,7 @@ import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
-import '../common/otp_text_field.dart'; // Import the OtpTextField widget
+import '../common/otp_text_field.dart'; // Import the updated OTPTextField
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
 import 'dart:io';
@@ -103,6 +103,9 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
         timestamp: null,
       ),
     ];
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -372,7 +375,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ),
                       SizedBox(height: 16),
                       ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        constraints: BoxConstraints(maxWidth: screenWidth * 0.9),
                         child: OrderView(),
                       ),
                       SizedBox(height: 32),
@@ -420,15 +423,17 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: 'Product Sans',
-                          color: Color(0xFFA51414),
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 16),
-                      OtpTextField(
-                        controller: _otpController,
-                        label: "OTP",
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      OTPTextField(
+                        length: 6, // Number of OTP fields
+                        controller: TextEditingController(), // Provide a controller
+                        onCompleted: (otp) {
+                          print('Entered OTP: $otp'); // Handle the completed OTP
+                        },
                       ),
                       SizedBox(height: 32), // Add spacing after the OTP field
                       Text(

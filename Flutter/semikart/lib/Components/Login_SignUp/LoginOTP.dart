@@ -122,9 +122,12 @@ class LoginOTPScreen extends StatelessWidget {
           Positioned(
             left: screenWidth * 0.06, // 6% of screen width
             top: screenHeight * 0.65, // 65% of screen height
-            child: OtpTextField(
+            child: OTPTextField(
+              length: 6, // Number of OTP fields
               controller: TextEditingController(), // Provide a controller
-              label: "Enter OTP", // Set the label to "Enter OTP"
+              onCompleted: (otp) {
+                print('Entered OTP: $otp'); // Handle the completed OTP
+              },
             ),
           ),
 

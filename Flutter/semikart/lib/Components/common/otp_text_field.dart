@@ -1,120 +1,66 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
-class OtpTextField extends StatefulWidget {
-  final TextEditingController controller;
-  final String label;
-  final EdgeInsetsGeometry? padding; // Optional padding parameter
-  final double width; // Width of the text field
+class OTPTextField extends StatelessWidget {
+  final int length; // Number of OTP fields
+  final TextEditingController controller; // Controller to capture the OTP
+  final double fieldWidth; // Width of each OTP field
+  final double fieldHeight; // Height of each OTP field
+  final double spacing; // Spacing between OTP fields
+  final Function(String)? onCompleted; // Callback when OTP is completed
 
-  const OtpTextField({
-    super.key,
+  OTPTextField({
+    required this.length,
     required this.controller,
-    required this.label,
-    this.padding,
-    this.width = 370.0, // Default width
+    this.fieldWidth = 50.0,
+    this.fieldHeight = 50.0,
+    this.spacing = 8.0,
+    this.onCompleted,
   });
 
   @override
-  _OtpTextFieldState createState() => _OtpTextFieldState();
-}
-
-class _OtpTextFieldState extends State<OtpTextField> {
-  Timer? _timer;
-  int _remainingTime = 120; // 2 minutes in seconds
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer(); // Start the timer when the widget is initialized
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel(); // Cancel the timer when the widget is disposed
-    super.dispose();
-  }
-
-  void _startTimer() {
-    _remainingTime = 120; // Reset the timer to 2 minutes
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingTime > 0) {
-        setState(() {
-          _remainingTime--;
-        });
-      } else {
-        timer.cancel(); // Stop the timer when it reaches 0
-      }
-    });
-  }
-
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Calculate the width dynamically based on screen size
-    final screenWidth = MediaQuery.of(context).size.width;
-    final calculatedWidth = widget.width > screenWidth * 0.9 ? screenWidth * 0.9 : widget.width; // Limit width to 90% of screen width
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(length, (index) {
+        return Container(
+          width: fieldWidth,
+          height: fieldHeight,
+          margin: EdgeInsets.symmetric(horizontal: spacing / 2),
+          child: TextField(
+            controller: TextEditingController(),
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            maxLength: 1,
+            style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Product Sans',
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: InputDecoration(
+              counterText: '', // Hide the character counter
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+            onChanged: (value) {
+              if (value.isNotEmpty && index < length - 1) {
+                FocusScope.of(context).nextFocus(); // Move to the next field
+              } else if (value.isEmpty && index > 0) {
+                FocusScope.of(context).previousFocus(); // Move to the previous field
+              }
 
-    return Padding(
-      padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
-      child: SizedBox(
-        width: calculatedWidth, // Use the dynamically calculated width
-        height: 72,
-        child: TextField(
-          controller: widget.controller,
-          keyboardType: TextInputType.number, // Set keyboard type to number for OTP
-          decoration: InputDecoration(
-            labelText: widget.label,
-            labelStyle: const TextStyle(
-              color: Color(0xFF757575), // Grey color for placeholder
-              fontSize: 16,
-              height: 19 / 16, // To achieve height of 19
-            ),
-            floatingLabelStyle: const TextStyle(
-              color: Color(0xFFA51414), // Red color when focused
-              fontSize: 16,
-            ),
-            floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
-            contentPadding: const EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                color: Color(0xFFA51414),
-                width: 1.0,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                color: Color(0xFFA51414),
-                width: 1.0,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                color: Color(0xFFA51414),
-                width: 1.0,
-              ),
-            ),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Text(
-                _remainingTime > 0 ? _formatTime(_remainingTime) : "Resend OTP",
-                style: const TextStyle(
-                  color: Color(0xFF757575), // Grey color for the timer
-                  fontSize: 14,
-                ),
-              ),
-            ),
+              // Collect the OTP when all fields are filled
+              String otp = '';
+              for (int i = 0; i < length; i++) {
+                otp += (controller.text.length > i ? controller.text[i] : '');
+              }
+              if (otp.length == length && onCompleted != null) {
+                onCompleted!(otp);
+              }
+            },
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
