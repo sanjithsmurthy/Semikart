@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
 import '../common/custom_text_field.dart'; // Import the CustomTextField widget
-import '../common/password_text_field.dart'; // Import the PasswordTextField widget
+import '../common/otp_text_field.dart'; // Import the OTPTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
 
@@ -76,17 +76,26 @@ class LoginOTPScreen extends StatelessWidget {
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
-              width: screenWidth * 0.4, // 40% of screen width
+              width: screenWidth * 0.4 - 10, // Subtract 10px for spacing near "OR"
               height: 1, // Fixed height
               color: Colors.black, // Line color
             ),
           ),
 
-         
+          // Second horizontal black line
+          Positioned(
+            left: screenWidth * 0.51 + 10, // Add 10px for spacing near "OR"
+            top: screenHeight * 0.46, // 46% of screen height
+            child: Container(
+              width: screenWidth * 0.4 - 10, // Subtract 10px for spacing near "OR"
+              height: 1, // Fixed height
+              color: Colors.black, // Line color
+            ),
+          ),
 
           // Positioned "OR" text exactly in the middle
           Positioned(
-            left: screenWidth * 0.50, // Centered between the two lines
+            left: screenWidth * 0.45, // Centered between the two lines
             top: screenHeight * 0.445, // Slightly above the lines
             child: Text(
               'OR',
@@ -99,19 +108,6 @@ class LoginOTPScreen extends StatelessWidget {
             ),
           ),
 
-
-           // Second horizontal black line
-          Positioned(
-            left: screenWidth * 0.57, // 51% of screen width
-            top: screenHeight * 0.46, // 46% of screen height
-            child: Container(
-              width: screenWidth * 0.4, // 40% of screen width
-              height: 1, // Fixed height
-              color: Colors.black, // Line color
-            ),
-          ),
-
-
           // Positioned CustomTextField for Email
           Positioned(
             left: screenWidth * 0.06, // 6% of screen width
@@ -122,13 +118,13 @@ class LoginOTPScreen extends StatelessWidget {
             ),
           ),
 
-          // Positioned PasswordTextField for Password
+          // Positioned OTPTextField for OTP
           Positioned(
             left: screenWidth * 0.06, // 6% of screen width
             top: screenHeight * 0.65, // 65% of screen height
-            child: PasswordTextField(
+            child: OtpTextField(
               controller: TextEditingController(), // Provide a controller
-              label: "Password", // Set the label to "Password"
+              label: "Enter OTP", // Set the label to "Enter OTP"
             ),
           ),
 
