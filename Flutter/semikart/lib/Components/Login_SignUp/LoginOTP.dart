@@ -40,7 +40,7 @@ class LoginOTPScreen extends StatelessWidget {
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.24, // 24% of screen height
             child: Text(
-              'Login with OTP',
+              'Login',
               style: TextStyle(
                 fontSize: screenWidth * 0.06, // 6% of screen width
                 fontFamily: 'Product Sans', // Product Sans font
@@ -76,26 +76,17 @@ class LoginOTPScreen extends StatelessWidget {
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
-              width: screenWidth * 0.4 - 10, // Subtract 10px for spacing near "OR"
+              width: screenWidth * 0.4, // 40% of screen width
               height: 1, // Fixed height
               color: Colors.black, // Line color
             ),
           ),
 
-          // Second horizontal black line
-          Positioned(
-            left: screenWidth * 0.51 + 10, // Add 10px for spacing near "OR"
-            top: screenHeight * 0.46, // 46% of screen height
-            child: Container(
-              width: screenWidth * 0.4 - 10, // Subtract 10px for spacing near "OR"
-              height: 1, // Fixed height
-              color: Colors.black, // Line color
-            ),
-          ),
+         
 
           // Positioned "OR" text exactly in the middle
           Positioned(
-            left: screenWidth * 0.45, // Centered between the two lines
+            left: screenWidth * 0.50, // Centered between the two lines
             top: screenHeight * 0.445, // Slightly above the lines
             child: Text(
               'OR',
@@ -108,27 +99,76 @@ class LoginOTPScreen extends StatelessWidget {
             ),
           ),
 
-          // Positioned CustomTextField for Mobile Number
+
+           // Second horizontal black line
+          Positioned(
+            left: screenWidth * 0.57, // 51% of screen width
+            top: screenHeight * 0.46, // 46% of screen height
+            child: Container(
+              width: screenWidth * 0.4, // 40% of screen width
+              height: 1, // Fixed height
+              color: Colors.black, // Line color
+            ),
+          ),
+
+
+          // Positioned CustomTextField for Email
           Positioned(
             left: screenWidth * 0.06, // 6% of screen width
             top: screenHeight * 0.52, // 52% of screen height
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
-              label: "Mobile Number", // Set the label to "Mobile Number"
+              label: "Email", // Set the label to "Email"
             ),
           ),
 
-          // Positioned RedButton for Login with OTP
+          // Positioned PasswordTextField for Password
+          Positioned(
+            left: screenWidth * 0.06, // 6% of screen width
+            top: screenHeight * 0.65, // 65% of screen height
+            child: PasswordTextField(
+              controller: TextEditingController(), // Provide a controller
+              label: "Password", // Set the label to "Password"
+            ),
+          ),
+
+          // Positioned ForgotPasswordButton
+          Positioned(
+            left: screenWidth * 0.6, // 70% - 10% of screen width
+            top: screenHeight * 0.78, // 78% of screen height
+            child: ForgotPasswordButton(
+              label: "Forgot Password", // Set the label
+              onPressed: () {
+                // Handle the Forgot Password button click
+                print('Forgot Password button clicked');
+              },
+            ),
+          ),
+
+          // Positioned "Don't have an account?" Button
+          Positioned(
+            left: screenWidth * 0.48, // 58% - 10% of screen width
+            top: screenHeight * 0.82, // 82% of screen height
+            child: ForgotPasswordButton(
+              label: "Don't have an account?", // Set the label
+              onPressed: () {
+                // Handle the button click
+                print('Don\'t have an account button clicked');
+              },
+            ),
+          ),
+
+          // Positioned RedButton for Login
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
-            top: screenHeight * 0.65, // 65% of screen height
+            top: screenHeight * 0.9, // 90% of screen height
             child: RedButton(
-              label: "Send OTP", // Set the label to "Send OTP"
+              label: "Login", // Set the label to "Login"
               width: screenWidth * 0.85, // 85% of screen width
               height: screenHeight * 0.06, // 6% of screen height
               onPressed: () {
-                // Handle the Send OTP button click
-                print('Send OTP button clicked');
+                // Handle the Login button click
+                print('Login button clicked');
               },
             ),
           ),
