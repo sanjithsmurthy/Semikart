@@ -158,7 +158,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
           // Positioned Send OTP
           Positioned(
             left: screenWidth * 0.65, // Align with other components
-            top: screenHeight * 0.68, // Adjust position to align with layout
+            top: screenHeight * 0.73, // Adjust position to align with layout
             child: GestureDetector(
               onTap: () {
                 if (canSendOTP) {
