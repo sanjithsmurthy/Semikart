@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'Loginpassword.dart'; // Import the LoginPasswordScreen widget
+import 'LoginOTP.dart';
 
 class VerticalRadios extends StatefulWidget {
   @override
@@ -48,7 +50,27 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       activeColor: Color(0xFFA51414), // Red color for selected radio
                       onChanged: (value) {
                         setState(() {
-                          _selectedOption = value!;
+                          _selectedOption = value!; // Update the selected radio option
+
+                          // Navigate to LoginPassword page when the first radio button is selected
+                          if (_selectedOption == "password") {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPasswordScreen(), // Navigate to LoginPassword
+                              ),
+                            );
+                          }
+
+                          // Navigate to LoginOTP page when the second radio button is selected
+                          if (_selectedOption == "otp") {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginOTPScreen(), // Navigate to LoginOTP
+                              ),
+                            );
+                          }
                         });
                       },
                     ),
@@ -100,7 +122,27 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       activeColor: Color(0xFFA51414), // Red color for selected radio
                       onChanged: (value) {
                         setState(() {
-                          _selectedOption = value!;
+                          _selectedOption = value!; // Update the selected radio option
+
+                          // Navigate to LoginPassword page when the first radio button is selected
+                          if (_selectedOption == "password") {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPasswordScreen(), // Navigate to LoginPassword
+                              ),
+                            );
+                          }
+
+                          // Navigate to LoginOTP page when the second radio button is selected
+                          if (_selectedOption == "otp") {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginOTPScreen(), // Navigate to LoginOTP
+                              ),
+                            );
+                          }
                         });
                       },
                     ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../common/custom_text_field.dart';
+import '../Login_SignUp/custom_text_field.dart';
 import '../common/textfield_dropdown.dart';
 import '../common/red_button.dart';
 import '../common/inactive_red_button.dart';
@@ -16,8 +16,8 @@ import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
-import '../common/otp_text_field.dart'; // Import the OtpTextField widget
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
+import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -103,6 +103,9 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
       ),
     ];
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -148,6 +151,11 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         controller: TextEditingController(),
                         label: "Email",
                         // No width parameter provided, so it will use the default width (370.0)
+                      ),
+                      SizedBox(height: 16),
+                      CustomTextField(
+                        controller: TextEditingController(), // Provide a controller
+                        label: "OTP", // Set the label to "OTP"
                       ),
                       SizedBox(height: 32),
                       Text(
@@ -371,7 +379,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ),
                       SizedBox(height: 16),
                       ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: maxWidth),
+                        constraints: BoxConstraints(maxWidth: screenWidth * 0.9),
                         child: OrderView(),
                       ),
                       SizedBox(height: 32),
@@ -413,22 +421,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         label: "Password",
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       ),
-                      SizedBox(height: 32), // Add spacing after the password field
-                      Text(
-                        'Enter OTP',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Product Sans',
-                          color: Color(0xFFA51414),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      OtpTextField(
-                        controller: _otpController,
-                        label: "OTP",
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      ),
+                      
                       SizedBox(height: 32), // Add spacing after the OTP field
                       Text(
                         'Product Search Page',
@@ -482,6 +475,27 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         ),
                       ),
                       SizedBox(height: 32), // Add spacing after the text
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to the LoginOTPScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginOTPScreen(), // Navigate to LoginOTPScreen
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'LoginOTP Page',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue, // Blue color to indicate it's clickable
+                            decoration: TextDecoration.underline, // Underline for clickable text
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32), // Add spacing after the text
                       Text(
                         'Built-in SearchBar Example',
                         style: TextStyle(
@@ -500,7 +514,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                       ),
                       SizedBox(height: 24), // Added bottom padding
                     ],
-                  ),
+                  ), //column
                 ),
               );
             },

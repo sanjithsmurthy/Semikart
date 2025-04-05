@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
-import '../common/vertical_radios.dart'; // Import the VerticalRadios widget
-import '../common/custom_text_field.dart'; // Import the CustomTextField widget
+import 'vertical_radios.dart'; // Import the VerticalRadios widget
+import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
@@ -140,20 +140,11 @@ class LoginPasswordScreen extends StatelessWidget {
             ),
           ),
 
-          // Second horizontal black line
-          Positioned(
-            left: screenWidth * 0.51, // 51% of screen width
-            top: screenHeight * 0.46, // 46% of screen height
-            child: Container(
-              width: screenWidth * 0.4, // 40% of screen width
-              height: 1, // Fixed height
-              color: Colors.black, // Line color
-            ),
-          ),
+         
 
           // Positioned "OR" text exactly in the middle
           Positioned(
-            left: screenWidth * 0.45, // Centered between the two lines
+            left: screenWidth * 0.50, // Centered between the two lines
             top: screenHeight * 0.445, // Slightly above the lines
             child: Text(
               'OR',
@@ -163,6 +154,18 @@ class LoginPasswordScreen extends StatelessWidget {
                 color: Colors.black, // Black color
                 fontWeight: FontWeight.normal, // Regular weight
               ),
+            ),
+          ),
+
+
+           // Second horizontal black line
+          Positioned(
+            left: screenWidth * 0.57, // 51% of screen width
+            top: screenHeight * 0.46, // 46% of screen height
+            child: Container(
+              width: screenWidth * 0.4, // 40% of screen width
+              height: 1, // Fixed height
+              color: Colors.black, // Line color
             ),
           ),
 
