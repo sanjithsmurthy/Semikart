@@ -3,12 +3,22 @@ import 'Loginpassword.dart'; // Import the LoginPassword screen
 import 'LoginOTP.dart'; // Import the LoginOTP screen
 
 class VerticalRadios extends StatefulWidget {
+  final String initialOption; // Add a parameter to set the initial selected option
+
+  VerticalRadios({required this.initialOption}); // Constructor to accept the initial option
+
   @override
   _VerticalRadiosState createState() => _VerticalRadiosState();
 }
 
 class _VerticalRadiosState extends State<VerticalRadios> {
-  String _selectedOption = "password"; // Default selected option
+  late String _selectedOption; // Track the selected option
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedOption = widget.initialOption; // Initialize with the passed option
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +55,16 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                     groupValue: _selectedOption, // Current selected option
                     activeColor: Color(0xFFA51414), // Red color for selected radio
                     onChanged: (value) {
-                      setState(() {
-                        _selectedOption = value!; // Update the selected radio option
-                      });
-                      // Navigate to LoginPassword screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
-                      );
+                      if (value != null) {
+                        setState(() {
+                          _selectedOption = value; // Update the selected radio option
+                        });
+                        // Navigate to LoginPassword screen
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -96,14 +108,16 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                     groupValue: _selectedOption, // Current selected option
                     activeColor: Color(0xFFA51414), // Red color for selected radio
                     onChanged: (value) {
-                      setState(() {
-                        _selectedOption = value!; // Update the selected radio option
-                      });
-                      // Navigate to LoginOTP screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginOTPScreen()),
-                      );
+                      if (value != null) {
+                        setState(() {
+                          _selectedOption = value; // Update the selected radio option
+                        });
+                        // Navigate to LoginOTP screen
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginOTPScreen()),
+                        );
+                      }
                     },
                   ),
                 ),

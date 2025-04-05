@@ -5,6 +5,7 @@ import 'vertical_radios.dart'; // Import the VerticalRadios widget
 import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the ForgotPasswordButton widget
+import 'Loginpassword.dart'; // Import the LoginPassword screen
 
 class LoginOTPScreen extends StatefulWidget {
   @override
@@ -40,8 +41,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned Semikart logo
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
-            top: screenHeight * 0.14, // 14% of screen height
+            left: screenWidth * 0.06, // 9% of screen width
+            top: screenHeight * 0.10, // 14% of screen height
             child: Image.asset(
               'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
               width: screenWidth * 0.5, // 50% of screen width
@@ -84,11 +85,17 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             left: screenWidth * 0.55, // 65% of screen width
             top: screenHeight * 0.25, // 33% of screen height
             child: VerticalRadios(
-              onOptionSelected: (selectedOption) {
-                
-              },
+              initialOption: "otp"
+              
             ),
           ),
+
+          // Add the VerticalRadios widget without navigation logic
+          // Positioned(
+          //   left: screenWidth * 0.07, // Align with other components
+          //   top: screenHeight * 0.42, // Adjust position to align with layout
+          //   child: VerticalRadios(), // No need to add navigation logic here
+          // ),
 
           // First horizontal black line
           Positioned(

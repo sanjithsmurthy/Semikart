@@ -46,6 +46,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             floatingLabelStyle: const TextStyle(
               color: Color(0xFFA51414), // Red color when focused
               fontSize: 16,
+              fontWeight: FontWeight.bold, // Make the floating label bold
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
             contentPadding: const EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
@@ -53,21 +54,21 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
                 color: Color(0xFFA51414),
-                width: 1.0,
+                width: 2.0, // Increased border width
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
                 color: Color(0xFFA51414),
-                width: 1.0,
+                width: 2.0, // Increased border width
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
                 color: Color(0xFFA51414),
-                width: 1.0,
+                width: 2.0, // Increased border width
               ),
             ),
             suffixIcon: IconButton(

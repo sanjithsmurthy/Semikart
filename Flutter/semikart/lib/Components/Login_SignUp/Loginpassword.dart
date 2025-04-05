@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import 'vertical_radios.dart'; // Import the VerticalRadios widget
 import 'custom_text_field.dart'; // Import the CustomTextField widget
-import '../common/password_text_field.dart'; // Import the PasswordTextField widget
+import 'password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
 
@@ -56,9 +56,8 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               SizedBox(height: 32), // Add spacing after the text
 
               VerticalRadios(
-                onOptionSelected: (selectedOption) { 
-                  
-                },
+                initialOption: "password"
+               
               ),
 
               // Other components...
@@ -133,9 +132,7 @@ class LoginPasswordScreen extends StatelessWidget {
             left: screenWidth * 0.55, // 65% of screen width
             top: screenHeight * 0.25, // 33% of screen height
             child: VerticalRadios(
-              onOptionSelected: (selectedOption) {
-                
-              },
+            initialOption: "password"
             ),
           ),
 
