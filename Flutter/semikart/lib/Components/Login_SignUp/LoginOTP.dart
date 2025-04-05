@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import 'vertical_radios.dart'; // Import the VerticalRadios widget
@@ -69,7 +68,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
           // Positioned SignInWithGoogleButton
           Positioned(
             left: screenWidth * 0.07, // 7% of screen width
-            top: screenHeight * 0.33, // 33% of screen height
+            top: screenHeight * 0.32, // 32% of screen height
             child: SignInWithGoogleButton(
               onPressed: () {
                 // Handle the Google sign-in logic here
@@ -82,12 +81,16 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned VerticalRadios
           Positioned(
-            left: screenWidth * 0.65, // 65% of screen width
-            top: screenHeight * 0.33, // 33% of screen height
-            child: VerticalRadios(), // Display the VerticalRadios widget
+            left: screenWidth * 0.55, // 65% of screen width
+            top: screenHeight * 0.25, // 33% of screen height
+            child: VerticalRadios(
+              onOptionSelected: (selectedOption) {
+                
+              },
+            ),
           ),
 
-         // First horizontal black line
+          // First horizontal black line
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.46, // 46% of screen height
@@ -113,7 +116,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-           // Second horizontal black line
+          // Second horizontal black line
           Positioned(
             left: screenWidth * 0.57, // 51% of screen width
             top: screenHeight * 0.46, // 46% of screen height
@@ -126,8 +129,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned CustomTextField for Email
           Positioned(
-            left: screenWidth * 0.06, // 6% of screen width
-            top: screenHeight * 0.52, // 52% of screen height
+            left: screenWidth * 0.06, // Align with other components
+            top: screenHeight * 0.52, // Adjust position to align with layout
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
               label: "Email", // Set the label to "Email"
@@ -136,13 +139,11 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // OTP Section
           Positioned(
-            left: screenWidth * 0.06, // 6% of screen width
-            top: screenHeight * 0.6, // 65% of screen height
+            left: screenWidth * 0.06, // Align with other components
+            top: screenHeight * 0.65, // Adjust position to align with layout
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Send OTP Text
-                
                 SizedBox(height: 8), // Space between "Send OTP" and the text field
 
                 // OTP Input Field
@@ -154,10 +155,10 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-          // Positioned send otp
+          // Positioned Send OTP
           Positioned(
-            left: screenWidth * 0.69, // 60% of screen width
-            top: screenHeight * 0.67, // 76% of screen height
+            left: screenWidth * 0.65, // Align with other components
+            top: screenHeight * 0.68, // Adjust position to align with layout
             child: GestureDetector(
               onTap: () {
                 if (canSendOTP) {

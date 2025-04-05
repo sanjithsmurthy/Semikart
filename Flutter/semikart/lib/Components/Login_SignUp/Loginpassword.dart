@@ -55,6 +55,12 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
               ),
               SizedBox(height: 32), // Add spacing after the text
 
+              VerticalRadios(
+                onOptionSelected: (selectedOption) { 
+                  
+                },
+              ),
+
               // Other components...
             ],
           ),
@@ -83,8 +89,8 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned Semikart logo
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
-            top: screenHeight * 0.14, // 14% of screen height
+            left: screenWidth * 0.06, // 9% of screen width
+            top: screenHeight * 0.10, // 14% of screen height
             child: Image.asset(
               'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
               width: screenWidth * 0.5, // 50% of screen width
@@ -111,7 +117,7 @@ class LoginPasswordScreen extends StatelessWidget {
           // Positioned SignInWithGoogleButton
           Positioned(
             left: screenWidth * 0.07, // 7% of screen width
-            top: screenHeight * 0.33, // 33% of screen height
+            top: screenHeight * 0.32, // 33% of screen height
             child: SignInWithGoogleButton(
               onPressed: () {
                 // Handle the Google sign-in logic here
@@ -124,9 +130,13 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned VerticalRadios
           Positioned(
-            left: screenWidth * 0.65, // 65% of screen width
-            top: screenHeight * 0.33, // 33% of screen height
-            child: VerticalRadios(), // Display the VerticalRadios widget
+            left: screenWidth * 0.55, // 65% of screen width
+            top: screenHeight * 0.25, // 33% of screen height
+            child: VerticalRadios(
+              onOptionSelected: (selectedOption) {
+                
+              },
+            ),
           ),
 
           // First horizontal black line
@@ -139,8 +149,6 @@ class LoginPasswordScreen extends StatelessWidget {
               color: Colors.black, // Line color
             ),
           ),
-
-         
 
           // Positioned "OR" text exactly in the middle
           Positioned(
@@ -157,8 +165,7 @@ class LoginPasswordScreen extends StatelessWidget {
             ),
           ),
 
-
-           // Second horizontal black line
+          // Second horizontal black line
           Positioned(
             left: screenWidth * 0.57, // 51% of screen width
             top: screenHeight * 0.46, // 46% of screen height
