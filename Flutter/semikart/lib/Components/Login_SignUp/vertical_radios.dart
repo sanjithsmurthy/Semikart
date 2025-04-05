@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'Loginpassword.dart'; // Import the LoginPassword screen
+import 'LoginOTP.dart'; // Import the LoginOTP screen
 
 class VerticalRadios extends StatefulWidget {
-  final Function(String) onOptionSelected; // Callback for selected option
-
-  VerticalRadios({required this.onOptionSelected}); // Constructor to accept the callback
-
   @override
   _VerticalRadiosState createState() => _VerticalRadiosState();
 }
@@ -49,8 +47,12 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                     onChanged: (value) {
                       setState(() {
                         _selectedOption = value!; // Update the selected radio option
-                        widget.onOptionSelected(_selectedOption); // Pass value to parent
                       });
+                      // Navigate to LoginPassword screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
+                      );
                     },
                   ),
                 ),
@@ -96,8 +98,12 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                     onChanged: (value) {
                       setState(() {
                         _selectedOption = value!; // Update the selected radio option
-                        widget.onOptionSelected(_selectedOption); // Pass value to parent
                       });
+                      // Navigate to LoginOTP screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginOTPScreen()),
+                      );
                     },
                   ),
                 ),
