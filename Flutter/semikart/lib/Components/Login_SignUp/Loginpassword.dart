@@ -5,6 +5,7 @@ import 'custom_text_field.dart'; // Import the CustomTextField widget
 import 'password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
+import 'signupscreen.dart'; // Import the SignUpScreen widget
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -213,8 +214,11 @@ class LoginPasswordScreen extends StatelessWidget {
             child: ForgotPasswordButton(
               label: "Don't have an account?", // Set the label
               onPressed: () {
-                // Handle the button click
-                print('Don\'t have an account button clicked');
+                 Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SignUpScreen()),
+      );
+            
               },
             ),
           ),

@@ -6,6 +6,7 @@ import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the ForgotPasswordButton widget
 import 'Loginpassword.dart'; // Import the LoginPassword screen
+import 'signupscreen.dart';// Import the LoginOTP screen
 
 class LoginOTPScreen extends StatefulWidget {
   @override
@@ -209,8 +210,10 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             child: ForgotPasswordButton(
               label: "Don't have an account?", // Set the label
               onPressed: () {
-                // Handle the button click
-                print('Don\'t have an account button clicked');
+                Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SignUpScreen()),
+      );
               },
             ),
           ),
