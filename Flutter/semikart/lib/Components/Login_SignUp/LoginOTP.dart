@@ -98,8 +98,6 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-         
-
           // Positioned "OR" text exactly in the middle
           Positioned(
             left: screenWidth * 0.50, // Centered between the two lines
@@ -114,7 +112,6 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
               ),
             ),
           ),
-
 
            // Second horizontal black line
           Positioned(
@@ -145,40 +142,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Send OTP Text
-                GestureDetector(
-                  onTap: () {
-                    if (canSendOTP) {
-                      setState(() {
-                        canSendOTP = false; // Disable the "Send OTP" button
-                        countdown = 120; // Start the 2-minute timer (120 seconds)
-                      });
-
-                      // Start the countdown timer
-                      timer = Timer.periodic(Duration(seconds: 1), (timer) {
-                        if (countdown > 0) {
-                          setState(() {
-                            countdown--;
-                          });
-                        } else {
-                          timer.cancel(); // Stop the timer when it reaches 0
-                          setState(() {
-                            canSendOTP = true; // Re-enable the "Send OTP" button
-                          });
-                        }
-                      });
-                    }
-                  },
-                  child: Text(
-                    canSendOTP
-                        ? 'Send OTP'
-                        : 'Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Product Sans',
-                      color: canSendOTP ? Colors.black : Colors.grey, // Grey when disabled
-                    ),
-                  ),
-                ),
+                
                 SizedBox(height: 8), // Space between "Send OTP" and the text field
 
                 // OTP Input Field
@@ -190,16 +154,43 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-          // Positioned ForgotPasswordButton
+          // Positioned send otp
           Positioned(
-            left: screenWidth * 0.6, // 70% - 10% of screen width
-            top: screenHeight * 0.76, // 78% of screen height
-            child: ForgotPasswordButton(
-              label: "Forgot Password", // Set the label
-              onPressed: () {
-                // Handle the Forgot Password button click
-                print('Forgot Password button clicked');
+            left: screenWidth * 0.69, // 60% of screen width
+            top: screenHeight * 0.67, // 76% of screen height
+            child: GestureDetector(
+              onTap: () {
+                if (canSendOTP) {
+                  setState(() {
+                    canSendOTP = false; // Disable the "Send OTP" button
+                    countdown = 120; // Start the 2-minute timer (120 seconds)
+                  });
+
+                  // Start the countdown timer
+                  timer = Timer.periodic(Duration(seconds: 1), (timer) {
+                    if (countdown > 0) {
+                      setState(() {
+                        countdown--;
+                      });
+                    } else {
+                      timer.cancel(); // Stop the timer when it reaches 0
+                      setState(() {
+                        canSendOTP = true; // Re-enable the "Send OTP" button
+                      });
+                    }
+                  });
+                }
               },
+              child: Text(
+                canSendOTP
+                    ? 'Send OTP'
+                    : 'Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Product Sans',
+                  color: canSendOTP ? Colors.black : Colors.grey, // Grey when disabled
+                ),
+              ),
             ),
           ),
 
