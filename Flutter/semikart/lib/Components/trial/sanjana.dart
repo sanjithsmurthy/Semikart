@@ -15,9 +15,10 @@ import '../common/profilepic.dart';
 import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
-import '../common/password_text_field.dart'; // Import the PasswordTextField widget
+import '../Login_SignUp/password_text_field.dart'; // Import the PasswordTextField widget
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
+import '../Login_SignUp/vertical_radios.dart'; // Import the VerticalRadios widget
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -308,6 +309,17 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         },
                       ),
                       SizedBox(height: 32),
+                      Text(
+                        'Vertical Radios Example',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                     
+                      SizedBox(height: 32), // Add spacing after the VerticalRadios
                       Text(
                         'Order Tracking',
                         style: TextStyle(

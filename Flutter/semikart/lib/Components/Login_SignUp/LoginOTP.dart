@@ -1,11 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import 'vertical_radios.dart'; // Import the VerticalRadios widget
 import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the ForgotPasswordButton widget
+import 'Loginpassword.dart'; // Import the LoginPassword screen
+import 'signupscreen.dart';// Import the LoginOTP screen
 
 class LoginOTPScreen extends StatefulWidget {
   @override
@@ -41,8 +42,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned Semikart logo
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
-            top: screenHeight * 0.14, // 14% of screen height
+            left: screenWidth * 0.06, // 9% of screen width
+            top: screenHeight * 0.10, // 14% of screen height
             child: Image.asset(
               'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
               width: screenWidth * 0.5, // 50% of screen width
@@ -69,7 +70,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
           // Positioned SignInWithGoogleButton
           Positioned(
             left: screenWidth * 0.07, // 7% of screen width
-            top: screenHeight * 0.33, // 33% of screen height
+            top: screenHeight * 0.32, // 32% of screen height
             child: SignInWithGoogleButton(
               onPressed: () {
                 // Handle the Google sign-in logic here
@@ -82,12 +83,22 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned VerticalRadios
           Positioned(
-            left: screenWidth * 0.65, // 65% of screen width
-            top: screenHeight * 0.33, // 33% of screen height
-            child: VerticalRadios(), // Display the VerticalRadios widget
+            left: screenWidth * 0.55, // 65% of screen width
+            top: screenHeight * 0.25, // 33% of screen height
+            child: VerticalRadios(
+              initialOption: "otp"
+              
+            ),
           ),
 
-         // First horizontal black line
+          // Add the VerticalRadios widget without navigation logic
+          // Positioned(
+          //   left: screenWidth * 0.07, // Align with other components
+          //   top: screenHeight * 0.42, // Adjust position to align with layout
+          //   child: VerticalRadios(), // No need to add navigation logic here
+          // ),
+
+          // First horizontal black line
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
             top: screenHeight * 0.46, // 46% of screen height
@@ -97,8 +108,6 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
               color: Colors.black, // Line color
             ),
           ),
-
-         
 
           // Positioned "OR" text exactly in the middle
           Positioned(
@@ -115,8 +124,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-
-           // Second horizontal black line
+          // Second horizontal black line
           Positioned(
             left: screenWidth * 0.57, // 51% of screen width
             top: screenHeight * 0.46, // 46% of screen height
@@ -129,8 +137,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned CustomTextField for Email
           Positioned(
-            left: screenWidth * 0.06, // 6% of screen width
-            top: screenHeight * 0.52, // 52% of screen height
+            left: screenWidth * 0.06, // Align with other components
+            top: screenHeight * 0.52, // Adjust position to align with layout
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
               label: "Email", // Set the label to "Email"
@@ -139,46 +147,11 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // OTP Section
           Positioned(
-            left: screenWidth * 0.06, // 6% of screen width
-            top: screenHeight * 0.6, // 65% of screen height
+            left: screenWidth * 0.06, // Align with other components
+            top: screenHeight * 0.65, // Adjust position to align with layout
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Send OTP Text
-                GestureDetector(
-                  onTap: () {
-                    if (canSendOTP) {
-                      setState(() {
-                        canSendOTP = false; // Disable the "Send OTP" button
-                        countdown = 120; // Start the 2-minute timer (120 seconds)
-                      });
-
-                      // Start the countdown timer
-                      timer = Timer.periodic(Duration(seconds: 1), (timer) {
-                        if (countdown > 0) {
-                          setState(() {
-                            countdown--;
-                          });
-                        } else {
-                          timer.cancel(); // Stop the timer when it reaches 0
-                          setState(() {
-                            canSendOTP = true; // Re-enable the "Send OTP" button
-                          });
-                        }
-                      });
-                    }
-                  },
-                  child: Text(
-                    canSendOTP
-                        ? 'Send OTP'
-                        : 'Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Product Sans',
-                      color: canSendOTP ? Colors.black : Colors.grey, // Grey when disabled
-                    ),
-                  ),
-                ),
                 SizedBox(height: 8), // Space between "Send OTP" and the text field
 
                 // OTP Input Field
@@ -190,16 +163,43 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-          // Positioned ForgotPasswordButton
+          // Positioned Send OTP
           Positioned(
-            left: screenWidth * 0.6, // 70% - 10% of screen width
-            top: screenHeight * 0.76, // 78% of screen height
-            child: ForgotPasswordButton(
-              label: "Forgot Password", // Set the label
-              onPressed: () {
-                // Handle the Forgot Password button click
-                print('Forgot Password button clicked');
+            left: screenWidth * 0.65, // Align with other components
+            top: screenHeight * 0.73, // Adjust position to align with layout
+            child: GestureDetector(
+              onTap: () {
+                if (canSendOTP) {
+                  setState(() {
+                    canSendOTP = false; // Disable the "Send OTP" button
+                    countdown = 120; // Start the 2-minute timer (120 seconds)
+                  });
+
+                  // Start the countdown timer
+                  timer = Timer.periodic(Duration(seconds: 1), (timer) {
+                    if (countdown > 0) {
+                      setState(() {
+                        countdown--;
+                      });
+                    } else {
+                      timer.cancel(); // Stop the timer when it reaches 0
+                      setState(() {
+                        canSendOTP = true; // Re-enable the "Send OTP" button
+                      });
+                    }
+                  });
+                }
               },
+              child: Text(
+                canSendOTP
+                    ? 'Send OTP'
+                    : 'Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Product Sans',
+                  color: canSendOTP ? Colors.black : Colors.grey, // Grey when disabled
+                ),
+              ),
             ),
           ),
 
@@ -210,8 +210,10 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             child: ForgotPasswordButton(
               label: "Don't have an account?", // Set the label
               onPressed: () {
-                // Handle the button click
-                print('Don\'t have an account button clicked');
+                Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SignUpScreen()),
+      );
               },
             ),
           ),

@@ -1,26 +1,35 @@
 import 'package:flutter/material.dart';
-import 'Loginpassword.dart'; // Import the LoginPasswordScreen widget
-import 'LoginOTP.dart';
+import 'Loginpassword.dart'; // Import the LoginPassword screen
+import 'LoginOTP.dart'; // Import the LoginOTP screen
 
 class VerticalRadios extends StatefulWidget {
+  final String initialOption; // Add a parameter to set the initial selected option
+
+  VerticalRadios({required this.initialOption}); // Constructor to accept the initial option
+
   @override
   _VerticalRadiosState createState() => _VerticalRadiosState();
 }
 
 class _VerticalRadiosState extends State<VerticalRadios> {
-  String _selectedOption = "password"; // Default selected option
+  late String _selectedOption; // Track the selected option
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedOption = widget.initialOption; // Initialize with the passed option
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Dynamically calculate dimensions
-    final containerWidth = screenWidth * 0.23; // 23% of screen width
-    final containerHeight = screenHeight * 0.086; // 8.6% of screen height
-    final radioSize = (containerHeight * 0.42) + 3; // Increase radio size by 3px
-    final textFontSize = containerHeight * 0.15; // 15% of container height
+    final containerWidth = screenWidth * 0.9; // Adjusted width for both radios
+    final containerHeight = screenHeight * 0.2; // Adjusted height for both radios
+    final radioSize = (containerHeight * 0.2); // Adjusted size for radio buttons
+    final textFontSize = containerHeight * 0.1; // Adjusted font size
 
     return Container(
       width: containerWidth,
@@ -28,55 +37,40 @@ class _VerticalRadiosState extends State<VerticalRadios> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(containerWidth * 0.08), // 8% of container width
-        border: Border.all(color: Colors.white, width: 1.0), // White border
       ),
-      child: Stack(
-        children: [
-          // First Radio (Login with Password)
-          Positioned(
-            top: 0,
-            left: 5, // Push the radio 5px to the right
-            child: Transform.translate(
-              offset: Offset(-10, 0), // Shift text 10px to the left
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: radioSize,
-                    height: radioSize,
-                    child: Radio<String>(
-                      value: "password",
-                      groupValue: _selectedOption,
-                      activeColor: Color(0xFFA51414), // Red color for selected radio
-                      onChanged: (value) {
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Add horizontal padding
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Space out the radios evenly
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // First Radio (Login with Password)
+            Row(
+              children: [
+                SizedBox(
+                  width: radioSize,
+                  height: radioSize,
+                  child: Radio<String>(
+                    value: "password", // Value for the first radio
+                    groupValue: _selectedOption, // Current selected option
+                    activeColor: Color(0xFFA51414), // Red color for selected radio
+                    onChanged: (value) {
+                      if (value != null) {
                         setState(() {
-                          _selectedOption = value!; // Update the selected radio option
-
-                          // Navigate to LoginPassword page when the first radio button is selected
-                          if (_selectedOption == "password") {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginPasswordScreen(), // Navigate to LoginPassword
-                              ),
-                            );
-                          }
-
-                          // Navigate to LoginOTP page when the second radio button is selected
-                          if (_selectedOption == "otp") {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginOTPScreen(), // Navigate to LoginOTP
-                              ),
-                            );
-                          }
+                          _selectedOption = value; // Update the selected radio option
                         });
-                      },
-                    ),
+                        // Navigate to LoginPassword screen
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
+                        );
+                      }
+                    },
                   ),
-                  SizedBox(width: 5), // Spacing between radio and text set to 5px
-                  Column(
+                ),
+                SizedBox(width: 10), // Spacing between radio and text
+                Expanded(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -99,56 +93,37 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
 
-          // Second Radio (Login with OTP)
-          Positioned(
-            bottom: 0,
-            left: 5, // Push the radio 5px to the right
-            child: Transform.translate(
-              offset: Offset(-10, 0), // Shift text 10px to the left
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: radioSize,
-                    height: radioSize,
-                    child: Radio<String>(
-                      value: "otp",
-                      groupValue: _selectedOption,
-                      activeColor: Color(0xFFA51414), // Red color for selected radio
-                      onChanged: (value) {
+            // Second Radio (Login with OTP)
+            Row(
+              children: [
+                SizedBox(
+                  width: radioSize,
+                  height: radioSize,
+                  child: Radio<String>(
+                    value: "otp", // Value for the second radio
+                    groupValue: _selectedOption, // Current selected option
+                    activeColor: Color(0xFFA51414), // Red color for selected radio
+                    onChanged: (value) {
+                      if (value != null) {
                         setState(() {
-                          _selectedOption = value!; // Update the selected radio option
-
-                          // Navigate to LoginPassword page when the first radio button is selected
-                          if (_selectedOption == "password") {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginPasswordScreen(), // Navigate to LoginPassword
-                              ),
-                            );
-                          }
-
-                          // Navigate to LoginOTP page when the second radio button is selected
-                          if (_selectedOption == "otp") {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginOTPScreen(), // Navigate to LoginOTP
-                              ),
-                            );
-                          }
+                          _selectedOption = value; // Update the selected radio option
                         });
-                      },
-                    ),
+                        // Navigate to LoginOTP screen
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginOTPScreen()),
+                        );
+                      }
+                    },
                   ),
-                  SizedBox(width: 5), // Spacing between radio and text set to 5px
-                  Column(
+                ),
+                SizedBox(width: 10), // Spacing between radio and text
+                Expanded(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -171,11 +146,11 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
