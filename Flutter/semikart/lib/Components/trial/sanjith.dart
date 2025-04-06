@@ -7,6 +7,7 @@ import '../common/forgot_password.dart'; // Import the ForgotPasswordButton comp
 import '../rfq_bom/add_item_manually.dart'; // Import the DynamicTable component
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton component
 import '../cart/cart_item.dart'; // Import the updated CartItem widget
+import '../cart/share_cart.dart'; // Import the ShareCart component
 
 class TestLayoutSanjith extends StatelessWidget {
   const TestLayoutSanjith({super.key});
@@ -90,6 +91,15 @@ class TestLayoutSanjith extends StatelessWidget {
                     quantity: 1,
                     onDelete: () {
                       print("Delete button pressed");
+                    },
+                  ),
+                  const SizedBox(height: 20), // Add spacing between components
+                  // ShareCart Component
+                  ShareCart(
+                    cartName: "Cart:2025-02-28 15:01:50",
+                    accessId: "dx5tf0uyxx",
+                    onShare: () {
+                      print("Share button pressed");
                     },
                   ),
                   const SizedBox(height: 20), // Add spacing between components
