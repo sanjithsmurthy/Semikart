@@ -4,6 +4,7 @@ import '../Commons/bottom_bar.dart'; // Import the BottomNavBar for navigation
 import '../Commons/edit_textbox.dart'; // Import the EditTextBox widget
 import '../Commons/edit_textbox2.dart'; // Import the EditTextBox2 widget
 
+
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
 
@@ -120,6 +121,51 @@ class _EditPageState extends State<EditPage> {
             ),
             const SizedBox(height: 16), // Add spacing
             const EditTextBox2(), // Add the EditTextBox2 widget below the checkbox
+            const SizedBox(height: 16), // Add spacing
+            // Razorpay Payment Option Widget
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Default Payment Option",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.radio_button_checked, color: Color(0xFFA51414)),
+                      const SizedBox(width: 8),
+                      Image.asset(
+                        'public/assets/images/cart/razorpay_logo.png', // Updated path
+                        height: 24.0,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          "Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
