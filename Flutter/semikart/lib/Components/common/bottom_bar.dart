@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Commons/bottom_bar.dart'; // Import the BottomNavBar for navigation
+import 'bottom_bar.dart'; // Import the BottomNavBar for navigation
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});

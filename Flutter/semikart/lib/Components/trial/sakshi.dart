@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../Commons/payment_page.dart'; // Import the PaymentPage (EditPage) widget
-import '../Commons/searchbar.dart' as custom; // Import the SearchBar widget with an alias
-import '../Commons/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
-import '../Commons/grey_text_box.dart'; // Import the GreyTextBox widget
-import '../Commons/my_cart.dart'; // Import the updated MyCartItem widget
-import '../Commons/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
+import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widget
+import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
+import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
+import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
+// import '../common/cartitem.dart'; // Import the updated MyCartItem widget
+import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -50,6 +50,11 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     );
   }
 
+  void _viewDetails(String title) {
+    // Handle view details action
+    print("View details for $title");
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -90,17 +95,17 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                             final cartItem = _cartItems[index];
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: MyCartItem(
-                                imageUrl: cartItem["imageUrl"],
-                                title: cartItem["title"],
-                                description: cartItem["description"],
-                                price: cartItem["price"],
-                                onDelete: () => _removeItem(index),
-                                onViewDetails: () {
-                                  // Handle view details action
-                                  print("View details for ${cartItem["title"]}");
-                                },
-                              ),
+                              // child: MyCartItem(
+                              //   imageUrl: cartItem["imageUrl"],
+                              //   title: cartItem["title"],
+                              //   description: cartItem["description"],
+                              //   price: cartItem["price"],
+                              //   onDelete: () => _removeItem(index),
+                              //   onViewDetails: () {
+                              //     // Handle view details action
+                              //     print("View details for ${cartItem["title"]}");
+                              //   },
+                              // ),
                             );
                           },
                         ),

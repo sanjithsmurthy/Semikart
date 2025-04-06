@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
-import '../Commons/bottom_bar.dart'; // Import the BottomNavBar for navigation
+import 'bottom_bar.dart'; // Import the BottomNavBar for navigation
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});

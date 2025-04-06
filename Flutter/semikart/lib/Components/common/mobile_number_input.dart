@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import for input formatters
 
 class MobileNumberField extends StatefulWidget {
   final TextEditingController controller;
@@ -28,7 +29,7 @@ class MobileNumberField extends StatefulWidget {
     '+971', '+972', '+90', '+98', '+880', '+94', '+84', '+351', '+48', '+32', '+30', '+45', '+353', '+420', '+36',
     '+40', '+380', '+375', '+372', '+371', '+370', '+43', '+358', '+386', '+385', '+381', '+382', '+389', '+373',
     '+994', '+995', '+374', '+976', '+977', '+93', '+964', '+968', '+974', '+973', '+965', '+966', '+962', '+961',
-    '+963', '+967', '+211', '+254', '+256', '+255', '+250', '+263', '+260', '+267', '+258', '+231', '+232', '+233',
+'+963', '+967', '+211', '+254', '+256', '+255', '+250', '+263', '+260', '+267', '+258', '+231', '+232', '+233',
     '+234', '+235', '+236', '+237', '+238', '+239', '+240', '+241', '+242', '+243', '+244', '+245', '+246', '+247',
     '+248', '+249', '+250', '+251', '+252', '+253', '+254', '+255', '+256', '+257', '+258', '+260', '+261', '+262',
     '+263', '+264', '+265', '+266', '+267', '+268', '+269', '+290', '+291', '+297', '+298', '+299',
@@ -97,19 +98,20 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                           floatingLabelStyle: TextStyle(
                             color: Color(0xFFA51414),
                             fontSize: 16,
+                            fontWeight: FontWeight.bold, // Make floating label bold
                             fontFamily: 'Product Sans',
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 1.0),
+                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 1.0),
+                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 1.0),
+                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
                           ),
                           filled: true,
                           fillColor: Colors.white,
@@ -147,7 +149,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                       flex: 7, // Adjust flex ratio as needed
                       child: TextField(
                         controller: widget.controller,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.number, // Set keyboard type to number
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Allow only numeric input
                         decoration: InputDecoration(
                           labelText: widget.label,
                           labelStyle: TextStyle(
@@ -158,19 +161,20 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                           floatingLabelStyle: TextStyle(
                             color: Color(0xFFA51414),
                             fontSize: 16,
+                            fontWeight: FontWeight.bold, // Make floating label bold
                             fontFamily: 'Product Sans',
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 1.0),
+                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 1.0),
+                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 1.0),
+                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
                           ),
                         ),
                         onChanged: (value) {

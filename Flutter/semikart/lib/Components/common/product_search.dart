@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Commons/searchbar.dart' as custom; // Alias the custom SearchBar widget
+import '../common/searchbar.dart' as custom; // Alias the custom SearchBar widget
 
 class ProductSearch extends StatelessWidget {
   const ProductSearch({super.key});
