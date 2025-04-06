@@ -31,7 +31,7 @@ class SignUpScreen extends StatelessWidget {
             // "Create Your Account" Text
             Positioned(
               left: screenWidth * 0.09, // 9% of screen width
-              top: screenHeight * 0.24, // 24% of screen height
+              top: screenHeight * 0.20, // 24% of screen height
               child: Text(
                 'Create your account',
                 style: TextStyle(
@@ -45,7 +45,7 @@ class SignUpScreen extends StatelessWidget {
 
             // Centered SignInWithGoogleButton
             Positioned(
-              top: screenHeight * 0.32, // 32% of screen height
+              top: screenHeight * 0.28, // 32% of screen height
               left: 0, // Start from the left edge
               right: 0, // End at the right edge
               child: Center(
@@ -62,7 +62,7 @@ class SignUpScreen extends StatelessWidget {
             // First horizontal black line
           Positioned(
             left: screenWidth * 0.09, // 9% of screen width
-            top: screenHeight * 0.46, // 46% of screen height
+            top: screenHeight * 0.42, // 46% of screen height
             child: Container(
               width: screenWidth * 0.4, // 40% of screen width
               height: 1, // Fixed height
@@ -73,7 +73,7 @@ class SignUpScreen extends StatelessWidget {
           // Positioned "OR" text exactly in the middle
           Positioned(
             left: screenWidth * 0.50, // Centered between the two lines
-            top: screenHeight * 0.445, // Slightly above the lines
+            top: screenHeight * 0.405, // Slightly above the lines
             child: Text(
               'OR',
               style: TextStyle(
@@ -88,7 +88,7 @@ class SignUpScreen extends StatelessWidget {
           // Second horizontal black line
           Positioned(
             left: screenWidth * 0.57, // 51% of screen width
-            top: screenHeight * 0.46, // 46% of screen height
+            top: screenHeight * 0.42, // 46% of screen height
             child: Container(
               width: screenWidth * 0.4, // 40% of screen width
               height: 1, // Fixed height
@@ -99,7 +99,7 @@ class SignUpScreen extends StatelessWidget {
           // Positioned CustomTextField for Email
           Positioned(
             left: screenWidth * 0.06, // Align with other components
-            top: screenHeight * 0.52, // Adjust position to align with layout
+            top: screenHeight * 0.48, // Adjust position to align with layout
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
               label: "FirstName", // Set the label to "Email"
@@ -109,7 +109,7 @@ class SignUpScreen extends StatelessWidget {
 
           Positioned(
             left: screenWidth * 0.06, // Align with other components
-            top: screenHeight * 0.62, // Adjust position to align with layout
+            top: screenHeight * 0.58, // Adjust position to align with layout
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
               label: "LastName", // Set the label to "Email"
@@ -119,7 +119,7 @@ class SignUpScreen extends StatelessWidget {
 
            Positioned(
             left: screenWidth * 0.06, // Align with other components
-            top: screenHeight * 0.72, // Adjust position to align with layout
+            top: screenHeight * 0.68, // Adjust position to align with layout
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
               label: "Email", // Set the label to "Email"
