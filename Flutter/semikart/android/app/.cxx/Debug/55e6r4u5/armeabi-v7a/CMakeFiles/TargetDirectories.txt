@@ -1,0 +1,2 @@
+C:/Users/Sakshi S Netrakar/Desktop/Semikart/Flutter/semikart/android/app/.cxx/Debug/55e6r4u5/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Sakshi S Netrakar/Desktop/Semikart/Flutter/semikart/android/app/.cxx/Debug/55e6r4u5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
