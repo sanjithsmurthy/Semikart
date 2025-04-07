@@ -31,106 +31,72 @@ class _ShipBillFormState extends State<ShipBillForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Name",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            GreyTextBox(
+              nameController: nameController,
+              text: "Name",
             ),
-            GreyTextBox(nameController: nameController),
             const SizedBox(height: 16),
-
-            const Text(
-              "Pincode",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            GreyTextBox(
+              nameController: pincodeController,
+              text: "Pincode",
             ),
-            GreyTextBox(nameController: pincodeController),
             const SizedBox(height: 16),
-
-            const Text(
-              "Address 1",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            GreyTextBox(
+              nameController: address1Controller,
+              text: "Address 1",
             ),
-            GreyTextBox(nameController: address1Controller),
             const SizedBox(height: 16),
-
-            const Text(
-              "Address 2",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            GreyTextBox(
+              nameController: address2Controller,
+              text: "Address 2",
             ),
-            GreyTextBox(nameController: address2Controller),
             const SizedBox(height: 16),
-
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Landmark",
-                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      GreyTextBox(nameController: landmarkController),
-                    ],
+                  child: GreyTextBox(
+                    nameController: landmarkController,
+                    text: "Landmark",
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "City",
-                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      GreyTextBox(nameController: cityController),
-                    ],
+                  child: GreyTextBox(
+                    nameController: cityController,
+                    text: "City",
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "State",
-                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      GreyTextBox(nameController: stateController),
-                    ],
+                  child: GreyTextBox(
+                    nameController: stateController,
+                    text: "State",
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Phone Number",
-                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      GreyTextBox(nameController: phoneController),
-                    ],
+                  child: GreyTextBox(
+                    nameController: phoneController,
+                    text: "Phone Number",
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-
-            const Text(
-              "Company Name(Optional)",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            GreyTextBox(
+              nameController: companyController,
+              text: "Company Name (Optional)",
             ),
-            GreyTextBox(nameController: companyController),
             const SizedBox(height: 16),
-
             const Text(
               "Do you have GSTN?",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Color(0xFFA51414), // Same style as other headings
+              ),
             ),
             Row(
               children: [
@@ -139,7 +105,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     Radio<bool>(
                       value: true,
                       groupValue: hasGSTN,
-                      activeColor: Colors.red,
+                      activeColor: const Color(0xFFA51414),
                       onChanged: (value) {
                         setState(() {
                           hasGSTN = value!;
@@ -154,7 +120,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     Radio<bool>(
                       value: false,
                       groupValue: hasGSTN,
-                      activeColor: Colors.red,
+                      activeColor: const Color(0xFFA51414),
                       onChanged: (value) {
                         setState(() {
                           hasGSTN = value!;
@@ -167,12 +133,10 @@ class _ShipBillFormState extends State<ShipBillForm> {
               ],
             ),
             const SizedBox(height: 16),
-
-            const Text(
-              "GSTN(Optional)",
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            GreyTextBox(
+              nameController: gstnController,
+              text: "GSTN (Optional)",
             ),
-            GreyTextBox(nameController: gstnController),
           ],
         ),
       ),
