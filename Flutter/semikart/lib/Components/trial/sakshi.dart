@@ -3,7 +3,7 @@ import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widge
 import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
-import 'Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
+import '/Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
 import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
 class TestLayoutSakshi extends StatefulWidget {
@@ -50,10 +50,6 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     );
   }
 
-  void _viewDetails(String title) {
-    // Handle view details action
-    print("View details for $title");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,17 +91,17 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                             final cartItem = _cartItems[index];
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: MyCartItem(
-                                imageUrl: cartItem["imageUrl"],
-                                title: cartItem["title"],
-                                description: cartItem["description"],
-                                price: cartItem["price"],
-                                onDelete: () => _removeItem(index),
-                                onViewDetails: () {
-                                  // Handle view details action
-                                  print("View details for ${cartItem["title"]}");
-                                },
-                              ),
+                              // child: MyCartItem(
+                              //   imageUrl: cartItem["imageUrl"],
+                              //   title: cartItem["title"],
+                              //   description: cartItem["description"],
+                              //   price: cartItem["price"],
+                              //   onDelete: () => _removeItem(index),
+                              //   onViewDetails: () {
+                              //     // Handle view details action
+                              //     print("View details for ${cartItem["title"]}");
+                              //   },
+                              // ),
                             );
                           },
                         ),
