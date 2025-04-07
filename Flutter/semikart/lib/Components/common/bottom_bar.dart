@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../cart/cart_page.dart'; // Import CartPage
-import '../common/header.dart'; // Import Header for HomePage
-import '../common/header_withback.dart'; // Import HeaderWithBack for other pages
-import '../cart/cart_page.dart'; // Import cartItemCount for badge updates
+import '../common/header.dart' as home_header; // Prefix for Header from header.dart
+import '../common/header_withback.dart' as back_header; // Prefix for HeaderWithBack from header_withback.dart
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -32,8 +31,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _selectedIndex == 0
-          ? const Header() // Use Header for HomePage
-          : CombinedAppBar(
+          ? const home_header.Header() // Use Header from header.dart for HomePage
+          : back_header.CombinedAppBar(
               title: _getPageTitle(_selectedIndex), // Use CombinedAppBar for other pages
               onBackPressed: () {
                 setState(() {
@@ -149,72 +148,4 @@ class PlaceholderPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class Header extends StatelessWidget implements PreferredSizeWidget {
-  const Header({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity, // Ensure the header fills the entire screen width
-      color: Colors.white,
-      height: 66.0, // Increased height to accommodate additional padding
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0), // Added vertical padding
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Menu Icon
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
-            iconSize: 35.0,
-            onPressed: () {},
-          ),
-          // Add spacing between the menu icon and the logo
-          const SizedBox(width: 15.0),
-          // Logo (Clickable)
-          Flexible(
-            child: Align(
-              alignment: Alignment.centerLeft, // Align the logo closer to the menu icon
-              child: GestureDetector(
-                onTap: () {
-                  // Navigate to the home tab of the bottom bar
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BottomNavBar(), // Redirect to BottomNavBar
-                    ),
-                  );
-                },
-                child: Image.asset(
-                  'public/assets/images/semikart_logo_medium.png',
-                  height: 20.0, // Fixed height for the logo
-                  fit: BoxFit.contain, // Ensure the logo scales properly
-                ),
-              ),
-            ),
-          ),
-          // Right-side Icons
-          Row(
-            mainAxisSize: MainAxisSize.min, // Prevents the row from taking extra space
-            children: [
-              IconButton(
-                icon: Image.asset('public/assets/images/whatsapp_icon.png'),
-                iconSize: 20.0, // Reduced size for WhatsApp icon
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.phone, color: Colors.black),
-                iconSize: 27.0, // Reduced size for phone icon
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(66.0); // Updated height to match the new padding
 }

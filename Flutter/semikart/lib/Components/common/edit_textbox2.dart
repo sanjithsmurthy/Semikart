@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
 import 'bottom_bar.dart'; // Import the Header widget
+import '../common/header.dart'; // Import Header from header.dart
 
 class EditTextBox2 extends StatelessWidget {
   const EditTextBox2({super.key});
@@ -108,7 +109,7 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min, // Adjust height dynamically
         children: [
-          const Header(), // Place the Header widget at the top
+          const Header(), // Use the Header widget from header.dart
           AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
