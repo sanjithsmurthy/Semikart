@@ -4,7 +4,6 @@ import 'bottom_bar.dart'; // Import the BottomNavBar for navigation
 import 'edit_textbox.dart'; // Import the EditTextBox widget
 import 'edit_textbox2.dart'; // Import the EditTextBox2 widget
 
-
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
 

@@ -5,6 +5,7 @@ import 'bottom_bar.dart'; // Import the Header widget
 class EditTextBox2 extends StatelessWidget {
   const EditTextBox2({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
