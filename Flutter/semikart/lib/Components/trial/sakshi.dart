@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widget
+import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
+import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
+import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
+import '/Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
+import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -9,6 +14,35 @@ class TestLayoutSakshi extends StatefulWidget {
 }
 
 class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
+  final TextEditingController searchController = TextEditingController();
+  final TextEditingController nameController = TextEditingController(); // Controller for GreyTextBox
+  final List<Map<String, dynamic>> _cartItems = [
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 1",
+      "description": "This is the description for Item 1",
+      "price": 1000.0,
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 2",
+      "description": "This is the description for Item 2",
+      "price": 2000.0,
+    },
+    {
+      "imageUrl": "public/assets/images/products/noImageFound.webp",
+      "title": "Item 3",
+      "description": "This is the description for Item 3",
+      "price": 3000.0,
+    },
+  ]; // Sample cart items with image, title, description, and price
+
+  void _removeItem(int index) {
+    setState(() {
+      _cartItems.removeAt(index);
+    });
+  }
+
   void _navigateToPaymentPage() {
     Navigator.push(
       context,
@@ -16,22 +50,74 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     );
   }
 
-  void _viewDetails(String title) {
-    // Handle view details action
-    print("View details for $title");
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Test Layout'),
-        backgroundColor: Colors.red,
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _navigateToPaymentPage, // Navigate to the payment page
-          child: const Text('Go to Payment Page'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Components'),
+          backgroundColor: Colors.red,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: Scaffold(
+                appBar: header.CombinedAppBar(
+                  title: "GO BACK", // Set the title for the page
+                  onBackPressed: () {
+                    // Handle back button press
+                    Navigator.pop(context);
+                  },
+                ),
+                body: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0), // Add 10px padding around SearchBar
+                        child: custom.SearchBar(searchController: searchController),
+                      ),
+                      const edit.EditTextBox(), // Use the EditTextBox widget here
+                      const SizedBox(height: 16), // Add spacing between components
+                      GreyTextBox(nameController: nameController), // Pass the controller to GreyTextBox
+                      const SizedBox(height: 16), // Add spacing before cart items
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _cartItems.length,
+                          itemBuilder: (context, index) {
+                            final cartItem = _cartItems[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              // child: MyCartItem(
+                              //   imageUrl: cartItem["imageUrl"],
+                              //   title: cartItem["title"],
+                              //   description: cartItem["description"],
+                              //   price: cartItem["price"],
+                              //   onDelete: () => _removeItem(index),
+                              //   onViewDetails: () {
+                              //     // Handle view details action
+                              //     print("View details for ${cartItem["title"]}");
+                              //   },
+                              // ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: _navigateToPaymentPage, // Navigate to the payment page
+                child: const Text('Payment Page'),
+              ),
+            ),
+          ],
         ),
       ),
     );

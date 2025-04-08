@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
-import 'bottom_bar.dart'; // Import the Header widget
+import 'header.dart'; // Import the Header widget
+import 'ship_bill.dart'; // Import the ShipBillForm widget
 
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});
@@ -80,12 +81,7 @@ class EditPage extends StatelessWidget {
           },
         ),
       ),
-      body: const Center(
-        child: Text(
-          "This is the Edit Address Page",
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
+      body: const ShipBillForm(), // Display the ShipBillForm widget here
     );
   }
 }
@@ -108,7 +104,7 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min, // Adjust height dynamically
         children: [
-          const Header(), // Place the Header widget at the top
+          const Header(), // Use the Header widget from header.dart
           AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
