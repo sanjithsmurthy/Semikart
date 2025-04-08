@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
-import 'header.dart'; // Import the Header widget
 import 'ship_bill.dart'; // Import the ShipBillForm widget
 
 class EditTextBox extends StatelessWidget {
@@ -99,29 +98,20 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min, // Adjust height dynamically
-        children: [
-          const Header(), // Use the Header widget from header.dart
-          AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: IconButton(
-              icon: SvgPicture.asset(
-                'public/assets/images/back.svg', // Path to the back.svg file
-                color: const Color(0xFFA51414), // Apply the custom color
-              ),
-              iconSize: 24.0, // Set the size of the SVG
-              onPressed: onBackPressed,
-            ),
-            title: Text(
-              title,
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leading: IconButton(
+        icon: SvgPicture.asset(
+          'public/assets/images/back.svg',
+          color: const Color(0xFFA51414),
+        ),
+        iconSize: 24.0,
+        onPressed: onBackPressed,
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }
