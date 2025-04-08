@@ -4,6 +4,7 @@ import '../rfq_bom/RFQ_text_component.dart'; // Import the RFQTextComponent clas
 import '../rfq_bom/RFQ_Adress_details.dart'; // Import the RFQAddressDetails class
 import '../common/header_withback.dart'; // Import the HeaderWithBack component
 import '../common/bottom_bar.dart'; // Import the BottomNavBar component
+// import '../profile/user_info.dart'; // Import the UserInfo widget
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});
@@ -11,35 +12,23 @@ class TestLayoutSoma extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Set the background color of the screen to white
       backgroundColor: Colors.white,
-
-      // Use HeaderWithBack as the app bar
       appBar: CombinedAppBar(
-        title: "RFQ Full Page", // Title for the app bar
+        title: "RFQ Full Page",
         onBackPressed: () {
-          Navigator.pop(context); // Navigate back to the previous page
+          Navigator.pop(context);
         },
       ),
-
-      // Main body content
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0), // Add padding around the content
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Upload File Component
-              const CustomSquare(), // Assuming CustomSquare is the main widget in upload_file.dart
-
-              const SizedBox(height: 30), // Spacing between components
-
-              // RFQ Text Component
-              const RFQTextComponent(), // Display RFQTextComponent
-
-              const SizedBox(height: 30), // Spacing between components
-
-              // RFQ Address Details Component
+              const CustomSquare(),
+              const SizedBox(height: 30),
+              const RFQTextComponent(),
+              const SizedBox(height: 30),
               RFQAddressDetails(
                 onSubmit: () {
                   print('Address Details Submitted!');
@@ -49,16 +38,22 @@ class TestLayoutSoma extends StatelessWidget {
           ),
         ),
       ),
-
-      // BottomNavBar implemented as the bottom bar
-      bottomNavigationBar:
-          const BottomNavBar(), // BottomNavBar from bottom_bar.dart
+      bottomNavigationBar: const BottomNavBar(),
     );
+  }
+}
+
+class SomaPage extends StatelessWidget {
+  const SomaPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const TestLayoutSoma(); // Now it uses the full RFQ layout
   }
 }
 
 void main() {
   runApp(const MaterialApp(
-    home: TestLayoutSoma(), // Set TestLayoutSoma as the initial page
+    home: SomaPage(),
   ));
 }
