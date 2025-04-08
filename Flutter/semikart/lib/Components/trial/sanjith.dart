@@ -1,96 +1,51 @@
 import 'package:flutter/material.dart';
 import '../common/bottom_bar.dart' as BottomBar; // Alias for bottom_bar.dart
-import '../common/header.dart'; // Import the Header for the AppBar
-import '../common/search_failed.dart'; // Import the search_failed.dart file
-import '../common/red_button.dart'; // Import the RedButton component
-import '../common/forgot_password.dart'; // Import the ForgotPasswordButton component
-import '../rfq_bom/add_item_manually.dart'; // Import the DynamicTable component
-import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton component
-
-class TestLayoutSanjith extends StatelessWidget {
-  const TestLayoutSanjith({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Header(), // Use the updated Header as the AppBar
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final screenWidth = constraints.maxWidth;
-          final padding = screenWidth * 0.05; // Dynamic padding based on screen width
-
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding, vertical: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // SearchFailed Component
-                  const SearchFailed(),
-                  const SizedBox(height: 20), // Add spacing between components
-                  // White Button Variant
-                  RedButton(
-                    label: "Go Back",
-                    onPressed: () {
-                      // Add your button action here
-                      print("White button pressed");
-                    },
-                    isWhiteButton: true, // Trigger the white button variant
-                    width: screenWidth * 0.5, // Button width is 50% of screen width
-                  ),
-                  const SizedBox(height: 20), // Add spacing between components
-                  // Forgot Password Button
-                  ForgotPasswordButton(
-                    label: "Forgot Password", // Customizable text
-                    onPressed: () {
-                      // Add your navigation or action here
-                      print("Forgot Password button pressed");
-                    },
-                  ),
-                  const SizedBox(height: 20), // Add spacing between components
-                  // Don't Have an Account Button
-                  ForgotPasswordButton(
-                    label: "Don't have an account", // Customizable text
-                    onPressed: () {
-                      // Add your navigation or action here
-                      print("Don't have an account button pressed");
-                    },
-                  ),
-                  const SizedBox(height: 20), // Add spacing between components
-                  // Sign In with Google Button (Two-Line Text)
-                  SignInWithGoogleButton(
-                    onPressed: () {
-                      // Add your Google sign-in logic here
-                      print("Sign in with Google button (Two-Line) pressed");
-                    },
-                    isTwoLine: true, // Enable two-line text
-                  ),
-                  const SizedBox(height: 20), // Add spacing between components
-                  // Sign In with Google Button (Single-Line Text)
-                  SignInWithGoogleButton(
-                    onPressed: () {
-                      // Add your Google sign-in logic here
-                      print("Sign in with Google button (Single-Line) pressed");
-                    },
-                    isTwoLine: false, // Enable single-line text
-                  ),
-                  const SizedBox(height: 20), // Add spacing between components
-                  // DynamicTable Component
-                  const DynamicTable(), // Let the table expand naturally
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
-    );
-  }
-}
+import '../common/header_withback.dart'; // Import the Header and CombinedAppBar components
+import '../cart/cart_page.dart'; // Import the CartPage component
 
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: TestLayoutSanjith(),
+    home: SanjithCartPage(),
   ));
+}
+
+class SanjithCartPage extends StatelessWidget {
+  const SanjithCartPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CombinedAppBar(
+        title: "Your Cart", // Title for the AppBar
+        onBackPressed: () => _handleBackPress(context), // Back button functionality
+      ),
+      body: CartPage(), // Implement the CartPage as the main body
+      bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
+    );
+  }
+
+  static void _handleBackPress(BuildContext context) {
+    Navigator.pop(context); // Navigate back to the previous page
+  }
+}
+
+class TestLayoutSanjith extends StatelessWidget {
+  const TestLayoutSanjith({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CombinedAppBar(
+        title: "Your Cart", // Title for the AppBar
+        onBackPressed: () => _handleBackPress(context), // Back button functionality
+      ),
+      body: CartPage(), // Implement the CartPage as the main body
+      bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
+    );
+  }
+
+  static void _handleBackPress(BuildContext context) {
+    Navigator.pop(context); // Navigate back to the previous page
+  }
 }

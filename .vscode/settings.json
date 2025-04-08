@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "D:/Semikart/Flutter/semikart/linux"
+    "cmake.sourceDirectory": "D:/Semikart/Flutter/semikart/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

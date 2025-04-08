@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+import 'cart_item.dart';
+import 'share_cart.dart';
+import '../common/red_button.dart'; // Import RedButton
+
+// Global ValueNotifier to track cart item count
+ValueNotifier<int> cartItemCount = ValueNotifier<int>(0);
+
+class CartPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Dynamic font sizes and spacing
+    final spacing = screenWidth * 0.02;
+
+    // Sample cart items data
+    final cartItems = [
+      {
+        "mfrPartNumber": "LSP4-480",
+        "customerPartNumber": "Customer Part",
+        "description": "LED Protection Devices\nLED Protection Devices, 120VAC-480VAC, 10kA/20kA, Compact Design",
+        "vendorPartNumber": "837-LSP4-480",
+        "manufacturer": "Hatch Lighting",
+        "supplier": "Mouser Electronics",
+        "basicUnitPrice": 911.93,
+        "finalUnitPrice": 1103.3441,
+        "quantity": 1,
+        "gstPercentage": 18.0,
+      },
+      {
+        "mfrPartNumber": "X22223201",
+        "customerPartNumber": "Customer Part",
+        "description": "Circuit Breaker Accessories Inactive - superseded by X222-232-11 1180 ACC- 12 Pole Cuttable Bus Connection",
+        "vendorPartNumber": "E-T-A",
+        "manufacturer": "E-T-A",
+        "supplier": "Master Electronics",
+        "basicUnitPrice": 1987.81,
+        "finalUnitPrice": 2581.348,
+        "quantity": 5,
+        "gstPercentage": 18.0,
+      },
+    ];
+
+    // Update the cart item count based on the number of items
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cartItemCount.value = cartItems.length; // Update count based on the number of items
+    });
+
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(spacing * 2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Share Cart Section
+              ShareCart(
+                cartName: 'Cart:2025-02-28 15:01:50',
+                accessId: 'dx5tf0uyxx',
+                onShare: () {
+                  // Add share functionality
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Cart Items Section
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: cartItems.length,
+                itemBuilder: (context, index) {
+                  final item = cartItems[index];
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: spacing * 2),
+                    child: CartItem(
+                      mfrPartNumber: item["mfrPartNumber"] as String,
+                      customerPartNumber: item["customerPartNumber"] as String,
+                      description: item["description"] as String,
+                      vendorPartNumber: item["vendorPartNumber"] as String,
+                      manufacturer: item["manufacturer"] as String,
+                      supplier: item["supplier"] as String,
+                      basicUnitPrice: item["basicUnitPrice"] as double,
+                      finalUnitPrice: item["finalUnitPrice"] as double,
+                      gstPercentage: item["gstPercentage"] as double,
+                      quantity: item["quantity"] as int,
+                      onDelete: () {
+                        // Add delete functionality
+                      },
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Grand Total Section
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(spacing * 2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 6.0,
+                      spreadRadius: 2.0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPriceRow(
+                      'Grand Total',
+                      '₹ ${_calculateGrandTotal(cartItems).toStringAsFixed(2)}',
+                      screenWidth * 0.045,
+                      isBold: true,
+                    ),
+                    const SizedBox(height: 16),
+                    // Use RedButton for "Proceed to Checkout"
+                    RedButton(
+                      label: 'Proceed to Checkout',
+                      onPressed: () {
+                        // Add functionality for checkout
+                        print("Proceeding to checkout...");
+                      },
+                      width: double.infinity, // Full-width button
+                      height: 50.0, // Custom height
+                      fontSize: 16.0, // Custom font size
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPriceRow(String label, String value, double fontSize, {bool isBold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ],
+    );
+  }
+
+  double _calculateGrandTotal(List<Map<String, dynamic>> cartItems) {
+    double grandTotal = 0.0;
+    for (var item in cartItems) {
+      final totalPrice = (item["finalUnitPrice"] as double) * (item["quantity"] as int);
+      final gstAmount = totalPrice * ((item["gstPercentage"] as double) / 100);
+      grandTotal += totalPrice + gstAmount;
+    }
+    return grandTotal;
+  }
+}
