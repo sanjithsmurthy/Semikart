@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'edit_textbox.dart';
-import 'edit_textbox2.dart';
 import 'items_dropdown.dart';
 import 'red_button.dart';
+import 'ship_bill.dart';
 
 
 class EditPage extends StatefulWidget {
@@ -15,19 +15,15 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   bool isChecked = false;
+  String? address1;
+  String? address2;
+  String? shippingAddress1;
+  String? shippingAddress2;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150),
-        child: CombinedAppBar(
-          title: "Payment",
-          onBackPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -35,7 +31,27 @@ class _EditPageState extends State<EditPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const EditTextBox(),
+              EditTextBox(
+                address1: address1,
+                address2: address2,
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShipBillForm(
+                        initialAddress1: address1,
+                        initialAddress2: address2,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      address1 = result['address1'];
+                      address2 = result['address2'];
+                    });
+                  }
+                },
+              ),
               const SizedBox(height: 16),
               CheckboxListTile(
                 value: isChecked,
@@ -53,7 +69,32 @@ class _EditPageState extends State<EditPage> {
                 contentPadding: EdgeInsets.zero,
               ),
               const SizedBox(height: 16),
-              const EditTextBox2(),
+              EditTextBox(
+                title: 'Shipping Address',
+                address1: shippingAddress1,
+                address2: shippingAddress2,
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShipBillForm(
+                        initialAddress1: shippingAddress1,
+                        initialAddress2: shippingAddress2,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      shippingAddress1 = result['address1'];
+                      shippingAddress2 = result['address2'];
+                      if (isChecked) {
+                        address1 = shippingAddress1;
+                        address2 = shippingAddress2;
+                      }
+                    });
+                  }
+                },
+              ),
               const SizedBox(height: 16),
 
               // My Items Container
