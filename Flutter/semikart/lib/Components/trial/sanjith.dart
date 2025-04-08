@@ -50,7 +50,7 @@ class SanjithCartPage extends StatelessWidget {
 }
 
 class TestLayoutSanjith extends StatelessWidget {
-  const TestLayoutSanjith({Key? key}) : super(key: key);
+  const TestLayoutSanjith({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +81,11 @@ class TestLayoutSanjith extends StatelessWidget {
       bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
     );
   }
+}
 
-  static void _handleBackPress(BuildContext context) {
-    Navigator.pop(context); // Navigate back to the previous page
-  }
+void main() {
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: TestLayoutSanjith(),
+  ));
 }

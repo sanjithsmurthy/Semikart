@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
-import 'bottom_bar.dart'; // Import the Header widget
-import '../common/header.dart'; // Import Header from header.dart
+import 'header.dart'; // Import the Header widget
+import 'ship_bill.dart'; // Import the ShipBillForm widget
 
 class EditTextBox extends StatelessWidget {
   const EditTextBox({super.key});
@@ -81,12 +81,7 @@ class EditPage extends StatelessWidget {
           },
         ),
       ),
-      body: const Center(
-        child: Text(
-          "This is the Edit Address Page",
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
+      body: const ShipBillForm(), // Display the ShipBillForm widget here
     );
   }
 }
