@@ -17,6 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List<Widget> _pages = [
     const PlaceholderPage(title: 'Home Page'), // Placeholder for HomePage
     const PlaceholderPage(title: 'Products Page'), // Placeholder for ProductsPage
+    const PlaceholderPage(title: 'Search Page'), // Placeholder for SearchPage
     CartPage(), // CartPage
     const PlaceholderPage(title: 'Profile Page'), // Placeholder for ProfilePage
   ];
@@ -49,6 +50,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xFFA51414), // Updated selected item color to #A51414
         unselectedItemColor: Colors.grey, // Unselected item color
+        backgroundColor: Colors.white, // Set the background color to white
         onTap: _onItemTapped,
         items: [
           const BottomNavigationBarItem(
@@ -59,7 +61,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
             icon: Icon(Icons.inventory),
             label: 'Products',
           ),
-          _buildCartNavItem(Icons.shopping_cart, "Cart", 2), // Cart with badge
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.search), // Search icon
+            label: 'Search',
+          ),
+          _buildCartNavItem(Icons.shopping_cart, "Cart", 3), // Cart with badge
           const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
@@ -75,8 +81,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
       case 1:
         return 'Products';
       case 2:
-        return 'Your Cart';
+        return 'Search';
       case 3:
+        return 'Your Cart';
+      case 4:
         return 'Profile';
       default:
         return '';

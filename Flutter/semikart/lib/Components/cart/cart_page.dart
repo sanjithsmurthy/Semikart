@@ -6,46 +6,53 @@ import '../common/red_button.dart'; // Import RedButton
 // Global ValueNotifier to track cart item count
 ValueNotifier<int> cartItemCount = ValueNotifier<int>(0);
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
+  @override
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  // Sample cart items data
+  final List<Map<String, dynamic>> cartItems = [
+    {
+      "mfrPartNumber": "LSP4-480",
+      "customerPartNumber": "Customer Part",
+      "description": "LED Protection Devices\nLED Protection Devices, 120VAC-480VAC, 10kA/20kA, Compact Design",
+      "vendorPartNumber": "837-LSP4-480",
+      "manufacturer": "Hatch Lighting",
+      "supplier": "Mouser Electronics",
+      "basicUnitPrice": 911.93,
+      "finalUnitPrice": 1103.3441,
+      "quantity": 1,
+      "gstPercentage": 18.0,
+    },
+    {
+      "mfrPartNumber": "X22223201",
+      "customerPartNumber": "Customer Part",
+      "description": "Circuit Breaker Accessories Inactive - superseded by X222-232-11 1180 ACC- 12 Pole Cuttable Bus Connection",
+      "vendorPartNumber": "E-T-A",
+      "manufacturer": "E-T-A",
+      "supplier": "Master Electronics",
+      "basicUnitPrice": 1987.81,
+      "finalUnitPrice": 2581.348,
+      "quantity": 5,
+      "gstPercentage": 18.0,
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Update the cart item count based on the number of items
+    cartItemCount.value = cartItems.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Dynamic font sizes and spacing
     final spacing = screenWidth * 0.02;
-
-    // Sample cart items data
-    final cartItems = [
-      {
-        "mfrPartNumber": "LSP4-480",
-        "customerPartNumber": "Customer Part",
-        "description": "LED Protection Devices\nLED Protection Devices, 120VAC-480VAC, 10kA/20kA, Compact Design",
-        "vendorPartNumber": "837-LSP4-480",
-        "manufacturer": "Hatch Lighting",
-        "supplier": "Mouser Electronics",
-        "basicUnitPrice": 911.93,
-        "finalUnitPrice": 1103.3441,
-        "quantity": 1,
-        "gstPercentage": 18.0,
-      },
-      {
-        "mfrPartNumber": "X22223201",
-        "customerPartNumber": "Customer Part",
-        "description": "Circuit Breaker Accessories Inactive - superseded by X222-232-11 1180 ACC- 12 Pole Cuttable Bus Connection",
-        "vendorPartNumber": "E-T-A",
-        "manufacturer": "E-T-A",
-        "supplier": "Master Electronics",
-        "basicUnitPrice": 1987.81,
-        "finalUnitPrice": 2581.348,
-        "quantity": 5,
-        "gstPercentage": 18.0,
-      },
-    ];
-
-    // Update the cart item count based on the number of items
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      cartItemCount.value = cartItems.length; // Update count based on the number of items
-    });
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -85,7 +92,10 @@ class CartPage extends StatelessWidget {
                       gstPercentage: item["gstPercentage"] as double,
                       quantity: item["quantity"] as int,
                       onDelete: () {
-                        // Add delete functionality
+                        setState(() {
+                          cartItems.removeAt(index); // Remove the item from the list
+                          cartItemCount.value = cartItems.length; // Update the cart item count
+                        });
                       },
                     ),
                   );
