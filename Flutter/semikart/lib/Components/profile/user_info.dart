@@ -47,7 +47,7 @@ class UserInfo extends StatelessWidget {
               children: [
                 // Title + Edit button
                 Padding(
-                  padding: const EdgeInsets.only(left: 22),
+                  padding: const EdgeInsets.only(left: 39.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -142,7 +142,7 @@ class UserInfo extends StatelessWidget {
 
                 // Radio: Email Updates
                 Padding(
-                  padding: const EdgeInsets.only(left: 22, right: 8.0),
+                  padding: const EdgeInsets.only(left: 39.0, right: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -150,7 +150,7 @@ class UserInfo extends StatelessWidget {
                         child: Text(
                           "Send Order Updates Emails",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFFA51414),
                           ),
@@ -169,7 +169,7 @@ class UserInfo extends StatelessWidget {
 
                 // Radio: SMS Updates
                 Padding(
-                  padding: const EdgeInsets.only(left: 22, right: 8.0),
+                  padding: const EdgeInsets.only(left: 39.0, right: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -177,7 +177,7 @@ class UserInfo extends StatelessWidget {
                         child: Text(
                           "Send Order Updates SMS",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFFA51414),
                           ),
