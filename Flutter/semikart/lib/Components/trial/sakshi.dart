@@ -57,7 +57,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Test Layout'),
+          title: const Text('Components'),
           backgroundColor: Colors.red,
         ),
         body: Column(
@@ -114,7 +114,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
             Center(
               child: ElevatedButton(
                 onPressed: _navigateToPaymentPage, // Navigate to the payment page
-                child: const Text('Go to Payment Page'),
+                child: const Text('Payment Page'),
               ),
             ),
           ],

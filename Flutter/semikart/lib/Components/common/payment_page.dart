@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
-import 'bottom_bar.dart'; // Import the BottomNavBar for navigation
-import 'edit_textbox.dart'; // Import the EditTextBox widget
-import 'edit_textbox2.dart'; // Import the EditTextBox2 widget
-
+import 'package:flutter_svg/flutter_svg.dart';
+import 'bottom_bar.dart';
+import 'edit_textbox.dart';
+import 'edit_textbox2.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
@@ -11,55 +10,50 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity, // Ensure the header fills the entire screen width
+      width: double.infinity,
       color: Colors.white,
-      height: 66.0, // Increased height to accommodate additional padding
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0), // Added vertical padding
+      height: 66.0,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Menu Icon
           IconButton(
             icon: const Icon(Icons.menu, color: Colors.black),
             iconSize: 35.0,
             onPressed: () {},
           ),
-          // Add spacing between the menu icon and the logo
           const SizedBox(width: 15.0),
-          // Logo (Clickable)
           Flexible(
             child: Align(
-              alignment: Alignment.centerLeft, // Align the logo closer to the menu icon
+              alignment: Alignment.centerLeft,
               child: GestureDetector(
                 onTap: () {
-                  // Navigate to the home tab of the bottom bar
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const BottomNavBar(), // Redirect to BottomNavBar
+                      builder: (context) => const BottomNavBar(),
                     ),
                   );
                 },
                 child: Image.asset(
                   'public/assets/images/semikart_logo_medium.png',
-                  height: 20.0, // Fixed height for the logo
-                  fit: BoxFit.contain, // Ensure the logo scales properly
+                  height: 20.0,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
           ),
-          // Right-side Icons
           Row(
-            mainAxisSize: MainAxisSize.min, // Prevents the row from taking extra space
+            mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
                 icon: Image.asset('public/assets/images/whatsapp_icon.png'),
-                iconSize: 20.0, // Reduced size for WhatsApp icon
+                iconSize: 20.0,
                 onPressed: () {},
               ),
               IconButton(
                 icon: const Icon(Icons.phone, color: Colors.black),
-                iconSize: 27.0, // Reduced size for phone icon
+                iconSize: 27.0,
                 onPressed: () {},
               ),
             ],
@@ -70,10 +64,9 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(66.0); // Updated height to match the new padding
+  Size get preferredSize => const Size.fromHeight(66.0);
 }
 
-// EditPage Class
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
 
@@ -82,98 +75,148 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  bool isChecked = false; // State for the checkbox
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150), // Adjust height as needed
+        preferredSize: const Size.fromHeight(150),
         child: CombinedAppBar(
           title: "Payment",
           onBackPressed: () {
-            Navigator.pop(context); // Navigate back to the previous page
+            Navigator.pop(context);
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16), // Add spacing
-            const EditTextBox(), // Use the EditTextBox widget here
-            const SizedBox(height: 16), // Add spacing
-            CheckboxListTile(
-              value: isChecked,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked = value ?? false; // Update the checkbox state
-                });
-              },
-              title: const Text(
-                "Billing Address same as shipping address",
-                style: TextStyle(fontSize: 16),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              const EditTextBox(),
+              const SizedBox(height: 16),
+              CheckboxListTile(
+                value: isChecked,
+                onChanged: (bool? value) {
+                  setState(() {
+                    isChecked = value ?? false;
+                  });
+                },
+                title: const Text(
+                  "Billing Address same as shipping address",
+                  style: TextStyle(fontSize: 16),
+                ),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: Color(0xFFA51414),
+                contentPadding: EdgeInsets.zero,
               ),
-              controlAffinity: ListTileControlAffinity.leading, // Place the checkbox on the left
-              activeColor: Color(0xFFA51414), // Set the tick color to red (#A51414)
-              contentPadding: EdgeInsets.zero, // Remove extra padding
-            ),
-            const SizedBox(height: 16), // Add spacing
-            const EditTextBox2(), // Add the EditTextBox2 widget below the checkbox
-            const SizedBox(height: 16), // Add spacing
-            // Razorpay Payment Option Widget
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    offset: const Offset(0, 2),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Default Payment Option",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.radio_button_checked, color: Color(0xFFA51414)),
-                      const SizedBox(width: 8),
-                      Image.asset(
-                        'public/assets/images/cart/razorpay_logo.png', // Updated path
-                        height: 24.0,
-                        fit: BoxFit.contain,
-                      ),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text(
-                          "Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater",
-                          style: TextStyle(fontSize: 14),
+              const SizedBox(height: 16),
+              const EditTextBox2(),
+              const SizedBox(height: 16),
+
+              // Razorpay Container
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      offset: const Offset(0, 2),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Default Payment Option",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Icon(Icons.radio_button_checked,
+                            color: Color(0xFFA51414)),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            "Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater",
+                            style: TextStyle(fontSize: 14),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+
+              // Terms & Conditions Container
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                margin: const EdgeInsets.only(top: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      offset: const Offset(0, 2),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Terms & Conditions",
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "1. We hereby declare that, the parts procured from Aqtronics/SemiKart against our PO number is not sold to any of the restricted entity by US or UK and also not used in any of the products/applications such as weapon of mass destruction/aerospace or defence systems restricted by US & UK. Furthermore these parts are not to be sold to any such entities within India. In doing so, we are aware a flag will be raised to the respective supplier and all business proceedings will be cancelled.",
+                              style: TextStyle(fontSize: 14, height: 1.6),
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              "2. Order delivery timelines may differ when procured from multiple suppliers.",
+                              style: TextStyle(fontSize: 14, height: 1.6),
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              "3. Standard lead time will be 2-3 weeks for stock parts after receiving of PO.",
+                              style: TextStyle(fontSize: 14, height: 1.6),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-// CombinedAppBar Widget
 class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onBackPressed;
@@ -189,18 +232,18 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       color: Colors.white,
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Adjust height dynamically
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Header(), // Place the Header widget at the top
+          const Header(),
           AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
             leading: IconButton(
               icon: SvgPicture.asset(
-                'public/assets/images/back.svg', // Path to the back.svg file
-                color: const Color(0xFFA51414), // Apply the custom color
+                'public/assets/images/back.svg',
+                color: const Color(0xFFA51414),
               ),
-              iconSize: 24.0, // Set the size of the SVG
+              iconSize: 24.0,
               onPressed: onBackPressed,
             ),
             title: Text(
@@ -214,5 +257,5 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(150); // Adjust height dynamically
+  Size get preferredSize => const Size.fromHeight(150);
 }
