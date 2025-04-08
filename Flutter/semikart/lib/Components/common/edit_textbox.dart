@@ -3,7 +3,20 @@ import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
 import 'ship_bill.dart'; // Import the ShipBillForm widget
 
 class EditTextBox extends StatelessWidget {
-  const EditTextBox({super.key});
+  final String? address1;
+  final String? address2;
+  final String? title;
+  final VoidCallback? onSave;
+  final VoidCallback? onEdit;
+
+  const EditTextBox({
+    super.key,
+    this.address1,
+    this.address2,
+    this.title,
+    this.onSave,
+    this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +39,21 @@ class EditTextBox extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  'Billing Address',
+                  title ?? 'Billing Address',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  'Magadi Main Rd, next to Prasanna Theatre, Cholourpalya, Bengaluru, Karnataka 560023',
-                  style: TextStyle(
+                  (address1?.isNotEmpty == true || address2?.isNotEmpty == true)
+                      ? '${address1 ?? ''}${address1?.isNotEmpty == true && address2?.isNotEmpty == true ? ', ' : ''}${address2 ?? ''}'
+                      : 'Your ${title?.toLowerCase() ?? 'billing'} address',
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,
                   ),
@@ -47,12 +62,16 @@ class EditTextBox extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          GestureDetector(
+            GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const EditPage()),
-              );
+              if (onEdit != null) {
+                onEdit!();
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const EditPage()),
+                );
+              }
             },
             child: const Icon(
               Icons.edit,
@@ -71,15 +90,15 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150), // Adjust height as needed
-        child: CombinedAppBar(
-          title: "Edit Address",
-          onBackPressed: () {
-            Navigator.pop(context); // Navigate back to the previous page
-          },
-        ),
-      ),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(150), // Adjust height as needed
+      //   child: CombinedAppBar(
+      //     title: "Edit Address",
+      //     onBackPressed: () {
+      //       Navigator.pop(context); // Navigate back to the previous page
+      //     },
+      //   ),
+      // ),
       body: const ShipBillForm(), // Display the ShipBillForm widget here
     );
   }
