@@ -52,6 +52,10 @@ class SanjithCartPage extends StatelessWidget {
 class TestLayoutSanjith extends StatelessWidget {
   const TestLayoutSanjith({super.key});
 
+  static void _handleBackPress(BuildContext context) {
+    Navigator.pop(context); // Navigate back to the previous page
+  }
+
   @override
   Widget build(BuildContext context) {
     // Set the status bar content to dark (black icons and text)
@@ -83,9 +87,4 @@ class TestLayoutSanjith extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: TestLayoutSanjith(),
-  ));
-}
+// Removed duplicate main function to resolve the conflict
