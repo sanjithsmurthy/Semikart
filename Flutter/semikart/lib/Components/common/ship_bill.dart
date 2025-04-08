@@ -25,7 +25,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -95,7 +94,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
             const Text(
               "Do you have GSTN?",
               style: TextStyle(
-                color: Color(0xFFA51414), // Same style as other headings
+                color: Color(0xFFA51414),
               ),
             ),
             Row(
@@ -133,9 +132,15 @@ class _ShipBillFormState extends State<ShipBillForm> {
               ],
             ),
             const SizedBox(height: 16),
-            GreyTextBox(
-              nameController: gstnController,
-              text: "GSTN (Optional)",
+            AbsorbPointer(
+              absorbing: !hasGSTN,
+              child: Opacity(
+                opacity: hasGSTN ? 1.0 : 0.5,
+                child: GreyTextBox(
+                  nameController: gstnController,
+                  text: "GSTN (Optional)",
+                ),
+              ),
             ),
           ],
         ),
