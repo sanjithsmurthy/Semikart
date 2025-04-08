@@ -4,7 +4,16 @@ import '../common/header.dart'; // Import Header from header.dart
 import 'ship_bill.dart'; // Import ShipBillForm from ship_bill.dart
 
 class EditTextBox2 extends StatelessWidget {
-  const EditTextBox2({super.key});
+  final String? address1;
+  final String? address2;
+  final VoidCallback? onEdit;
+
+  const EditTextBox2({
+    super.key,
+    this.address1,
+    this.address2,
+    this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +36,8 @@ class EditTextBox2 extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Shipping Address',
                   style: TextStyle(
                     fontSize: 16,
@@ -36,10 +45,12 @@ class EditTextBox2 extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  'Magadi Main Rd, next to Prasanna Theatre, Cholourpalya, Bengaluru, Karnataka 560023',
-                  style: TextStyle(
+                  address1?.isNotEmpty == true || address2?.isNotEmpty == true
+                      ? [address1, address2].where((a) => a?.isNotEmpty == true).join(', ')
+                      : 'Your shipping address',
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,
                   ),
