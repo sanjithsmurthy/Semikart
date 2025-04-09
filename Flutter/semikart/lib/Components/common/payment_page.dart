@@ -111,13 +111,18 @@ class _EditPageState extends State<EditPage> {
                 value: isChecked,
                 onChanged: (bool? value) async {
                   if (value == true) {
-                    // Check if mandatory billing fields are filled
-                    if (address1 == null || address1!.isEmpty) {
+                    // Check if all mandatory billing fields are filled
+                    if (name == null || name!.isEmpty ||
+                        pincode == null || pincode!.isEmpty ||
+                        address1 == null || address1!.isEmpty ||
+                        city == null || city!.isEmpty ||
+                        state == null || state!.isEmpty ||
+                        phone == null || phone!.isEmpty) {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text('Missing Information'),
-                          content: const Text('Please fill all mandatory billing address fields first'),
+                          content: const Text('Please fill all mandatory billing address fields first (Name, Pincode, Address1, City, State, Phone)'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
