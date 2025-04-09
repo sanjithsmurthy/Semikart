@@ -15,10 +15,29 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   bool isChecked = false;
+  // Billing Address Fields
+  String? name;
+  String? pincode;
   String? address1;
   String? address2;
+  String? landmark;
+  String? city;
+  String? state;
+  String? phone;
+  String? company;
+  String? gstn;
+  
+  // Shipping Address Fields
+  String? shippingName;
+  String? shippingPincode;
   String? shippingAddress1;
   String? shippingAddress2;
+  String? shippingLandmark;
+  String? shippingCity;
+  String? shippingState;
+  String? shippingPhone;
+  String? shippingCompany;
+  String? shippingGstn;
 
   final List<Map<String, dynamic>> items = [
     {
@@ -73,8 +92,16 @@ class _EditPageState extends State<EditPage> {
                   );
                   if (result != null) {
                     setState(() {
+                      name = result['name'];
+                      pincode = result['pincode'];
                       address1 = result['address1'];
                       address2 = result['address2'];
+                      landmark = result['landmark'];
+                      city = result['city'];
+                      state = result['state'];
+                      phone = result['phone'];
+                      company = result['company'];
+                      gstn = result['gstn'];
                     });
                   }
                 },
@@ -105,15 +132,31 @@ class _EditPageState extends State<EditPage> {
                     // Copy all billing fields to shipping
                     setState(() {
                       isChecked = true;
+                      shippingName = name;
+                      shippingPincode = pincode;
                       shippingAddress1 = address1;
                       shippingAddress2 = address2;
+                      shippingLandmark = landmark;
+                      shippingCity = city;
+                      shippingState = state;
+                      shippingPhone = phone;
+                      shippingCompany = company;
+                      shippingGstn = gstn;
                     });
                   } else {
-                    // Clear shipping address when unchecked
+                    // Clear all shipping address fields when unchecked
                     setState(() {
                       isChecked = false;
+                      shippingName = null;
+                      shippingPincode = null;
                       shippingAddress1 = null;
                       shippingAddress2 = null;
+                      shippingLandmark = null;
+                      shippingCity = null;
+                      shippingState = null;
+                      shippingPhone = null;
+                      shippingCompany = null;
+                      shippingGstn = null;
                     });
                   }
                 },
@@ -142,11 +185,27 @@ class _EditPageState extends State<EditPage> {
                   );
                   if (result != null) {
                     setState(() {
+                      shippingName = result['name'];
+                      shippingPincode = result['pincode'];
                       shippingAddress1 = result['address1'];
                       shippingAddress2 = result['address2'];
+                      shippingLandmark = result['landmark'];
+                      shippingCity = result['city'];
+                      shippingState = result['state'];
+                      shippingPhone = result['phone'];
+                      shippingCompany = result['company'];
+                      shippingGstn = result['gstn'];
                       if (isChecked) {
+                        name = shippingName;
+                        pincode = shippingPincode;
                         address1 = shippingAddress1;
                         address2 = shippingAddress2;
+                        landmark = shippingLandmark;
+                        city = shippingCity;
+                        state = shippingState;
+                        phone = shippingPhone;
+                        company = shippingCompany;
+                        gstn = shippingGstn;
                       }
                     });
                   }
