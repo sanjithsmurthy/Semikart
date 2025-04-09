@@ -237,13 +237,28 @@ class _EditPageState extends State<EditPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'My Items',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'My Items',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            // Add edit functionality here
+                          },
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Color(0xFFA51414),
+                          ),
+                          padding: EdgeInsets.zero,
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     ...items.map((item) => Column(
