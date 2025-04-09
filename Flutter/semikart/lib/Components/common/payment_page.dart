@@ -20,6 +20,33 @@ class _EditPageState extends State<EditPage> {
   String? shippingAddress1;
   String? shippingAddress2;
 
+  final List<Map<String, dynamic>> items = [
+    {
+      'serialNo': 1,
+      'mfrPartNumber': 'X22223201',
+      'manufacturer': 'E-T-A',
+      'basicUnitPrice': 2581.32,
+      'quantity': 5,
+      'finalUnitPrice': 2581.32,
+    },
+    {
+      'serialNo': 2,
+      'mfrPartNumber': 'X22223901',
+      'manufacturer': 'E-T-A',
+      'basicUnitPrice': 3681.32,
+      'quantity': 5,
+      'finalUnitPrice': 3681.32,
+    },
+  ];
+
+  double calculateGrandTotal() {
+    double total = 0;
+    for (var item in items) {
+      total += (item['finalUnitPrice'] * item['quantity'] * 1.18) + 250;
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,26 +146,48 @@ class _EditPageState extends State<EditPage> {
                     const Text(
                       'My Items',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 12),
-                    ItemDropdownCard(
-                      mfrPartNumber: 'X22223201',
-                      manufacturer: 'E-T-A',
-                      basicUnitPrice: 2581.32,
-                      quantity: 5,
-                      finalUnitPrice: 2581.32,
-                    ),
-                    const SizedBox(height: 12),
-                    ItemDropdownCard(
-                      mfrPartNumber: 'X22223201',
-                      manufacturer: 'E-T-A',
-                      basicUnitPrice: 2581.32,
-                      quantity: 5,
-                      finalUnitPrice: 2581.32,
+                    ...items.map((item) => Column(
+                      children: [
+                        ItemDropdownCard(
+                          serialNo: item['serialNo'],
+                          mfrPartNumber: item['mfrPartNumber'],
+                          manufacturer: item['manufacturer'],
+                          basicUnitPrice: item['basicUnitPrice'],
+                          quantity: item['quantity'],
+                          finalUnitPrice: item['finalUnitPrice'],
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    )).toList(),
+                    const SizedBox(height: 16),
+                    // Grand Total Row
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0.1),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Grand Total   ',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '₹${calculateGrandTotal().toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFA51414),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -237,11 +286,155 @@ class _EditPageState extends State<EditPage> {
               RedButton(
                 label: 'Continue to payment',
                 onPressed: () {
-                  // Add payment navigation logic here
+                  showDialog(
+                    context: context,
+                    builder: (context) => PaymentConfirmationDialog(
+                      amount: calculateGrandTotal(),
+                      onConfirm: () {
+                        Navigator.pop(context);
+                        // Add actual payment processing logic here
+                      },
+                    ),
+                  );
                 },
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class PaymentConfirmationDialog extends StatelessWidget {
+  final double amount;
+  final VoidCallback onConfirm;
+
+  const PaymentConfirmationDialog({
+    super.key,
+    required this.amount,
+    required this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Confirm Payment',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFA51414),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '₹${amount.toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Total amount to be paid',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Transaction Id: T2025040942440',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                'Note: Please don\'t refresh the page while your transaction is in progress. '
+                'If you click on back button the payment for the current transaction id will be pending. '
+                'You can complete the payment within 24 hours using the "Make Payment" option in Order Dashboard (Order History).',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Cancel Payment'),
+                          content: const Text(
+                            'Are you sure you want to cancel this order? '
+                            'If you wish to complete the payment later you can do this '
+                            'from "Make Payment" option in order dashboard.'
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context); // Close confirmation
+                                Navigator.pop(context); // Close payment dialog
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      side: const BorderSide(color: Color(0xFFA51414)),
+                    ),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Color(0xFFA51414),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: onConfirm,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFA51414),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: const Text(
+                      'Confirm',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
