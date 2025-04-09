@@ -1,72 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'bottom_bar.dart';
 import 'edit_textbox.dart';
-import 'edit_textbox2.dart';
 import 'items_dropdown.dart';
+import 'red_button.dart';
+import 'ship_bill.dart';
 
-class Header extends StatelessWidget implements PreferredSizeWidget {
-  const Header({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Colors.white,
-      height: 66.0,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
-            iconSize: 35.0,
-            onPressed: () {},
-          ),
-          const SizedBox(width: 15.0),
-          Flexible(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BottomNavBar(),
-                    ),
-                  );
-                },
-                child: Image.asset(
-                  'public/assets/images/semikart_logo_medium.png',
-                  height: 20.0,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: Image.asset('public/assets/images/whatsapp_icon.png'),
-                iconSize: 20.0,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.phone, color: Colors.black),
-                iconSize: 27.0,
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(66.0);
-}
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -77,19 +15,15 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   bool isChecked = false;
+  String? address1;
+  String? address2;
+  String? shippingAddress1;
+  String? shippingAddress2;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150),
-        child: CombinedAppBar(
-          title: "Payment",
-          onBackPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -97,7 +31,27 @@ class _EditPageState extends State<EditPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              const EditTextBox(),
+              EditTextBox(
+                address1: address1,
+                address2: address2,
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShipBillForm(
+                        initialAddress1: address1,
+                        initialAddress2: address2,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      address1 = result['address1'];
+                      address2 = result['address2'];
+                    });
+                  }
+                },
+              ),
               const SizedBox(height: 16),
               CheckboxListTile(
                 value: isChecked,
@@ -115,7 +69,32 @@ class _EditPageState extends State<EditPage> {
                 contentPadding: EdgeInsets.zero,
               ),
               const SizedBox(height: 16),
-              const EditTextBox2(),
+              EditTextBox(
+                title: 'Shipping Address',
+                address1: shippingAddress1,
+                address2: shippingAddress2,
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShipBillForm(
+                        initialAddress1: shippingAddress1,
+                        initialAddress2: shippingAddress2,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    setState(() {
+                      shippingAddress1 = result['address1'];
+                      shippingAddress2 = result['address2'];
+                      if (isChecked) {
+                        address1 = shippingAddress1;
+                        address2 = shippingAddress2;
+                      }
+                    });
+                  }
+                },
+              ),
               const SizedBox(height: 16),
 
               // My Items Container
@@ -254,6 +233,13 @@ class _EditPageState extends State<EditPage> {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+              RedButton(
+                label: 'Continue to payment',
+                onPressed: () {
+                  // Add payment navigation logic here
+                },
+              ),
             ],
           ),
         ),
@@ -274,29 +260,20 @@ class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Header(),
-          AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: IconButton(
-              icon: SvgPicture.asset(
-                'public/assets/images/back.svg',
-                color: const Color(0xFFA51414),
-              ),
-              iconSize: 24.0,
-              onPressed: onBackPressed,
-            ),
-            title: Text(
-              title,
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leading: IconButton(
+        icon: SvgPicture.asset(
+          'public/assets/images/back.svg',
+          color: const Color(0xFFA51414),
+        ),
+        iconSize: 24.0,
+        onPressed: onBackPressed,
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }

@@ -59,7 +59,7 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                         setState(() {
                           _selectedOption = value; // Update the selected radio option
                         });
-                        // Navigate to LoginPassword screen
+                        // Navigate to LoginPassword screen without custom animation
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
@@ -112,7 +112,7 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                         setState(() {
                           _selectedOption = value; // Update the selected radio option
                         });
-                        // Navigate to LoginOTP screen
+                        // Navigate to LoginOTP screen without custom animation
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => LoginOTPScreen()),

@@ -42,7 +42,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned Semikart logo
           Positioned(
-            left: screenWidth * 0.06, // 9% of screen width
+            left: screenWidth * 0.05, // 9% of screen width
             top: screenHeight * 0.10, // 14% of screen height
             child: Image.asset(
               'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
@@ -54,7 +54,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned Login text
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
+            left: screenWidth * 0.05, // 9% of screen width
             top: screenHeight * 0.24, // 24% of screen height
             child: Text(
               'Login',
@@ -69,7 +69,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned SignInWithGoogleButton
           Positioned(
-            left: screenWidth * 0.07, // 7% of screen width
+            left: screenWidth * 0.05, // 7% of screen width
             top: screenHeight * 0.32, // 32% of screen height
             child: SignInWithGoogleButton(
               onPressed: () {
@@ -83,7 +83,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned VerticalRadios
           Positioned(
-            left: screenWidth * 0.55, // 65% of screen width
+            left: screenWidth * 0.48, // 65% of screen width
             top: screenHeight * 0.25, // 33% of screen height
             child: VerticalRadios(
               initialOption: "otp"
@@ -91,16 +91,10 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             ),
           ),
 
-          // Add the VerticalRadios widget without navigation logic
-          // Positioned(
-          //   left: screenWidth * 0.07, // Align with other components
-          //   top: screenHeight * 0.42, // Adjust position to align with layout
-          //   child: VerticalRadios(), // No need to add navigation logic here
-          // ),
 
           // First horizontal black line
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
+            left: screenWidth * 0.05, // 9% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
               width: screenWidth * 0.4, // 40% of screen width
@@ -111,7 +105,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned "OR" text exactly in the middle
           Positioned(
-            left: screenWidth * 0.50, // Centered between the two lines
+            left: screenWidth * 0.48, // Centered between the two lines
             top: screenHeight * 0.445, // Slightly above the lines
             child: Text(
               'OR',
@@ -126,7 +120,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Second horizontal black line
           Positioned(
-            left: screenWidth * 0.57, // 51% of screen width
+            right: screenWidth * 0.05, // 51% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
               width: screenWidth * 0.4, // 40% of screen width
@@ -137,7 +131,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned CustomTextField for Email
           Positioned(
-            left: screenWidth * 0.06, // Align with other components
+             left: screenWidth * 0.05,
+            right: screenWidth*0.05, // Align with other components
             top: screenHeight * 0.52, // Adjust position to align with layout
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
@@ -147,7 +142,8 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // OTP Section
           Positioned(
-            left: screenWidth * 0.06, // Align with other components
+             left: screenWidth * 0.05,
+            right: screenWidth*0.05, // Align with other components
             top: screenHeight * 0.65, // Adjust position to align with layout
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +201,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned "Don't have an account?" Button
           Positioned(
-            left: screenWidth * 0.48, // 58% - 10% of screen width
+            right: screenWidth * 0.05, // 58% - 10% of screen width
             top: screenHeight * 0.82, // 82% of screen height
             child: ForgotPasswordButton(
               label: "Don't have an account?", // Set the label
@@ -220,7 +216,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
           // Positioned RedButton for Login
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
+            left: screenWidth * 0.05, // 9% of screen width
             top: screenHeight * 0.9, // 90% of screen height
             child: RedButton(
               label: "Login", // Set the label to "Login"

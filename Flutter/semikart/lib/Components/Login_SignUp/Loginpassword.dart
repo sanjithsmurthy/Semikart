@@ -6,6 +6,7 @@ import 'password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
 import 'signupscreen.dart'; // Import the SignUpScreen widget
+import 'forgot_password.dart'; // Import the ForgotPassword screen
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -58,7 +59,6 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
 
               VerticalRadios(
                 initialOption: "password"
-               
               ),
 
               // Other components...
@@ -89,8 +89,8 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned Semikart logo
           Positioned(
-            left: screenWidth * 0.06, // 9% of screen width
-            top: screenHeight * 0.10, // 14% of screen height
+            left: screenWidth * 0.05, // Adjusted to 5% of screen width
+            top: screenHeight * 0.10, // 10% of screen height
             child: Image.asset(
               'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
               width: screenWidth * 0.5, // 50% of screen width
@@ -101,7 +101,7 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned Login text
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
+            left: screenWidth * 0.05, // Adjusted to 7% of screen width
             top: screenHeight * 0.24, // 24% of screen height
             child: Text(
               'Login',
@@ -116,8 +116,8 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned SignInWithGoogleButton
           Positioned(
-            left: screenWidth * 0.07, // 7% of screen width
-            top: screenHeight * 0.32, // 33% of screen height
+            left: screenWidth * 0.05, // Adjusted to 5% of screen width
+            top: screenHeight * 0.32, // 32% of screen height
             child: SignInWithGoogleButton(
               onPressed: () {
                 // Handle the Google sign-in logic here
@@ -130,16 +130,16 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned VerticalRadios
           Positioned(
-            left: screenWidth * 0.55, // 65% of screen width
-            top: screenHeight * 0.25, // 33% of screen height
+            left: screenWidth * 0.48, // Adjusted to 53% of screen width
+            top: screenHeight * 0.25, // 25% of screen height
             child: VerticalRadios(
-            initialOption: "password"
+              initialOption: "password",
             ),
           ),
 
           // First horizontal black line
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
+            left: screenWidth * 0.05, // Adjusted to 7% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
               width: screenWidth * 0.4, // 40% of screen width
@@ -150,7 +150,7 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned "OR" text exactly in the middle
           Positioned(
-            left: screenWidth * 0.50, // Centered between the two lines
+            left: screenWidth * 0.48, // Adjusted to 48% of screen width
             top: screenHeight * 0.445, // Slightly above the lines
             child: Text(
               'OR',
@@ -165,7 +165,7 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Second horizontal black line
           Positioned(
-            left: screenWidth * 0.57, // 51% of screen width
+            right: screenWidth * 0.05, // Adjusted to 55% of screen width
             top: screenHeight * 0.46, // 46% of screen height
             child: Container(
               width: screenWidth * 0.4, // 40% of screen width
@@ -176,7 +176,8 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned CustomTextField for Email
           Positioned(
-            left: screenWidth * 0.06, // 6% of screen width
+            left: screenWidth * 0.05,
+            right: screenWidth*0.05, // Adjusted to 5% of screen width
             top: screenHeight * 0.52, // 52% of screen height
             child: CustomTextField(
               controller: TextEditingController(), // Provide a controller
@@ -186,7 +187,8 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned PasswordTextField for Password
           Positioned(
-            left: screenWidth * 0.06, // 6% of screen width
+            left: screenWidth * 0.05,
+            right: screenWidth*0.05, // Adjusted to 5% of screen width
             top: screenHeight * 0.65, // 65% of screen height
             child: PasswordTextField(
               controller: TextEditingController(), // Provide a controller
@@ -196,36 +198,38 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned ForgotPasswordButton
           Positioned(
-            left: screenWidth * 0.6, // 70% - 10% of screen width
+            right: screenWidth * 0.05, // Adjusted to 58% of screen width
             top: screenHeight * 0.78, // 78% of screen height
             child: ForgotPasswordButton(
               label: "Forgot Password", // Set the label
               onPressed: () {
-                // Handle the Forgot Password button click
-                print('Forgot Password button clicked');
+                // Navigate to ForgotPassword screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                );
               },
             ),
           ),
 
           // Positioned "Don't have an account?" Button
           Positioned(
-            left: screenWidth * 0.48, // 58% - 10% of screen width
+            right: screenWidth * 0.05, // Adjusted to 46% of screen width
             top: screenHeight * 0.82, // 82% of screen height
             child: ForgotPasswordButton(
               label: "Don't have an account?", // Set the label
               onPressed: () {
-                 Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SignUpScreen()),
-      );
-            
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUpScreen()),
+                );
               },
             ),
           ),
 
           // Positioned RedButton for Login
           Positioned(
-            left: screenWidth * 0.09, // 9% of screen width
+            left: screenWidth * 0.05, // Adjusted to 7% of screen width
             top: screenHeight * 0.9, // 90% of screen height
             child: RedButton(
               label: "Login", // Set the label to "Login"
