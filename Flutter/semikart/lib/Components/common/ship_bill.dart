@@ -78,8 +78,16 @@ class _ShipBillFormState extends State<ShipBillForm> {
     }
 
     final formData = {
+      'name': nameController.text,
+      'pincode': pincodeController.text,
       'address1': address1Controller.text,
       'address2': address2Controller.text,
+      'landmark': landmarkController.text,
+      'city': cityController.text,
+      'state': stateController.text,
+      'phone': phoneController.text,
+      'company': companyController.text,
+      'gstn': gstnController.text,
     };
     Navigator.pop(context, formData);
     
