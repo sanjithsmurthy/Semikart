@@ -129,7 +129,7 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned VerticalRadios
           Positioned(
-            right: screenWidth * 0.05, // Adjusted to 53% of screen width
+            left: screenWidth * 0.48, // Adjusted to 53% of screen width
             top: screenHeight * 0.25, // 25% of screen height
             child: VerticalRadios(
               initialOption: "password",
@@ -225,8 +225,7 @@ class LoginPasswordScreen extends StatelessWidget {
 
           // Positioned RedButton for Login
           Positioned(
-            left: screenWidth * 0.05,
-            right: screenWidth*0.05, // Adjusted to 7% of screen width
+            left: screenWidth * 0.05, // Adjusted to 7% of screen width
             top: screenHeight * 0.9, // 90% of screen height
             child: RedButton(
               label: "Login", // Set the label to "Login"
