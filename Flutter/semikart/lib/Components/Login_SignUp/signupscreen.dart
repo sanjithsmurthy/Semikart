@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
-import 'password_text_field.dart';
+import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
+import '../common/red_button.dart'; // Import the RedButton widget
+import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
+import 'loginpassword.dart'; // Import the LoginScreen component
+import '../common/forgot_password.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  bool passwordsMatch = false; // Track if passwords match
+  bool isTermsAccepted = false; // Track if the checkbox is checked
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -130,24 +142,77 @@ class SignUpScreen extends StatelessWidget {
                 controller: TextEditingController(),
                 label: "Company Name",
               ),
+              SizedBox(height: 2), // Reduced spacing above ConfirmPasswordScreen
+
+              // Confirm Password Component
+              ConfirmPasswordScreen(
+                onPasswordsMatch: (match) {
+                  setState(() {
+                    passwordsMatch = match; // Update the passwordsMatch state
+                  });
+                },
+              ),
+              SizedBox(height: 16), // Reduced spacing below ConfirmPasswordScreen
+
+              // Checkbox for Terms and Conditions
+              Row(
+                children: [
+                  Checkbox(
+                    value: isTermsAccepted,
+                    onChanged: (value) {
+                      setState(() {
+                        isTermsAccepted = value ?? false; // Update the checkbox state
+                      });
+                    },
+                  ),
+                  Expanded(
+                    child: Text(
+                      "I agree to the terms and conditions",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Product Sans',
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(height: 16),
 
-              // PasswordTextField for Password
-              PasswordTextField(
-                controller: TextEditingController(),
-                label: "Password",
-              ),
-              SizedBox(height: 24),
-
-              // Submit Button (Optional)
+              // ForgotPasswordButton
               Center(
-                child: ElevatedButton(
+                child: ForgotPasswordButton(
+                  label: "Already have an account?", // Set the label
                   onPressed: () {
-                    print('Sign Up button pressed');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPasswordScreen()), // Navigate to LoginScreen
+                    );
                   },
-                  child: Text('Sign Up'),
                 ),
               ),
+
+              SizedBox(height: 16), // Add spacing below the "Already have an account?" text
+
+              // Button
+              Center(
+                child: passwordsMatch && isTermsAccepted
+                    ? RedButton(
+                        label: "Sign Up", // Button label
+                        width: screenWidth * 0.9, // Dynamically scale width
+                        height: screenHeight * 0.06, // Dynamically scale height
+                        onPressed: () {
+                          // Handle sign-up action
+                          print("Passwords match and terms accepted! Proceeding with sign-up...");
+                        },
+                      )
+                    : InactiveButton(
+                        label: "Sign Up", // Button label
+                        width: screenWidth * 0.9, // Dynamically scale width
+                        height: screenHeight * 0.06, // Dynamically scale height
+                      ),
+              ),
+              SizedBox(height: 16), // Add spacing below the button
             ],
           ),
         ),
