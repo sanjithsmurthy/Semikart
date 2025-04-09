@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../common/header_withback.dart'; // Import the HeaderWithBack component
-import '../common/bottom_bar.dart'; // Import the BottomNavBar component
+import 'upload_file.dart'; // Import the CustomSquare component
+import 'RFQ_text_component.dart'; // Import the RFQTextComponent
+import 'rfq_adress_details.dart'; // Import the RFQAddressDetails component
 
 class RFQFullPage extends StatelessWidget {
   const RFQFullPage({super.key});
@@ -11,48 +12,36 @@ class RFQFullPage extends StatelessWidget {
       // Set the background color of the screen to white
       backgroundColor: Colors.white,
 
-      // AppBar implemented using HeaderWithBack
-      appBar: CombinedAppBar(
-        title: "RFQ Full Page", // Title for the app bar
-        onBackPressed: () {
-          Navigator.pop(context); // Navigate back to the previous page
-        },
-      ),
-
       // Main body content
-      body: Center(
-        child: Container(
-          width: 412, // Fixed width
-          constraints: const BoxConstraints(
-            minHeight: 100, // Minimum height (adjustable as content grows)
-          ),
-          padding:
-              const EdgeInsets.all(16.0), // Add padding inside the component
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Add padding inside the component
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Example content
-              Text(
-                "This is the RFQ Full Page",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+              // Add the CustomSquare component
+              CustomSquare(),
+
               const SizedBox(height: 20),
-              Text(
-                "The height of this page adjusts dynamically based on its content.",
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+
+              // Add the RFQTextComponent
+              RFQTextComponent(),
+
+              const SizedBox(height: 20),
+
+              // Add the RFQAddressDetails component
+              RFQAddressDetails(
+                onSubmit: () {
+                  // Define what happens when the submit button is pressed
+                  print('Submit button pressed!');
+                },
               ),
+
+              const SizedBox(height: 20),
             ],
           ),
         ),
       ),
-
-      // BottomNavBar implemented as the bottom bar
-      bottomNavigationBar:
-          const BottomNavBar(), // BottomNavBar from bottom_bar.dart
     );
   }
 }
