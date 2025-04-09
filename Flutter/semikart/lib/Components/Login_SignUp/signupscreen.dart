@@ -108,7 +108,7 @@ class SignUpScreen extends StatelessWidget {
                 controller: TextEditingController(),
                 label: "Email",
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 12),
 
               // MobileNumberField
               MobileNumberField(
