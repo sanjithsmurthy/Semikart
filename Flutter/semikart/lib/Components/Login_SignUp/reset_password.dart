@@ -4,6 +4,7 @@ import 'forgot_password.dart'; // Import the ForgotPasswordScreen
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveRedButton widget
+import 'success.dart'; // Import the SuccessScreen
 
 class ResetPasswordScreen extends StatefulWidget {
   @override
@@ -40,19 +41,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
-                      );
-                    },
-                  ),
-
-                  // Cross Icon
-                  IconButton(
-                    icon: Icon(Icons.close, color: Color(0xFFA51414)), // Cross icon
-                    iconSize: screenWidth * 0.07, // Dynamically scale the icon size
-                    onPressed: () {
-                      // Navigate back to LoginPasswordScreen
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
                       );
                     },
                   ),
@@ -124,8 +112,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         width: screenWidth * 0.9, // Dynamically scale width
                         height: screenHeight * 0.06, // Dynamically scale height
                         onPressed: () {
-                          // Handle submit action
-                          print("Passwords match! Proceeding...");
+                         Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SuccessScreen()), // Replace with your HomePage widget
+            );
                         },
                       )
                     : InactiveButton(

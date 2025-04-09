@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:semikart/Components/home/home_page.dart';
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
@@ -203,7 +204,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: screenHeight * 0.06, // Dynamically scale height
                         onPressed: () {
                           // Handle sign-up action
-                          print("Passwords match and terms accepted! Proceeding with sign-up...");
+                         Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()), // Replace with your HomePage widget
+            );
                         },
                       )
                     : InactiveButton(
