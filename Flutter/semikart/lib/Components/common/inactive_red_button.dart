@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class InactiveButton extends StatelessWidget {
   final String label;
   final EdgeInsetsGeometry? padding;
+  final double? width; // Optional width parameter
+  final double? height; // Optional height parameter
 
   const InactiveButton({
     super.key,
     required this.label,
     this.padding,
+    this.width, // Accept optional width
+    this.height, // Accept optional height
   });
 
   @override
@@ -17,13 +21,14 @@ class InactiveButton extends StatelessWidget {
         // Get screen width
         final screenWidth = MediaQuery.of(context).size.width;
 
-        // Dynamically calculate button width and font size
-        final buttonWidth = screenWidth < 400 ? screenWidth * 0.9 : 343.0; // 90% of screen width for small screens
+        // Dynamically calculate button width and font size if not provided
+        final buttonWidth = width ?? (screenWidth < 400 ? screenWidth * 0.9 : 343.0); // Default: 90% of screen width for small screens
+        final buttonHeight = height ?? 48.0; // Default: Fixed height of 48
         final fontSize = screenWidth < 400 ? 16.0 : 20.0; // Adjust font size for smaller screens
 
         return SizedBox(
           width: buttonWidth,
-          height: 48, // Fixed height for the button
+          height: buttonHeight, // Use optional height or default
           child: ElevatedButton(
             onPressed: null, // Always disabled
             style: ElevatedButton.styleFrom(
