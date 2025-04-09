@@ -19,6 +19,7 @@ import '../Login_SignUp/password_text_field.dart'; // Import the PasswordTextFie
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
 import '../Login_SignUp/vertical_radios.dart'; // Import the VerticalRadios widget
+import '../Login_SignUp/confirm_password.dart'; // Import the ConfirmPasswordScreen
 import 'dart:io';
 
 class TestLayoutSanjana extends StatefulWidget {
@@ -523,6 +524,38 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         backgroundColor: Colors.white, // White background for the search bar
                         iconColor: Color(0xFFA51414), // Red color for the search icon
                         borderRadius: 25.0, // Rounded corners
+                      ),
+                      SizedBox(height: 32),
+                      Text(
+                        'Confirm Password Example',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Product Sans',
+                          color: Color(0xFFA51414),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Navigate to ConfirmPasswordScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ConfirmPasswordScreen(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFA51414), // Red button color
+                        ),
+                        child: Text(
+                          'Go to Confirm Password Screen',
+                          style: TextStyle(
+                            fontFamily: 'Product Sans',
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                       SizedBox(height: 24), // Added bottom padding
                     ],
