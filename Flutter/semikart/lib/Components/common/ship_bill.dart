@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'grey_text_box.dart'; // Import the GreyTextBox widget
+import 'red_button.dart'; // Import the RedButton widget
 
 class ShipBillForm extends StatefulWidget {
-  const ShipBillForm({super.key});
+  final String? initialAddress1;
+  final String? initialAddress2;
+
+  const ShipBillForm({
+    super.key,
+    this.initialAddress1,
+    this.initialAddress2,
+  });
 
   @override
   State<ShipBillForm> createState() => _ShipBillFormState();
@@ -11,8 +20,15 @@ class ShipBillForm extends StatefulWidget {
 class _ShipBillFormState extends State<ShipBillForm> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController pincodeController = TextEditingController();
-  final TextEditingController address1Controller = TextEditingController();
-  final TextEditingController address2Controller = TextEditingController();
+  late final TextEditingController address1Controller;
+  late final TextEditingController address2Controller;
+
+  @override
+  void initState() {
+    super.initState();
+    address1Controller = TextEditingController(text: widget.initialAddress1);
+    address2Controller = TextEditingController(text: widget.initialAddress2);
+  }
   final TextEditingController landmarkController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
@@ -21,6 +37,59 @@ class _ShipBillFormState extends State<ShipBillForm> {
   final TextEditingController gstnController = TextEditingController();
 
   bool hasGSTN = false; // State for the GSTN radio button
+
+  void _saveAddress() {
+    // Validate all required fields
+    if (nameController.text.isEmpty ||
+        pincodeController.text.isEmpty ||
+        address1Controller.text.isEmpty ||
+        cityController.text.isEmpty ||
+        stateController.text.isEmpty ||
+        phoneController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all required fields'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    // Validate pincode is numeric
+    if (!RegExp(r'^[0-9]+$').hasMatch(pincodeController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pincode must contain only numbers'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    // Validate phone number is numeric
+    if (!RegExp(r'^[0-9]+$').hasMatch(phoneController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Phone number must contain only numbers'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    final formData = {
+      'address1': address1Controller.text,
+      'address2': address2Controller.text,
+    };
+    Navigator.pop(context, formData);
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Address updated successfully'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +101,17 @@ class _ShipBillFormState extends State<ShipBillForm> {
           children: [
             GreyTextBox(
               nameController: nameController,
-              text: "Name",
+              text: "Name*",
             ),
             const SizedBox(height: 16),
             GreyTextBox(
               nameController: pincodeController,
-              text: "Pincode",
+              text: "Pincode*",
             ),
             const SizedBox(height: 16),
             GreyTextBox(
               nameController: address1Controller,
-              text: "Address 1",
+              text: "Address 1*",
             ),
             const SizedBox(height: 16),
             GreyTextBox(
@@ -62,7 +131,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 Expanded(
                   child: GreyTextBox(
                     nameController: cityController,
-                    text: "City",
+                    text: "City*",
                   ),
                 ),
               ],
@@ -73,14 +142,14 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 Expanded(
                   child: GreyTextBox(
                     nameController: stateController,
-                    text: "State",
+                    text: "State*",
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: GreyTextBox(
                     nameController: phoneController,
-                    text: "Phone Number",
+                    text: "Phone Number*",
                   ),
                 ),
               ],
@@ -142,6 +211,13 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 ),
               ),
             ),
+            const SizedBox(height: 32),
+            RedButton(
+              label: 'Update',
+              onPressed: _saveAddress,
+              width: double.infinity,
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
