@@ -5,6 +5,7 @@ class PasswordTextField extends StatefulWidget {
   final String label;
   final EdgeInsetsGeometry? padding; // Optional padding parameter
   final double width; // Width of the text field
+  final Function(String)? onChanged; // Optional onChanged callback
 
   const PasswordTextField({
     super.key,
@@ -12,6 +13,7 @@ class PasswordTextField extends StatefulWidget {
     required this.label,
     this.padding,
     this.width = 370.0, // Default width
+    this.onChanged, // Optional onChanged callback
   });
 
   @override
@@ -36,6 +38,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           controller: widget.controller,
           obscureText: !_isPasswordVisible, // Toggle password visibility
           obscuringCharacter: '•', // Use a medium-sized dot character
+          onChanged: widget.onChanged, // Call the onChanged callback if provided
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle: const TextStyle(

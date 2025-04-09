@@ -6,6 +6,8 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final EdgeInsetsGeometry? padding; // Optional padding parameter
   final double width; // New width parameter with default value
+  final Widget? suffixIcon; // Optional suffix icon parameter
+  final Function(String)? onChanged; // Optional onChanged callback
 
   const CustomTextField({
     super.key,
@@ -14,6 +16,8 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.padding, // Optional padding parameter
     this.width = 370.0, // Default width
+    this.suffixIcon, // Optional suffix icon
+    this.onChanged, // Optional onChanged callback
   });
 
   @override
@@ -29,43 +33,45 @@ class CustomTextField extends StatelessWidget {
         height: 72,
         child: TextField(
           controller: controller,
+          obscureText: isPassword, // Toggle password visibility if it's a password field
+          onChanged: onChanged, // Call the onChanged callback if provided
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Color(0xFF757575), // Grey color for placeholder
               fontSize: 16,
               height: 19 / 16, // To achieve height of 19
             ),
-            floatingLabelStyle: TextStyle(
+            floatingLabelStyle: const TextStyle(
               color: Color(0xFFA51414), // Red color when focused
               fontSize: 16,
               fontWeight: FontWeight.bold, // Make the label bold to match the border weight
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
-            contentPadding: EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
+            contentPadding: const EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0xFFA51414),
                 width: 2.0, // Increased border width
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0xFFA51414),
                 width: 2.0, // Increased border width
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0xFFA51414), // Red border when focused
                 width: 2.0, // Increased border width
               ),
             ),
+            suffixIcon: suffixIcon, // Add the optional suffix icon
           ),
-          obscureText: isPassword,
         ),
       ),
     );
