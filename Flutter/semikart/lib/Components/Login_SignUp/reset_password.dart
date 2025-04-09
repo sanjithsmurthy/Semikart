@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Loginpassword.dart'; // Import the LoginPasswordScreen
 import 'forgot_password.dart'; // Import the ForgotPasswordScreen
 
@@ -46,39 +45,56 @@ class ResetPasswordScreen extends StatelessWidget {
             ),
           ),
 
-          // Shield with Red Tick and Person Icon
+          // ResetMan Image
           Positioned(
-            top: screenHeight * 0.15, // Adjust top padding dynamically
+            top: screenHeight * 0.023, // Adjust top padding dynamically
             left: 0,
             right: 0,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Shield Icon
-                Icon(
-                  Icons.shield, // Shield icon
-                  color: Color(0xFF707070), // Grey color for the shield
-                  size: screenWidth * 0.3, // Dynamically scale the shield size
-                ),
+            child: Center(
+              child: Image.asset(
+                'public/assets/images/resetman.png', // Replace with the actual path to resetman.png
+                width: screenWidth * 0.4, // Dynamically scale width
+                height: screenHeight * 0.4, // Dynamically scale height
+                fit: BoxFit.contain, // Ensure the image fits within the bounds
+              ),
+            ),
+          ),
 
-                // Red Tick in the Middle of the Shield
-                Icon(
-                  Icons.check, // Red tick icon
-                  color: Color(0xFFA51414), // Red color for the tick
-                  size: screenWidth * 0.1, // Dynamically scale the tick size
+          // "Set Your Password" Text
+          Positioned(
+            top: screenHeight * 0.3, // Just below the image
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                "Set Your Password",
+                style: TextStyle(
+                  fontSize: screenWidth * 0.05, // Dynamically scale font size (20px for a 400px width screen)
+                  fontWeight: FontWeight.bold, // Bold font weight
+                  color: Colors.black, // Black color
+                  fontFamily: 'Product Sans', // Product Sans font
                 ),
+              ),
+            ),
+          ),
 
-                // Person Icon (Pointing)
-                Positioned(
-                  right: -screenWidth * 0.1, // Adjust position to the right of the shield
-                  bottom: -screenHeight * 0.05, // Slightly below the shield
-                  child: FaIcon(
-                    FontAwesomeIcons.personWalkingArrowRight, // Person pointing icon
-                    color: Color(0xFFA51414), // Red color for the person icon
-                    size: screenWidth * 0.15, // Dynamically scale the person icon size
-                  ),
+          // Instruction Text
+          Positioned(
+            top: screenHeight * 0.35, // Just below the "Set Your Password" text
+            left: screenWidth * 0.1, // Add padding from the left
+            right: screenWidth * 0.1, // Add padding from the right
+            child: Center(
+              child: Text(
+                "In order to keep your account safe you need\n"
+                "to create a strong password.",
+                textAlign: TextAlign.center, // Center align the text
+                style: TextStyle(
+                  fontSize: screenWidth * 0.0375, // Dynamically scale font size (15px for a 400px width screen)
+                  fontWeight: FontWeight.w600, // Semi-bold font weight
+                  color: Color(0xFF989DA3), // #989DA3 color
+                  fontFamily: 'Product Sans', // Product Sans font
                 ),
-              ],
+              ),
             ),
           ),
         ],
