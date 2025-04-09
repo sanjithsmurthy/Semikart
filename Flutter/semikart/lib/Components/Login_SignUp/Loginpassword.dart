@@ -6,6 +6,7 @@ import 'password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
 import 'signupscreen.dart'; // Import the SignUpScreen widget
+import 'forgot_password.dart'; // Import the ForgotPassword screen
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -202,8 +203,11 @@ class LoginPasswordScreen extends StatelessWidget {
             child: ForgotPasswordButton(
               label: "Forgot Password", // Set the label
               onPressed: () {
-                // Handle the Forgot Password button click
-                print('Forgot Password button clicked');
+                // Navigate to ForgotPassword screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                );
               },
             ),
           ),
