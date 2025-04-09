@@ -90,15 +90,6 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(150), // Adjust height as needed
-      //   child: CombinedAppBar(
-      //     title: "Edit Address",
-      //     onBackPressed: () {
-      //       Navigator.pop(context); // Navigate back to the previous page
-      //     },
-      //   ),
-      // ),
       body: const ShipBillForm(), // Display the ShipBillForm widget here
     );
   }
