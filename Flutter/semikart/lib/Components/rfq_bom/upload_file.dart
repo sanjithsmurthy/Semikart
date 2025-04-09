@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../common/red_button.dart'; // Import the RedButton class
 
 class CustomSquare extends StatelessWidget {
   const CustomSquare({super.key});
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      print('Image selected: ${image.path}');
+      // You can now use the image path to upload the image or perform other actions
+    } else {
+      print('Image selection canceled.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +105,7 @@ class CustomSquare extends StatelessWidget {
                     Center(
                       child: RedButton(
                         label: "Browse",
-                        onPressed: () {
-                          print('Red button pressed!');
-                        },
+                        onPressed: _pickImage, // Call the _pickImage method
                       ), // Use the RedButton widget
                     ),
                   ],
