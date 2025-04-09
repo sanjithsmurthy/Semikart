@@ -82,10 +82,40 @@ class _EditPageState extends State<EditPage> {
               const SizedBox(height: 16),
               CheckboxListTile(
                 value: isChecked,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked = value ?? false;
-                  });
+                onChanged: (bool? value) async {
+                  if (value == true) {
+                    // Check if mandatory billing fields are filled
+                    if (address1 == null || address1!.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Missing Information'),
+                          content: const Text('Please fill all mandatory billing address fields first'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                      return;
+                    }
+
+                    // Copy all billing fields to shipping
+                    setState(() {
+                      isChecked = true;
+                      shippingAddress1 = address1;
+                      shippingAddress2 = address2;
+                    });
+                  } else {
+                    // Clear shipping address when unchecked
+                    setState(() {
+                      isChecked = false;
+                      shippingAddress1 = null;
+                      shippingAddress2 = null;
+                    });
+                  }
                 },
                 title: const Text(
                   "Billing Address same as shipping address",
