@@ -5,48 +5,19 @@ import '../common/header_withback.dart'; // Import the Header and CombinedAppBar
 import '../cart/cart_page.dart'; // Import the CartPage component
 
 void main() {
+  // Set global status bar style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // White background for the status bar
+      statusBarIconBrightness: Brightness.dark, // Dark icons for visibility
+      statusBarBrightness: Brightness.light, // For iOS compatibility
+    ),
+  );
+
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: SanjithCartPage(),
+    home: TestLayoutSanjith(), // Set TestLayoutSanjith as the home page
   ));
-}
-
-class SanjithCartPage extends StatelessWidget {
-  const SanjithCartPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Set the status bar content to dark (black icons and text)
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.white, // Set the status bar background color
-        statusBarIconBrightness: Brightness.dark, // Set icons to dark
-        statusBarBrightness: Brightness.light, // For iOS compatibility
-      ),
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(66.0), // Match the header height
-        child: CombinedAppBar(
-          title: "Your Cart", // Title for the AppBar
-          onBackPressed: () => _handleBackPress(context), // Back button functionality
-        ),
-      ),
-      body: Container(
-        color: Colors.white, // Match the header's background color
-        child: SafeArea(
-          child: CartPage(), // Implement the CartPage as the main body
-        ),
-      ),
-      bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
-    );
-  }
-
-  static void _handleBackPress(BuildContext context) {
-    Navigator.pop(context); // Navigate back to the previous page
-  }
 }
 
 class TestLayoutSanjith extends StatelessWidget {
@@ -58,33 +29,20 @@ class TestLayoutSanjith extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set the status bar content to dark (black icons and text)
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.white, // Set the status bar background color
-        statusBarIconBrightness: Brightness.dark, // Set icons to dark
-        statusBarBrightness: Brightness.light, // For iOS compatibility
-      ),
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(66.0), // Match the header height
-        child: CombinedAppBar(
-          title: "Your Cart", // Title for the AppBar
-          onBackPressed: () => _handleBackPress(context), // Back button functionality
+    return SafeArea( // Wrap the entire Scaffold in SafeArea
+      child: Scaffold(
+        extendBodyBehindAppBar: false, // Ensure the body does not extend behind the AppBar
+        backgroundColor: Colors.white, // Set the background color to white
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(66.0), // Match the header height
+          child: CombinedAppBar(
+            title: "Your Cart", // Title for the AppBar
+            onBackPressed: () => _handleBackPress(context), // Back button functionality
+          ),
         ),
+        body: CartPage(), // Implement the CartPage as the main body
+        bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
       ),
-      body: Container(
-        color: Colors.white, // Match the header's background color
-        child: SafeArea(
-          child: CartPage(), // Implement the CartPage as the main body
-        ),
-      ),
-      bottomNavigationBar: BottomBar.BottomNavBar(), // Use the alias for BottomNavBar
     );
   }
 }
-
-// Removed duplicate main function to resolve the conflict

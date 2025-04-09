@@ -73,14 +73,10 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class HeaderWithBack extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback? onBackPressed; // Callback for back button
   final VoidCallback? onLogoTap; // Callback for logo tap
-  final VoidCallback onBackPressed; // Callback for back button press
 
-  const HeaderWithBack({
-    super.key,
-    this.onLogoTap,
-    required this.onBackPressed,
-  });
+  const HeaderWithBack({super.key, this.onBackPressed, this.onLogoTap});
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +91,9 @@ class HeaderWithBack extends StatelessWidget implements PreferredSizeWidget {
           children: [
             // Back Button
             IconButton(
-              icon: SvgPicture.asset(
-                'public/assets/images/back.svg', // Path to the back.svg file
-                color: const Color(0xFFA51414), // Apply the custom color
-              ),
-              iconSize: 24.0,
-              onPressed: onBackPressed, // Use the callback for back button
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              iconSize: 35.0,
+              onPressed: onBackPressed,
             ),
             const SizedBox(width: 15.0),
             // Logo (Clickable)
@@ -108,7 +101,15 @@ class HeaderWithBack extends StatelessWidget implements PreferredSizeWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
-                  onTap: onLogoTap, // Use the callback for navigation
+                  onTap: onLogoTap ??
+                      () {
+                        // Navigate to the BottomNavBar
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const BottomNavBar()),
+                          (route) => false, // Remove all previous routes
+                        );
+                      },
                   child: Image.asset(
                     'public/assets/images/semikart_logo_medium.png',
                     height: 20.0,
