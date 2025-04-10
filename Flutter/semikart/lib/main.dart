@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'Components/Login_SignUp/Loginpassword.dart';
-import 'Components/Login_SignUp/LoginOTP.dart';
-import 'Components/Login_SignUp/signupscreen.dart';
-import 'Components/trial/testing.dart';
+import 'package:flutter/services.dart'; // Import SystemChrome
+import 'package:semikart/Components/Login_SignUp/Loginpassword.dart';
+import 'Components/trial/testing.dart'; // Import ButtonNavigationPage
 import 'managers/auth_manager.dart'; // Import AuthManager provider
 
 void main() {
+  // Set global status bar and navigation bar styles
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // White background for the status bar
+      statusBarIconBrightness: Brightness.dark, // Dark icons for visibility
+      statusBarBrightness: Brightness.light, // For iOS compatibility
+      systemNavigationBarColor: Colors.white, // White background for the bottom navigation bar
+      systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for visibility
+    ),
+  );
+
   runApp(
     ProviderScope( // Initialize Riverpod
       child: const MyApp(),
@@ -39,91 +49,20 @@ class ModeWrapper extends ConsumerWidget {
     // Watch the current testing mode state
     final isTestingMode = ref.watch(authManagerProvider);
 
-    // Navigate to different pages based on the mode
-    return isTestingMode ? const TestingPage() : const LoginOptions();
-  }
-}
-
-class LoginOptions extends ConsumerWidget {
-  const LoginOptions({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+    // Navigate to LoginPasswordScreen by default
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Options'),
-        backgroundColor: const Color(0xFFA51414),
+      body: LoginPasswordScreen(), // Display LoginPasswordScreen
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to testing.dart when the button is clicked
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ButtonNavigationPage()),
+          );
+        },
+        backgroundColor: isTestingMode ? Colors.green : Colors.grey,
+        child: const Icon(Icons.bug_report), // Icon for testing mode
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
-                );
-              },
-              child: const Text('Login with Password'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginOTPScreen()),
-                );
-              },
-              child: const Text('Login with OTP'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignUpScreen()),
-                );
-              },
-              child: const Text('Sign Up'),
-            ),
-            const SizedBox(height: 32),
-            // Button to toggle testing mode
-            ElevatedButton(
-              onPressed: () {
-                ref.read(authManagerProvider.notifier).toggleTestingMode();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey,
-              ),
-              child: const Text('Enter Testing Mode'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class TestingPage extends ConsumerWidget {
-  const TestingPage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Testing Mode'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            onPressed: () {
-              // Toggle back to production mode
-              ref.read(authManagerProvider.notifier).toggleTestingMode();
-            },
-          ),
-        ],
-      ),
-      body: const ButtonNavigationPage(), // Call ButtonNavigationPage here
     );
   }
 }
