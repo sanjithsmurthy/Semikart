@@ -145,7 +145,7 @@ class LoginPasswordScreen extends StatelessWidget {
               top: screenHeight * 0.45, // 45% of screen height
               child: CustomTextField(
                 controller: TextEditingController(),
-                width: screenWidth * 0.90, // Provide a controller
+                width: screenWidth , // Provide a controller
                 label: "Email", // Set the label to "Email"
                 height: screenHeight * 0.06, // 6% of screen height
               ),
@@ -158,7 +158,7 @@ class LoginPasswordScreen extends StatelessWidget {
               top: screenHeight * 0.55, // 55% of screen height
               child: PasswordTextField(
                 controller: TextEditingController(),
-                width: screenWidth * 0.90, // Provide a controller
+                width: screenWidth * 1, // Provide a controller
                 label: "Password", // Set the label to "Password"
                 height: screenHeight * 0.06, // 6% of screen height
               ),
