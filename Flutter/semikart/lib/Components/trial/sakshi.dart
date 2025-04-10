@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widget
 import '../common/payment_progress.dart'; // Import the PaymentProgress widget
+import '../common/payment_failed.dart'; // Import the PaymentFailedScreen widget
 import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
@@ -130,7 +131,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
-                  onPressed: () {}, // Will implement payment failed functionality
+                  onPressed: () => PaymentFailedDialog.show(context: context),
                   child: const Text('Failed'),
                 ),
               ],
