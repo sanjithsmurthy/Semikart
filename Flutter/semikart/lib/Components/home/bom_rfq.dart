@@ -11,29 +11,30 @@ class BomRfqCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Define responsive sizes based on screen dimensions
-    // Adjust these multipliers as needed for your desired layout
-    final cardWidth = screenWidth * 0.9; // 90% of screen width
-    // Height might need adjustment based on content, using screen width for proportion
-    final cardHeight = screenWidth * 0.95;
+    // --- Width Multiplier ---
+    // Keep the width calculation as before
+    const double cardWidthMultiplier = 0.8; // Example: 80% of screen width
+    final cardWidth = screenWidth * cardWidthMultiplier;
+
+    // --- Other dimensions remain based on screen size ---
+    // (Adjust these multipliers if needed for visual balance)
     final generalPadding = screenWidth * 0.04; // ~16 on 400 width
     final imageSize = screenWidth * 0.2; // ~80 on 400 width
     final horizontalSpacing = screenWidth * 0.03; // ~12 on 400 width
-    final verticalSpacingSmall = screenHeight * 0.005; // ~4 on 800 height
-    final verticalSpacingMedium = screenHeight * 0.01; // ~8 on 800 height
+    // Reduced vertical spacing slightly to help prevent overflow issues
+    final verticalSpacingSmall = screenHeight * 0.004; // Slightly smaller
+    final verticalSpacingMedium = screenHeight * 0.009; // Slightly smaller
     final titleFontSize = screenWidth * 0.04; // ~16 on 400 width
     final bodyFontSize = screenWidth * 0.03; // ~12 on 400 width
     final buttonWidth = screenWidth * 0.22; // ~90 on 400 width
     final buttonHeight = screenHeight * 0.035; // ~30 on 800 height
     final buttonFontSize = screenWidth * 0.03; // ~12 on 400 width
-    final dividerWidth = cardWidth * 0.9; // Relative to card width
+    final dividerWidth = cardWidth * 0.9; // Relative to the card width
 
     return Center(
       child: Container(
-        width: cardWidth,
-        // Consider using IntrinsicHeight or calculating height more dynamically
-        // if content varies significantly. Fixed relative height might still overflow/underflow.
-        height: cardHeight,
+        width: cardWidth, // Use the calculated width
+        // REMOVED fixed height: height: cardHeight,
         padding: EdgeInsets.all(generalPadding),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -44,19 +45,17 @@ class BomRfqCard extends StatelessWidget {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          // Use screen width for consistent corner rounding
           borderRadius: BorderRadius.circular(screenWidth * 0.025), // ~10 on 400 width
         ),
         child: Column(
-          // Use MainAxisAlignment.spaceBetween if you want to push top/bottom sections apart
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // Let the Column determine its height
+          mainAxisSize: MainAxisSize.min, // Important: Make column take minimum vertical space needed
           children: [
             // Smart BOM Section
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  // Responsive padding
                   padding: EdgeInsets.only(
                       left: screenWidth * 0.025, top: screenHeight * 0.02),
                   child: Image.asset(
@@ -116,7 +115,7 @@ class BomRfqCard extends StatelessWidget {
             Center(
               child: Container(
                 width: dividerWidth,
-                height: 2, // Keep divider height minimal
+                height: 2,
                 color: Colors.white,
               ),
             ),
@@ -127,7 +126,6 @@ class BomRfqCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  // Responsive padding
                   padding: EdgeInsets.only(
                       left: screenWidth * 0.025, top: screenHeight * 0.01),
                   child: Image.asset(
@@ -165,10 +163,7 @@ class BomRfqCard extends StatelessWidget {
                 ),
               ],
             ),
-            // Use Spacer if you want the button pushed to the very bottom,
-            // but this might conflict with a fixed container height.
-            // const Spacer(),
-            SizedBox(height: verticalSpacingMedium), // Keep SizedBox if Spacer is not used
+            SizedBox(height: verticalSpacingMedium),
             Align(
               alignment: Alignment.centerRight,
               child: RedButton(
