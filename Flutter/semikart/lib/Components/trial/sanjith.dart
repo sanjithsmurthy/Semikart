@@ -21,14 +21,6 @@ class TestLayoutSanjith extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Set the status bar and navigation bar styles for this screen
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.white, // White background for the status bar
-        statusBarIconBrightness: Brightness.dark, // Dark icons for visibility
-        systemNavigationBarColor: Colors.white, // White background for the bottom navigation bar
-        systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for visibility
-      ),
-    );
 
     return SafeArea( // Wrap the entire Scaffold in SafeArea
       child: Scaffold(
