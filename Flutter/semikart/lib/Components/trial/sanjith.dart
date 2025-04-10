@@ -5,15 +5,6 @@ import '../common/header_withback.dart'; // Import the Header and CombinedAppBar
 import '../cart/cart_page.dart'; // Import the CartPage component
 
 void main() {
-  // Set global status bar style
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // White background for the status bar
-      statusBarIconBrightness: Brightness.dark, // Dark icons for visibility
-      statusBarBrightness: Brightness.light, // For iOS compatibility
-    ),
-  );
-
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: TestLayoutSanjith(), // Set TestLayoutSanjith as the home page
@@ -29,6 +20,16 @@ class TestLayoutSanjith extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Set the status bar and navigation bar styles for this screen
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white, // White background for the status bar
+        statusBarIconBrightness: Brightness.dark, // Dark icons for visibility
+        systemNavigationBarColor: Colors.white, // White background for the bottom navigation bar
+        systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for visibility
+      ),
+    );
+
     return SafeArea( // Wrap the entire Scaffold in SafeArea
       child: Scaffold(
         extendBodyBehindAppBar: false, // Ensure the body does not extend behind the AppBar
