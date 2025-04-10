@@ -10,8 +10,8 @@ class BomRfqCard extends StatelessWidget {
     return Center(
       child: Container(
         width: 380,
-        // Increased height to accommodate content and prevent overflow
-        height: 350, // Increased from 330
+        // Increased height slightly more to accommodate content and prevent overflow
+        height: 360, // Increased from 350
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -100,7 +100,6 @@ class BomRfqCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  // Reduced top padding slightly if needed, but height increase should be enough
                   padding: const EdgeInsets.only(left: 10, top: 5),
                   child: Image.asset(
                     'public/assets/images/RFQ.png',
