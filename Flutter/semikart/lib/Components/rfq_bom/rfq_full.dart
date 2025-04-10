@@ -15,7 +15,8 @@ class RFQFullPage extends StatelessWidget {
       // Main body content
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0), // Add padding inside the component
+          padding:
+              const EdgeInsets.all(16.0), // Add padding inside the component
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
