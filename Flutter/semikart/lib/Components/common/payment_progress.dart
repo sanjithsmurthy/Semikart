@@ -37,10 +37,10 @@ class PaymentProgress {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 24),
-                RedButton(
-                  label: 'OK',
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+                // RedButton(
+                //   label: 'OK',
+                //   onPressed: () => Navigator.of(context).pop(),
+                // ),
               ],
             ),
           ),

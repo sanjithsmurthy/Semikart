@@ -128,6 +128,11 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                   onPressed: () => PaymentProgress.show(context: context),
                   child: const Text('Progress'),
                 ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () {}, // Will implement payment failed functionality
+                  child: const Text('Failed'),
+                ),
               ],
             ),
           ],
