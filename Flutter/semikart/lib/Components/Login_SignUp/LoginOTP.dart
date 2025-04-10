@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import this package
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import 'vertical_radios.dart'; // Import the VerticalRadios widget
 import 'custom_text_field.dart'; // Import the CustomTextField widget
@@ -73,12 +72,6 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Set the status bar style
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // Set the status bar background color to white
-      statusBarIconBrightness: Brightness.dark, // Set the status bar icons to dark
-    ));
-
     // Get screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -148,7 +141,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             Positioned(
               left: screenWidth * 0.05,
               right: screenWidth * 0.05, // 5% padding on both sides
-              top: screenHeight * 0.45, // 40% of screen height
+              top: screenHeight * 0.45, // 45% of screen height
               child: CustomTextField(
                 controller: _emailController,
                 label: "Email",
@@ -173,29 +166,33 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                     controller: _otpController, // Controller for OTP input
                     label: "OTP", // Set the label to "OTP"
                   ),
-
-                  // Resend OTP Timer
-                  if (!canSendOTP) // Show only when the timer is running
-                    Padding(
-                      padding: EdgeInsets.only(top: screenHeight * 0.01),
-                      child: Text(
-                        "Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035, // Scaled font size
-                          fontFamily: 'Product Sans',
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
                 ],
               ),
+            ),
+
+            // Resend OTP Timer Positioned at top: screenHeight * 0.65
+            Positioned(
+               // Align with other components
+              right: screenWidth * 0.05, // Align with other components
+              top: screenHeight * 0.65, // Position at 65% of screen height
+              child: canSendOTP
+                  ? SizedBox.shrink() // Hide the timer if OTP can be sent
+                  : Text(
+                      "Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}",
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.035, // Scaled font size
+                        fontFamily: 'Product Sans',
+                        color: Colors.red,
+                      ),
+                      textAlign: TextAlign.center, // Center the text
+                    ),
             ),
 
             // Positioned Generate OTP Button
             Positioned(
               left: screenWidth * 0.05, // Align with other components
               right: screenWidth * 0.05, // Align with other components
-              top: screenHeight * 0.70, // Position just above the Login button
+              top: screenHeight * 0.78, // Position just above the Login button
               child: canSendOTP
                   ? RedButton(
                       label: "Generate OTP", // Button label
@@ -216,7 +213,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             // Positioned "Don't have an account?" Button
             Positioned(
               right: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.80, // Push upwards
+              top: screenHeight * 0.70, // Push upwards
               child: ForgotPasswordButton(
                 label: "Don't have an account?", // Set the label
                 onPressed: () {
@@ -231,7 +228,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             // Positioned RedButton for Login
             Positioned(
               left: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.85, // 85% of screen height
+              top: screenHeight * 0.884, // 88.2% of screen height
               child: RedButton(
                 label: "Login", // Set the label to "Login"
                 width: screenWidth * 0.85, // 85% of screen width

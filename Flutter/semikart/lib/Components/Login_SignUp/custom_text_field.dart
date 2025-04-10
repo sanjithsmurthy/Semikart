@@ -37,12 +37,14 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           obscureText: isPassword, // Toggle password visibility if it's a password field
           onChanged: onChanged, // Call the onChanged callback if provided
+          cursorHeight: (height ?? 72) * 0.5, // Adjust cursor height to 50% of the text field height
+          cursorWidth: 1.5, // Make the cursor slightly thinner
           decoration: InputDecoration(
             labelText: label,
             labelStyle: const TextStyle(
               color: Color(0xFF757575), // Grey color for placeholder
               fontSize: 16,
-              height: 19 / 16, // To achieve height of 19
+              height: 1.2, // Adjust height for better vertical alignment
             ),
             floatingLabelStyle: const TextStyle(
               color: Color(0xFFA51414), // Red color when focused
@@ -50,7 +52,7 @@ class CustomTextField extends StatelessWidget {
               fontWeight: FontWeight.bold, // Make the label bold to match the border weight
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
-            contentPadding: const EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 29.0), // Center text vertically
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
@@ -73,6 +75,10 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
             suffixIcon: suffixIcon, // Add the optional suffix icon
+          ),
+          style: const TextStyle(
+            fontSize: 16, // Adjust font size for input text
+            height: 1.2, // Adjust height for better vertical alignment
           ),
         ),
       ),

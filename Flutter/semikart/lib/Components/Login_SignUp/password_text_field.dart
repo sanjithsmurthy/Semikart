@@ -41,12 +41,14 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           obscureText: !_isPasswordVisible, // Toggle password visibility
           obscuringCharacter: '•', // Use a medium-sized dot character
           onChanged: widget.onChanged, // Call the onChanged callback if provided
+          cursorHeight: (widget.height ?? 72) * 0.5, // Adjust cursor height to 50% of the text field height
+          cursorWidth: 1.5, // Make the cursor slightly thinner
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle: const TextStyle(
               color: Color(0xFF757575), // Grey color for placeholder
               fontSize: 16,
-              height: 19 / 16, // To achieve height of 19
+              height: 1.2, // Adjust height for better vertical alignment
             ),
             floatingLabelStyle: const TextStyle(
               color: Color(0xFFA51414), // Red color when focused
@@ -54,7 +56,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               fontWeight: FontWeight.bold, // Make the floating label bold
             ),
             floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
-            contentPadding: const EdgeInsets.only(left: 29.0, top: 20, bottom: 20),
+            contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 29.0), // Center text vertically
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(
@@ -87,6 +89,10 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                 });
               },
             ),
+          ),
+          style: const TextStyle(
+            fontSize: 16, // Adjust font size for input text
+            height: 1.2, // Adjust height for better vertical alignment
           ),
         ),
       ),
