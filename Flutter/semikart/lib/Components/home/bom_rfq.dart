@@ -32,7 +32,7 @@ class BomRfqCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 10, top: 15),
                   child: Image.asset(
-                    'public/assets/images/RFQ.png',
+                    'public/assets/images/bom_home.png',
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
@@ -142,7 +142,8 @@ class BomRfqCard extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const RFQFullPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const RFQFullPage()),
                   );
                 },
                 width: 90,

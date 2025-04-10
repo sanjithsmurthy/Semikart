@@ -17,7 +17,7 @@ class SuccessScreen extends StatelessWidget {
 
             // Success Image
             Image.asset(
-              'public/assets/images/checksuccess.png', // Path to the image
+              'public/assets/images/checksucccess.png', // Path to the image
               width: 164, // Width of the image
               height: 164,
               fit: BoxFit.contain, // Height of the image
