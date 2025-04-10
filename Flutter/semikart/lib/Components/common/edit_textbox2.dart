@@ -2,21 +2,133 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'ship_bill.dart';
 
-class EditTextBox2 extends StatelessWidget {
+class EditTextBox2 extends StatefulWidget {
+  // New parameters for multiple addresses
+  final String? title;
+  final List<Map<String, String>>? initialAddresses;
+  final int? initialSelectedIndex;
+  final ValueChanged<List<Map<String, String>>>? onAddressesChanged;
+  final ValueChanged<int>? onAddressSelected;
+
+  // Backward compatible parameters
   final String? address1;
   final String? address2;
-  final String? title;
-  final VoidCallback? onSave;
   final VoidCallback? onEdit;
 
   const EditTextBox2({
     super.key,
+    this.title,
+    this.initialAddresses,
+    this.initialSelectedIndex,
+    this.onAddressesChanged,
+    this.onAddressSelected,
+    // Backward compatible parameters
     this.address1,
     this.address2,
-    this.title,
-    this.onSave,
     this.onEdit,
   });
+
+  @override
+  State<EditTextBox2> createState() => _EditTextBox2State();
+}
+
+class _EditTextBox2State extends State<EditTextBox2> {
+  late List<Map<String, String>> _addresses;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with backward compatible parameters if provided
+    _addresses = widget.initialAddresses ?? [];
+    if (widget.address1 != null || widget.address2 != null) {
+      _addresses.add({
+        'address1': widget.address1 ?? '',
+        'address2': widget.address2 ?? '',
+      });
+    }
+    _selectedIndex = widget.initialSelectedIndex ?? -1;
+  }
+
+  void _addNewAddress() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ShipBillForm()),
+    );
+
+    if (result != null && result is Map<String, String>) {
+      setState(() {
+        _addresses.add(result);
+        _selectedIndex = _addresses.length - 1;
+      });
+      _notifyChanges();
+    }
+  }
+
+  void _editAddress(int index) async {
+    // For backward compatibility with onEdit
+    if (widget.onEdit != null && _addresses.length == 1) {
+      widget.onEdit!();
+      return;
+    }
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ShipBillForm()),
+    );
+
+    if (result != null && result is Map<String, String>) {
+      setState(() {
+        _addresses[index] = result;
+      });
+      _notifyChanges();
+    }
+  }
+
+  void _selectAddress(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    widget.onAddressSelected?.call(index);
+  }
+
+  void _notifyChanges() {
+    widget.onAddressesChanged?.call(_addresses);
+  }
+
+  Widget _buildAddressItem(Map<String, String> address, int index) {
+    final addressText = '${address['address1'] ?? ''}${address['address1']?.isNotEmpty == true && address['address2']?.isNotEmpty == true ? ', ' : ''}${address['address2'] ?? ''}';
+    
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Radio<int>(
+            value: index,
+            groupValue: _selectedIndex,
+            onChanged: (value) => _selectAddress(value!),
+            activeColor: const Color(0xFFA51414),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              addressText,
+              style: const TextStyle(fontSize: 14),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit, color: Color(0xFFA51414)),
+            onPressed: () => _editAddress(index),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,37 +145,20 @@ class EditTextBox2 extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title ?? 'Billing Address',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  (address1?.isNotEmpty == true || address2?.isNotEmpty == true)
-                      ? '${address1 ?? ''}${address1?.isNotEmpty == true && address2?.isNotEmpty == true ? ', ' : ''}${address2 ?? ''}'
-                      : 'Your ${title?.toLowerCase()?.replaceAll(' address', '') ?? 'billing'} address',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                widget.title ?? 'Shipping Address',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
@@ -71,12 +166,7 @@ class EditTextBox2 extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ShipBillForm()),
-                    );
-                  },
+                  onTap: _addNewAddress,
                   child: const Text(
                     'Add new',
                     style: TextStyle(
@@ -86,25 +176,25 @@ class EditTextBox2 extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: () {
-                  if (onEdit != null) {
-                    onEdit!();
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const EditPage()),
-                    );
-                  }
-                },
-                child: const Icon(
-                  Icons.edit,
-                  color: Color(0xFFA51414),
-                ),
-              ),
             ],
           ),
+          const SizedBox(height: 12),
+          if (_addresses.isEmpty)
+            Text(
+              'No ${widget.title?.toLowerCase()?.replaceAll(' address', '') ?? 'shipping'} addresses added',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
+            )
+          else
+            Column(
+              children: [
+                ..._addresses.asMap().entries.map(
+                      (entry) => _buildAddressItem(entry.value, entry.key),
+                    ),
+              ],
+            ),
         ],
       ),
     );
