@@ -5,51 +5,65 @@ import '../rfq_bom/rfq_full.dart'; // Import the RFQFullPage
 class BomRfqCard extends StatelessWidget {
   const BomRfqCard({super.key});
 
+  // Adjust the target aspect ratio (height / width).
+  // Increase the height relative to the width slightly compared to the previous version
+  // to provide more vertical space for the content.
+  // Example: Use a ratio closer to 0.9 (height) / 0.95 (width)
+  static const double targetAspectRatio = 0.90 / 0.95; // Approx 0.947...
+
   @override
   Widget build(BuildContext context) {
     // Get screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // --- Width Multiplier ---
-    // Keep the width calculation as before
-    const double cardWidthMultiplier = 0.8; // Example: 80% of screen width
+    // --- Define Base Multiplier ---
+    // Keep the width multiplier as desired
+    const double cardWidthMultiplier = 0.95;
+
+    // --- Calculate Final Dimensions ---
+    // Calculate the final width based on the multiplier
     final cardWidth = screenWidth * cardWidthMultiplier;
+    // Calculate the final height using the width and the adjusted target aspect ratio
+    final cardHeight = cardWidth * targetAspectRatio;
 
     // --- Other dimensions remain based on screen size ---
-    // (Adjust these multipliers if needed for visual balance)
-    final generalPadding = screenWidth * 0.04; // ~16 on 400 width
-    final imageSize = screenWidth * 0.2; // ~80 on 400 width
-    final horizontalSpacing = screenWidth * 0.03; // ~12 on 400 width
-    // Reduced vertical spacing slightly to help prevent overflow issues
-    final verticalSpacingSmall = screenHeight * 0.004; // Slightly smaller
-    final verticalSpacingMedium = screenHeight * 0.009; // Slightly smaller
-    final titleFontSize = screenWidth * 0.04; // ~16 on 400 width
-    final bodyFontSize = screenWidth * 0.03; // ~12 on 400 width
-    final buttonWidth = screenWidth * 0.22; // ~90 on 400 width
-    final buttonHeight = screenHeight * 0.035; // ~30 on 800 height
-    final buttonFontSize = screenWidth * 0.03; // ~12 on 400 width
-    final dividerWidth = cardWidth * 0.9; // Relative to the card width
+    // These define the size of elements *inside* the card.
+    // Minor adjustments might be needed based on testing.
+    final generalPadding = screenWidth * 0.04;
+    final imageSize = screenWidth * 0.18;
+    final horizontalSpacing = screenWidth * 0.03;
+    final verticalSpacingSmall = screenHeight * 0.004;
+    final verticalSpacingMedium = screenHeight * 0.009; // Slightly increased medium spacing
+    final titleFontSize = screenWidth * 0.04;
+    final bodyFontSize = screenWidth * 0.03;
+    final buttonWidth = screenWidth * 0.22;
+    final buttonHeight = screenHeight * 0.035;
+    final buttonFontSize = screenWidth * 0.03;
+    // Adjust divider width based on the new cardWidth
+    final dividerWidth = cardWidth * 0.9;
 
-    return Center( 
+    return Center(
       child: Container(
         width: cardWidth, // Use the calculated width
-        // REMOVED fixed height: height: cardHeight,
+        height: cardHeight, // Use the calculated height
         padding: EdgeInsets.all(generalPadding),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [
-              Color(0xFFF46D6D), // 19%
-              Color(0xFFA51414), // 100%
+              Color(0xFFF46D6D),
+              Color(0xFFA51414),
             ],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          borderRadius: BorderRadius.circular(screenWidth * 0.025), // ~10 on 400 width
+          borderRadius: BorderRadius.circular(screenWidth * 0.025),
         ),
+        // Removed Clip.antiAlias as scrolling is removed
+        // Removed SingleChildScrollView wrapper
         child: Column(
-          // Let the Column determine its height
-          mainAxisSize: MainAxisSize.min, // Important: Make column take minimum vertical space needed
+          // Use MainAxisAlignment to distribute space if needed, e.g., spaceEvenly
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Example
           children: [
             // Smart BOM Section
             Row(
@@ -96,14 +110,15 @@ class BomRfqCard extends StatelessWidget {
                 ),
               ],
             ),
+            // Use Spacer() instead of SizedBox if you want flexible spacing
+            // const Spacer(), // Example: Pushes elements apart
             SizedBox(height: verticalSpacingMedium),
             Align(
               alignment: Alignment.centerRight,
               child: RedButton(
                 label: "Go to BOM",
                 onPressed: () {
-                  // Handle BOM button tap
-                  print("Go to BOM tapped"); // Added for testing
+                  print("Go to BOM tapped");
                 },
                 width: buttonWidth,
                 height: buttonHeight,
@@ -163,6 +178,8 @@ class BomRfqCard extends StatelessWidget {
                 ),
               ],
             ),
+            // Use Spacer() instead of SizedBox if you want flexible spacing
+            // const Spacer(), // Example: Pushes elements apart
             SizedBox(height: verticalSpacingMedium),
             Align(
               alignment: Alignment.centerRight,
@@ -181,6 +198,7 @@ class BomRfqCard extends StatelessWidget {
                 fontSize: buttonFontSize,
               ),
             ),
+            // Removed extra SizedBox at the bottom
           ],
         ),
       ),
