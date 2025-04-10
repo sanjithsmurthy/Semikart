@@ -173,7 +173,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             // Resend OTP Timer Positioned at top: screenHeight * 0.65
             Positioned(
                // Align with other components
-              right: screenWidth * 0.05, // Align with other components
+              right: screenWidth * 0.09, // Align with other components
               top: screenHeight * 0.65, // Position at 65% of screen height
               child: canSendOTP
                   ? SizedBox.shrink() // Hide the timer if OTP can be sent
@@ -190,24 +190,26 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
             // Positioned Generate OTP Button
             Positioned(
-              left: screenWidth * 0.05, // Align with other components
-              right: screenWidth * 0.05, // Align with other components
               top: screenHeight * 0.78, // Position just above the Login button
-              child: canSendOTP
-                  ? RedButton(
-                      label: "Generate OTP", // Button label
-                      width: screenWidth * 0.85, // 85% of screen width
-                      height: screenHeight * 0.06, // Match the height of the Login button
-                      onPressed: () {
-                        _startTimer(); // Start the timer when OTP is generated
-                        print("OTP Generated for ${_emailController.text}");
-                      },
-                    )
-                  : InactiveButton(
-                      label: "Generate OTP", // Button label
-                      width: screenWidth * 0.85, // 85% of screen width
-                      height: screenHeight * 0.06, // Match the height of the Login button
-                    ),
+              left: 0, // Ensure the button spans the full width
+              right: 0, // Ensure the button spans the full width
+              child: Center(
+                child: canSendOTP
+                    ? RedButton(
+                        label: "Generate OTP", // Button label
+                        width: screenWidth * 0.85, // 85% of screen width
+                        height: screenHeight * 0.06, // Match the height of the Login button
+                        onPressed: () {
+                          _startTimer(); // Start the timer when OTP is generated
+                          print("OTP Generated for ${_emailController.text}");
+                        },
+                      )
+                    : InactiveButton(
+                        label: "Generate OTP", // Button label
+                        width: screenWidth * 0.85, // 85% of screen width
+                        height: screenHeight * 0.06, // Match the height of the Login button
+                      ),
+              ),
             ),
 
             // Positioned "Don't have an account?" Button
@@ -227,27 +229,30 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
             // Positioned RedButton for Login
             Positioned(
-              left: screenWidth * 0.05, // 5% of screen width
               top: screenHeight * 0.884, // 88.2% of screen height
-              child: RedButton(
-                label: "Login", // Set the label to "Login"
-                width: screenWidth * 0.85, // 85% of screen width
-                height: screenHeight * 0.06, // 6% of screen height
-                onPressed: () async {
-                  // Check if the entered OTP matches the correct OTP
-                  if (_otpController.text == correctOTP) {
-                    print("Login successful");
-                  } else {
-                    // Show popup using CustomPopup
-                    await CustomPopup.show(
-                      context: context,
-                      title: 'Invalid OTP',
-                      message: "The OTP you entered is incorrect. Please try again.",
-                      buttonText: 'OK',
-                      imagePath: 'public/assets/images/Alert.png', // Optional image path
-                    );
-                  }
-                },
+              left: 0, // Ensure the button spans the full width
+              right: 0, // Ensure the button spans the full width
+              child: Center(
+                child: RedButton(
+                  label: "Login", // Set the label to "Login"
+                  width: screenWidth * 0.85, // 85% of screen width
+                  height: screenHeight * 0.06, // 6% of screen height
+                  onPressed: () async {
+                    // Check if the entered OTP matches the correct OTP
+                    if (_otpController.text == correctOTP) {
+                      print("Login successful");
+                    } else {
+                      // Show popup using CustomPopup
+                      await CustomPopup.show(
+                        context: context,
+                        title: 'Invalid OTP',
+                        message: "The OTP you entered is incorrect. Please try again.",
+                        buttonText: 'OK',
+                        imagePath: 'public/assets/images/Alert.png', // Optional image path
+                      );
+                    }
+                  },
+                ),
               ),
             ),
           ],
