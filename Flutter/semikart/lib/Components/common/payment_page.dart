@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'edit_textbox.dart';
+import 'edit_textbox2.dart';
 import 'items_dropdown.dart';
 import 'red_button.dart';
 import 'ship_bill.dart';
@@ -174,7 +175,7 @@ class _EditPageState extends State<EditPage> {
                 contentPadding: EdgeInsets.zero,
               ),
               const SizedBox(height: 16),
-              EditTextBox(
+              EditTextBox2(
                 title: 'Shipping Address',
                 address1: shippingAddress1,
                 address2: shippingAddress2,

@@ -52,7 +52,7 @@ class EditTextBox2 extends StatelessWidget {
                 Text(
                   (address1?.isNotEmpty == true || address2?.isNotEmpty == true)
                       ? '${address1 ?? ''}${address1?.isNotEmpty == true && address2?.isNotEmpty == true ? ', ' : ''}${address2 ?? ''}'
-                      : 'Your ${title?.toLowerCase() ?? 'billing'} address',
+                      : 'Your ${title?.toLowerCase()?.replaceAll(' address', '') ?? 'billing'} address',
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,
@@ -72,14 +72,10 @@ class EditTextBox2 extends StatelessWidget {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    if (onEdit != null) {
-                      onEdit!();
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const EditPage()),
-                      );
-                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ShipBillForm()),
+                    );
                   },
                   child: const Text(
                     'Add new',
