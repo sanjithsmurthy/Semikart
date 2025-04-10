@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:semikart/Components/home/home_page.dart';
-import 'package:flutter/services.dart'; // Import for SystemUiOverlayStyle
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
@@ -24,12 +23,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Set the status bar style
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // Set the status bar background color to white
-      statusBarIconBrightness: Brightness.dark, // Set the status bar icons to dark
-    ));
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -45,25 +38,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Center(
                   child: Image.asset(
                     'public/assets/images/semikart_logo_medium.png',
-                    width: screenWidth * 0.4, // 40% of screen width
+                    width: screenWidth * 0.4, // Specify width
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // "Create Your Account" Text
                 Center(
                   child: Text(
                     'Create your account',
                     style: TextStyle(
-                      fontSize: screenWidth * 0.06, // 6% of screen width
+                      fontSize: screenWidth * 0.06, // Specify font size
                       fontFamily: 'Product Sans',
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // SignInWithGoogleButton
                 Center(
@@ -74,22 +67,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     isLoading: false,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                SizedBox(height: screenHeight * 0.03), // Add spacing
 
-                // First horizontal black line
+                // Divider with "OR"
                 Row(
                   children: [
                     Expanded(
                       child: Divider(
                         color: Colors.black,
                         thickness: 1,
-                        endIndent: screenWidth * 0.02, // 2% of screen width
+                        endIndent: screenWidth * 0.02, // Specify spacing
                       ),
                     ),
                     Text(
                       'OR',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.04, // 4% of screen width
+                        fontSize: screenWidth * 0.04, // Specify font size
                         fontFamily: 'Product Sans',
                         color: Colors.black,
                       ),
@@ -98,33 +91,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Divider(
                         color: Colors.black,
                         thickness: 1,
-                        indent: screenWidth * 0.02, // 2% of screen width
+                        indent: screenWidth * 0.02, // Specify spacing
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // CustomTextField for First Name
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "First Name",
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // CustomTextField for Last Name
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "Last Name",
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // CustomTextField for Email
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "Email",
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // MobileNumberField
                 MobileNumberField(
@@ -139,14 +132,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     print('Invalid mobile number: $number');
                   },
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // CustomTextField for Company Name
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "Company Name",
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
@@ -156,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                   },
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // Checkbox for Terms and Conditions
                 Row(
@@ -173,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Text(
                         "I agree to the terms and conditions",
                         style: TextStyle(
-                          fontSize: screenWidth * 0.035, // 3.5% of screen width
+                          fontSize: screenWidth * 0.035, // Specify font size
                           fontFamily: 'Product Sans',
                           color: Colors.black,
                         ),
@@ -181,12 +174,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // ForgotPasswordButton
                 Center(
                   child: ForgotPasswordButton(
-                    label: "Already have an account?", // Set the label
+                    label: "Already have an account?", // Specify label
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -195,30 +188,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // Sign Up Button
                 Center(
                   child: passwordsMatch && isTermsAccepted
                       ? RedButton(
-                          label: "Sign Up", // Button label
-                          width: screenWidth * 0.9, // 90% of screen width
-                          height: screenHeight * 0.06, // 6% of screen height
+                          label: "Sign Up", // Specify label
+                          width: screenWidth * 0.9, // Specify width
+                          height: screenHeight * 0.06, // Specify height
                           onPressed: () {
-                            // Handle sign-up action
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => HomePage()), // Replace with your HomePage widget
+                              MaterialPageRoute(builder: (context) => HomePage()), // Navigate to HomePage
                             );
                           },
                         )
                       : InactiveButton(
-                          label: "Sign Up", // Button label
-                          width: screenWidth * 0.9, // 90% of screen width
-                          height: screenHeight * 0.06, // 6% of screen height
+                          label: "Sign Up", // Specify label
+                          width: screenWidth * 0.9, // Specify width
+                          height: screenHeight * 0.06, // Specify height
                         ),
                 ),
-                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+                SizedBox(height: screenHeight * 0.03), // Add spacing
               ],
             ),
           ),
