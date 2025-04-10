@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import this package
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
 import 'vertical_radios.dart'; // Import the VerticalRadios widget
 import 'custom_text_field.dart'; // Import the CustomTextField widget
@@ -73,175 +74,182 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
 class LoginPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Set the status bar style
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // Set the status bar background color to white
+      statusBarIconBrightness: Brightness.dark, // Set the status bar icons to dark
+    ));
+
     return Scaffold(
-      body: Stack(
-        children: [
-          // White background
-          Container(
-            width: screenWidth,
-            height: screenHeight,
-            color: Colors.white, // Set the background color to white
-          ),
-
-          // Positioned Semikart logo
-          Positioned(
-            left: screenWidth * 0.05, // Adjusted to 5% of screen width
-            top: screenHeight * 0.10, // 10% of screen height
-            child: Image.asset(
-              'public/assets/images/Semikart_Logo_Medium.png', // Path to the logo
-              width: screenWidth * 0.5, // 50% of screen width
-              height: screenHeight * 0.04, // 4% of screen height
-              fit: BoxFit.contain, // Ensure the image fits within the dimensions
+      body: SafeArea( // Wrap the Stack in SafeArea
+        child: Stack(
+          children: [
+            // White background
+            Container(
+              width: screenWidth,
+              height: screenHeight,
+              color: Colors.white, // Set the background color to white
             ),
-          ),
 
-          // Positioned Login text
-          Positioned(
-            left: screenWidth * 0.05, // Adjusted to 7% of screen width
-            top: screenHeight * 0.24, // 24% of screen height
-            child: Text(
-              'Login',
-              style: TextStyle(
-                fontSize: screenWidth * 0.06, // 6% of screen width
-                fontFamily: 'Product Sans', // Product Sans font
-                color: Colors.black, // Black color
-                fontWeight: FontWeight.normal, // Regular weight
+            // Positioned Semikart logo
+            Positioned(
+              left: screenWidth * 0.05, // Adjusted to 5% of screen width
+              top: screenHeight * 0.10, // 10% of screen height
+              child: Image.asset(
+                'public/assets/images/semikart_logo_medium.png', // Path to the logo
+                width: screenWidth * 0.5, // 50% of screen width
+                height: screenHeight * 0.04, // 4% of screen height
+                fit: BoxFit.contain, // Ensure the image fits within the dimensions
               ),
             ),
-          ),
 
-          // Positioned SignInWithGoogleButton
-          Positioned(
-            left: screenWidth * 0.05, // Adjusted to 5% of screen width
-            top: screenHeight * 0.32, // 32% of screen height
-            child: SignInWithGoogleButton(
-              onPressed: () {
-                // Handle the Google sign-in logic here
-                print('Google Sign-In button pressed');
-              },
-              isLoading: false, // Set to true if loading state is required
-              isTwoLine: true, // Display the text in two lines
-            ),
-          ),
-
-          // Positioned VerticalRadios
-          Positioned(
-            left: screenWidth * 0.48, // Adjusted to 53% of screen width
-            top: screenHeight * 0.25, // 25% of screen height
-            child: VerticalRadios(
-              initialOption: "password",
-            ),
-          ),
-
-          // First horizontal black line
-          Positioned(
-            left: screenWidth * 0.05, // Adjusted to 7% of screen width
-            top: screenHeight * 0.46, // 46% of screen height
-            child: Container(
-              width: screenWidth * 0.4, // 40% of screen width
-              height: 1, // Fixed height
-              color: Colors.black, // Line color
-            ),
-          ),
-
-          // Positioned "OR" text exactly in the middle
-          Positioned(
-            left: screenWidth * 0.48, // Adjusted to 48% of screen width
-            top: screenHeight * 0.445, // Slightly above the lines
-            child: Text(
-              'OR',
-              style: TextStyle(
-                fontSize: screenWidth * 0.04, // 4% of screen width
-                fontFamily: 'Product Sans', // Product Sans font
-                color: Colors.black, // Black color
-                fontWeight: FontWeight.normal, // Regular weight
+            // Positioned Login text
+            Positioned(
+              left: screenWidth * 0.05, // Adjusted to 7% of screen width
+              top: screenHeight * 0.24, // 24% of screen height
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.06, // 6% of screen width
+                  fontFamily: 'Product Sans', // Product Sans font
+                  color: Colors.black, // Black color
+                  fontWeight: FontWeight.normal, // Regular weight
+                ),
               ),
             ),
-          ),
 
-          // Second horizontal black line
-          Positioned(
-            right: screenWidth * 0.05, // Adjusted to 55% of screen width
-            top: screenHeight * 0.46, // 46% of screen height
-            child: Container(
-              width: screenWidth * 0.4, // 40% of screen width
-              height: 1, // Fixed height
-              color: Colors.black, // Line color
+            // Positioned SignInWithGoogleButton
+            Positioned(
+              left: screenWidth * 0.05, // Adjusted to 5% of screen width
+              top: screenHeight * 0.32, // 32% of screen height
+              child: SignInWithGoogleButton(
+                onPressed: () {
+                  // Handle the Google sign-in logic here
+                  print('Google Sign-In button pressed');
+                },
+                isLoading: false, // Set to true if loading state is required
+                isTwoLine: true, // Display the text in two lines
+              ),
             ),
-          ),
 
-          // Positioned CustomTextField for Email
-          Positioned(
-            left: screenWidth * 0.05,
-            right: screenWidth*0.05, // Adjusted to 5% of screen width
-            top: screenHeight * 0.52, // 52% of screen height
-            child: CustomTextField(
-              controller: TextEditingController(), // Provide a controller
-              label: "Email", // Set the label to "Email"
+            // Positioned VerticalRadios
+            Positioned(
+              left: screenWidth * 0.48, // Adjusted to 53% of screen width
+              top: screenHeight * 0.25, // 25% of screen height
+              child: VerticalRadios(
+                initialOption: "password",
+              ),
             ),
-          ),
 
-          // Positioned PasswordTextField for Password
-          Positioned(
-            left: screenWidth * 0.05,
-            right: screenWidth*0.05, // Adjusted to 5% of screen width
-            top: screenHeight * 0.65, // 65% of screen height
-            child: PasswordTextField(
-              controller: TextEditingController(), // Provide a controller
-              label: "Password", // Set the label to "Password"
+            // First horizontal black line
+            Positioned(
+              left: screenWidth * 0.05, // Adjusted to 7% of screen width
+              top: screenHeight * 0.46, // 46% of screen height
+              child: Container(
+                width: screenWidth * 0.4, // 40% of screen width
+                height: 1, // Fixed height
+                color: Colors.black, // Line color
+              ),
             ),
-          ),
 
-          // Positioned ForgotPasswordButton
-          Positioned(
-            right: screenWidth * 0.05, // Adjusted to 58% of screen width
-            top: screenHeight * 0.78, // 78% of screen height
-            child: ForgotPasswordButton(
-              label: "Forgot Password", // Set the label
-              onPressed: () {
-                // Navigate to ForgotPassword screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
-                );
-              },
+            // Positioned "OR" text exactly in the middle
+            Positioned(
+              left: screenWidth * 0.48, // Adjusted to 48% of screen width
+              top: screenHeight * 0.445, // Slightly above the lines
+              child: Text(
+                'OR',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04, // 4% of screen width
+                  fontFamily: 'Product Sans', // Product Sans font
+                  color: Colors.black, // Black color
+                  fontWeight: FontWeight.normal, // Regular weight
+                ),
+              ),
             ),
-          ),
 
-          // Positioned "Don't have an account?" Button
-          Positioned(
-            right: screenWidth * 0.05, // Adjusted to 46% of screen width
-            top: screenHeight * 0.82, // 82% of screen height
-            child: ForgotPasswordButton(
-              label: "Don't have an account?", // Set the label
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignUpScreen()),
-                );
-              },
+            // Second horizontal black line
+            Positioned(
+              right: screenWidth * 0.05, // Adjusted to 55% of screen width
+              top: screenHeight * 0.46, // 46% of screen height
+              child: Container(
+                width: screenWidth * 0.4, // 40% of screen width
+                height: 1, // Fixed height
+                color: Colors.black, // Line color
+              ),
             ),
-          ),
 
-          // Positioned RedButton for Login
-          Positioned(
-            left: screenWidth * 0.05, // Adjusted to 7% of screen width
-            top: screenHeight * 0.9, // 90% of screen height
-            child: RedButton(
-              label: "Login", // Set the label to "Login"
-              width: screenWidth * 0.85, // 85% of screen width
-              height: screenHeight * 0.06, // 6% of screen height
-              onPressed: () {
-                // Handle the Login button click
-                print('Login button clicked');
-              },
+            // Positioned CustomTextField for Email
+            Positioned(
+              left: screenWidth * 0.05,
+              right: screenWidth*0.05, // Adjusted to 5% of screen width
+              top: screenHeight * 0.52, // 52% of screen height
+              child: CustomTextField(
+                controller: TextEditingController(), // Provide a controller
+                label: "Email", // Set the label to "Email"
+              ),
             ),
-          ),
-        ],
+
+            // Positioned PasswordTextField for Password
+            Positioned(
+              left: screenWidth * 0.05,
+              right: screenWidth*0.05, // Adjusted to 5% of screen width
+              top: screenHeight * 0.65, // 65% of screen height
+              child: PasswordTextField(
+                controller: TextEditingController(), // Provide a controller
+                label: "Password", // Set the label to "Password"
+              ),
+            ),
+
+            // Positioned ForgotPasswordButton
+            Positioned(
+              right: screenWidth * 0.05, // Adjusted to 58% of screen width
+              top: screenHeight * 0.78, // 78% of screen height
+              child: ForgotPasswordButton(
+                label: "Forgot Password", // Set the label
+                onPressed: () {
+                  // Navigate to ForgotPassword screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                  );
+                },
+              ),
+            ),
+
+            // Positioned "Don't have an account?" Button
+            Positioned(
+              right: screenWidth * 0.05, // Adjusted to 46% of screen width
+              top: screenHeight * 0.82, // 82% of screen height
+              child: ForgotPasswordButton(
+                label: "Don't have an account?", // Set the label
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+              ),
+            ),
+
+            // Positioned RedButton for Login
+            Positioned(
+              left: screenWidth * 0.05, // Adjusted to 7% of screen width
+              top: screenHeight * 0.9, // 90% of screen height
+              child: RedButton(
+                label: "Login", // Set the label to "Login"
+                width: screenWidth * 0.85, // 85% of screen width
+                height: screenHeight * 0.06, // 6% of screen height
+                onPressed: () {
+                  // Handle the Login button click
+                  print('Login button clicked');
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

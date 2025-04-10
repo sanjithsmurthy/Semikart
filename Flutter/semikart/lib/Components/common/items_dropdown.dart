@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ItemDropdownCard extends StatefulWidget {
+  final int serialNo;
   final String mfrPartNumber;
   final String manufacturer;
   final double basicUnitPrice;
@@ -9,6 +10,7 @@ class ItemDropdownCard extends StatefulWidget {
 
   const ItemDropdownCard({
     Key? key,
+    required this.serialNo,
     required this.mfrPartNumber,
     required this.manufacturer,
     required this.basicUnitPrice,
@@ -61,7 +63,7 @@ class _ItemDropdownCardState extends State<ItemDropdownCard> {
                 children: [
                   Flexible(
                     child: Text(
-                      '1. ${widget.mfrPartNumber}',
+                      '${widget.serialNo}. ${widget.mfrPartNumber}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

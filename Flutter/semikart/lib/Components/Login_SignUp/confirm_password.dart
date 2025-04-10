@@ -26,109 +26,110 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Add horizontal padding
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: screenHeight * 0.1), // Add some top spacing
+    // Calculate the width dynamically based on screen size
+    final double componentWidth = screenWidth * 0.9; // 90% of the screen width
+    final double maxWidth = 370.0; // Maximum width for larger screens
+    final double calculatedWidth = componentWidth < maxWidth ? componentWidth : maxWidth;
 
-          // Password Field
-          PasswordTextField(
-            controller: passwordController,
-            label: "Password", // Label for the password field
-            onChanged: (value) {
-              _validatePassword(value); // Validate password on change
-              _notifyPasswordMatch(); // Notify parent widget about password match
-            },
-          ),
-
-          SizedBox(height: screenHeight * 0.005), // Reduced spacing below the password field
-
-          // Password Requirements Heading and List
-          Row(
+    return Center( // Center the component horizontally
+      child: SizedBox(
+        width: calculatedWidth, // Dynamically calculated width
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Spacer for alignment
-              SizedBox(width: screenWidth * 0.05), // Align bullets and heading vertically
+              SizedBox(height: screenHeight * 0.1), // Add some top spacing
 
-              // Column for heading and requirements
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Password Requirements Heading
-                    Text(
-                      "YOUR PASSWORD MUST CONTAIN",
-                      style: TextStyle(
-                        fontSize: 12, // Font size 12
-                        fontWeight: FontWeight.bold, // Bold text
-                        color: _areAllRequirementsSatisfied() ? Colors.black : Color(0xFF989DA3), // Black if all requirements are satisfied, grey otherwise
-                        fontFamily: 'Product Sans', // Product Sans font
-                      ),
-                    ),
-
-                    SizedBox(height: screenHeight * 0.01), // Add spacing below the heading
-
-                    // Password Requirements List
-                    _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
-                    SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
-                    _buildRequirementItem("1 upper case letter", hasUpperCase),
-                    SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
-                    _buildRequirementItem("1 or more numbers", hasNumber),
-                    SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
-                    _buildRequirementItem("1 or more special characters", hasSpecialChar),
-                  ],
-                ),
+              // Password Field
+              PasswordTextField(
+                controller: passwordController,
+                label: "Password", // Label for the password field
+                width: calculatedWidth, // Use the dynamically calculated width
+                onChanged: (value) {
+                  _validatePassword(value); // Validate password on change
+                  _notifyPasswordMatch(); // Notify parent widget about password match
+                },
               ),
-            ],
-          ),
 
-          SizedBox(height: screenHeight * 0.03), // Add spacing between sections
+              SizedBox(height: screenHeight * 0.005), // Reduced spacing below the password field
 
-          // Confirm Password Field
-          CustomTextField(
-            controller: confirmPasswordController,
-            label: "Confirm Password", // Label for the confirm password field
-            suffixIcon: Icon(
-              _isPasswordMatching() && _areAllRequirementsSatisfied()
-                  ? Icons.check // Green tick icon
-                  : Icons.close, // Red cross icon
-              color: _isPasswordMatching() && _areAllRequirementsSatisfied()
-                  ? Colors.green // Green color if all requirements are satisfied and passwords match
-                  : Color(0xFFA51414), // Red color otherwise
-            ),
-            onChanged: (value) {
-              setState(() {}); // Update UI when confirm password changes
-              _notifyPasswordMatch(); // Notify parent widget about password match
-            },
-          ),
-
-          // Alert Text for Password Mismatch
-          if (!_isPasswordMatching() && confirmPasswordController.text.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.01), // Add spacing above the alert
-              child: Row(
+              // Password Requirements Heading and List
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.error, // Alert icon
-                    color: Color(0xFFA51414), // Red color for the alert icon
-                    size: 16, // Icon size
-                  ),
-                  SizedBox(width: 8), // Spacing between the icon and text
+                  // Password Requirements Heading
                   Text(
-                    "Passwords do not match",
+                    "YOUR PASSWORD MUST CONTAIN",
                     style: TextStyle(
-                      fontSize: 11, // Font size
-                      fontWeight: FontWeight.w600, // Semi-bold font weight
-                      color: Color(0xFFA51414), // Red color for the alert text
+                      fontSize: 12, // Font size 12
+                      fontWeight: FontWeight.bold, // Bold text
+                      color: _areAllRequirementsSatisfied() ? Colors.black : Color(0xFF989DA3), // Black if all requirements are satisfied, grey otherwise
                       fontFamily: 'Product Sans', // Product Sans font
                     ),
                   ),
+
+                  SizedBox(height: screenHeight * 0.01), // Add spacing below the heading
+
+                  // Password Requirements List
+                  _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
+                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
+                  _buildRequirementItem("1 upper case letter", hasUpperCase),
+                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
+                  _buildRequirementItem("1 or more numbers", hasNumber),
+                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
+                  _buildRequirementItem("1 or more special characters", hasSpecialChar),
                 ],
               ),
-            ),
-        ],
+
+              SizedBox(height: screenHeight * 0.03), // Add spacing between sections
+
+              // Confirm Password Field
+              CustomTextField(
+                controller: confirmPasswordController,
+                label: "Confirm Password", // Label for the confirm password field
+                width: calculatedWidth, // Use the dynamically calculated width
+                suffixIcon: Icon(
+                  _isPasswordMatching() && _areAllRequirementsSatisfied()
+                      ? Icons.check // Green tick icon
+                      : Icons.close, // Red cross icon
+                  color: _isPasswordMatching() && _areAllRequirementsSatisfied()
+                      ? Colors.green // Green color if all requirements are satisfied and passwords match
+                      : Color(0xFFA51414), // Red color otherwise
+                ),
+                onChanged: (value) {
+                  setState(() {}); // Update UI when confirm password changes
+                  _notifyPasswordMatch(); // Notify parent widget about password match
+                },
+              ),
+
+              // Alert Text for Password Mismatch
+              if (!_isPasswordMatching() && confirmPasswordController.text.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.01), // Add spacing above the alert
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.error, // Alert icon
+                        color: Color(0xFFA51414), // Red color for the alert icon
+                        size: 16, // Icon size
+                      ),
+                      SizedBox(width: 8), // Spacing between the icon and text
+                      Text(
+                        "Passwords do not match",
+                        style: TextStyle(
+                          fontSize: 11, // Font size
+                          fontWeight: FontWeight.w600, // Semi-bold font weight
+                          color: Color(0xFFA51414), // Red color for the alert text
+                          fontFamily: 'Product Sans', // Product Sans font
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
