@@ -10,7 +10,8 @@ class BomRfqCard extends StatelessWidget {
     return Center(
       child: Container(
         width: 380,
-        height: 330, // Decreased height by 10 pixels
+        // Increased height slightly more to accommodate content and prevent overflow
+        height: 360, // Increased from 350
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -76,6 +77,7 @@ class BomRfqCard extends StatelessWidget {
                 label: "Go to BOM",
                 onPressed: () {
                   // Handle BOM button tap
+                  print("Go to BOM tapped"); // Added for testing
                 },
                 width: 90,
                 height: 30,
@@ -134,7 +136,9 @@ class BomRfqCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            // Use Spacer to push the button towards the bottom if flexible space is desired
+            // const Spacer(), // Optional: Use if you want the button at the very bottom
+            const SizedBox(height: 8), // Keep SizedBox if Spacer is not used
             Align(
               alignment: Alignment.centerRight,
               child: RedButton(

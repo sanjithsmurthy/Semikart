@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'edit_textbox.dart';
+import 'edit_textbox2.dart';
 import 'items_dropdown.dart';
 import 'red_button.dart';
 import 'ship_bill.dart';
@@ -174,7 +175,7 @@ class _EditPageState extends State<EditPage> {
                 contentPadding: EdgeInsets.zero,
               ),
               const SizedBox(height: 16),
-              EditTextBox(
+              EditTextBox2(
                 title: 'Shipping Address',
                 address1: shippingAddress1,
                 address2: shippingAddress2,
@@ -215,6 +216,34 @@ class _EditPageState extends State<EditPage> {
                     });
                   }
                 },
+              ),
+              const SizedBox(height: 8),
+              // Add New Button
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Add logic for adding a new shipping address
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ShipBillForm(), // Navigate to the form for adding a new address
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFA51414), // Button color
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  ),
+                  child: const Text(
+                    'Add New',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
 
