@@ -103,24 +103,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // CustomTextField for First Name
                 CustomTextField(
+                  width: screenWidth , // Specify width
+                  height: screenHeight * 0.06,
                   controller: firstNameController,
                   label: "First Name",
                 ),
-                SizedBox(height: screenHeight * 0.01), // Add spacing
+                SizedBox(height: screenHeight * 0.015), // Add spacing
 
                 // CustomTextField for Last Name
                 CustomTextField(
+                  width: screenWidth , // Specify width
+                  height: screenHeight * 0.06,
                   controller: lastNameController,
                   label: "Last Name",
                 ),
-                SizedBox(height: screenHeight * 0.01), // Add spacing
+                SizedBox(height: screenHeight * 0.015), // Add spacing
 
                 // CustomTextField for Email
                 CustomTextField(
+                  width: screenWidth , // Specify width
+                  height: screenHeight * 0.06,
                   controller: emailController,
                   label: "Email",
                 ),
-                SizedBox(height: screenHeight * 0.01), // Add spacing
+                SizedBox(height: screenHeight * 0.015), // Add spacing
 
                 // MobileNumberField
                 MobileNumberField(
@@ -139,6 +145,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // CustomTextField for Company Name
                 CustomTextField(
+                  width: screenWidth , // Specify width
+                  height: screenHeight * 0.06,
                   controller: companyNameController,
                   label: "Company Name",
                 ),
@@ -153,6 +161,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       passwordsMatch = match; // Update the passwordsMatch state
                     });
                   },
+                ),
+                SizedBox(height: screenHeight * 0.02), // Add spacing
+
+                // ForgotPasswordButton
+                Center(
+                  child: ForgotPasswordButton(
+                    label: "Already have an account?", // Specify label
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPasswordScreen()), // Navigate to LoginScreen
+                      );
+                    },
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
@@ -182,19 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // ForgotPasswordButton
-                Center(
-                  child: ForgotPasswordButton(
-                    label: "Already have an account?", // Specify label
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPasswordScreen()), // Navigate to LoginScreen
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                
 
                 // Sign Up Button
                 Center(
