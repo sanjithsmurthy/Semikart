@@ -31,7 +31,7 @@ class BomRfqCard extends StatelessWidget {
     final buttonFontSize = screenWidth * 0.03; // ~12 on 400 width
     final dividerWidth = cardWidth * 0.9; // Relative to the card width
 
-    return Center(
+    return Center( 
       child: Container(
         width: cardWidth, // Use the calculated width
         // REMOVED fixed height: height: cardHeight,
