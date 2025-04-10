@@ -19,7 +19,7 @@ class CustomPopup {
         return Dialog(
           backgroundColor: Color(0xFFFFFFFF),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12), // Rounded corners
+            borderRadius: BorderRadius.circular(30), // Increased corner radius to 20
           ),
           child: Container(
             width: popupWidth,
@@ -32,7 +32,7 @@ class CustomPopup {
                 if (imagePath != null)
                   Image.asset(
                     imagePath,
-                    width: popupWidth * 0.2, // Scale image width to 20% of popup width
+                    width: popupWidth * 0.22, // Scale image width to 20% of popup width
                     height: popupWidth * 0.2, // Scale image height to 20% of popup width
                     fit: BoxFit.contain,
                   ),
