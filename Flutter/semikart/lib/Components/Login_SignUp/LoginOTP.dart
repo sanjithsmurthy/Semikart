@@ -148,7 +148,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
             Positioned(
               left: screenWidth * 0.05,
               right: screenWidth * 0.05, // 5% padding on both sides
-              top: screenHeight * 0.40, // 40% of screen height
+              top: screenHeight * 0.45, // 40% of screen height
               child: CustomTextField(
                 controller: _emailController,
                 label: "Email",
