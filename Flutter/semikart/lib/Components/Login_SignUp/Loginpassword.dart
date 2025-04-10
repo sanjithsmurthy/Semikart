@@ -148,7 +148,7 @@ class LoginPasswordScreen extends StatelessWidget {
             Positioned(
               left: screenWidth * 0.05,
               right: screenWidth * 0.05, // 5% padding on both sides
-              top: screenHeight * 0.40, // 40% of screen height
+              top: screenHeight * 0.42, // 40% of screen height
               child: CustomTextField(
                 controller: TextEditingController(), // Provide a controller
                 label: "Email", // Set the label to "Email"
@@ -160,7 +160,7 @@ class LoginPasswordScreen extends StatelessWidget {
             Positioned(
               left: screenWidth * 0.05,
               right: screenWidth * 0.05, // 5% padding on both sides
-              top: screenHeight * 0.50, // 50% of screen height
+              top: screenHeight * 0.52, // 50% of screen height
               child: PasswordTextField(
                 controller: TextEditingController(), // Provide a controller
                 label: "Password", // Set the label to "Password"
@@ -171,7 +171,7 @@ class LoginPasswordScreen extends StatelessWidget {
             // Positioned ForgotPasswordButton
             Positioned(
               right: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.60, // 60% of screen height
+              top: screenHeight * 0.62, // 60% of screen height
               child: ForgotPasswordButton(
                 label: "Forgot Password?", // Set the label
                 onPressed: () {
@@ -187,7 +187,7 @@ class LoginPasswordScreen extends StatelessWidget {
             // Positioned "Don't have an account?" Button
             Positioned(
               right: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.65, // 65% of screen height
+              top: screenHeight * 0.67, // 65% of screen height
               child: ForgotPasswordButton(
                 label: "Don't have an account?", // Set the label
                 onPressed: () {
@@ -202,7 +202,7 @@ class LoginPasswordScreen extends StatelessWidget {
             // Positioned RedButton for Login
             Positioned(
               left: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.75, // 75% of screen height
+              top: screenHeight * 0.77, // 75% of screen height
               child: RedButton(
                 label: "Login", // Set the label to "Login"
                 width: screenWidth * 0.90, // 90% of screen width
