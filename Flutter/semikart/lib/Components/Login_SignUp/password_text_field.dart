@@ -5,6 +5,7 @@ class PasswordTextField extends StatefulWidget {
   final String label;
   final EdgeInsetsGeometry? padding; // Optional padding parameter
   final double width; // Width of the text field
+  final double? height; // Optional height parameter
   final Function(String)? onChanged; // Optional onChanged callback
 
   const PasswordTextField({
@@ -13,6 +14,7 @@ class PasswordTextField extends StatefulWidget {
     required this.label,
     this.padding,
     this.width = 370.0, // Default width
+    this.height, // Optional height parameter
     this.onChanged, // Optional onChanged callback
   });
 
@@ -33,7 +35,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
         width: calculatedWidth, // Use the dynamically calculated width
-        height: 72,
+        height: widget.height ?? 72, // Use the provided height or default to 72
         child: TextField(
           controller: widget.controller,
           obscureText: !_isPasswordVisible, // Toggle password visibility
