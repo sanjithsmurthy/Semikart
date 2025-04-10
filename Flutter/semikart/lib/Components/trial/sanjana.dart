@@ -546,38 +546,38 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         borderRadius: 25.0, // Rounded corners
                       ),
                       SizedBox(height: 32),
-                      Text(
-                        'Confirm Password Example',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Product Sans',
-                          color: Color(0xFFA51414),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navigate to ConfirmPasswordScreen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ConfirmPasswordScreen(),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFA51414), // Red button color
-                        ),
-                        child: Text(
-                          'Go to Confirm Password Screen',
-                          style: TextStyle(
-                            fontFamily: 'Product Sans',
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 24), // Added bottom padding
+                      // Text(
+                      //   'Confirm Password Example',
+                      //   style: TextStyle(
+                      //     fontSize: 18,
+                      //     fontFamily: 'Product Sans',
+                      //     color: Color(0xFFA51414),
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
+                      // SizedBox(height: 16),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // Navigate to ConfirmPasswordScreen
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) => ConfirmPasswordScreen(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: Color(0xFFA51414), // Red button color
+                      //   ),
+                      //   child: Text(
+                      //     'Go to Confirm Password Screen',
+                      //     style: TextStyle(
+                      //       fontFamily: 'Product Sans',
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(height: 24), // Added bottom padding
                     ],
                   ), //column
                 ),
