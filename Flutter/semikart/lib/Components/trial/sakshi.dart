@@ -45,14 +45,10 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
   }
 
   void _navigateToPaymentPage() {
-    // First show payment progress dialog
-    PaymentProgress.show(context: context).then((_) {
-      // After dialog is dismissed, navigate to payment page
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const EditPage()),
-      );
-    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EditPage()),
+    );
   }
 
 
