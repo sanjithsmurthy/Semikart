@@ -18,6 +18,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool passwordsMatch = false; // Track if passwords match
   bool isTermsAccepted = false; // Track if the checkbox is checked
 
+  // Controllers for text fields
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileNumberController = TextEditingController();
+  final TextEditingController companyNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -27,39 +34,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(
-              top: screenHeight * 0.3, // Push everything 30% down dynamically
-              left: screenWidth * 0.04, // 4% of screen width for horizontal padding
-              right: screenWidth * 0.04, // 4% of screen width for horizontal padding
-            ),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: screenHeight * 0.08), // Space for the logo
+
                 // Semikart Logo
-                Center(
-                  child: Image.asset(
-                    'public/assets/images/semikart_logo_medium.png',
-                    width: screenWidth * 0.4, // Specify width
-                    fit: BoxFit.contain,
-                  ),
+                Image.asset(
+                  'public/assets/images/semikart_logo_medium.png',
+                  width: screenWidth * 0.4, // 40% of screen width
+                  height: screenHeight * 0.05, // 5% of screen height
+                  fit: BoxFit.contain,
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // "Create Your Account" Text
-                Center(
-                  child: Text(
-                    'Create your account',
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.06, // Specify font size
-                      fontFamily: 'Product Sans',
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  'Create Your Account',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.06, // 6% of screen width
+                    fontFamily: 'Product Sans', // Use Product Sans font
+                    color: Colors.black, // Black text color
+                    fontWeight: FontWeight.bold, // Bold font weight
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
-                // SignInWithGoogleButton
+                // Google Sign-In Button
                 Center(
                   child: SignInWithGoogleButton(
                     onPressed: () {
@@ -101,28 +103,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // CustomTextField for First Name
                 CustomTextField(
-                  controller: TextEditingController(),
+                  controller: firstNameController,
                   label: "First Name",
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                SizedBox(height: screenHeight * 0.01), // Add spacing
 
                 // CustomTextField for Last Name
                 CustomTextField(
-                  controller: TextEditingController(),
+                  controller: lastNameController,
                   label: "Last Name",
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                SizedBox(height: screenHeight * 0.01), // Add spacing
 
                 // CustomTextField for Email
                 CustomTextField(
-                  controller: TextEditingController(),
+                  controller: emailController,
                   label: "Email",
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                SizedBox(height: screenHeight * 0.005), // Add spacing
 
                 // MobileNumberField
                 MobileNumberField(
-                  controller: TextEditingController(),
+                  controller: mobileNumberController,
                   label: 'Mobile Number',
                   countryCodes: ['+91', '+1', '+44'],
                   defaultCountryCode: '+91',
@@ -137,10 +139,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // CustomTextField for Company Name
                 CustomTextField(
-                  controller: TextEditingController(),
+                  controller: companyNameController,
                   label: "Company Name",
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                SizedBox(height: screenHeight * 0.00), // Add spacing
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
@@ -162,6 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           isTermsAccepted = value ?? false; // Update the checkbox state
                         });
                       },
+                      activeColor: Color(0xFFA51414), // Set checkbox color
                     ),
                     Expanded(
                       child: Text(
