@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'upload_file.dart'; // Import the CustomSquare component
 import 'RFQ_text_component.dart'; // Import the RFQTextComponent
 import 'rfq_adress_details.dart'; // Import the RFQAddressDetails component
-// Import the header component file which contains CombinedAppBar
-import '../common/header_withback.dart';
 
 class RFQFullPage extends StatelessWidget {
   const RFQFullPage({super.key});
@@ -14,18 +12,7 @@ class RFQFullPage extends StatelessWidget {
       // Set the background color of the screen to white
       backgroundColor: Colors.white,
 
-      // Replace HeaderWithBack with CombinedAppBar
-      // Scaffold automatically places this within the top safe area.
-      appBar: CombinedAppBar(
-        title: "Request For Quote", // Provide a title for the AppBar section
-        onBackPressed: () {
-          // Checks if there's a previous route to pop, otherwise does nothing
-          Navigator.maybePop(context);
-        },
-      ),
-
-      // Main body content - remains unchanged and is placed by Scaffold
-      // within the safe area below the AppBar.
+      // Main body content
       body: SingleChildScrollView(
         child: Padding(
           padding:
@@ -56,7 +43,6 @@ class RFQFullPage extends StatelessWidget {
           ),
         ),
       ),
-      // No BottomNavigationBar added as per the request focusing only on the AppBar
     );
   }
 }
