@@ -21,6 +21,7 @@ import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
 import '../Login_SignUp/vertical_radios.dart'; // Import the VerticalRadios widget
 import '../Login_SignUp/confirm_password.dart'; // Import the ConfirmPasswordScreen
 import 'dart:io';
+import '../Login_SignUp/success.dart';
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -509,6 +510,25 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         ),
                       ),
                       SizedBox(height: 32), // Add spacing after the text
+                      SizedBox(height: 32), // Add spacing before the link
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SuccessScreen()),
+                          );
+                        },
+                        child: Text(
+                          'Go to Success Screen',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32), // Add spacing after the link
                       Text(
                         'Built-in SearchBar Example',
                         style: TextStyle(
