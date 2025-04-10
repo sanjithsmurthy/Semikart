@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final EdgeInsetsGeometry? padding; // Optional padding parameter
   final double width; // New width parameter with default value
+  final double? height; // Optional height parameter
   final Widget? suffixIcon; // Optional suffix icon parameter
   final Function(String)? onChanged; // Optional onChanged callback
 
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.padding, // Optional padding parameter
     this.width = 370.0, // Default width
+    this.height, // Optional height parameter
     this.suffixIcon, // Optional suffix icon
     this.onChanged, // Optional onChanged callback
   });
@@ -30,7 +32,7 @@ class CustomTextField extends StatelessWidget {
       padding: padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
         width: calculatedWidth, // Use the dynamically calculated width
-        height: 72,
+        height: height ?? 72, // Use the provided height or default to 72
         child: TextField(
           controller: controller,
           obscureText: isPassword, // Toggle password visibility if it's a password field

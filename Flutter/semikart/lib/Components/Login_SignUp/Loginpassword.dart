@@ -77,14 +77,8 @@ class LoginPasswordScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Set the status bar style
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // Set the status bar background color to white
-      statusBarIconBrightness: Brightness.dark, // Set the status bar icons to dark
-    ));
-
     return Scaffold(
-      body: SafeArea( // Wrap the Stack in SafeArea
+      body: SafeArea(
         child: Stack(
           children: [
             // White background
@@ -96,35 +90,35 @@ class LoginPasswordScreen extends StatelessWidget {
 
             // Positioned Semikart logo
             Positioned(
-              left: screenWidth * 0.05, // Adjusted to 5% of screen width
-              top: screenHeight * 0.10, // 10% of screen height
+              left: screenWidth * 0.05, // 5% of screen width
+              top: screenHeight * 0.08, // 8% of screen height
               child: Image.asset(
                 'public/assets/images/semikart_logo_medium.png', // Path to the logo
-                width: screenWidth * 0.5, // 50% of screen width
-                height: screenHeight * 0.04, // 4% of screen height
+                width: screenWidth * 0.4, // 40% of screen width
+                height: screenHeight * 0.05, // 5% of screen height
                 fit: BoxFit.contain, // Ensure the image fits within the dimensions
               ),
             ),
 
             // Positioned Login text
             Positioned(
-              left: screenWidth * 0.05, // Adjusted to 7% of screen width
-              top: screenHeight * 0.24, // 24% of screen height
+              left: screenWidth * 0.05, // 5% of screen width
+              top: screenHeight * 0.18, // 18% of screen height
               child: Text(
                 'Login',
                 style: TextStyle(
-                  fontSize: screenWidth * 0.06, // 6% of screen width
+                  fontSize: screenWidth * 0.055, // 5.5% of screen width
                   fontFamily: 'Product Sans', // Product Sans font
                   color: Colors.black, // Black color
-                  fontWeight: FontWeight.normal, // Regular weight
+                  fontWeight: FontWeight.bold, // Bold weight
                 ),
               ),
             ),
 
             // Positioned SignInWithGoogleButton
             Positioned(
-              left: screenWidth * 0.05, // Adjusted to 5% of screen width
-              top: screenHeight * 0.32, // 32% of screen height
+              left: screenWidth * 0.05, // 5% of screen width
+              top: screenHeight * 0.25, // 25% of screen height
               child: SignInWithGoogleButton(
                 onPressed: () {
                   // Handle the Google sign-in logic here
@@ -137,78 +131,45 @@ class LoginPasswordScreen extends StatelessWidget {
 
             // Positioned VerticalRadios
             Positioned(
-              left: screenWidth * 0.48, // Adjusted to 53% of screen width
-              top: screenHeight * 0.25, // 25% of screen height
+              left: screenWidth * 0.55, // 55% of screen width
+              top: screenHeight * 0.22, // 22% of screen height
               child: VerticalRadios(
                 initialOption: "password",
-              ),
-            ),
-
-            // First horizontal black line
-            Positioned(
-              left: screenWidth * 0.05, // Adjusted to 7% of screen width
-              top: screenHeight * 0.46, // 46% of screen height
-              child: Container(
-                width: screenWidth * 0.4, // 40% of screen width
-                height: 1, // Fixed height
-                color: Colors.black, // Line color
-              ),
-            ),
-
-            // Positioned "OR" text exactly in the middle
-            Positioned(
-              left: screenWidth * 0.48, // Adjusted to 48% of screen width
-              top: screenHeight * 0.445, // Slightly above the lines
-              child: Text(
-                'OR',
-                style: TextStyle(
-                  fontSize: screenWidth * 0.04, // 4% of screen width
-                  fontFamily: 'Product Sans', // Product Sans font
-                  color: Colors.black, // Black color
-                  fontWeight: FontWeight.normal, // Regular weight
-                ),
-              ),
-            ),
-
-            // Second horizontal black line
-            Positioned(
-              right: screenWidth * 0.05, // Adjusted to 55% of screen width
-              top: screenHeight * 0.46, // 46% of screen height
-              child: Container(
-                width: screenWidth * 0.4, // 40% of screen width
-                height: 1, // Fixed height
-                color: Colors.black, // Line color
               ),
             ),
 
             // Positioned CustomTextField for Email
             Positioned(
               left: screenWidth * 0.05,
-              right: screenWidth*0.05, // Adjusted to 5% of screen width
-              top: screenHeight * 0.52, // 52% of screen height
+              right: screenWidth * 0.05, // 5% padding on both sides
+              top: screenHeight * 0.45, // 45% of screen height
               child: CustomTextField(
-                controller: TextEditingController(), // Provide a controller
+                controller: TextEditingController(),
+                width: screenWidth * 0.90, // Provide a controller
                 label: "Email", // Set the label to "Email"
+                height: screenHeight * 0.06, // 6% of screen height
               ),
             ),
 
             // Positioned PasswordTextField for Password
             Positioned(
               left: screenWidth * 0.05,
-              right: screenWidth*0.05, // Adjusted to 5% of screen width
-              top: screenHeight * 0.65, // 65% of screen height
+              right: screenWidth * 0.05, // 5% padding on both sides
+              top: screenHeight * 0.55, // 55% of screen height
               child: PasswordTextField(
-                controller: TextEditingController(), // Provide a controller
+                controller: TextEditingController(),
+                width: screenWidth * 0.90, // Provide a controller
                 label: "Password", // Set the label to "Password"
+                height: screenHeight * 0.06, // 6% of screen height
               ),
             ),
 
             // Positioned ForgotPasswordButton
             Positioned(
-              right: screenWidth * 0.05, // Adjusted to 58% of screen width
-              top: screenHeight * 0.78, // 78% of screen height
+              right: screenWidth * 0.05, // 5% of screen width
+              top: screenHeight * 0.65, // 65% of screen height
               child: ForgotPasswordButton(
-                label: "Forgot Password", // Set the label
+                label: "Forgot Password?", // Set the label
                 onPressed: () {
                   // Navigate to ForgotPassword screen
                   Navigator.push(
@@ -221,8 +182,8 @@ class LoginPasswordScreen extends StatelessWidget {
 
             // Positioned "Don't have an account?" Button
             Positioned(
-              right: screenWidth * 0.05, // Adjusted to 46% of screen width
-              top: screenHeight * 0.82, // 82% of screen height
+              right: screenWidth * 0.05, // 5% of screen width
+              top: screenHeight * 0.70, // 70% of screen height
               child: ForgotPasswordButton(
                 label: "Don't have an account?", // Set the label
                 onPressed: () {
@@ -236,11 +197,11 @@ class LoginPasswordScreen extends StatelessWidget {
 
             // Positioned RedButton for Login
             Positioned(
-              left: screenWidth * 0.05, // Adjusted to 7% of screen width
-              top: screenHeight * 0.9, // 90% of screen height
+              left: screenWidth * 0.05, // 5% of screen width
+              top: screenHeight * 0.785, // 78.5% of screen height
               child: RedButton(
                 label: "Login", // Set the label to "Login"
-                width: screenWidth * 0.85, // 85% of screen width
+                width: screenWidth * 0.90, // 90% of screen width
                 height: screenHeight * 0.06, // 6% of screen height
                 onPressed: () {
                   // Handle the Login button click

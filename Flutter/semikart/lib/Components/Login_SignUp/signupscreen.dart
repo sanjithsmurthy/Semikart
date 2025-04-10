@@ -31,43 +31,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
     ));
 
     return Scaffold(
-      body: SafeArea( // Wrap the SingleChildScrollView in SafeArea
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              16.0, // Left padding
-              screenHeight * 0.12, // Top padding (113px as a percentage of screen height)
-              16.0, // Right padding
-              16.0, // Bottom padding
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.04, // 4% of screen width for horizontal padding
+              vertical: screenHeight * 0.02, // 2% of screen height for vertical padding
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Semikart Logo
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0), // Shift logo to the left
+                Center(
                   child: Image.asset(
                     'public/assets/images/semikart_logo_medium.png',
                     width: screenWidth * 0.4, // 40% of screen width
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: screenHeight * 0.03), // 3% of screen height
 
                 // "Create Your Account" Text
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0), // Shift text to the left
+                Center(
                   child: Text(
                     'Create your account',
                     style: TextStyle(
                       fontSize: screenWidth * 0.06, // 6% of screen width
                       fontFamily: 'Product Sans',
                       color: Colors.black,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: screenHeight * 0.03), // 3% of screen height
 
                 // SignInWithGoogleButton
                 Center(
@@ -78,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     isLoading: false,
                   ),
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: screenHeight * 0.03), // 3% of screen height
 
                 // First horizontal black line
                 Row(
@@ -87,49 +83,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Divider(
                         color: Colors.black,
                         thickness: 1,
-                        endIndent: 8,
+                        endIndent: screenWidth * 0.02, // 2% of screen width
                       ),
                     ),
                     Text(
                       'OR',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.04,
+                        fontSize: screenWidth * 0.04, // 4% of screen width
                         fontFamily: 'Product Sans',
                         color: Colors.black,
-                        fontWeight: FontWeight.normal,
                       ),
                     ),
                     Expanded(
                       child: Divider(
                         color: Colors.black,
                         thickness: 1,
-                        indent: 8,
+                        indent: screenWidth * 0.02, // 2% of screen width
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: screenHeight * 0.03), // 3% of screen height
 
                 // CustomTextField for First Name
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "First Name",
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
                 // CustomTextField for Last Name
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "Last Name",
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
                 // CustomTextField for Email
                 CustomTextField(
                   controller: TextEditingController(),
                   label: "Email",
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
                 // MobileNumberField
                 MobileNumberField(
@@ -144,92 +139,91 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     print('Invalid mobile number: $number');
                   },
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
-              // CustomTextField for Company Name
-              CustomTextField(
-                controller: TextEditingController(),
-                label: "Company Name",
-              ),
-              SizedBox(height: 2), // Reduced spacing above ConfirmPasswordScreen
+                // CustomTextField for Company Name
+                CustomTextField(
+                  controller: TextEditingController(),
+                  label: "Company Name",
+                ),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
-              // Confirm Password Component
-              ConfirmPasswordScreen(
-                onPasswordsMatch: (match) {
-                  setState(() {
-                    passwordsMatch = match; // Update the passwordsMatch state
-                  });
-                },
-              ),
-              SizedBox(height: 16), // Reduced spacing below ConfirmPasswordScreen
-
-              // Checkbox for Terms and Conditions
-              Row(
-                children: [
-                  Checkbox(
-                    value: isTermsAccepted,
-                    onChanged: (value) {
-                      setState(() {
-                        isTermsAccepted = value ?? false; // Update the checkbox state
-                      });
-                    },
-                  ),
-                  Expanded(
-                    child: Text(
-                      "I agree to the terms and conditions",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Product Sans',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-
-              // ForgotPasswordButton
-              Center(
-                child: ForgotPasswordButton(
-                  label: "Already have an account?", // Set the label
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPasswordScreen()), // Navigate to LoginScreen
-                    );
+                // Confirm Password Component
+                ConfirmPasswordScreen(
+                  onPasswordsMatch: (match) {
+                    setState(() {
+                      passwordsMatch = match; // Update the passwordsMatch state
+                    });
                   },
                 ),
-              ),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
 
-              SizedBox(height: 16), // Add spacing below the "Already have an account?" text
-
-              // Button
-              Center(
-                child: passwordsMatch && isTermsAccepted
-                    ? RedButton(
-                        label: "Sign Up", // Button label
-                        width: screenWidth * 0.9, // Dynamically scale width
-                        height: screenHeight * 0.06, // Dynamically scale height
-                        onPressed: () {
-                          // Handle sign-up action
-                         Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()), // Replace with your HomePage widget
-            );
-                        },
-                      )
-                    : InactiveButton(
-                        label: "Sign Up", // Button label
-                        width: screenWidth * 0.9, // Dynamically scale width
-                        height: screenHeight * 0.06, // Dynamically scale height
+                // Checkbox for Terms and Conditions
+                Row(
+                  children: [
+                    Checkbox(
+                      value: isTermsAccepted,
+                      onChanged: (value) {
+                        setState(() {
+                          isTermsAccepted = value ?? false; // Update the checkbox state
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: Text(
+                        "I agree to the terms and conditions",
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.035, // 3.5% of screen width
+                          fontFamily: 'Product Sans',
+                          color: Colors.black,
+                        ),
                       ),
-              ),
-              SizedBox(height: 16), // Add spacing below the button
-            ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+
+                // ForgotPasswordButton
+                Center(
+                  child: ForgotPasswordButton(
+                    label: "Already have an account?", // Set the label
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPasswordScreen()), // Navigate to LoginScreen
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02), // 2% of screen height
+
+                // Sign Up Button
+                Center(
+                  child: passwordsMatch && isTermsAccepted
+                      ? RedButton(
+                          label: "Sign Up", // Button label
+                          width: screenWidth * 0.9, // 90% of screen width
+                          height: screenHeight * 0.06, // 6% of screen height
+                          onPressed: () {
+                            // Handle sign-up action
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomePage()), // Replace with your HomePage widget
+                            );
+                          },
+                        )
+                      : InactiveButton(
+                          label: "Sign Up", // Button label
+                          width: screenWidth * 0.9, // 90% of screen width
+                          height: screenHeight * 0.06, // 6% of screen height
+                        ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // 3% of screen height
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }
