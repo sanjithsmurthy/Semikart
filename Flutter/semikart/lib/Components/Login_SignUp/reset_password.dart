@@ -95,6 +95,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
               // Confirm Password Component
               ConfirmPasswordScreen(
+                width: MediaQuery.of(context).size.width * 0.8, // 80% of screen width
+                height: MediaQuery.of(context).size.height,
                 onPasswordsMatch: (match) {
                   setState(() {
                     passwordsMatch = match; // Update the passwordsMatch state

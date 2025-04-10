@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: emailController,
                   label: "Email",
                 ),
-                SizedBox(height: screenHeight * 0.005), // Add spacing
+                SizedBox(height: screenHeight * 0.01), // Add spacing
 
                 // MobileNumberField
                 MobileNumberField(
@@ -142,10 +142,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: companyNameController,
                   label: "Company Name",
                 ),
-                SizedBox(height: screenHeight * 0.00), // Add spacing
+                SizedBox(height: screenHeight * 0.01), // Add spacing
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
+                  width: screenWidth , // Specify width
+                  height: screenHeight * 0.06, // Specify height
                   onPasswordsMatch: (match) {
                     setState(() {
                       passwordsMatch = match; // Update the passwordsMatch state

@@ -4,8 +4,14 @@ import 'custom_text_field.dart'; // Import for the custom field
 
 class ConfirmPasswordScreen extends StatefulWidget {
   final void Function(bool match)? onPasswordsMatch; // Optional callback for passwords match
+  final double? width; // Optional width parameter
+  final double height; // Required height parameter
 
-  ConfirmPasswordScreen({this.onPasswordsMatch}); // Constructor with optional parameter
+  ConfirmPasswordScreen({
+    this.onPasswordsMatch,
+    this.width, // Optional width parameter
+    required this.height, // Required height parameter
+  });
 
   @override
   _ConfirmPasswordScreenState createState() => _ConfirmPasswordScreenState();
@@ -23,36 +29,31 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double effectiveWidth = widget.width ?? screenWidth * 0.9; // Default to 90% of screen width if width is not provided
 
-    // Calculate the width dynamically based on screen size
-    final double componentWidth = screenWidth * 0.9; // 90% of the screen width
-    final double maxWidth = 370.0; // Maximum width for larger screens
-    final double calculatedWidth = componentWidth < maxWidth ? componentWidth : maxWidth;
-
-    return Center( // Center the component horizontally
+    return Center(
       child: SizedBox(
-        width: calculatedWidth, // Dynamically calculated width
+        width: effectiveWidth, // Use the effective width
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: screenHeight * 0.1), // Add some top spacing
+              SizedBox(height: widget.height * 0.1), // Add top spacing dynamically
 
               // Password Field
               PasswordTextField(
                 controller: passwordController,
                 label: "Password", // Label for the password field
-                width: calculatedWidth, // Use the dynamically calculated width
+                width: effectiveWidth, // Use the effective width
                 onChanged: (value) {
                   _validatePassword(value); // Validate password on change
                   _notifyPasswordMatch(); // Notify parent widget about password match
                 },
               ),
 
-              SizedBox(height: screenHeight * 0.005), // Reduced spacing below the password field
+              SizedBox(height: widget.height * 0.02), // Add spacing dynamically
 
               // Password Requirements Heading and List
               Column(
@@ -69,26 +70,26 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                     ),
                   ),
 
-                  SizedBox(height: screenHeight * 0.01), // Add spacing below the heading
+                  SizedBox(height: widget.height * 0.01), // Add spacing below the heading
 
                   // Password Requirements List
                   _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
-                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
+                  SizedBox(height: widget.height * 0.015), // Dynamic spacing
                   _buildRequirementItem("1 upper case letter", hasUpperCase),
-                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
+                  SizedBox(height: widget.height * 0.015), // Dynamic spacing
                   _buildRequirementItem("1 or more numbers", hasNumber),
-                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
+                  SizedBox(height: widget.height * 0.015), // Dynamic spacing
                   _buildRequirementItem("1 or more special characters", hasSpecialChar),
                 ],
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Add spacing between sections
+              SizedBox(height: widget.height * 0.03), // Add spacing dynamically
 
               // Confirm Password Field
               CustomTextField(
                 controller: confirmPasswordController,
                 label: "Confirm Password", // Label for the confirm password field
-                width: calculatedWidth, // Use the dynamically calculated width
+                width: effectiveWidth, // Use the effective width
                 suffixIcon: Icon(
                   _isPasswordMatching() && _areAllRequirementsSatisfied()
                       ? Icons.check // Green tick icon
@@ -106,7 +107,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
               // Alert Text for Password Mismatch
               if (!_isPasswordMatching() && confirmPasswordController.text.isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(top: screenHeight * 0.01), // Add spacing above the alert
+                  padding: EdgeInsets.only(top: widget.height * 0.01), // Add spacing above the alert
                   child: Row(
                     children: [
                       Icon(
