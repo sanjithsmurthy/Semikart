@@ -51,7 +51,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
         SnackBar(
           content:
               Text('Please fill all mandatory fields before adding a new row.'),
-          backgroundColor: Colors.red,
+          backgroundColor: Color(0xFFA51414),
         ),
       );
       return; // Stop adding a new component
