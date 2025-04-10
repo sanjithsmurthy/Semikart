@@ -47,7 +47,7 @@ class _EditTextBox2State extends State<EditTextBox2> {
         'address2': widget.address2 ?? '',
       });
     }
-    _selectedIndex = widget.initialSelectedIndex ?? -1;
+    _selectedIndex = widget.initialSelectedIndex ?? (_addresses.isNotEmpty ? 0 : -1);
   }
 
   void _addNewAddress() async {
@@ -128,6 +128,15 @@ class _EditTextBox2State extends State<EditTextBox2> {
         ],
       ),
     );
+  }
+
+  // Method to handle adding a copied billing address
+  void _addCopiedAddress(Map<String, String> address) {
+    setState(() {
+      _addresses.add(address);
+      _selectedIndex = _addresses.length - 1;
+    });
+    _notifyChanges();
   }
 
   @override
