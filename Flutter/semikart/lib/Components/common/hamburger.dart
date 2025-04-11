@@ -57,7 +57,7 @@ class HamburgerMenu extends StatelessWidget {
 
                     // Semikart Logo
                     Image.asset(
-                      'public/assets/images/Semikart_Logo_Medium.png', // Path to the Semikart logo
+                      'public/assets/images/semikart_logo_medium.png', // Path to the Semikart logo
                       width: screenWidth * 0.4, // Dynamically scale width
                       fit: BoxFit.contain,
                     ),
