@@ -6,7 +6,6 @@ import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'Loginpassword.dart'; // Import the LoginPassword screen
 import 'signupscreen.dart'; // Import the SignUpScreen
 import '../common/popup.dart'; // Import the CustomPopup widget
 
@@ -72,190 +71,154 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true, // Adjust layout when the keyboard appears
       body: SafeArea(
-        child: Stack(
-          children: [
-            // White background
-            Container(
-              width: screenWidth,
-              height: screenHeight,
-              color: Colors.white, // Set the background color to white
-            ),
-
-            // Positioned Semikart logo
-            Positioned(
-              left: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.08, // 8% of screen height
-              child: Image.asset(
-                'public/assets/images/semikart_logo_medium.png', // Path to the logo
-                width: screenWidth * 0.4, // 40% of screen width
-                height: screenHeight * 0.05, // 5% of screen height
-                fit: BoxFit.contain, // Ensure the image fits within the dimensions
-              ),
-            ),
-
-            // Positioned Login text
-            Positioned(
-              left: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.18, // 18% of screen height
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: screenWidth * 0.055, // 5.5% of screen width
-                  fontFamily: 'Product Sans', // Product Sans font
-                  color: Colors.black, // Black color
-                  fontWeight: FontWeight.bold, // Bold weight
-                ),
-              ),
-            ),
-
-            // Positioned SignInWithGoogleButton
-            Positioned(
-              left: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.25, // 25% of screen height
-              child: SignInWithGoogleButton(
-                onPressed: () {
-                  // Handle the Google sign-in logic here
-                  print('Google Sign-In button pressed');
-                },
-                isLoading: false, // Set to true if loading state is required
-                isTwoLine: true, // Display the text in two lines
-              ),
-            ),
-
-            // Positioned VerticalRadios
-            Positioned(
-              left: screenWidth * 0.55, // 55% of screen width
-              top: screenHeight * 0.22, // 22% of screen height
-              child: VerticalRadios(
-                initialOption: "otp",
-              ),
-            ),
-
-            // Positioned CustomTextField for Email
-            Positioned(
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.05, // 5% padding on both sides
-              top: screenHeight * 0.45, // 45% of screen height
-              child: CustomTextField(
-                controller: _emailController,
-                label: "Email",
-                onChanged: (value) {
-                  _validateEmail(value); // Validate email on input change
-                },
-              ),
-            ),
-
-            // OTP Section
-            Positioned(
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.05, // Align with other components
-              top: screenHeight * 0.55, // Adjust position to align with layout
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenHeight * 0.01), // Space between "Send OTP" and the text field
-
-                  // OTP Input Field
-                  CustomTextField(
-                    controller: _otpController, // Controller for OTP input
-                    label: "OTP", // Set the label to "OTP"
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), // Adjust padding for the keyboard
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: screenHeight * 0.08), // Top spacing
+                // Semikart Logo
+                Center(
+                  child: Image.asset(
+                    'public/assets/images/semikart_logo_medium.png',
+                    width: screenWidth * 0.4,
+                    height: screenHeight * 0.05,
+                    fit: BoxFit.contain,
                   ),
-                ],
-              ),
-            ),
-
-            // Resend OTP Timer Positioned at top: screenHeight * 0.65
-            Positioned(
-               // Align with other components
-              right: screenWidth * 0.09, // Align with other components
-              top: screenHeight * 0.65, // Position at 65% of screen height
-              child: canSendOTP
-                  ? SizedBox.shrink() // Hide the timer if OTP can be sent
-                  : Text(
+                ),
+                SizedBox(height: screenHeight * 0.05), // Spacing below the logo
+                // Login Text
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.055,
+                      fontFamily: 'Product Sans',
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // Spacing below the login text
+                // Sign In with Google Button
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: SignInWithGoogleButton(
+                    onPressed: () {
+                      print('Google Sign-In button pressed');
+                    },
+                    isLoading: false,
+                    isTwoLine: true,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // Spacing below the Google button
+                // Vertical Radios
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: VerticalRadios(
+                    initialOption: "otp",
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // Spacing below the radios
+                // Email Field
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: CustomTextField(
+                    controller: _emailController,
+                    label: "Email",
+                    onChanged: (value) {
+                      _validateEmail(value); // Validate email on input change
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // Spacing below the email field
+                // OTP Field
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: CustomTextField(
+                    controller: _otpController,
+                    label: "OTP",
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02), // Spacing below the OTP field
+                // Resend OTP Timer
+                if (!canSendOTP)
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                    child: Text(
                       "Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}",
                       style: TextStyle(
-                        fontSize: screenWidth * 0.035, // Scaled font size
+                        fontSize: screenWidth * 0.035,
                         fontFamily: 'Product Sans',
                         color: Colors.red,
                       ),
-                      textAlign: TextAlign.center, // Center the text
                     ),
-            ),
-
-            // Positioned Generate OTP Button
-            Positioned(
-              top: screenHeight * 0.78, // Position just above the Login button
-              left: 0, // Ensure the button spans the full width
-              right: 0, // Ensure the button spans the full width
-              child: Center(
-                child: canSendOTP
-                    ? RedButton(
-                        label: "Generate OTP", // Button label
-                        width: screenWidth * 0.85, // 85% of screen width
-                        height: screenHeight * 0.06, // Match the height of the Login button
-                        onPressed: () {
-                          _startTimer(); // Start the timer when OTP is generated
-                          print("OTP Generated for ${_emailController.text}");
-                        },
-                      )
-                    : InactiveButton(
-                        label: "Generate OTP", // Button label
-                        width: screenWidth * 0.85, // 85% of screen width
-                        height: screenHeight * 0.06, // Match the height of the Login button
-                      ),
-              ),
-            ),
-
-            // Positioned "Don't have an account?" Button
-            Positioned(
-              right: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.70, // Push upwards
-              child: ForgotPasswordButton(
-                label: "Don't have an account?", // Set the label
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()),
-                  );
-                },
-              ),
-            ),
-
-            // Positioned RedButton for Login
-            Positioned(
-              top: screenHeight * 0.884, // 88.2% of screen height
-              left: 0, // Ensure the button spans the full width
-              right: 0, // Ensure the button spans the full width
-              child: Center(
-                child: RedButton(
-                  label: "Login", // Set the label to "Login"
-                  width: screenWidth * 0.85, // 85% of screen width
-                  height: screenHeight * 0.06, // 6% of screen height
-                  onPressed: () async {
-                    // Check if the entered OTP matches the correct OTP
-                    if (_otpController.text == correctOTP) {
-                      print("Login successful");
-                    } else {
-                      // Show popup using CustomPopup
-                      await CustomPopup.show(
-                        context: context,
-                        title: 'Invalid OTP',
-                        message: "The OTP you entered is incorrect. Please try again.",
-                        buttonText: 'OK',
-                        imagePath: 'public/assets/images/Alert.png', // Optional image path
-                      );
-                    }
-                  },
+                  ),
+                SizedBox(height: screenHeight * 0.02), // Spacing below the timer
+                // Generate OTP Button
+                Center(
+                  child: canSendOTP
+                      ? RedButton(
+                          label: "Generate OTP",
+                          width: screenWidth * 0.85,
+                          height: screenHeight * 0.06,
+                          onPressed: () {
+                            _startTimer();
+                            print("OTP Generated for ${_emailController.text}");
+                          },
+                        )
+                      : InactiveButton(
+                          label: "Generate OTP",
+                          width: screenWidth * 0.85,
+                          height: screenHeight * 0.06,
+                        ),
                 ),
-              ),
+                SizedBox(height: screenHeight * 0.03), // Spacing below the button
+                // Login Button
+                Center(
+                  child: RedButton(
+                    label: "Login",
+                    width: screenWidth * 0.85,
+                    height: screenHeight * 0.06,
+                    onPressed: () async {
+                      if (_otpController.text == correctOTP) {
+                        print("Login successful");
+                      } else {
+                        await CustomPopup.show(
+                          context: context,
+                          title: 'Invalid OTP',
+                          message: "The OTP you entered is incorrect. Please try again.",
+                          buttonText: 'OK',
+                          imagePath: 'public/assets/images/Alert.png',
+                        );
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02), // Spacing below the login button
+                // Don't Have an Account Button
+                Center(
+                  child: ForgotPasswordButton(
+                    label: "Don't have an account?",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpScreen()),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
