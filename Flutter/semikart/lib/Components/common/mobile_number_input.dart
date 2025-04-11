@@ -154,6 +154,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                         controller: widget.controller,
                         keyboardType: TextInputType.number, // Set keyboard type to number
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Allow only numeric input
+                        cursorColor: Colors.black, // Set the cursor color to black
+                        textAlignVertical: TextAlignVertical.center, // Vertically center the text
                         decoration: InputDecoration(
                           labelText: widget.label,
                           labelStyle: TextStyle(
