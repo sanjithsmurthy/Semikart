@@ -18,6 +18,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool passwordsMatch = false; // Track if passwords match
   bool isTermsAccepted = false; // Track if the checkbox is checked
 
+  // Controllers for text fields
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileNumberController = TextEditingController();
+  final TextEditingController companyNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -27,38 +34,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.04, // 4% of screen width for horizontal padding
-              vertical: screenHeight * 0.02, // 2% of screen height for vertical padding
-            ),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: screenHeight * 0.08), // Space for the logo
+
                 // Semikart Logo
-                Center(
-                  child: Image.asset(
-                    'public/assets/images/semikart_logo_medium.png',
-                    width: screenWidth * 0.4, // Specify width
-                    fit: BoxFit.contain,
-                  ),
+                Image.asset(
+                  'public/assets/images/semikart_logo_medium.png',
+                  width: screenWidth * 0.4, // 40% of screen width
+                  height: screenHeight * 0.05, // 5% of screen height
+                  fit: BoxFit.contain,
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // "Create Your Account" Text
-                Center(
-                  child: Text(
-                    'Create your account',
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.06, // Specify font size
-                      fontFamily: 'Product Sans',
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  'Create Your Account',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.06, // 6% of screen width
+                    fontFamily: 'Product Sans', // Use Product Sans font
+                    color: Colors.black, // Black text color
+                    fontWeight: FontWeight.bold, // Bold font weight
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
-                // SignInWithGoogleButton
+                // Google Sign-In Button
                 Center(
                   child: SignInWithGoogleButton(
                     onPressed: () {
@@ -99,50 +102,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // CustomTextField for First Name
-                CustomTextField(
-                  controller: TextEditingController(),
-                  label: "First Name",
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: firstNameController,
+                    label: "First Name",
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // CustomTextField for Last Name
-                CustomTextField(
-                  controller: TextEditingController(),
-                  label: "Last Name",
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: lastNameController,
+                    label: "Last Name",
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // CustomTextField for Email
-                CustomTextField(
-                  controller: TextEditingController(),
-                  label: "Email",
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: emailController,
+                    label: "Email",
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // MobileNumberField
-                MobileNumberField(
-                  controller: TextEditingController(),
-                  label: 'Mobile Number',
-                  countryCodes: ['+91', '+1', '+44'],
-                  defaultCountryCode: '+91',
-                  onCountryCodeChanged: (code) {
-                    print('Selected country code: $code');
-                  },
-                  onValidationFailed: (number) {
-                    print('Invalid mobile number: $number');
-                  },
+                Center(
+                  child: MobileNumberField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: mobileNumberController,
+                    label: 'Mobile Number',
+                    countryCodes: ['+91', '+1', '+44'],
+                    defaultCountryCode: '+91',
+                    onCountryCodeChanged: (code) {
+                      print('Selected country code: $code');
+                    },
+                    onValidationFailed: (number) {
+                      print('Invalid mobile number: $number');
+                    },
+                  ),
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                SizedBox(height: screenHeight * 0.025), // Add spacing
 
                 // CustomTextField for Company Name
-                CustomTextField(
-                  controller: TextEditingController(),
-                  label: "Company Name",
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: companyNameController,
+                    label: "Company Name",
+                  ),
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
+                SizedBox(height: screenHeight * 0.015), // Add spacing
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
+                  width: screenWidth, // Specify width
+                  height: screenHeight * 0.06, // Specify height
                   onPasswordsMatch: (match) {
                     setState(() {
                       passwordsMatch = match; // Update the passwordsMatch state
@@ -151,33 +176,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // Checkbox for Terms and Conditions
-                Row(
-                  children: [
-                    Checkbox(
-                      value: isTermsAccepted,
-                      onChanged: (value) {
-                        setState(() {
-                          isTermsAccepted = value ?? false; // Update the checkbox state
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        "I agree to the terms and conditions",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035, // Specify font size
-                          fontFamily: 'Product Sans',
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
-
                 // ForgotPasswordButton
-                Center(
+                Align(
+                  alignment: Alignment.centerRight, // Align to the right
                   child: ForgotPasswordButton(
                     label: "Already have an account?", // Specify label
                     onPressed: () {
@@ -186,6 +187,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         MaterialPageRoute(builder: (context) => LoginPasswordScreen()), // Navigate to LoginScreen
                       );
                     },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02), // Add spacing
+
+                // Checkbox for Terms and Conditions
+                Align(
+                  alignment: Alignment.centerRight, // Align the entire row to the right
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // Minimize the row's width
+                    children: [
+                      Checkbox(
+                        value: isTermsAccepted,
+                        onChanged: (value) {
+                          setState(() {
+                            isTermsAccepted = value ?? false; // Update the checkbox state
+                          });
+                        },
+                        activeColor: Color(0xFFA51414), // Set checkbox color
+                      ),
+                      Text(
+                        "I agree to the terms and conditions",
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.035, // Specify font size
+                          fontFamily: 'Product Sans',
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.right, // Align text to the right
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widget
+import '../common/payment_progress.dart'; // Import the PaymentProgress widget
+import '../common/payment_failed.dart'; // Import the PaymentFailedScreen widget
 import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
-import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
-import '/Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
+import '../common/grey_text_box.dart'; // Import the GreyTextBox widgetimport '/Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
 import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 
 class TestLayoutSakshi extends StatefulWidget {
@@ -46,7 +47,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
   void _navigateToPaymentPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const EditPage()), // Navigate to EditPage
+      MaterialPageRoute(builder: (context) => const EditPage()),
     );
   }
 
@@ -111,11 +112,24 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                 ),
               ),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: _navigateToPaymentPage, // Navigate to the payment page
-                child: const Text('Payment Page'),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _navigateToPaymentPage,
+                  child: const Text('Payment Page'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () => PaymentProgress.show(context: context),
+                  child: const Text('Progress'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () => PaymentFailedDialog.show(context: context),
+                  child: const Text('Failed'),
+                ),
+              ],
             ),
           ],
         ),

@@ -43,6 +43,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
           onChanged: widget.onChanged, // Call the onChanged callback if provided
           cursorHeight: (widget.height ?? 72) * 0.5, // Adjust cursor height to 50% of the text field height
           cursorWidth: 1.5, // Make the cursor slightly thinner
+          cursorColor: Colors.black, // Set the cursor color to black
+          textAlignVertical: TextAlignVertical.center, // Vertically center the text
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle: const TextStyle(

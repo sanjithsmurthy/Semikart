@@ -4,8 +4,14 @@ import 'custom_text_field.dart'; // Import for the custom field
 
 class ConfirmPasswordScreen extends StatefulWidget {
   final void Function(bool match)? onPasswordsMatch; // Optional callback for passwords match
+  final double? width; // Optional width parameter
+  final double? height; // Optional height parameter
 
-  ConfirmPasswordScreen({this.onPasswordsMatch}); // Constructor with optional parameter
+  ConfirmPasswordScreen({
+    this.onPasswordsMatch,
+    this.width, // Optional width parameter
+    this.height, // Optional height parameter
+  });
 
   @override
   _ConfirmPasswordScreenState createState() => _ConfirmPasswordScreenState();
@@ -23,72 +29,76 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double effectiveWidth = widget.width ?? screenWidth * 0.9; // Default to 90% of screen width if width is not provided
+    final double effectiveHeight = widget.height ?? screenHeight * 0.1; // Default to 10% of screen height if height is not provided
 
-    // Calculate the width dynamically based on screen size
-    final double componentWidth = screenWidth * 0.9; // 90% of the screen width
-    final double maxWidth = 370.0; // Maximum width for larger screens
-    final double calculatedWidth = componentWidth < maxWidth ? componentWidth : maxWidth;
-
-    return Center( // Center the component horizontally
+    return Center(
       child: SizedBox(
-        width: calculatedWidth, // Dynamically calculated width
+        width: effectiveWidth, // Use the effective width
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: screenHeight * 0.1), // Add some top spacing
+              SizedBox(height: effectiveHeight * 0.1), // Add top spacing dynamically
 
               // Password Field
               PasswordTextField(
                 controller: passwordController,
                 label: "Password", // Label for the password field
-                width: calculatedWidth, // Use the dynamically calculated width
+                width: screenWidth, // Specify width
+                height: screenHeight * 0.06, // Use the effective height
                 onChanged: (value) {
                   _validatePassword(value); // Validate password on change
                   _notifyPasswordMatch(); // Notify parent widget about password match
                 },
               ),
 
-              SizedBox(height: screenHeight * 0.005), // Reduced spacing below the password field
+              // Adjust spacing between the first text field and the heading
+              SizedBox(height: effectiveHeight * 0.2), // Set spacing to 0.15 of effectiveHeight
 
               // Password Requirements Heading and List
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Password Requirements Heading
-                  Text(
-                    "YOUR PASSWORD MUST CONTAIN",
-                    style: TextStyle(
-                      fontSize: 12, // Font size 12
-                      fontWeight: FontWeight.bold, // Bold text
-                      color: _areAllRequirementsSatisfied() ? Colors.black : Color(0xFF989DA3), // Black if all requirements are satisfied, grey otherwise
-                      fontFamily: 'Product Sans', // Product Sans font
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.05), // Add left padding to push text to the right
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Password Requirements Heading
+                    Text(
+                      "YOUR PASSWORD MUST CONTAIN",
+                      style: TextStyle(
+                        fontSize: 16, // Increased font size
+                        fontWeight: FontWeight.bold, // Bold text
+                        color: Color(0xFF989DA3), // Grey text color
+                        fontFamily: 'Product Sans', // Product Sans font
+                      ),
                     ),
-                  ),
 
-                  SizedBox(height: screenHeight * 0.01), // Add spacing below the heading
+                    SizedBox(height: effectiveHeight * 0.03), // Add spacing below the heading
 
-                  // Password Requirements List
-                  _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
-                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
-                  _buildRequirementItem("1 upper case letter", hasUpperCase),
-                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
-                  _buildRequirementItem("1 or more numbers", hasNumber),
-                  SizedBox(height: screenHeight * 0.015), // Spacing of 11px dynamically
-                  _buildRequirementItem("1 or more special characters", hasSpecialChar),
-                ],
+                    // Password Requirements List
+                    _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
+                    SizedBox(height: effectiveHeight * 0.03), // Increased spacing between requirements
+                    _buildRequirementItem("1 upper case letter", hasUpperCase),
+                    SizedBox(height: effectiveHeight * 0.03), // Increased spacing between requirements
+                    _buildRequirementItem("1 or more numbers", hasNumber),
+                    SizedBox(height: effectiveHeight * 0.03), // Increased spacing between requirements
+                    _buildRequirementItem("1 or more special characters", hasSpecialChar),
+                  ],
+                ),
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Add spacing between sections
+              // Adjust spacing between the last requirement and the second text field
+              SizedBox(height: effectiveHeight * 0.2), // Set spacing to 0.15 of effectiveHeight
 
               // Confirm Password Field
               CustomTextField(
                 controller: confirmPasswordController,
+                width: screenWidth, // Specify width
+                height: screenHeight * 0.06, // Use the effective height
                 label: "Confirm Password", // Label for the confirm password field
-                width: calculatedWidth, // Use the dynamically calculated width
                 suffixIcon: Icon(
                   _isPasswordMatching() && _areAllRequirementsSatisfied()
                       ? Icons.check // Green tick icon
@@ -106,7 +116,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
               // Alert Text for Password Mismatch
               if (!_isPasswordMatching() && confirmPasswordController.text.isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(top: screenHeight * 0.01), // Add spacing above the alert
+                  padding: EdgeInsets.only(top: effectiveHeight * 0.01), // Add spacing above the alert
                   child: Row(
                     children: [
                       Icon(
@@ -139,17 +149,18 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
     return Row(
       children: [
         Icon(
-          Icons.circle, // Grey or black dot
-          size: 12, // Big size for the dot
-          color: isSatisfied ? Colors.black : Color(0xFF989DA3), // Black for satisfied, grey otherwise
+          Icons.circle, // Use a circle icon for the bullet
+          size: 12, // Fixed size for the bullet
+          color: isSatisfied ? Color.fromARGB(255, 25, 107, 27) : Color(0xFF989DA3), // Dark green for satisfied, grey otherwise
+          // Dark green for satisfied, grey otherwise
         ),
-        SizedBox(width: 8), // Add spacing between the dot and text
+        SizedBox(width: 8), // Add spacing between the bullet and text
         Text(
           text,
           style: TextStyle(
             fontSize: 11, // Fixed font size
             fontWeight: FontWeight.w600, // Semi-bold font weight
-            color: isSatisfied ? Colors.black : Color(0xFF989DA3), // Black for satisfied, grey otherwise
+            color: Color(0xFF989DA3), // Keep text color grey
             fontFamily: 'Product Sans', // Product Sans font
           ),
         ),
