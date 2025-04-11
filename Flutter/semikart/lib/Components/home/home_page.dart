@@ -3,7 +3,6 @@ import '../common/header.dart'; // Import Header
 import '../common/search_builtin.dart' as custom; // Import SearchBar with alias
 import 'popular_categories_grid.dart';
 import 'bom_rfq.dart'; // Import BomRfqCard
-import 'manufacturers.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -158,8 +157,6 @@ class HomePage extends StatelessWidget {
                     // Add BOM_RFQ Card
                     const BomRfqCard(),
                     SizedBox(height: screenHeight * 0.05), // Add 50px dynamic spacing after BOM_RFQ Card
-                    // Add Manufacturers Marquee
-                    ManufacturerCarousel(),
                   ],
                 ),
               ),
