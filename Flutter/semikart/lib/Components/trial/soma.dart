@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home/bom_rfq.dart'; // Import the BomRfqCard widget
+import '../products/prodl1_component.dart'; // Import the CustomSquareBox widget
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});
@@ -10,8 +10,11 @@ class TestLayoutSoma extends StatelessWidget {
       appBar: AppBar(
         title: const Text("BOM RFQ"),
       ),
-      body: const Center(
-        child: BomRfqCard(), // Use the BomRfqCard as the main content
+      body: Center(
+        child: CustomSquareBox(
+          imagePath: 'public/assets/images/products/Category Icons_Circuit Protection.png', // Replace with your image path
+          text: 'Circuit Protection',
+        ),
       ),
     );
   }
@@ -26,8 +29,11 @@ class SomaPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("BOM RFQ"),
       ),
-      body: const Center(
-        child: BomRfqCard(), // Use the BomRfqCard as the main content
+      body: Center(
+        child: CustomSquareBox(
+          imagePath: 'public/assets/images/products/Category Icons_Circuit Protection.png', // Replace with your image path
+          text: 'Circuit Protection',
+        ),
       ),
     );
   }
