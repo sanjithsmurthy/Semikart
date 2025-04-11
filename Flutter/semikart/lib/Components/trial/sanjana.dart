@@ -22,6 +22,7 @@ import '../Login_SignUp/vertical_radios.dart'; // Import the VerticalRadios widg
 import '../Login_SignUp/confirm_password.dart'; // Import the ConfirmPasswordScreen
 import 'dart:io';
 import '../Login_SignUp/success.dart';
+import '../common/hamburger.dart'; // Import the HamburgerMenu widget
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -115,8 +116,10 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
           'Component Testing',
           style: TextStyle(fontFamily: 'Product Sans'),
         ),
-        backgroundColor: Color(0xFFA51414),
+        backgroundColor: Color(0xFFA51414), // Red background for the AppBar
+        iconTheme: IconThemeData(color: Colors.white), // White icon color
       ),
+      drawer: const HamburgerMenu(), // Attach the HamburgerMenu widget here
       body: Stack(
         children: [
           LayoutBuilder(
