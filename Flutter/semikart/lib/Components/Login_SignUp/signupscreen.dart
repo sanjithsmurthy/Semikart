@@ -31,28 +31,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Adjust layout when the keyboard appears
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(
-              left: screenWidth * 0.05,
-              right: screenWidth * 0.05,
-              bottom: MediaQuery.of(context).viewInsets.bottom, // Adjust padding for the keyboard
-            ),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: screenHeight * 0.08), // Space for the logo
 
                 // Semikart Logo
-                Center(
-                  child: Image.asset(
-                    'public/assets/images/semikart_logo_medium.png',
-                    width: screenWidth * 0.4, // 40% of screen width
-                    height: screenHeight * 0.05, // 5% of screen height
-                    fit: BoxFit.contain,
-                  ),
+                Image.asset(
+                  'public/assets/images/semikart_logo_medium.png',
+                  width: screenWidth * 0.4, // 40% of screen width
+                  height: screenHeight * 0.05, // 5% of screen height
+                  fit: BoxFit.contain,
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
