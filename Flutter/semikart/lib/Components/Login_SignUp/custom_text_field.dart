@@ -9,6 +9,8 @@ class CustomTextField extends StatelessWidget {
   final double? height; // Optional height parameter
   final Widget? suffixIcon; // Optional suffix icon parameter
   final Function(String)? onChanged; // Optional onChanged callback
+  final FocusNode? focusNode; // Optional FocusNode parameter
+  final VoidCallback? onTap; // Optional onTap callback
 
   const CustomTextField({
     super.key,
@@ -20,6 +22,8 @@ class CustomTextField extends StatelessWidget {
     this.height, // Optional height parameter
     this.suffixIcon, // Optional suffix icon
     this.onChanged, // Optional onChanged callback
+    this.focusNode, // Optional FocusNode
+    this.onTap, // Optional onTap callback
   });
 
   @override
@@ -35,8 +39,10 @@ class CustomTextField extends StatelessWidget {
         height: height ?? 72, // Use the provided height or default to 72
         child: TextField(
           controller: controller,
+          focusNode: focusNode, // Attach the FocusNode
           obscureText: isPassword, // Toggle password visibility if it's a password field
           onChanged: onChanged, // Call the onChanged callback if provided
+          onTap: onTap, // Attach the onTap callback
           cursorHeight: (height ?? 72) * 0.5, // Adjust cursor height to 50% of the text field height
           cursorWidth: 1.5, // Make the cursor slightly thinner
           cursorColor: Colors.black, // Set the cursor color to black

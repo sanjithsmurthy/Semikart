@@ -6,11 +6,13 @@ import 'red_button.dart'; // Import the RedButton widget
 class ShipBillForm extends StatefulWidget {
   final String? initialAddress1;
   final String? initialAddress2;
+  final Function(BuildContext, FocusNode) scrollToFocusedField; // Accept scrollToFocusedField as a parameter
 
   const ShipBillForm({
     super.key,
     this.initialAddress1,
     this.initialAddress2,
+    required this.scrollToFocusedField, // Required parameter
   });
 
   @override
@@ -29,12 +31,25 @@ class _ShipBillFormState extends State<ShipBillForm> {
     address1Controller = TextEditingController(text: widget.initialAddress1);
     address2Controller = TextEditingController(text: widget.initialAddress2);
   }
+
   final TextEditingController landmarkController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController companyController = TextEditingController();
   final TextEditingController gstnController = TextEditingController();
+
+  // Focus Nodes for each text field
+  final FocusNode nameFocusNode = FocusNode();
+  final FocusNode pincodeFocusNode = FocusNode();
+  final FocusNode address1FocusNode = FocusNode();
+  final FocusNode address2FocusNode = FocusNode();
+  final FocusNode landmarkFocusNode = FocusNode();
+  final FocusNode cityFocusNode = FocusNode();
+  final FocusNode stateFocusNode = FocusNode();
+  final FocusNode phoneFocusNode = FocusNode();
+  final FocusNode companyFocusNode = FocusNode();
+  final FocusNode gstnFocusNode = FocusNode();
 
   bool hasGSTN = false; // State for the GSTN radio button
 
@@ -90,7 +105,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
       'gstn': gstnController.text,
     };
     Navigator.pop(context, formData);
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Address updated successfully'),
@@ -101,133 +116,151 @@ class _ShipBillFormState extends State<ShipBillForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GreyTextBox(
-              nameController: nameController,
-              text: "Name*",
-            ),
-            const SizedBox(height: 16),
-            GreyTextBox(
-              nameController: pincodeController,
-              text: "Pincode*",
-            ),
-            const SizedBox(height: 16),
-            GreyTextBox(
-              nameController: address1Controller,
-              text: "Address 1*",
-            ),
-            const SizedBox(height: 16),
-            GreyTextBox(
-              nameController: address2Controller,
-              text: "Address 2",
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: GreyTextBox(
-                    nameController: landmarkController,
-                    text: "Landmark",
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: GreyTextBox(
-                    nameController: cityController,
-                    text: "City*",
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: GreyTextBox(
-                    nameController: stateController,
-                    text: "State*",
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: GreyTextBox(
-                    nameController: phoneController,
-                    text: "Phone Number*",
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            GreyTextBox(
-              nameController: companyController,
-              text: "Company Name (Optional)",
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              "Do you have GSTN?",
-              style: TextStyle(
-                color: Color(0xFFA51414),
-              ),
-            ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    Radio<bool>(
-                      value: true,
-                      groupValue: hasGSTN,
-                      activeColor: const Color(0xFFA51414),
-                      onChanged: (value) {
-                        setState(() {
-                          hasGSTN = value!;
-                        });
-                      },
-                    ),
-                    const Text("Yes"),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Radio<bool>(
-                      value: false,
-                      groupValue: hasGSTN,
-                      activeColor: const Color(0xFFA51414),
-                      onChanged: (value) {
-                        setState(() {
-                          hasGSTN = value!;
-                        });
-                      },
-                    ),
-                    const Text("No"),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            AbsorbPointer(
-              absorbing: !hasGSTN,
-              child: Opacity(
-                opacity: hasGSTN ? 1.0 : 0.5,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GreyTextBox(
+            nameController: nameController,
+            text: "Name*",
+            focusNode: nameFocusNode, // Attach FocusNode
+            onTap: () => widget.scrollToFocusedField(context, nameFocusNode), // Scroll when focused
+          ),
+          const SizedBox(height: 16),
+          GreyTextBox(
+            nameController: pincodeController,
+            text: "Pincode*",
+            focusNode: pincodeFocusNode, // Attach FocusNode
+            onTap: () => widget.scrollToFocusedField(context, pincodeFocusNode), // Scroll when focused
+          ),
+          const SizedBox(height: 16),
+          GreyTextBox(
+            nameController: address1Controller,
+            text: "Address 1*",
+            focusNode: address1FocusNode, // Attach FocusNode
+            onTap: () => widget.scrollToFocusedField(context, address1FocusNode), // Scroll when focused
+          ),
+          const SizedBox(height: 16),
+          GreyTextBox(
+            nameController: address2Controller,
+            text: "Address 2",
+            focusNode: address2FocusNode, // Attach FocusNode
+            onTap: () => widget.scrollToFocusedField(context, address2FocusNode), // Scroll when focused
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
                 child: GreyTextBox(
-                  nameController: gstnController,
-                  text: "GSTN (Optional)",
+                  nameController: landmarkController,
+                  text: "Landmark",
+                  focusNode: landmarkFocusNode, // Attach FocusNode
+                  onTap: () => widget.scrollToFocusedField(context, landmarkFocusNode), // Scroll when focused
                 ),
               ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: GreyTextBox(
+                  nameController: cityController,
+                  text: "City*",
+                  focusNode: cityFocusNode, // Attach FocusNode
+                  onTap: () => widget.scrollToFocusedField(context, cityFocusNode), // Scroll when focused
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: GreyTextBox(
+                  nameController: stateController,
+                  text: "State*",
+                  focusNode: stateFocusNode, // Attach FocusNode
+                  onTap: () => widget.scrollToFocusedField(context, stateFocusNode), // Scroll when focused
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: GreyTextBox(
+                  nameController: phoneController,
+                  text: "Phone Number*",
+                  focusNode: phoneFocusNode, // Attach FocusNode
+                  onTap: () => widget.scrollToFocusedField(context, phoneFocusNode), // Scroll when focused
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          GreyTextBox(
+            nameController: companyController,
+            text: "Company Name (Optional)",
+            focusNode: companyFocusNode, // Attach FocusNode
+            onTap: () => widget.scrollToFocusedField(context, companyFocusNode), // Scroll when focused
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Do you have GSTN?",
+            style: TextStyle(
+              color: Color(0xFFA51414),
             ),
-            const SizedBox(height: 32),
-            RedButton(
-              label: 'Update',
-              onPressed: _saveAddress,
-              width: double.infinity,
+          ),
+          Row(
+            children: [
+              Row(
+                children: [
+                  Radio<bool>(
+                    value: true,
+                    groupValue: hasGSTN,
+                    activeColor: const Color(0xFFA51414),
+                    onChanged: (value) {
+                      setState(() {
+                        hasGSTN = value!;
+                      });
+                    },
+                  ),
+                  const Text("Yes"),
+                ],
+              ),
+              Row(
+                children: [
+                  Radio<bool>(
+                    value: false,
+                    groupValue: hasGSTN,
+                    activeColor: const Color(0xFFA51414),
+                    onChanged: (value) {
+                      setState(() {
+                        hasGSTN = value!;
+                      });
+                    },
+                  ),
+                  const Text("No"),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          AbsorbPointer(
+            absorbing: !hasGSTN,
+            child: Opacity(
+              opacity: hasGSTN ? 1.0 : 0.5,
+              child: GreyTextBox(
+                nameController: gstnController,
+                text: "GSTN (Optional)",
+                focusNode: gstnFocusNode, // Attach FocusNode
+                onTap: () => widget.scrollToFocusedField(context, gstnFocusNode), // Scroll when focused
+              ),
             ),
-            const SizedBox(height: 16),
-          ],
-        ),
+          ),
+          const SizedBox(height: 32),
+          RedButton(
+            label: 'Update',
+            onPressed: _saveAddress,
+            width: double.infinity,
+          ),
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }

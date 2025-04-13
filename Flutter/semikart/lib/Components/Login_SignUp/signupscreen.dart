@@ -49,6 +49,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
+                // Display Name
+                const Text(
+                  'GFXAgency',
+                  style: TextStyle(
+                    fontSize: 20, // Set font size to 20
+                    fontWeight: FontWeight.normal, // Remove bold styling
+                    fontFamily: 'Product Sans', // Use Product Sans font
+                    color: Colors.black, // Set text color to black
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // Add spacing
+
                 // "Create Your Account" Text
                 Text(
                   'Create Your Account',

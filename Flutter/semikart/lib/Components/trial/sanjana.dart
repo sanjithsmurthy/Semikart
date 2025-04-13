@@ -11,7 +11,7 @@ import '../common/two_radios.dart';
 import '../common/RFQ_CTA.dart';
 import '../common/cartempty.dart';
 import '../common/order_view.dart';
-import '../common/profilepic.dart';
+import '../profile/profilepic.dart';
 import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
@@ -23,6 +23,7 @@ import '../Login_SignUp/confirm_password.dart'; // Import the ConfirmPasswordScr
 import 'dart:io';
 import '../Login_SignUp/success.dart';
 import '../common/hamburger.dart'; // Import the HamburgerMenu widget
+import '../profile/profile_screen.dart'; // Import the ProfileScreen
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -513,6 +514,25 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         ),
                       ),
                       SizedBox(height: 32), // Add spacing after the text
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to ProfileScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                          );
+                        },
+                        child: const Text(
+                          'Profile Screen',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue, // Blue color to indicate it's clickable
+                            decoration: TextDecoration.underline, // Underline for clickable text
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32), // Add spacing after the text
                       SizedBox(height: 32), // Add spacing before the link
                       GestureDetector(
                         onTap: () {

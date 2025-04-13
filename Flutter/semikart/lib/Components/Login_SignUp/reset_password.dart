@@ -43,11 +43,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)), // Back arrow icon
                     iconSize: screenWidth * 0.06, // Dynamically scale the icon size
                     onPressed: () {
-                      // Navigate back to ForgotPasswordScreen
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
-                      );
+                      // Navigate back to the previous screen dynamically
+                      Navigator.pop(context);
+                      
                     },
                   ),
                 ],
