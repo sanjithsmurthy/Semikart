@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'header_withback.dart';
+import 'RFQ_CTA.dart'; // Import the RFQ_CTA widget
 
-class ProductsL1Page extends StatelessWidget {
-  const ProductsL1Page({super.key});
+class Productsstaticheader extends StatelessWidget {
+  const Productsstaticheader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,8 @@ class ProductsL1Page extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
+          const SizedBox(height: 16), // Add spacing before RFQ_CTA
+          const RFQComponent(), // Add the RFQ_CTA widget here
         ],
       ),
     );
