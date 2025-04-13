@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../products/product_details_noimage.dart'; // Import the ProductDetailsNoImage component
+import '../products/prodl1_component.dart'; // Import the CustomSquareBox component
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});
@@ -11,12 +11,10 @@ class TestLayoutSoma extends StatelessWidget {
         title: const Text("Test Layout Soma"),
       ),
       body: Center(
-        child: ProductDetailsNoImage(
-          manufacturerPartNumber: '103004194-5501', // Example part number
-          manufacturerImagePath:
-              'public/assets/images/products/noImageFound.png', // Example image URL
-          eatonImagePath:
-              'public/assets/images/products/Eaton.png', // Local asset path for Eaton image
+        child: CustomSquareBox(
+          imagePath:
+              'public/assets/icon/circuit_protection.png', // Example image URL
+          text: 'Circuit Protection',
         ),
       ),
     );
