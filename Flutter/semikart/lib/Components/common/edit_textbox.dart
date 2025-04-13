@@ -69,7 +69,7 @@ class EditTextBox extends StatelessWidget {
               } else {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  EditPage(scrollToFocusedField: (context, focusNode) {})),
+                  MaterialPageRoute(builder: (context) => const EditPage()),
                 );
               }
             },
@@ -85,19 +85,12 @@ class EditTextBox extends StatelessWidget {
 }
 
 class EditPage extends StatelessWidget {
-  final Function(BuildContext, FocusNode) scrollToFocusedField; // Add scrollToFocusedField parameter
-
-  const EditPage({
-    super.key,
-    required this.scrollToFocusedField, // Make it a required parameter
-  });
+  const EditPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ShipBillForm(
-        scrollToFocusedField: scrollToFocusedField, // Pass the parameter to ShipBillForm
-      ),
+      body: const ShipBillForm(), // Display the ShipBillForm widget here
     );
   }
 }

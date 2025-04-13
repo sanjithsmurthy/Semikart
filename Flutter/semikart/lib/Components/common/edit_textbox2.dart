@@ -15,9 +15,6 @@ class EditTextBox2 extends StatefulWidget {
   final String? address2;
   final VoidCallback? onEdit;
 
-  // Scroll to Focused Field parameter
-  final Function(BuildContext, FocusNode)? scrollToFocusedField;
-
   const EditTextBox2({
     super.key,
     this.title,
@@ -29,7 +26,6 @@ class EditTextBox2 extends StatefulWidget {
     this.address1,
     this.address2,
     this.onEdit,
-    this.scrollToFocusedField, // Add scrollToFocusedField parameter
   });
 
   @override
@@ -57,11 +53,7 @@ class _EditTextBox2State extends State<EditTextBox2> {
   void _addNewAddress() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ShipBillForm(
-          scrollToFocusedField: widget.scrollToFocusedField!, // Pass scrollToFocusedField
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => const ShipBillForm()),
     );
 
     if (result != null && result is Map<String, String>) {
@@ -82,11 +74,7 @@ class _EditTextBox2State extends State<EditTextBox2> {
 
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => ShipBillForm(
-          scrollToFocusedField: widget.scrollToFocusedField!, // Pass scrollToFocusedField
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => const ShipBillForm()),
     );
 
     if (result != null && result is Map<String, String>) {
@@ -223,19 +211,12 @@ class _EditTextBox2State extends State<EditTextBox2> {
 }
 
 class EditPage extends StatelessWidget {
-  final Function(BuildContext, FocusNode) scrollToFocusedField; // Add scrollToFocusedField parameter
-
-  const EditPage({
-    super.key,
-    required this.scrollToFocusedField, // Make it a required parameter
-  });
+  const EditPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ShipBillForm(
-        scrollToFocusedField: scrollToFocusedField, // Pass the parameter to ShipBillForm
-      ),
+      body: const ShipBillForm(),
     );
   }
 }
