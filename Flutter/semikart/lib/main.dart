@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:flutter/services.dart'; // Import SystemChrome
+import 'package:firebase_core/firebase_core.dart'; // Import Firebase
 import 'package:semikart/Components/Login_SignUp/Loginpassword.dart';
 import 'Components/trial/testing.dart'; // Import ButtonNavigationPage
 import 'managers/auth_manager.dart'; // Import AuthManager provider
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter bindings are initialized
+  await Firebase.initializeApp(); // Initialize Firebase
+
   // Set global status bar and navigation bar styles
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
