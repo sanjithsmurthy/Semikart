@@ -11,7 +11,7 @@ class ProductsL1Page extends StatelessWidget {
 
     // List of categories with their icons and names
     final List<Map<String, String>> categories = [
-      {"icon": "Flutter/semikart/public/assets/icon/circuit_protection.png", "name": "Circuit Protection"},
+      {"icon": "whatsapp.svg", "name": "Circuit Protection"},
       {"icon": "assets/icons/connectors.png", "name": "Connectors"},
       {"icon": "assets/icons/electromechanical.png", "name": "Electromechanical"},
       {"icon": "assets/icons/embedded_solutions.png", "name": "Embedded Solutions"},
