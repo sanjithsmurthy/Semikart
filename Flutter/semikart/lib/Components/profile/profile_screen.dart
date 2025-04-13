@@ -6,6 +6,7 @@ import '../common/popup.dart'; // Import the CustomPopup widget
 import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
 import '../Login_SignUp/reset_password.dart'; // Import the ResetPasswordScreen
 import 'user_info.dart'; // Import the UserInfo widget
+import '../common/ship_bill.dart'; // Import the ShipBillForm widget
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -89,6 +90,11 @@ class ProfileScreen extends StatelessWidget {
 
                 // User Information Section
                 const UserInfo(), // Add the UserInfo widget here
+
+                const SizedBox(height: 32), // Add spacing between UserInfo and ShipBillForm
+
+                // Ship Bill Form Section
+                const ShipBillForm(),
               ],
             ),
           ),
