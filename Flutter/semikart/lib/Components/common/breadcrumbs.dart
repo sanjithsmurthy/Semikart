@@ -16,9 +16,11 @@ class Breadcrumbs extends StatelessWidget {
               items[i].label,
               style: TextStyle(
                 color: i == items.length - 1
-                    ? Colors.red // Highlight the last breadcrumb
+                    ? const Color(0xFFA51414) // Highlight the current page with #A51414
                     : Colors.black,
                 fontWeight: i == items.length - 1 ? FontWeight.bold : FontWeight.normal,
+                fontSize: 14, // Set font size to 14
+                fontFamily: 'Product Sans', // Use Product Sans font
                 decoration: i == items.length - 1 ? TextDecoration.none : TextDecoration.underline,
               ),
             ),
@@ -28,7 +30,12 @@ class Breadcrumbs extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 4.0),
               child: Text(
                 '>',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold, // Make the arrow bold
+                  fontSize: 20, // Set font size to 20
+                  fontFamily: 'Product Sans', // Use Product Sans font
+                ),
               ),
             ),
         ],
