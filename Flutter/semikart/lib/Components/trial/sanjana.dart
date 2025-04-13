@@ -25,6 +25,7 @@ import '../Login_SignUp/success.dart';
 import '../common/hamburger.dart'; // Import the HamburgerMenu widget
 import '../profile/profile_screen.dart'; // Import the ProfileScreen
 import '../common/breadcrumbs.dart'; // Import the Breadcrumbs widget
+import '../Login_SignUp/login_password_new.dart'; // Import the LoginPasswordNewDotDot page
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -595,38 +596,27 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         borderRadius: 25.0, // Rounded corners
                       ),
                       SizedBox(height: 32),
-                      // Text(
-                      //   'Confirm Password Example',
-                      //   style: TextStyle(
-                      //     fontSize: 18,
-                      //     fontFamily: 'Product Sans',
-                      //     color: Color(0xFFA51414),
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      // SizedBox(height: 16),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // Navigate to ConfirmPasswordScreen
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => ConfirmPasswordScreen(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: Color(0xFFA51414), // Red button color
-                      //   ),
-                      //   child: Text(
-                      //     'Go to Confirm Password Screen',
-                      //     style: TextStyle(
-                      //       fontFamily: 'Product Sans',
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 24), // Added bottom padding
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to the LoginPasswordNewDotDot page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPasswordNewScreen(), // Replace with the actual page class
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Go to LoginPasswordNewDotDot Page',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue, // Blue color to indicate it's clickable
+                            decoration: TextDecoration.underline, // Underline for clickable text
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32),
                     ],
                   ), //column
                 ),
