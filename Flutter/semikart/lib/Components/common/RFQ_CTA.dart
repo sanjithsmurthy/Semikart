@@ -6,32 +6,34 @@ class RFQComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      width: 333,
-      height: 99,
-      decoration: BoxDecoration(
-        color: Color(0xFFFFFFFF),  // Added white background
+      width: screenWidth * 0.9, // 90% of the screen width
+      height: screenHeight * 0.15, // 15% of the screen height
+      decoration: const BoxDecoration(
+        color: Color(0xFFFFFFFF), // White background
       ),
       child: Stack(
         children: [
           Positioned(
-            left: 0,
-            top: 0,
+            left: screenWidth * 0.02, // 2% of the screen width
+            top: screenHeight * 0.02 - 40, // Move 20px up
             child: Image.asset(
               'public/assets/images/RFQ.png',
-              width: 99,
-              height: 99,
+              width: screenWidth * 0.3, // 30% of the screen width
+              height: screenHeight * 0.15, // 15% of the screen height
               fit: BoxFit.contain,
             ),
           ),
           Positioned(
-            left: 130,
-            top: 12,
-            child: Container(
-              width: 165,
-              height: 23,
-              child: Text(
-                'Request for quote',  // Changed from 'Request For Quote' to match requirement
+            left: screenWidth * 0.35, // 35% of the screen width
+            top: screenHeight * 0.01, // 1% of the screen height
+            child: SizedBox(
+              width: screenWidth * 0.5, // 50% of the screen width
+              child: const Text(
+                'Request for quote',
                 style: TextStyle(
                   fontSize: 20,
                   fontFamily: 'Product Sans',
@@ -42,17 +44,16 @@ class RFQComponent extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 147,
-            top: 50.55,
+            left: screenWidth * 0.37, // 37% of the screen width
+            top: screenHeight * 0.06, // Adjusted to ensure 10px space from the text
             child: SizedBox(
-              width: 124,
+              width: screenWidth * 0.4, // 40% of the screen width
               child: RedButton(
                 label: "Submit RFQ",
                 onPressed: () {
                   print('RFQ button pressed');
                 },
-                // variant: 'small',  // Added variant parameter for 16px font size
-                width: 124,        // Explicit width
+                width: screenWidth * 0.4, // 40% of the screen width
               ),
             ),
           ),
