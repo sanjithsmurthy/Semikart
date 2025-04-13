@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import '../common/header_withback.dart'; // Import the Header widget
+import 'profilepic.dart'; // Import the ProfilePicture widget
+import '../common/red_button.dart';
+import '../common/popup.dart'; // Import the RedButton widget
+import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
+import '../Login_SignUp/reset_password.dart'; // Import the ResetPasswordScreen
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      appBar: CombinedAppBar(
+        title: 'Profile',
+        onBackPressed: () {
+          Navigator.pop(context); // Navigate back to the previous screen
+        },
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Center( // Wrap the Column in a Center widget
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center, // Ensure horizontal centering
+              children: [
+                const SizedBox(height: 16),
+
+                // Profile Picture Section
+                ProfilePicture(
+                  onImageSelected: (image) {
+                    // Handle profile picture update
+                  },
+                ),
+                const SizedBox(height: 8),
+
+                // Display Name
+                const Text(
+                  'GFXAgency',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Logout Button
+                RedButton(
+                  label: 'Logout',
+                  onPressed: () {
+                    CustomPopup.show(
+                              context: context,
+                              title: 'Logout',
+                              message: 'Are you sure you want to logout?',
+                              buttonText: 'Confirm',
+                              imagePath: 'public/assets/images/Alert.png', // Replace with your logout icon path
+                            ).then((_) {
+                              // Navigate to LoginPasswordScreen when popup button is clicked
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
+                              );
+                            });
+                    // Handle logout logic
+                  },
+                  width: screenWidth * 0.8,
+                  height: 50,
+                ),
+                const SizedBox(height: 16),
+
+                // Change Password Button
+                RedButton(
+                  label: 'Change Password',
+                  onPressed: () {
+                      Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => ResetPasswordScreen()), // Navigate to HomePage
+                            );
+                  },
+                  width: screenWidth * 0.8,
+                  height: 50,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
