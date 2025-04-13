@@ -5,6 +5,8 @@ class GreyTextBox extends StatelessWidget {
   final String text; // Single parameter for both label and hint text
   final double? width; // Optional width parameter
   final Color backgroundColor; // Background color parameter
+  final FocusNode? focusNode; // Optional FocusNode parameter
+  final VoidCallback? onTap; // Optional onTap callback
 
   GreyTextBox({
     Key? key,
@@ -13,6 +15,8 @@ class GreyTextBox extends StatelessWidget {
     this.width, // Optional width
     this.backgroundColor =
         const Color(0xFFE4E8EC), // Default grey background color
+    this.focusNode, // Optional FocusNode
+    this.onTap, // Optional onTap callback
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class GreyTextBox extends StatelessWidget {
       children: [
         Text(
           text, // Use the single parameter for label text
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 13,
             color: Color(0xFFA51414), // Adjust the color as needed
           ),
@@ -43,11 +47,13 @@ class GreyTextBox extends StatelessWidget {
           child: TextField(
             cursorColor: Colors.black, // Set the cursor color to black
             controller: nameController,
+            focusNode: focusNode, // Attach the FocusNode
+            onTap: onTap, // Attach the onTap callback
             decoration: InputDecoration(
               hintText: text, // Use the same parameter for hint text
               border: InputBorder.none,
               contentPadding:
-                  EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             ),
           ),
         ),
