@@ -102,59 +102,71 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
                 // CustomTextField for First Name
-                CustomTextField(
-                  width: screenWidth , // Specify width
-                  height: screenHeight * 0.06,
-                  controller: firstNameController,
-                  label: "First Name",
-                ),
-                SizedBox(height: screenHeight * 0.015), // Add spacing
-
-                // CustomTextField for Last Name
-                CustomTextField(
-                  width: screenWidth , // Specify width
-                  height: screenHeight * 0.06,
-                  controller: lastNameController,
-                  label: "Last Name",
-                ),
-                SizedBox(height: screenHeight * 0.015), // Add spacing
-
-                // CustomTextField for Email
-                CustomTextField(
-                  width: screenWidth , // Specify width
-                  height: screenHeight * 0.06,
-                  controller: emailController,
-                  label: "Email",
-                ),
-                SizedBox(height: screenHeight * 0.015), // Add spacing
-
-                // MobileNumberField
-                MobileNumberField(
-                  controller: mobileNumberController,
-                  label: 'Mobile Number',
-                  countryCodes: ['+91', '+1', '+44'],
-                  defaultCountryCode: '+91',
-                  onCountryCodeChanged: (code) {
-                    print('Selected country code: $code');
-                  },
-                  onValidationFailed: (number) {
-                    print('Invalid mobile number: $number');
-                  },
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: firstNameController,
+                    label: "First Name",
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // CustomTextField for Company Name
-                CustomTextField(
-                  width: screenWidth , // Specify width
-                  height: screenHeight * 0.06,
-                  controller: companyNameController,
-                  label: "Company Name",
+                // CustomTextField for Last Name
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: lastNameController,
+                    label: "Last Name",
+                  ),
                 ),
-                SizedBox(height: screenHeight * 0.01), // Add spacing
+                SizedBox(height: screenHeight * 0.02), // Add spacing
+
+                // CustomTextField for Email
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: emailController,
+                    label: "Email",
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02), // Add spacing
+
+                // MobileNumberField
+                Center(
+                  child: MobileNumberField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: mobileNumberController,
+                    label: 'Mobile Number',
+                    countryCodes: ['+91', '+1', '+44'],
+                    defaultCountryCode: '+91',
+                    onCountryCodeChanged: (code) {
+                      print('Selected country code: $code');
+                    },
+                    onValidationFailed: (number) {
+                      print('Invalid mobile number: $number');
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.025), // Add spacing
+
+                // CustomTextField for Company Name
+                Center(
+                  child: CustomTextField(
+                    width: screenWidth * 0.75, // Specify width
+                    height: screenHeight * 0.06, // Specify height
+                    controller: companyNameController,
+                    label: "Company Name",
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.015), // Add spacing
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
-                  width: screenWidth , // Specify width
+                  width: screenWidth, // Specify width
                   height: screenHeight * 0.06, // Specify height
                   onPasswordsMatch: (match) {
                     setState(() {
@@ -165,7 +177,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // ForgotPasswordButton
-                Center(
+                Align(
+                  alignment: Alignment.centerRight, // Align to the right
                   child: ForgotPasswordButton(
                     label: "Already have an account?", // Specify label
                     onPressed: () {
@@ -179,32 +192,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // Checkbox for Terms and Conditions
-                Row(
-                  children: [
-                    Checkbox(
-                      value: isTermsAccepted,
-                      onChanged: (value) {
-                        setState(() {
-                          isTermsAccepted = value ?? false; // Update the checkbox state
-                        });
-                      },
-                      activeColor: Color(0xFFA51414), // Set checkbox color
-                    ),
-                    Expanded(
-                      child: Text(
+                Align(
+                  alignment: Alignment.centerRight, // Align the entire row to the right
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // Minimize the row's width
+                    children: [
+                      Checkbox(
+                        value: isTermsAccepted,
+                        onChanged: (value) {
+                          setState(() {
+                            isTermsAccepted = value ?? false; // Update the checkbox state
+                          });
+                        },
+                        activeColor: Color(0xFFA51414), // Set checkbox color
+                      ),
+                      Text(
                         "I agree to the terms and conditions",
                         style: TextStyle(
                           fontSize: screenWidth * 0.035, // Specify font size
                           fontFamily: 'Product Sans',
                           color: Colors.black,
                         ),
+                        textAlign: TextAlign.right, // Align text to the right
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
-
-                
 
                 // Sign Up Button
                 Center(

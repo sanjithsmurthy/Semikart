@@ -5,7 +5,7 @@ import 'custom_text_field.dart'; // Import for the custom field
 class ConfirmPasswordScreen extends StatefulWidget {
   final void Function(bool match)? onPasswordsMatch; // Optional callback for passwords match
   final double? width; // Optional width parameter
-  final double? height; // Optional height parameter (now non-compulsory)
+  final double? height; // Optional height parameter
 
   ConfirmPasswordScreen({
     this.onPasswordsMatch,
@@ -60,31 +60,34 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
               SizedBox(height: effectiveHeight * 0.2), // Set spacing to 0.15 of effectiveHeight
 
               // Password Requirements Heading and List
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Password Requirements Heading
-                  Text(
-                    "YOUR PASSWORD MUST CONTAIN",
-                    style: TextStyle(
-                      fontSize: 14, // Font size 12
-                      fontWeight: FontWeight.bold, // Bold text
-                      color: _areAllRequirementsSatisfied() ? Colors.black : Color(0xFF989DA3), // Black if all requirements are satisfied, grey otherwise
-                      fontFamily: 'Product Sans', // Product Sans font
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.05), // Add left padding to push text to the right
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Password Requirements Heading
+                    Text(
+                      "YOUR PASSWORD MUST CONTAIN",
+                      style: TextStyle(
+                        fontSize: 16, // Increased font size
+                        fontWeight: FontWeight.bold, // Bold text
+                        color: Color(0xFF989DA3), // Grey text color
+                        fontFamily: 'Product Sans', // Product Sans font
+                      ),
                     ),
-                  ),
 
-                  SizedBox(height: effectiveHeight * 0.015), // Add spacing below the heading
+                    SizedBox(height: effectiveHeight * 0.03), // Add spacing below the heading
 
-                  // Password Requirements List
-                  _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
-                  SizedBox(height: effectiveHeight * 0.03), // Adjust spacing between requirements
-                  _buildRequirementItem("1 upper case letter", hasUpperCase),
-                  SizedBox(height: effectiveHeight * 0.03), // Adjust spacing between requirements
-                  _buildRequirementItem("1 or more numbers", hasNumber),
-                  SizedBox(height: effectiveHeight * 0.03), // Adjust spacing between requirements
-                  _buildRequirementItem("1 or more special characters", hasSpecialChar),
-                ],
+                    // Password Requirements List
+                    _buildRequirementItem("Between 8 and 20 characters", hasMinLength),
+                    SizedBox(height: effectiveHeight * 0.03), // Increased spacing between requirements
+                    _buildRequirementItem("1 upper case letter", hasUpperCase),
+                    SizedBox(height: effectiveHeight * 0.03), // Increased spacing between requirements
+                    _buildRequirementItem("1 or more numbers", hasNumber),
+                    SizedBox(height: effectiveHeight * 0.03), // Increased spacing between requirements
+                    _buildRequirementItem("1 or more special characters", hasSpecialChar),
+                  ],
+                ),
               ),
 
               // Adjust spacing between the last requirement and the second text field
@@ -146,17 +149,18 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
     return Row(
       children: [
         Icon(
-          Icons.circle, // Grey or black dot
-          size: 12, // Big size for the dot
-          color: isSatisfied ? Colors.black : Color(0xFF989DA3), // Black for satisfied, grey otherwise
+          Icons.circle, // Use a circle icon for the bullet
+          size: 12, // Fixed size for the bullet
+          color: isSatisfied ? Color.fromARGB(255, 25, 107, 27) : Color(0xFF989DA3), // Dark green for satisfied, grey otherwise
+          // Dark green for satisfied, grey otherwise
         ),
-        SizedBox(width: 8), // Add spacing between the dot and text
+        SizedBox(width: 8), // Add spacing between the bullet and text
         Text(
           text,
           style: TextStyle(
             fontSize: 11, // Fixed font size
             fontWeight: FontWeight.w600, // Semi-bold font weight
-            color: isSatisfied ? Colors.black : Color(0xFF989DA3), // Black for satisfied, grey otherwise
+            color: Color(0xFF989DA3), // Keep text color grey
             fontFamily: 'Product Sans', // Product Sans font
           ),
         ),

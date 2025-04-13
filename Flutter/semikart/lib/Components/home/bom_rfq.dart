@@ -38,8 +38,8 @@ class BomRfqCard extends StatelessWidget {
     final titleFontSize = screenWidth * 0.04;
     final bodyFontSize = screenWidth * 0.03;
     final buttonWidth = screenWidth * 0.22;
-    final buttonHeight = screenHeight * 0.035;
-    final buttonFontSize = screenWidth * 0.03;
+    final buttonHeight = screenHeight * 0.04;
+    final buttonFontSize = screenWidth * 0.025;
     // Adjust divider width based on the new cardWidth
     final dividerWidth = cardWidth * 0.9;
 

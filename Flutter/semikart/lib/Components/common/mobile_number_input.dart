@@ -9,7 +9,8 @@ class MobileNumberField extends StatefulWidget {
   final Function(String)? onCountryCodeChanged; // Callback for country code change
   final Function(String)? onValidationFailed; // Callback for validation failure
   final EdgeInsetsGeometry? padding; // Optional padding parameter
-  final double width; // Width of the text field
+  final double? width; // Optional width parameter
+  final double? height; // Optional height parameter
 
   const MobileNumberField({
     super.key,
@@ -20,7 +21,8 @@ class MobileNumberField extends StatefulWidget {
     this.onCountryCodeChanged,
     this.onValidationFailed,
     this.padding,
-    this.width = 370.0, // Default width
+    this.width, // Optional width parameter
+    this.height, // Optional height parameter
   });
 
   static const List<String> _defaultCountryCodes = [
@@ -70,13 +72,14 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate responsive widths
-        final totalWidth = constraints.maxWidth;
+        // Calculate responsive widths and heights
+        final totalWidth = widget.width ?? constraints.maxWidth; // Use provided width or max available width
+        final fieldHeight = widget.height ?? 60.0; // Use provided height or default to 60.0
 
         return Padding(
           padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
           child: SizedBox(
-            width: totalWidth, // Use the total available width
+            width: totalWidth, // Use the calculated width
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -151,6 +154,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                         controller: widget.controller,
                         keyboardType: TextInputType.number, // Set keyboard type to number
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Allow only numeric input
+                        cursorColor: Colors.black, // Set the cursor color to black
+                        textAlignVertical: TextAlignVertical.center, // Vertically center the text
                         decoration: InputDecoration(
                           labelText: widget.label,
                           labelStyle: TextStyle(
