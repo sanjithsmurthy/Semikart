@@ -70,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
                     });
                   },
                   width: screenWidth * 0.8,
-                  height: 50,
+                  height: 40,
                 ),
                 const SizedBox(height: 16),
 
@@ -84,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                     );
                   },
                   width: screenWidth * 0.8,
-                  height: 50,
+                  height: 40,
                 ),
                 const SizedBox(height: 32), // Add spacing between buttons and UserInfo
 
