@@ -8,6 +8,7 @@ import '../common/grey_text_box.dart'; // Import the GreyTextBox widgetimport '/
 import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 import '../common/products_l1.dart'; // Import the ProductsL1Page widget
 import '../common/l1_tiles_row.dart'; // Import the Productsonerow widget
+import '../common/products_static.dart'; // Import the Productsstaticheader widget
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -150,6 +151,16 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                     );
                   },
                   child: const Text('one row'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Productsstaticheader()),
+                    );
+                  },
+                  child: const Text('Products Header'),
                 ),
               ],
             ),
