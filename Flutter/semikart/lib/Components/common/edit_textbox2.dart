@@ -15,6 +15,9 @@ class EditTextBox2 extends StatefulWidget {
   final String? address2;
   final VoidCallback? onEdit;
 
+  // Scroll to Focused Field parameter
+  final Function(BuildContext, FocusNode)? scrollToFocusedField;
+
   const EditTextBox2({
     super.key,
     this.title,
@@ -26,6 +29,7 @@ class EditTextBox2 extends StatefulWidget {
     this.address1,
     this.address2,
     this.onEdit,
+    this.scrollToFocusedField, // Add scrollToFocusedField parameter
   });
 
   @override
@@ -53,7 +57,11 @@ class _EditTextBox2State extends State<EditTextBox2> {
   void _addNewAddress() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ShipBillForm()),
+      MaterialPageRoute(
+        builder: (context) => ShipBillForm(
+          scrollToFocusedField: widget.scrollToFocusedField!, // Pass scrollToFocusedField
+        ),
+      ),
     );
 
     if (result != null && result is Map<String, String>) {
@@ -74,7 +82,11 @@ class _EditTextBox2State extends State<EditTextBox2> {
 
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ShipBillForm()),
+      MaterialPageRoute(
+        builder: (context) => ShipBillForm(
+          scrollToFocusedField: widget.scrollToFocusedField!, // Pass scrollToFocusedField
+        ),
+      ),
     );
 
     if (result != null && result is Map<String, String>) {
@@ -211,12 +223,19 @@ class _EditTextBox2State extends State<EditTextBox2> {
 }
 
 class EditPage extends StatelessWidget {
-  const EditPage({super.key});
+  final Function(BuildContext, FocusNode) scrollToFocusedField; // Add scrollToFocusedField parameter
+
+  const EditPage({
+    super.key,
+    required this.scrollToFocusedField, // Make it a required parameter
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const ShipBillForm(),
+      body: ShipBillForm(
+        scrollToFocusedField: scrollToFocusedField, // Pass the parameter to ShipBillForm
+      ),
     );
   }
 }
