@@ -24,25 +24,13 @@ class UserInfo extends StatelessWidget {
 
     return Container(
       width: fieldWidth,
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.all(8.0), // Reduced padding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title + Edit button
           Padding(
-            padding: const EdgeInsets.only(left: 39.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Align with text fields
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -51,7 +39,7 @@ class UserInfo extends StatelessWidget {
                     "User Information",
                     style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.normal, // Removed bold styling
                       color: Colors.black,
                     ),
                   ),
@@ -63,7 +51,7 @@ class UserInfo extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 8), // Reduced vertical gap
 
           CustomTextField(
             label: "First Name",
@@ -137,18 +125,20 @@ class UserInfo extends StatelessWidget {
 
           // Radio: Email Updates
           Padding(
-            padding: const EdgeInsets.only(left: 39.0, right: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Align with text fields
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Flexible(
                   child: Text(
-                    "Send Order Updates Emails",
+                    "Send Order Update Emails",
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.normal, // Removed bold styling
                       color: Color(0xFFA51414),
                     ),
+                    softWrap: false, // Prevent wrapping to the next line
+                    overflow: TextOverflow.ellipsis, // Truncate text if it overflows
                   ),
                 ),
                 TwoRadioButtons(
@@ -164,7 +154,7 @@ class UserInfo extends StatelessWidget {
 
           // Radio: SMS Updates
           Padding(
-            padding: const EdgeInsets.only(left: 39.0, right: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Align with text fields
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -173,7 +163,7 @@ class UserInfo extends StatelessWidget {
                     "Send Order Updates SMS",
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.normal, // Removed bold styling
                       color: Color(0xFFA51414),
                     ),
                   ),
