@@ -11,8 +11,8 @@ class ProductsL1Page extends StatelessWidget {
 
     // List of categories with their icons and names
     final List<Map<String, String>> categories = [
-      {"icon": "whatsapp.svg", "name": "Circuit Protection"},
-      {"icon": "assets/icons/connectors.png", "name": "Connectors"},
+      {"icon": "public/assets/images/products/Category Icons_Circuit Protection.png", "name": "Circuit Protection"},
+      {"icon": "Flutter/semikart/public/assets/icon/connectors.png", "name": "Connectors"},
       {"icon": "assets/icons/electromechanical.png", "name": "Electromechanical"},
       {"icon": "assets/icons/embedded_solutions.png", "name": "Embedded Solutions"},
       {"icon": "assets/icons/enclosures.png", "name": "Enclosures"},
@@ -106,11 +106,20 @@ class ProductsL1Page extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
+          // Use Image.network to load the image
+          Image.network(
             iconPath,
             width: iconSize,
             height: iconSize,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              // Fallback widget in case the image fails to load
+              return Icon(
+                Icons.broken_image,
+                size: iconSize,
+                color: Colors.grey,
+              );
+            },
           ),
           const SizedBox(height: 8), // Spacing between icon and text
           Text(
