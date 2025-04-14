@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CustomSquareBox extends StatelessWidget {
-  final double width;
-  final double height;
   final String imagePath;
   final String text;
-  final double imageSize;
   final TextStyle? textStyle;
   final Color backgroundColor;
   final EdgeInsetsGeometry padding;
 
   const CustomSquareBox({
     super.key,
-    this.width = 146,
-    this.height = 113,
     required this.imagePath,
     required this.text,
-    this.imageSize = 40, // Default size for the image
     this.textStyle,
     this.backgroundColor = Colors.white,
     this.padding = const EdgeInsets.all(8.0),
@@ -24,9 +18,17 @@ class CustomSquareBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Set fixed aspect ratio for the component
+    final boxWidth = screenWidth * 0.4; // 40% of screen width
+    final boxHeight = boxWidth * 0.75; // Maintain a 4:3 aspect ratio
+    final imageSize = boxWidth * 0.3; // 30% of box width
+
     return Container(
-      width: width,
-      height: height,
+      width: boxWidth,
+      height: boxHeight,
       padding: padding,
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -42,18 +44,20 @@ class CustomSquareBox extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
+          // Dynamically scalable image
+          Image.network(
             imagePath,
-            width: 40, // Explicitly set the width to 40
-            height: 40, // Explicitly set the height to 40
+            width: imageSize, // Dynamically set the width
+            height: imageSize, // Dynamically set the height
             fit: BoxFit.contain,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 8), // Distance between image and text
+          // Text below the image
           Text(
             text,
             style: textStyle ??
-                const TextStyle(
-                  fontSize: 14,
+                TextStyle(
+                  fontSize: boxWidth * 0.1, // Responsive font size
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
@@ -72,7 +76,8 @@ void main() {
       appBar: AppBar(title: const Text("CustomSquareBox Example")),
       body: Center(
         child: CustomSquareBox(
-          imagePath: 'public/assets/icon/circuit_protection.ico', // Correct image path
+          imagePath:
+              'public/assets/images/products/Category Icons_Circuit Protection.png', // Correct image path
           text: 'Circuit Protection',
         ),
       ),

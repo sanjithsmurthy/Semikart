@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'header_withback.dart';
 
-class ProductsL1Page extends StatelessWidget {
-  const ProductsL1Page({super.key});
+class Productsonerow extends StatelessWidget {
+  const Productsonerow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,21 +13,6 @@ class ProductsL1Page extends StatelessWidget {
     final List<Map<String, String>> categories = [
       {"icon": "whatsapp.svg", "name": "Circuit Protection"},
       {"icon": "assets/icons/connectors.png", "name": "Connectors"},
-      {"icon": "assets/icons/electromechanical.png", "name": "Electromechanical"},
-      {"icon": "assets/icons/embedded_solutions.png", "name": "Embedded Solutions"},
-      {"icon": "assets/icons/enclosures.png", "name": "Enclosures"},
-      {"icon": "assets/icons/engineering_tools.png", "name": "Engineering Development Tools"},
-      {"icon": "assets/icons/industrial_automation.png", "name": "Industrial Automation"},
-      {"icon": "assets/icons/led_lighting.png", "name": "LED Lighting"},
-      {"icon": "assets/icons/optoelectronics.png", "name": "Optoelectronics"},
-      {"icon": "assets/icons/passive_components.png", "name": "Passive Components"},
-      {"icon": "assets/icons/power.png", "name": "Power"},
-      {"icon": "assets/icons/semiconductors.png", "name": "Semiconductors"},
-      {"icon": "assets/icons/sensors.png", "name": "Sensors"},
-      {"icon": "assets/icons/test_measurements.png", "name": "Test and Measurements"},
-      {"icon": "assets/icons/thermal_management.png", "name": "Thermal Management"},
-      {"icon": "assets/icons/tools_suppliers.png", "name": "Tools and Suppliers"},
-      {"icon": "assets/icons/wire_cables.png", "name": "Wire Cables"},
     ];
 
     return Scaffold(
@@ -53,41 +38,29 @@ class ProductsL1Page extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          // Grid-like layout with lines
+          // First row with vertical and horizontal lines
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: ListView.builder(
-                itemCount: (categories.length / 2).ceil(),
-                itemBuilder: (context, index) {
-                  final int firstIndex = index * 2;
-                  final int secondIndex = firstIndex + 1;
-
-                  return Column(
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          _buildCategoryItem(
-                            iconPath: categories[firstIndex]["icon"]!,
-                            name: categories[firstIndex]["name"]!,
-                            iconSize: screenWidth * 0.1,
-                          ),
-                          _buildVerticalDivider(screenHeight: screenHeight),
-                          if (secondIndex < categories.length)
-                            _buildCategoryItem(
-                              iconPath: categories[secondIndex]["icon"]!,
-                              name: categories[secondIndex]["name"]!,
-                              iconSize: screenWidth * 0.1,
-                            )
-                          else
-                            const Spacer(), // Empty space if no second item
-                        ],
+                      _buildCategoryItem(
+                        iconPath: categories[0]["icon"]!,
+                        name: categories[0]["name"]!,
+                        iconSize: screenWidth * 0.1,
                       ),
-                      if (index < (categories.length / 2).ceil() - 1)
-                        _buildHorizontalDivider(screenWidth: screenWidth),
+                      _buildVerticalDivider(screenHeight: screenHeight),
+                      _buildCategoryItem(
+                        iconPath: categories[1]["icon"]!,
+                        name: categories[1]["name"]!,
+                        iconSize: screenWidth * 0.1,
+                      ),
                     ],
-                  );
-                },
+                  ),
+                  _buildHorizontalDivider(screenWidth: screenWidth),
+                ],
               ),
             ),
           ),

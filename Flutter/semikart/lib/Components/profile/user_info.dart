@@ -3,13 +3,29 @@ import '../Login_SignUp/custom_text_field.dart';
 import '../common/two_radios.dart';
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({super.key});
+  final Function(BuildContext, FocusNode) scrollToFocusedField;
+
+  const UserInfo({
+    super.key,
+    required this.scrollToFocusedField, // Accept the scroll function
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
     final fieldWidth = isSmallScreen ? double.infinity : screenWidth * 0.8;
+
+    // Focus Nodes for each text field
+    final FocusNode firstNameFocusNode = FocusNode();
+    final FocusNode lastNameFocusNode = FocusNode();
+    final FocusNode companyNameFocusNode = FocusNode();
+    final FocusNode emailFocusNode = FocusNode();
+    final FocusNode phoneNumberFocusNode = FocusNode();
+    final FocusNode alternateNumberFocusNode = FocusNode();
+    final FocusNode gstinFocusNode = FocusNode();
+    final FocusNode typeFocusNode = FocusNode();
+    final FocusNode sourceFocusNode = FocusNode();
 
     // Controllers
     final firstNameController = TextEditingController();
@@ -56,24 +72,32 @@ class UserInfo extends StatelessWidget {
           CustomTextField(
             label: "First Name",
             controller: firstNameController,
+            focusNode: firstNameFocusNode, // Attach focus node
+            onTap: () => scrollToFocusedField(context, firstNameFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 4), // Reduced vertical gap
 
           CustomTextField(
             label: "Last Name",
             controller: lastNameController,
+            focusNode: lastNameFocusNode, // Attach focus node
+            onTap: () => scrollToFocusedField(context, lastNameFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 4), // Reduced vertical gap
 
           CustomTextField(
             label: "Company Name",
             controller: companyNameController,
+            focusNode: companyNameFocusNode, // Attach focus node
+            onTap: () => scrollToFocusedField(context, companyNameFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 4), // Reduced vertical gap
 
           CustomTextField(
             label: "Your Email",
             controller: emailController,
+            focusNode: emailFocusNode, // Attach focus node
+            onTap: () => scrollToFocusedField(context, emailFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 4), // Reduced vertical gap
 
@@ -84,6 +108,8 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Phone Number",
                   controller: phoneNumberController,
+                  focusNode: phoneNumberFocusNode, // Attach focus node
+                  onTap: () => scrollToFocusedField(context, phoneNumberFocusNode), // Scroll when focused
                 ),
               ),
               const SizedBox(width: 8),
@@ -91,6 +117,8 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Alternate No.",
                   controller: alternateNumberController,
+                  focusNode: alternateNumberFocusNode, // Attach focus node
+                  onTap: () => scrollToFocusedField(context, alternateNumberFocusNode), // Scroll when focused
                 ),
               ),
             ],
@@ -100,6 +128,8 @@ class UserInfo extends StatelessWidget {
           CustomTextField(
             label: "GSTIN NO.",
             controller: gstinController,
+            focusNode: gstinFocusNode, // Attach focus node
+            onTap: () => scrollToFocusedField(context, gstinFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 4), // Reduced vertical gap
 
@@ -110,6 +140,8 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Type",
                   controller: typeController,
+                  focusNode: typeFocusNode, // Attach focus node
+                  onTap: () => scrollToFocusedField(context, typeFocusNode), // Scroll when focused
                 ),
               ),
               const SizedBox(width: 8),
@@ -117,6 +149,8 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Source",
                   controller: sourceController,
+                  focusNode: sourceFocusNode, // Attach focus node
+                  onTap: () => scrollToFocusedField(context, sourceFocusNode), // Scroll when focused
                 ),
               ),
             ],
@@ -144,8 +178,7 @@ class UserInfo extends StatelessWidget {
                 TwoRadioButtons(
                   options: ['Yes', 'No'],
                   initialSelection: 0,
-                  onSelectionChanged: (value) =>
-                      print("Email Radio: $value"),
+                  onSelectionChanged: (value) => print("Email Radio: $value"),
                 ),
               ],
             ),
@@ -171,8 +204,7 @@ class UserInfo extends StatelessWidget {
                 TwoRadioButtons(
                   options: ['Yes', 'No'],
                   initialSelection: 0,
-                  onSelectionChanged: (value) =>
-                      print("SMS Radio: $value"),
+                  onSelectionChanged: (value) => print("SMS Radio: $value"),
                 ),
               ],
             ),

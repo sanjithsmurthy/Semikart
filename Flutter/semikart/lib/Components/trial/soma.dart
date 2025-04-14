@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../products/prodl1_component.dart'; // Import the CustomSquareBox widget
+import '../products/prodl1_component.dart'; // Import the CustomSquareBox component
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});
@@ -8,30 +8,12 @@ class TestLayoutSoma extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("BOM RFQ"),
+        title: const Text("Test Layout Soma"),
       ),
       body: Center(
         child: CustomSquareBox(
-          imagePath: 'public/assets/images/products/Category Icons_Circuit Protection.png', // Replace with your image path
-          text: 'Circuit Protection',
-        ),
-      ),
-    );
-  }
-}
-
-class SomaPage extends StatelessWidget {
-  const SomaPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("BOM RFQ"),
-      ),
-      body: Center(
-        child: CustomSquareBox(
-          imagePath: 'public/assets/images/products/Category Icons_Circuit Protection.png', // Replace with your image path
+          imagePath:
+              'public/assets/icon/circuit_protection.png', // Example image URL
           text: 'Circuit Protection',
         ),
       ),
@@ -41,6 +23,6 @@ class SomaPage extends StatelessWidget {
 
 void main() {
   runApp(const MaterialApp(
-    home: SomaPage(), // Set SomaPage as the initial page
+    home: TestLayoutSoma(), // Set TestLayoutSoma as the initial page
   ));
 }

@@ -8,8 +8,29 @@ import '../Login_SignUp/reset_password.dart'; // Import the ResetPasswordScreen
 import 'user_info.dart'; // Import the UserInfo widget
 import '../common/ship_bill.dart'; // Import the ShipBillForm widget
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToFocusedField(BuildContext context, FocusNode focusNode) {
+    // Delay to ensure the keyboard is fully visible
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (focusNode.hasFocus) {
+        // Scroll to the focused text field
+        _scrollController.animateTo(
+          _scrollController.offset + 100, // Adjust offset as needed
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +44,7 @@ class ProfileScreen extends StatelessWidget {
         },
       ),
       body: SingleChildScrollView(
+        controller: _scrollController, // Attach the scroll controller
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Center(
@@ -70,7 +92,7 @@ class ProfileScreen extends StatelessWidget {
                     });
                   },
                   width: screenWidth * 0.8,
-                  height: 40,
+                  height: MediaQuery.of(context).size.height * 0.05, // Dynamically scalable height
                 ),
                 const SizedBox(height: 16),
 
@@ -84,17 +106,21 @@ class ProfileScreen extends StatelessWidget {
                     );
                   },
                   width: screenWidth * 0.8,
-                  height: 40,
+                  height: MediaQuery.of(context).size.height * 0.05, // Dynamically scalable height
                 ),
-                const SizedBox(height: 32), // Add spacing between buttons and UserInfo
+                const SizedBox(height: 32),
 
                 // User Information Section
-                const UserInfo(), // Add the UserInfo widget here
+                UserInfo(
+                  scrollToFocusedField: _scrollToFocusedField, // Pass the scroll function
+                ),
 
                 const SizedBox(height: 32), // Add spacing between UserInfo and ShipBillForm
 
                 // Ship Bill Form Section
-                const ShipBillForm(),
+                // ShipBillForm(
+                //   scrollToFocusedField: _scrollToFocusedField, // Pass the scroll function
+                // ),
               ],
             ),
           ),

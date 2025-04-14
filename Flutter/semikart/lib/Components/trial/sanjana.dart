@@ -24,6 +24,8 @@ import 'dart:io';
 import '../Login_SignUp/success.dart';
 import '../common/hamburger.dart'; // Import the HamburgerMenu widget
 import '../profile/profile_screen.dart'; // Import the ProfileScreen
+import '../common/breadcrumbs.dart'; // Import the Breadcrumbs widget
+import '../Login_SignUp/login_password_new.dart'; // Import the LoginPasswordNewDotDot page
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -138,6 +140,31 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Add Breadcrumbs at the top of the page
+                      Breadcrumbs(
+                        items: [
+                          BreadcrumbItem(
+                            label: 'Home',
+                            onTap: () {
+                              Navigator.pushNamed(context, '/home'); // Navigate to Home
+                            },
+                          ),
+                          BreadcrumbItem(
+                            label: 'Components',
+                            onTap: () {
+                              Navigator.pushNamed(context, '/components'); // Navigate to Components
+                            },
+                          ),
+                          BreadcrumbItem(
+                            label: 'Testing',
+                            onTap: () {
+                              Navigator.pushNamed(context, '/testing'); // Navigate to Testing
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16), // Add spacing after breadcrumbs
+
                       Text(
                         'Custom TextField',
                         style: TextStyle(
@@ -569,38 +596,27 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         borderRadius: 25.0, // Rounded corners
                       ),
                       SizedBox(height: 32),
-                      // Text(
-                      //   'Confirm Password Example',
-                      //   style: TextStyle(
-                      //     fontSize: 18,
-                      //     fontFamily: 'Product Sans',
-                      //     color: Color(0xFFA51414),
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      // SizedBox(height: 16),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // Navigate to ConfirmPasswordScreen
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (context) => ConfirmPasswordScreen(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: Color(0xFFA51414), // Red button color
-                      //   ),
-                      //   child: Text(
-                      //     'Go to Confirm Password Screen',
-                      //     style: TextStyle(
-                      //       fontFamily: 'Product Sans',
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 24), // Added bottom padding
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to the LoginPasswordNewDotDot page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPasswordNewScreen(), // Replace with the actual page class
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Go to LoginPasswordNewDotDot Page',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            color: Colors.blue, // Blue color to indicate it's clickable
+                            decoration: TextDecoration.underline, // Underline for clickable text
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 32),
                     ],
                   ), //column
                 ),
@@ -676,6 +692,54 @@ class SearchBuiltinPage extends StatelessWidget {
           backgroundColor: Colors.white,
           iconColor: Color(0xFFA51414),
           borderRadius: 25.0,
+        ),
+      ),
+    );
+  }
+}
+
+class ExamplePage extends StatelessWidget {
+  const ExamplePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Example Page'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Breadcrumbs(
+              items: [
+                BreadcrumbItem(
+                  label: 'Home',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/home'); // Navigate to Home page
+                  },
+                ),
+                BreadcrumbItem(
+                  label: 'Products',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/products'); // Navigate to Products page
+                  },
+                ),
+                BreadcrumbItem(
+                  label: 'Details',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/details'); // Navigate to Details page
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'This is the content of the current page.',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
         ),
       ),
     );

@@ -7,6 +7,7 @@ import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget w
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widgetimport '/Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
 import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
 import '../common/products_l1.dart'; // Import the ProductsL1Page widget
+import '../common/l1_tiles_row.dart'; // Import the Productsonerow widget
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -139,6 +140,16 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                     );
                   },
                   child: const Text('Products l1'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Productsonerow()),
+                    );
+                  },
+                  child: const Text('one row'),
                 ),
               ],
             ),
