@@ -6,13 +6,11 @@ import 'red_button.dart'; // Import the RedButton widget
 class ShipBillForm extends StatefulWidget {
   final String? initialAddress1;
   final String? initialAddress2;
-  final Function(BuildContext, FocusNode) scrollToFocusedField; // Accept scrollToFocusedField as a parameter
 
   const ShipBillForm({
     super.key,
     this.initialAddress1,
     this.initialAddress2,
-    required this.scrollToFocusedField, // Required parameter
   });
 
   @override
@@ -38,18 +36,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController companyController = TextEditingController();
   final TextEditingController gstnController = TextEditingController();
-
-  // Focus Nodes for each text field
-  final FocusNode nameFocusNode = FocusNode();
-  final FocusNode pincodeFocusNode = FocusNode();
-  final FocusNode address1FocusNode = FocusNode();
-  final FocusNode address2FocusNode = FocusNode();
-  final FocusNode landmarkFocusNode = FocusNode();
-  final FocusNode cityFocusNode = FocusNode();
-  final FocusNode stateFocusNode = FocusNode();
-  final FocusNode phoneFocusNode = FocusNode();
-  final FocusNode companyFocusNode = FocusNode();
-  final FocusNode gstnFocusNode = FocusNode();
 
   bool hasGSTN = false; // State for the GSTN radio button
 
@@ -124,29 +110,21 @@ class _ShipBillFormState extends State<ShipBillForm> {
           GreyTextBox(
             nameController: nameController,
             text: "Name*",
-            focusNode: nameFocusNode, // Attach FocusNode
-            onTap: () => widget.scrollToFocusedField(context, nameFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 16),
           GreyTextBox(
             nameController: pincodeController,
             text: "Pincode*",
-            focusNode: pincodeFocusNode, // Attach FocusNode
-            onTap: () => widget.scrollToFocusedField(context, pincodeFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 16),
           GreyTextBox(
             nameController: address1Controller,
             text: "Address 1*",
-            focusNode: address1FocusNode, // Attach FocusNode
-            onTap: () => widget.scrollToFocusedField(context, address1FocusNode), // Scroll when focused
           ),
           const SizedBox(height: 16),
           GreyTextBox(
             nameController: address2Controller,
             text: "Address 2",
-            focusNode: address2FocusNode, // Attach FocusNode
-            onTap: () => widget.scrollToFocusedField(context, address2FocusNode), // Scroll when focused
           ),
           const SizedBox(height: 16),
           Row(
@@ -155,8 +133,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 child: GreyTextBox(
                   nameController: landmarkController,
                   text: "Landmark",
-                  focusNode: landmarkFocusNode, // Attach FocusNode
-                  onTap: () => widget.scrollToFocusedField(context, landmarkFocusNode), // Scroll when focused
                 ),
               ),
               const SizedBox(width: 16),
@@ -164,8 +140,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 child: GreyTextBox(
                   nameController: cityController,
                   text: "City*",
-                  focusNode: cityFocusNode, // Attach FocusNode
-                  onTap: () => widget.scrollToFocusedField(context, cityFocusNode), // Scroll when focused
                 ),
               ),
             ],
@@ -177,8 +151,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 child: GreyTextBox(
                   nameController: stateController,
                   text: "State*",
-                  focusNode: stateFocusNode, // Attach FocusNode
-                  onTap: () => widget.scrollToFocusedField(context, stateFocusNode), // Scroll when focused
                 ),
               ),
               const SizedBox(width: 16),
@@ -186,8 +158,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 child: GreyTextBox(
                   nameController: phoneController,
                   text: "Phone Number*",
-                  focusNode: phoneFocusNode, // Attach FocusNode
-                  onTap: () => widget.scrollToFocusedField(context, phoneFocusNode), // Scroll when focused
                 ),
               ),
             ],
@@ -196,8 +166,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
           GreyTextBox(
             nameController: companyController,
             text: "Company Name (Optional)",
-            focusNode: companyFocusNode, // Attach FocusNode
-            onTap: () => widget.scrollToFocusedField(context, companyFocusNode), // Scroll when focused
           ),
           const SizedBox(height: 16),
           const Text(
@@ -248,8 +216,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
               child: GreyTextBox(
                 nameController: gstnController,
                 text: "GSTN (Optional)",
-                focusNode: gstnFocusNode, // Attach FocusNode
-                onTap: () => widget.scrollToFocusedField(context, gstnFocusNode), // Scroll when focused
               ),
             ),
           ),

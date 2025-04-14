@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'header_withback.dart';
 
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
@@ -11,48 +10,29 @@ class ProductsL1Page extends StatelessWidget {
 
     // List of categories with their icons and names
     final List<Map<String, String>> categories = [
-      {"icon": "whatsapp.svg", "name": "Circuit Protection"},
-      {"icon": "assets/icons/connectors.png", "name": "Connectors"},
-      {"icon": "assets/icons/electromechanical.png", "name": "Electromechanical"},
-      {"icon": "assets/icons/embedded_solutions.png", "name": "Embedded Solutions"},
-      {"icon": "assets/icons/enclosures.png", "name": "Enclosures"},
-      {"icon": "assets/icons/engineering_tools.png", "name": "Engineering Development Tools"},
-      {"icon": "assets/icons/industrial_automation.png", "name": "Industrial Automation"},
-      {"icon": "assets/icons/led_lighting.png", "name": "LED Lighting"},
-      {"icon": "assets/icons/optoelectronics.png", "name": "Optoelectronics"},
-      {"icon": "assets/icons/passive_components.png", "name": "Passive Components"},
-      {"icon": "assets/icons/power.png", "name": "Power"},
-      {"icon": "assets/icons/semiconductors.png", "name": "Semiconductors"},
-      {"icon": "assets/icons/sensors.png", "name": "Sensors"},
-      {"icon": "assets/icons/test_measurements.png", "name": "Test and Measurements"},
-      {"icon": "assets/icons/thermal_management.png", "name": "Thermal Management"},
-      {"icon": "assets/icons/tools_suppliers.png", "name": "Tools and Suppliers"},
-      {"icon": "assets/icons/wire_cables.png", "name": "Wire Cables"},
+      {"icon": "public/assets/icon/circuit_protection.png", "name": "Circuit Protection"},
+      {"icon": "public/assets/icon/connectors.png", "name": "Connectors"},
+      {"icon": "public/assets/icon/electromechanical.png", "name": "Electromechanical"},
+      {"icon": "public/assets/icon/embeded_solutions.png", "name": "Embedded Solutions"},
+      {"icon": "public/assets/icon/enclosures.png", "name": "Enclosures"},
+      {"icon": "public/assets/icon/engineering_development.png", "name": "Engineering Development Tools"},
+      {"icon": "public/assets/icon/industrial_automation.png", "name": "Industrial Automation"},
+      {"icon": "public/assets/icon/led_lighting.png", "name": "LED Lighting"},
+      {"icon": "public/assets/icon/optoelectronics.png", "name": "Optoelectronics"},
+      {"icon": "public/assets/icon/passive_components.png", "name": "Passive Components"},
+      {"icon": "public/assets/icon/power.png", "name": "Power"},
+      {"icon": "public/assets/icon/semiconductors.png", "name": "Semiconductors"},
+      {"icon": "public/assets/icon/sensors.png", "name": "Sensors"},
+      {"icon": "public/assets/icon/test_and_measurement.png", "name": "Test and Measurements"},
+      {"icon": "public/assets/icon/thermal_management.png", "name": "Thermal Management"},
+      {"icon": "public/assets/icon/tools_and_supplies.png", "name": "Tools and Suppliers"},
+      {"icon": "public/assets/icon/wire_and_cable.png", "name": "Wire Cables"},
     ];
 
     return Scaffold(
-      appBar: CombinedAppBar(
-        title: 'Products', // Set your product category title here
-        onBackPressed: () {
-          Navigator.pop(context); // Standard back navigation
-        },
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Heading
-          Container(
-            padding: EdgeInsets.all(screenWidth * 0.04),
-            child: const Text(
-              'Electronic Components Categories Line Card',
-              style: TextStyle(
-                color: Color(0xFFA51414), // Red color (A51414)
-                fontSize: 20, // Font size 20px
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
           // Grid-like layout with lines
           Expanded(
             child: Padding(
@@ -70,14 +50,14 @@ class ProductsL1Page extends StatelessWidget {
                           _buildCategoryItem(
                             iconPath: categories[firstIndex]["icon"]!,
                             name: categories[firstIndex]["name"]!,
-                            iconSize: screenWidth * 0.1,
+                            iconSize: screenWidth * 0.2, // Adjusted for responsiveness
                           ),
                           _buildVerticalDivider(screenHeight: screenHeight),
                           if (secondIndex < categories.length)
                             _buildCategoryItem(
                               iconPath: categories[secondIndex]["icon"]!,
                               name: categories[secondIndex]["name"]!,
-                              iconSize: screenWidth * 0.1,
+                              iconSize: screenWidth * 0.2, // Adjusted for responsiveness
                             )
                           else
                             const Spacer(), // Empty space if no second item
@@ -106,11 +86,20 @@ class ProductsL1Page extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
+          // Use Image.network to load the image
+          Image.network(
             iconPath,
             width: iconSize,
             height: iconSize,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              // Fallback widget in case the image fails to load
+              return Icon(
+                Icons.broken_image,
+                size: iconSize,
+                color: Colors.grey,
+              );
+            },
           ),
           const SizedBox(height: 8), // Spacing between icon and text
           Text(

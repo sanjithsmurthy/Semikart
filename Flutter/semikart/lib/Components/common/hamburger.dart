@@ -4,6 +4,7 @@ import 'red_button.dart'; // Import your custom RedButton
 import 'popup.dart'; // Import your CustomPopup widget
 import '../Login_SignUp/Loginpassword.dart';
 import '../profile/profile_screen.dart';
+
 class HamburgerMenu extends StatelessWidget {
   const HamburgerMenu({super.key});
 
@@ -12,186 +13,173 @@ class HamburgerMenu extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white, // Set the top bar background to white
-        iconTheme: const IconThemeData(color: Colors.black), // Set the icon color to black
-        elevation: 0, // Remove shadow
-      ),
-      drawer: Drawer(
-        width: screenWidth * 0.75, // Occupy 75% of the screen width
-        child: Container(
-          color: Colors.white, // Set the background color to white
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Section with Back Icon and Logo
-              Padding(
-                padding: EdgeInsets.only(
-                  left: screenWidth * 0.05,
-                  top: screenHeight * 0.06,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Back Icon
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Color(0xFFA51414), // Red color for the back icon
-                      ),
-                      iconSize: screenWidth * 0.06, // Dynamically scale the icon size
-                      onPressed: () {
-                        Navigator.pop(context); // Navigate back to the previous page
-                      },
-                    ),
-                    SizedBox(width: screenWidth * 0.02), // Add spacing between the icon and the logo
-
-                    // Semikart Logo
-                    Image.asset(
-                      'public/assets/images/semikart_logo_medium.png', // Path to the Semikart logo
-                      width: screenWidth * 0.4, // Dynamically scale width
-                      fit: BoxFit.contain,
-                    ),
-                  ],
-                ),
+    return Drawer(
+      width: screenWidth * 0.75, // Occupy 75% of the screen width
+      child: Container(
+        color: Colors.white, // Set the background color to white
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Section with Back Icon and Logo
+            Padding(
+              padding: EdgeInsets.only(
+                left: screenWidth * 0.05,
+                top: screenHeight * 0.06,
               ),
-              SizedBox(height: screenHeight * 0.04),
-
-              // Profile Section
-              Center(
-                child: Column(
-                  children: [
-                    // Profile Picture
-                    CircleAvatar(
-                      radius: screenWidth * 0.12, // Dynamically scale the profile picture size
-                      backgroundImage: const AssetImage('public/assets/images/profile_picture.png'), // Replace with actual profile picture path
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Back Icon
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Color(0xFFA51414), // Red color for the back icon
                     ),
-                    const SizedBox(height: 8),
+                    iconSize: screenWidth * 0.06, // Dynamically scale the icon size
+                    onPressed: () {
+                      Navigator.pop(context); // Navigate back to the previous page
+                    },
+                  ),
+                  SizedBox(width: screenWidth * 0.02), // Add spacing between the icon and the logo
 
-                    // Username and Email
-                    const Text(
-                      'Username',
-                      style: TextStyle(
-                        fontSize: 16, // Set font size to 16
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                  // Semikart Logo
+                  Image.asset(
+                    'public/assets/images/semikart_logo_medium.png', // Path to the Semikart logo
+                    width: screenWidth * 0.4, // Dynamically scale width
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.04),
+
+            // Profile Section
+            Center(
+              child: Column(
+                children: [
+                  // Profile Picture
+                  CircleAvatar(
+                    radius: screenWidth * 0.12, // Dynamically scale the profile picture size
+                    backgroundImage: const AssetImage('public/assets/images/profile_picture.png'), // Replace with actual profile picture path
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Username and Email
+                  const Text(
+                    'Username',
+                    style: TextStyle(
+                      fontSize: 16, // Set font size to 16
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'username@gmail.com',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Edit Profile and Logout Buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Edit Profile Button
+                      RedButton(
+                        label: 'Edit Profile',
+                        onPressed: () {
+                          // Navigate to Edit Profile Screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProfileScreen()), // Navigate to HomePage
+                          );
+                        },
+                        width: screenWidth * 0.3,
+                        height: 40,
+                        isWhiteButton: true,
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'username@gmail.com',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                      const SizedBox(width: 16),
 
-                    // Edit Profile and Logout Buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Edit Profile Button
-                        RedButton(
-                          label: 'Edit Profile',
-                          onPressed: () {
-                            // Navigate to Edit Profile Screen
-                           Navigator.pushReplacement(
+                      // Logout Button
+                      RedButton(
+                        label: 'Logout',
+                        onPressed: () {
+                          // Show Logout Confirmation Popup
+                          CustomPopup.show(
+                            context: context,
+                            title: 'Logout',
+                            message: 'Are you sure you want to logout?',
+                            buttonText: 'Confirm',
+                            imagePath: 'public/assets/images/Alert.png', // Replace with your logout icon path
+                          ).then((_) {
+                            // Navigate to LoginPasswordScreen when popup button is clicked
+                            Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => ProfileScreen()), // Navigate to HomePage
+                              MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
                             );
-                          },
-                          width: screenWidth * 0.3,
-                          height: 40,
-                          isWhiteButton: true,
-                        ),
-                        const SizedBox(width: 16),
-
-                        // Logout Button
-                        RedButton(
-                          label: 'Logout',
-                          onPressed: () {
-                            // Show Logout Confirmation Popup
-                            CustomPopup.show(
-                              context: context,
-                              title: 'Logout',
-                              message: 'Are you sure you want to logout?',
-                              buttonText: 'Confirm',
-                              imagePath: 'public/assets/images/Alert.png', // Replace with your logout icon path
-                            ).then((_) {
-                              // Navigate to LoginPasswordScreen when popup button is clicked
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
-                              );
-                            });
-                          },
-                          width: screenWidth * 0.3,
-                          height: 40,
-                          isWhiteButton: true, // Make the button outlined
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                          });
+                        },
+                        width: screenWidth * 0.3,
+                        height: 40,
+                        isWhiteButton: true, // Make the button outlined
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: screenHeight * 0.04),
+            ),
+            SizedBox(height: screenHeight * 0.04),
 
-              // Menu Items
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildMenuItem(
-                      context,
-                      icon: Icons.shopping_bag,
-                      text: 'Products',
-                      onTap: () {
-                        // Navigate to Products Screen
-                        Navigator.pushNamed(context, '/products');
-                      },
-                    ),
-                    SizedBox(height: 16), // Add spacing between menu items
-                    _buildMenuItem(
-                      context,
-                      icon: Icons.history,
-                      text: 'Order History',
-                      onTap: () {
-                        // Navigate to Order History Screen
-                        Navigator.pushNamed(context, '/orderHistory');
-                      },
-                    ),
-                    SizedBox(height: 16), // Add spacing between menu items
-                    _buildMenuItem(
-                      context,
-                      icon: Icons.list_alt,
-                      text: 'BOM History',
-                      onTap: () {
-                        // Navigate to BOM History Screen
-                        Navigator.pushNamed(context, '/bomHistory');
-                      },
-                    ),
-                    SizedBox(height: 16), // Add spacing between menu items
-                    _buildMenuItem(
-                      context,
-                      icon: Icons.contact_support,
-                      text: 'Contact Us',
-                      onTap: () {
-                        // Navigate to Contact Us Screen
-                        Navigator.pushNamed(context, '/contactUs');
-                      },
-                    ),
-                  ],
-                ),
+            // Menu Items
+            Expanded(
+              child: ListView(
+                children: [
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.shopping_bag,
+                    text: 'Products',
+                    onTap: () {
+                      // Navigate to Products Screen
+                      Navigator.pushNamed(context, '/products');
+                    },
+                  ),
+                  SizedBox(height: 16), // Add spacing between menu items
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.history,
+                    text: 'Order History',
+                    onTap: () {
+                      // Navigate to Order History Screen
+                      Navigator.pushNamed(context, '/orderHistory');
+                    },
+                  ),
+                  SizedBox(height: 16), // Add spacing between menu items
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.list_alt,
+                    text: 'BOM History',
+                    onTap: () {
+                      // Navigate to BOM History Screen
+                      Navigator.pushNamed(context, '/bomHistory');
+                    },
+                  ),
+                  SizedBox(height: 16), // Add spacing between menu items
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.contact_support,
+                    text: 'Contact Us',
+                    onTap: () {
+                      // Navigate to Contact Us Screen
+                      Navigator.pushNamed(context, '/contactUs');
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-      body: const Center(
-        child: Text(
-          "Main Content Area",
-          style: TextStyle(fontSize: 18),
+            ),
+          ],
         ),
       ),
     );
