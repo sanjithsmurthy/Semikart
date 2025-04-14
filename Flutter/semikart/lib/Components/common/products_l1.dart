@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'header.dart'; // Import the Header widget
 import 'products_static.dart'; // Import the products_static.dart file
 
 class ProductsL1Page extends StatelessWidget {
@@ -31,58 +32,81 @@ class ProductsL1Page extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Products'),
-        backgroundColor: const Color(0xFFA51414), // Red color
+      appBar: Header(
+        showBackButton: true, // Show the back button
+        title: 'Products', // Set the title
+        onBackPressed: () {
+          Navigator.pop(context); // Navigate back to the previous page
+        },
+        onLogoTap: () {
+          Navigator.pushNamed(context, '/home'); // Navigate to the home page
+        },
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Add the ProductsHeaderContent from products_static.dart
-            const ProductsHeaderContent(),
-            const SizedBox(height: 16), // Add spacing between header and grid
+      body: Stack(
+        children: [
+          // Main content
+          Padding(
+            padding: EdgeInsets.only(top: screenHeight * 0.4), // Leave space for the fixed header
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                    SizedBox(height: screenHeight * 0.02), // Add dynamic spacing between header and grid
 
-            // Grid-like layout with lines
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: ListView.builder(
-                shrinkWrap: true, // Ensures the ListView takes only the required space
-                physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
-                itemCount: (categories.length / 2).ceil(),
-                itemBuilder: (context, index) {
-                  final int firstIndex = index * 2;
-                  final int secondIndex = firstIndex + 1;
+                  // Grid-like layout with lines
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                    child: ListView.builder(
+                      shrinkWrap: true, // Ensures the ListView takes only the required space
+                      physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
+                      itemCount: (categories.length / 2).ceil(),
+                      itemBuilder: (context, index) {
+                        final int firstIndex = index * 2;
+                        final int secondIndex = firstIndex + 1;
 
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          _buildCategoryItem(
-                            iconPath: categories[firstIndex]["icon"]!,
-                            name: categories[firstIndex]["name"]!,
-                            iconSize: screenWidth * 0.2, // Adjusted for responsiveness
-                          ),
-                          _buildVerticalDivider(screenHeight: screenHeight),
-                          if (secondIndex < categories.length)
-                            _buildCategoryItem(
-                              iconPath: categories[secondIndex]["icon"]!,
-                              name: categories[secondIndex]["name"]!,
-                              iconSize: screenWidth * 0.2, // Adjusted for responsiveness
-                            )
-                          else
-                            const Spacer(), // Empty space if no second item
-                        ],
-                      ),
-                      if (index < (categories.length / 2).ceil() - 1)
-                        _buildHorizontalDivider(screenWidth: screenWidth),
-                    ],
-                  );
-                },
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                _buildCategoryItem(
+                                  iconPath: categories[firstIndex]["icon"]!,
+                                  name: categories[firstIndex]["name"]!,
+                                  iconSize: screenWidth * 0.1, // Adjusted for responsiveness
+                                ),
+                                _buildVerticalDivider(screenHeight: screenHeight),
+                                if (secondIndex < categories.length)
+                                  _buildCategoryItem(
+                                    iconPath: categories[secondIndex]["icon"]!,
+                                    name: categories[secondIndex]["name"]!,
+                                    iconSize: screenWidth * 0.1, // Adjusted for responsiveness
+                                  )
+                                else
+                                  const Spacer(), // Empty space if no second item
+                              ],
+                            ),
+                            if (index < (categories.length / 2).ceil() - 1)
+                              _buildHorizontalDivider(screenWidth: screenWidth),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+
+          // Fixed header
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: screenHeight * 0.005), // Add 5px dynamic padding to the bottom
+              child: const ProductsHeaderContent(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -98,7 +122,7 @@ class ProductsL1Page extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Use Image.network to load the image
-          Image.network(
+          Image.asset(
             iconPath,
             width: iconSize,
             height: iconSize,
