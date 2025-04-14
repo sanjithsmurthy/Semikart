@@ -127,7 +127,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                         onTap: onLogoTap,
                         child: Image.asset(
                           'public/assets/images/semikart_logo_medium.png',
-                          height: screenHeight * 0.03, // 3% of screen height
+                          height: screenHeight * 0.025, // 25% of screen height
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -143,7 +143,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                       ),
                       IconButton(
                         icon: const Icon(Icons.phone, color: Colors.black),
-                        iconSize: screenWidth * 0.06, // 6% of screen width
+                        iconSize: screenWidth * 0.07, // 6% of screen width
                         onPressed: () {},
                       ),
                     ],
