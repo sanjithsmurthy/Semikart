@@ -23,30 +23,36 @@ class HamburgerMenu extends StatelessWidget {
             // Header Section with Back Icon and Logo
             Padding(
               padding: EdgeInsets.only(
-                left: screenWidth * 0.05,
-                top: screenHeight * 0.06,
+                left: screenWidth * 0.05 + (screenWidth * 0.01), // Move 10 pixels right dynamically
+                top: screenHeight * 0.048, // Keep the top padding as is
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Back Icon
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Color(0xFFA51414), // Red color for the back icon
+                  Transform.translate(
+                    offset: Offset(screenWidth * 0.01, 0), // Move 10 pixels right dynamically
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Color(0xFFA51414), // Red color for the back icon
+                      ),
+                      iconSize: screenWidth * 0.06, // Dynamically scale the icon size
+                      onPressed: () {
+                        Navigator.pop(context); // Navigate back to the previous page
+                      },
                     ),
-                    iconSize: screenWidth * 0.06, // Dynamically scale the icon size
-                    onPressed: () {
-                      Navigator.pop(context); // Navigate back to the previous page
-                    },
                   ),
                   SizedBox(width: screenWidth * 0.02), // Add spacing between the icon and the logo
 
                   // Semikart Logo
-                  Image.asset(
-                    'public/assets/images/semikart_logo_medium.png', // Path to the Semikart logo
-                    width: screenWidth * 0.4, // Dynamically scale width
-                    fit: BoxFit.contain,
+                  Transform.translate(
+                    offset: Offset(screenWidth * 0.01, 0), // Move 10 pixels right dynamically
+                    child: Image.asset(
+                      'public/assets/images/semikart_logo_medium.png', // Path to the Semikart logo
+                      height: screenHeight * 0.025, // Dynamically scale height
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ],
               ),
