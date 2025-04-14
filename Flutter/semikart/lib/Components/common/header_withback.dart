@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import flutter_svg package
+import 'hamburger.dart'; // Import the HamburgerMenu
 import 'bottom_bar.dart'; // Import the BottomNavBar for navigation
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
@@ -20,7 +21,14 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.black),
               iconSize: 35.0,
-              onPressed: () {},
+              onPressed: () {
+                // Show the HamburgerMenu as a modal bottom sheet
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => const HamburgerMenu(),
+                );
+              },
             ),
             // Add spacing between the menu icon and the logo
             const SizedBox(width: 15.0),

@@ -72,7 +72,7 @@ void main() {
       appBar: AppBar(title: const Text("CustomSquareBox Example")),
       body: Center(
         child: CustomSquareBox(
-          imagePath: 'public/assets/images/products/Category Icons_Circuit Protection.png', // Correct image path
+          imagePath: 'public/assets/icon/circuit_protection.ico', // Correct image path
           text: 'Circuit Protection',
         ),
       ),

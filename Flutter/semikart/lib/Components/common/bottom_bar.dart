@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../cart/cart_page.dart'; // Import CartPage
-import '../common/header.dart' as home_header; // Prefix for Header from header.dart
-import '../common/header_withback.dart' as back_header; // Prefix for HeaderWithBack from header_withback.dart
+import '../common/header.dart'; // Import the unified Header
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -31,16 +30,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex == 0
-          ? const home_header.Header() // Use Header from header.dart for HomePage
-          : back_header.CombinedAppBar(
-              title: _getPageTitle(_selectedIndex), // Use CombinedAppBar for other pages
-              onBackPressed: () {
-                setState(() {
-                  _selectedIndex = 0; // Navigate back to HomePage
-                });
-              },
-            ),
+      appBar: Header(
+        showBackButton: _selectedIndex != 0, // Show back button for non-home pages
+        title: _getPageTitle(_selectedIndex), // Set the title based on the selected page
+        onBackPressed: () {
+          setState(() {
+            _selectedIndex = 0; // Navigate back to HomePage
+          });
+        },
+        onLogoTap: () {
+          setState(() {
+            _selectedIndex = 0; // Navigate to HomePage when logo is tapped
+          });
+        },
+      ),
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages, // Render the selected page
@@ -75,8 +78,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
     );
   }
 
-  // Helper method to get the title for CombinedAppBar
-  String _getPageTitle(int index) {
+  // Helper method to get the title for Header
+  String? _getPageTitle(int index) {
     switch (index) {
       case 1:
         return 'Products';
@@ -87,7 +90,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       case 4:
         return 'Profile';
       default:
-        return '';
+        return null; // No title for HomePage
     }
   }
 
