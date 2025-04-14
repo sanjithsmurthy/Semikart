@@ -45,7 +45,7 @@ class CustomSquareBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Dynamically scalable image
-          Image.network(
+          Image.asset(
             imagePath,
             width: imageSize, // Dynamically set the width
             height: imageSize, // Dynamically set the height
