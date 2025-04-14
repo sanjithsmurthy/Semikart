@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'header.dart'; // Import the header.dart file
+import 'products_static.dart'; // Import the products_static.dart file
 
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
@@ -30,14 +32,26 @@ class ProductsL1Page extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Grid-like layout with lines
-          Expanded(
-            child: Padding(
+      appBar: Header(
+        title: 'Products', // Set the title for the header
+        onBackPressed: () {
+          Navigator.pop(context); // Handle back navigation
+        },
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Add the ProductsHeaderContent from products_static.dart
+            const ProductsHeaderContent(),
+            const SizedBox(height: 16), // Add spacing between header and grid
+
+            // Grid-like layout with lines
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
               child: ListView.builder(
+                shrinkWrap: true, // Ensures the ListView takes only the required space
+                physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
                 itemCount: (categories.length / 2).ceil(),
                 itemBuilder: (context, index) {
                   final int firstIndex = index * 2;
@@ -52,7 +66,7 @@ class ProductsL1Page extends StatelessWidget {
                             name: categories[firstIndex]["name"]!,
                             iconSize: screenWidth * 0.2, // Adjusted for responsiveness
                           ),
-                          _buildVerticalDivider(screenHeight: screenHeight),
+                          const SizedBox(width: 16), // Space between items
                           if (secondIndex < categories.length)
                             _buildCategoryItem(
                               iconPath: categories[secondIndex]["icon"]!,
@@ -63,15 +77,17 @@ class ProductsL1Page extends StatelessWidget {
                             const Spacer(), // Empty space if no second item
                         ],
                       ),
-                      if (index < (categories.length / 2).ceil() - 1)
-                        _buildHorizontalDivider(screenWidth: screenWidth),
+                      const Divider(
+                        color: Color(0xFFA51414), // Red color
+                        thickness: 1, // Thickness of the line
+                      ),
                     ],
                   );
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -111,32 +127,6 @@ class ProductsL1Page extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-      ),
-    );
-  }
-
-  // Widget for a vertical divider
-  Widget _buildVerticalDivider({required double screenHeight}) {
-    return Container(
-      width: 30, // Space between items
-      height: screenHeight * 0.1, // Length of the vertical line
-      alignment: Alignment.center,
-      child: const VerticalDivider(
-        color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Thickness of the line
-      ),
-    );
-  }
-
-  // Widget for a horizontal divider
-  Widget _buildHorizontalDivider({required double screenWidth}) {
-    return Container(
-      height: 30, // Space between rows
-      width: screenWidth * 0.9, // Length of the horizontal line
-      alignment: Alignment.center,
-      child: const Divider(
-        color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Thickness of the line
       ),
     );
   }
