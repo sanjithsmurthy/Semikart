@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'header.dart'; // Import the header.dart file
 import 'products_static.dart'; // Import the products_static.dart file
 
 class ProductsL1Page extends StatelessWidget {
@@ -32,11 +31,9 @@ class ProductsL1Page extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: Header(
-        title: 'Products', // Set the title for the header
-        onBackPressed: () {
-          Navigator.pop(context); // Handle back navigation
-        },
+      appBar: AppBar(
+        title: const Text('Products'),
+        backgroundColor: const Color(0xFFA51414), // Red color
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -66,7 +63,7 @@ class ProductsL1Page extends StatelessWidget {
                             name: categories[firstIndex]["name"]!,
                             iconSize: screenWidth * 0.2, // Adjusted for responsiveness
                           ),
-                          const SizedBox(width: 16), // Space between items
+                          _buildVerticalDivider(screenHeight: screenHeight),
                           if (secondIndex < categories.length)
                             _buildCategoryItem(
                               iconPath: categories[secondIndex]["icon"]!,
@@ -77,10 +74,8 @@ class ProductsL1Page extends StatelessWidget {
                             const Spacer(), // Empty space if no second item
                         ],
                       ),
-                      const Divider(
-                        color: Color(0xFFA51414), // Red color
-                        thickness: 1, // Thickness of the line
-                      ),
+                      if (index < (categories.length / 2).ceil() - 1)
+                        _buildHorizontalDivider(screenWidth: screenWidth),
                     ],
                   );
                 },
@@ -127,6 +122,32 @@ class ProductsL1Page extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+
+  // Widget for a vertical divider
+  Widget _buildVerticalDivider({required double screenHeight}) {
+    return Container(
+      width: 30, // Space between items
+      height: screenHeight * 0.1, // Length of the vertical line
+      alignment: Alignment.center,
+      child: const VerticalDivider(
+        color: Color(0xFFA51414), // Red color (A51414)
+        thickness: 1, // Thickness of the line
+      ),
+    );
+  }
+
+  // Widget for a horizontal divider
+  Widget _buildHorizontalDivider({required double screenWidth}) {
+    return Container(
+      height: 30, // Space between rows
+      width: screenWidth * 0.9, // Length of the horizontal line
+      alignment: Alignment.center,
+      child: const Divider(
+        color: Color(0xFFA51414), // Red color (A51414)
+        thickness: 1, // Thickness of the line
       ),
     );
   }
