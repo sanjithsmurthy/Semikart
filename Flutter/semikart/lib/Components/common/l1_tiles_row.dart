@@ -10,7 +10,7 @@ class Productsonerow extends StatelessWidget {
 
     // List of categories with their icons and names
     final List<Map<String, String>> categories = [
-      {"icon": "public/assets/images/products/Category Icons_Circuit Protection.png", "name": "Circuit Protection"},
+      {"icon": "public/assets/icon/circuit_protection.png", "name": "Circuit Protection"},
       {"icon": "public/assets/icon/connectors.png", "name": "Connectors"},
     ];
 
