@@ -24,7 +24,7 @@ class HamburgerMenu extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(
                 left: screenWidth * 0.05 + (screenWidth * 0.01), // Move 10 pixels right dynamically
-                top: screenHeight * 0.048, // Keep the top padding as is
+                top: screenHeight * 0.043, // Keep the top padding as is
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
