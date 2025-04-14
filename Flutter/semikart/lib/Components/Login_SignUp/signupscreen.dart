@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:semikart/Components/home/home_page.dart';
+import 'package:semikart/Components/home/home_screen.dart';
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component

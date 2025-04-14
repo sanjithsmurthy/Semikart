@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Breadcrumbs extends StatelessWidget {
-  final List<BreadcrumbItem> items; // List of breadcrumb items
+  final List<BreadcrumbItem> items;
 
-  const Breadcrumbs({super.key, required this.items});
+  const Breadcrumbs({required this.items, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,32 +11,22 @@ class Breadcrumbs extends StatelessWidget {
       children: [
         for (int i = 0; i < items.length; i++) ...[
           GestureDetector(
-            onTap: items[i].onTap, // Navigate to the corresponding page
+            onTap: items[i].onTap,
             child: Text(
               items[i].label,
               style: TextStyle(
-                color: i == items.length - 1
-                    ? const Color(0xFFA51414) // Highlight the current page with #A51414
-                    : Colors.black,
+                color: i == items.length - 1 ? const Color(0xFFA51414) : Colors.black,
                 fontWeight: i == items.length - 1 ? FontWeight.bold : FontWeight.normal,
-                fontSize: 14, // Set font size to 14
+fontSize: 14, // Set font size to 14
                 fontFamily: 'Product Sans', // Use Product Sans font
                 decoration: i == items.length - 1 ? TextDecoration.none : TextDecoration.underline,
               ),
             ),
           ),
-          if (i < items.length - 1) // Add a separator except for the last item
+          if (i < items.length - 1)
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.0),
-              child: Text(
-                '>',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold, // Make the arrow bold
-                  fontSize: 20, // Set font size to 20
-                  fontFamily: 'Product Sans', // Use Product Sans font
-                ),
-              ),
+              child: Text('>', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
         ],
       ],
@@ -45,8 +35,8 @@ class Breadcrumbs extends StatelessWidget {
 }
 
 class BreadcrumbItem {
-  final String label; // Name of the breadcrumb
-  final VoidCallback onTap; // Action when the breadcrumb is clicked
+  final String label;
+  final VoidCallback onTap;
 
   BreadcrumbItem({required this.label, required this.onTap});
 }
