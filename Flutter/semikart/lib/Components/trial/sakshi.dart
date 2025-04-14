@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widget
-import '../common/payment_progress.dart'; // Import the PaymentProgress widget
-import '../common/payment_failed.dart'; // Import the PaymentFailedScreen widget
+import '../cart/payment_page.dart'; // Import the PaymentPage (EditPage) widget
+import '../cart/payment_progress.dart'; // Import the PaymentProgress widget
+import '../cart/payment_failed.dart'; // Import the PaymentFailedScreen widget
 import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
 import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
-import '../common/products_l1.dart'; // Import the ProductsL1Page widget
-import '../common/l1_tiles_row.dart'; // Import the Productsonerow widget
-import '../common/products_static.dart'; // Import the Productsstaticheader widget
+import '../products/products_l1.dart'; 
+import '../products/products_l2.dart'; // Import the ProductsL1Page widget
+import '../products/l1_tiles_row.dart'; // Import the Productsonerow widget
+import '../products/products_static.dart'; // Import the Productsstaticheader widget
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -114,6 +115,16 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                           );
                         },
                         child: const Text('Products L1'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProductsL2Page()),
+                          );
+                        },
+                        child: const Text('Products L2'),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(

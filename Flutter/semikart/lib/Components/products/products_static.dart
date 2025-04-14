@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'search_builtin.dart' as custom_search; // Import the SearchBar widget
-import 'RFQ_CTA.dart'; // Import the RFQ_CTA widget
+import '../common/search_builtin.dart' as custom_search; // Import the SearchBar widget
+import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
 
 class ProductsHeaderContent extends StatelessWidget {
   const ProductsHeaderContent({super.key});
