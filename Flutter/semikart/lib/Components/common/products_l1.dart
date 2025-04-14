@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'header_withback.dart';
 
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
@@ -31,28 +30,9 @@ class ProductsL1Page extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: CombinedAppBar(
-        title: 'Products', // Set your product category title here
-        onBackPressed: () {
-          Navigator.pop(context); // Standard back navigation
-        },
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Heading
-          Container(
-            padding: EdgeInsets.all(screenWidth * 0.04),
-            child: const Text(
-              'Electronic Components Categories Line Card',
-              style: TextStyle(
-                color: Color(0xFFA51414), // Red color (A51414)
-                fontSize: 20, // Font size 20px
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
           // Grid-like layout with lines
           Expanded(
             child: Padding(
@@ -70,14 +50,14 @@ class ProductsL1Page extends StatelessWidget {
                           _buildCategoryItem(
                             iconPath: categories[firstIndex]["icon"]!,
                             name: categories[firstIndex]["name"]!,
-                            iconSize: screenWidth * 0.1,
+                            iconSize: screenWidth * 0.2, // Adjusted for responsiveness
                           ),
                           _buildVerticalDivider(screenHeight: screenHeight),
                           if (secondIndex < categories.length)
                             _buildCategoryItem(
                               iconPath: categories[secondIndex]["icon"]!,
                               name: categories[secondIndex]["name"]!,
-                              iconSize: screenWidth * 0.1,
+                              iconSize: screenWidth * 0.2, // Adjusted for responsiveness
                             )
                           else
                             const Spacer(), // Empty space if no second item
