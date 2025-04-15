@@ -40,7 +40,7 @@ class CartItem extends StatelessWidget {
     final grandTotal = totalPrice + gstAmount;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: spacing),
+      margin: const EdgeInsets.symmetric(vertical: 1.0), // Set top and bottom margin to 1px
       padding: EdgeInsets.all(spacing),
       decoration: BoxDecoration(
         color: Colors.white,
