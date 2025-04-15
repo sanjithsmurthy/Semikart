@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'popup.dart';
-import 'red_button.dart';
+import '../common/popup.dart';
+import '../common/red_button.dart';
 
 class PaymentFailedDialog {
   static Future<void> show({

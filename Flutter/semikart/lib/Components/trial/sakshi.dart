@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import '../common/payment_page.dart'; // Import the PaymentPage (EditPage) widget
-import '../common/payment_progress.dart'; // Import the PaymentProgress widget
-import '../common/payment_failed.dart'; // Import the PaymentFailedScreen widget
+import '../cart/payment_page.dart'; // Import the PaymentPage (EditPage) widget
+import '../cart/payment_progress.dart'; // Import the PaymentProgress widget
+import '../cart/payment_failed.dart'; // Import the PaymentFailedScreen widget
 import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
-import '../common/grey_text_box.dart'; // Import the GreyTextBox widgetimport '/Components/cart/cart_item.dart'; // Import the updated MyCartItem widget
+import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
 import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
-import '../common/products_l1.dart'; // Import the ProductsL1Page widget
-import '../common/l1_tiles_row.dart'; // Import the Productsonerow widget
-import '../common/products_static.dart'; // Import the Productsstaticheader widget
+import '../products/products_l1.dart'; 
+import '../products/products_l2.dart'; // Import the ProductsL1Page widget
+import '../products/l1_tiles_row.dart'; // Import the Productsonerow widget
+import '../products/products_static.dart'; // Import the Productsstaticheader widget
 
 class TestLayoutSakshi extends StatefulWidget {
   const TestLayoutSakshi({super.key});
@@ -54,7 +55,6 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,18 +65,20 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
           backgroundColor: Colors.red,
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Header Section
+            header.CombinedAppBar(
+              title: "GO BACK", // Set the title for the page
+              onBackPressed: () {
+                // Handle back button press
+                Navigator.pop(context);
+              },
+            ),
             Expanded(
-              child: Scaffold(
-                appBar: header.CombinedAppBar(
-                  title: "GO BACK", // Set the title for the page
-                  onBackPressed: () {
-                    // Handle back button press
-                    Navigator.pop(context);
-                  },
-                ),
-                body: Padding(
-                  padding: const EdgeInsets.all(16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -87,82 +89,93 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                       const edit.EditTextBox(), // Use the EditTextBox widget here
                       const SizedBox(height: 16), // Add spacing between components
                       GreyTextBox(nameController: nameController), // Pass the controller to GreyTextBox
+                      const SizedBox(height: 16), // Add spacing before the button
+
+                      // Payment Page Button
+                      ElevatedButton(
+                        onPressed: _navigateToPaymentPage,
+                        child: const Text('Payment Page'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => PaymentProgress.show(context: context),
+                        child: const Text('Progress'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => PaymentFailedDialog.show(context: context),
+                        child: const Text('Failed'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProductsL1Page()),
+                          );
+                        },
+                        child: const Text('Products L1'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProductsL2Page()),
+                          );
+                        },
+                        child: const Text('Products L2'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Productsonerow()),
+                          );
+                        },
+                        child: const Text('One Row'),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProductsHeaderContent()),
+                          );
+                        },
+                        child: const Text('Products Header'),
+                      ),
                       const SizedBox(height: 16), // Add spacing before cart items
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: _cartItems.length,
-                          itemBuilder: (context, index) {
-                            final cartItem = _cartItems[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              // child: MyCartItem(
-                              //   imageUrl: cartItem["imageUrl"],
-                              //   title: cartItem["title"],
-                              //   description: cartItem["description"],
-                              //   price: cartItem["price"],
-                              //   onDelete: () => _removeItem(index),
-                              //   onViewDetails: () {
-                              //     // Handle view details action
-                              //     print("View details for ${cartItem["title"]}");
-                              //   },
-                              // ),
-                            );
-                          },
-                        ),
+                      ListView.builder(
+                        shrinkWrap: true, // Ensures the ListView takes only the required space
+                        physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
+                        itemCount: _cartItems.length,
+                        itemBuilder: (context, index) {
+                          final cartItem = _cartItems[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: ListTile(
+                              leading: Image.network(
+                                cartItem["imageUrl"],
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons.broken_image);
+                                },
+                              ),
+                              title: Text(cartItem["title"]),
+                              subtitle: Text(cartItem["description"]),
+                              trailing: Text("\$${cartItem["price"]}"),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: _navigateToPaymentPage,
-                  child: const Text('Payment Page'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () => PaymentProgress.show(context: context),
-                  child: const Text('Progress'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () => PaymentFailedDialog.show(context: context),
-                  child: const Text('Failed'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ProductsL1Page()),
-                    );
-                  },
-                  child: const Text('Products l1'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Productsonerow()),
-                    );
-                  },
-                  child: const Text('one row'),
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Productsstaticheader()),
-                    );
-                  },
-                  child: const Text('Products Header'),
-                ),
-              ],
             ),
           ],
         ),

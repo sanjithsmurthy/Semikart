@@ -71,7 +71,7 @@ class ProductDetailsNoImage extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                 horizontal: containerWidth * 0.09, // 9% of container width
               ),
-              child: Image.network(
+              child: Image.asset(
                 manufacturerImagePath,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {

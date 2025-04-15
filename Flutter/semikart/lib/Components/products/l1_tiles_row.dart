@@ -59,7 +59,7 @@ class Productsonerow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Use Image.network to load the image
-          Image.network(
+          Image.asset(
             iconPath,
             width: iconSize,
             height: iconSize,
