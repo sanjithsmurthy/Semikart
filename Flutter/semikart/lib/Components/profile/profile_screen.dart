@@ -93,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ).then((_) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) =>  LoginPasswordScreen()),
+                          MaterialPageRoute(builder: (context) => const LoginPasswordScreen()),
                         );
                       });
                     },
@@ -108,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) =>  ResetPasswordScreen()),
+                        MaterialPageRoute(builder: (context) => const ResetPasswordScreen()),
                       );
                     },
                     width: screenWidth * 0.8,
