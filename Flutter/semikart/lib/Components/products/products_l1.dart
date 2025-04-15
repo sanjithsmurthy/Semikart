@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../common/header.dart'; // Import the Header widget
+
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
 import 'products_l2.dart'; // Import the ProductsL2Page widget
 
@@ -33,16 +33,16 @@ class ProductsL1Page extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: Header(
-        showBackButton: true, // Show the back button
-        title: 'Products', // Set the title
-        onBackPressed: () {
-          Navigator.pop(context); // Navigate back to the previous page
-        },
-        onLogoTap: () {
-          Navigator.pushNamed(context, '/home'); // Navigate to the home page
-        },
-      ),
+      // appBar: Header(
+      //   showBackButton: true, // Show the back button
+      //   title: 'Products', // Set the title
+      //   onBackPressed: () {
+      //     Navigator.pop(context); // Navigate back to the previous page
+      //   },
+      //   onLogoTap: () {
+      //     Navigator.pushNamed(context, '/home'); // Navigate to the home page
+      //   },
+      // ),
       body: Stack(
         children: [
           // Main content
