@@ -91,7 +91,6 @@ class _ProfilePictureState extends State<ProfilePicture> {
     // Dynamically calculate sizes based on screen width
     final profileSize = screenWidth * 0.25; // Reduced size to 25% of screen width
     final editIconSize = profileSize * 0.22; // Edit icon size is 22% of profile picture size
-    final borderWidth = profileSize * 0.015; // Border width is 1.5% of profile picture size
 
     return SizedBox(
       width: profileSize,
@@ -104,19 +103,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
             height: profileSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFFA51414),
-                width: borderWidth, // Dynamically calculated border width
-              ),
+              color: Colors.grey[200], // Background color for the circle
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey[200],
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: _getImageWidget(profileSize), // Pass profile size for dynamic scaling
-            ),
+            clipBehavior: Clip.antiAlias,
+            child: _getImageWidget(profileSize), // Pass profile size for dynamic scaling
           ),
           // Edit Icon
           Positioned(
