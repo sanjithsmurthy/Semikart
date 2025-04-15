@@ -31,19 +31,19 @@ class _ProfilePictureState extends State<ProfilePicture> {
         maxHeight: 1000,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
         // Get MIME type for both web and mobile
         final mimeType = image.mimeType?.toLowerCase() ?? '';
         final isImage = mimeType.startsWith('image/');
-        
+
         if (!isImage) {
           if (context.mounted) {
             await CustomPopup.show(
               context: context,
               title: 'Invalid File Type',
-              message: 'Please select an image file (JPG, PNG, GIF or WEBP)',
-              imagePath: 'public/assets/images/Alert.png',  // Add your image path here
+              message: 'Please select an image file (JPG, PNG, GIF, or WEBP)',
+              imagePath: 'public/assets/images/Alert.png', // Add your image path here
             );
           }
           return;
@@ -56,7 +56,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
             _selectedImage = File(image.path);
           }
         });
-        
+
+        // Notify parent widget about the selected image
         if (!kIsWeb && _selectedImage != null) {
           widget.onImageSelected(_selectedImage!);
         }
@@ -70,7 +71,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
           message: 'Failed to select image. Please try again.',
         );
       }
-      print('Error picking image: $e');
+      debugPrint('Error picking image: $e');
     }
   }
 
@@ -96,7 +97,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Color(0xFFA51414),
+                color: const Color(0xFFA51414),
                 width: borderWidth, // Dynamically calculated border width
               ),
             ),
@@ -118,7 +119,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
               child: Container(
                 width: editIconSize, // Dynamically calculated edit icon size
                 height: editIconSize, // Dynamically calculated edit icon size
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(0xFFA51414),
                 ),
