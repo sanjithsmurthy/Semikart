@@ -202,7 +202,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             child: Text(
               "Manually enter each product\nrequirement below.",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

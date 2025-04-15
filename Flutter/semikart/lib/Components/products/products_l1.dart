@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../common/header.dart'; // Import the Header widget
-import 'products_static.dart'; // Import the products_static.dart file
+import 'products_static.dart'; // Import the ProductsHeaderContent widget
+import 'products_l2.dart'; // Import the ProductsL2Page widget
 
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
@@ -69,6 +70,7 @@ class ProductsL1Page extends StatelessWidget {
                             Row(
                               children: [
                                 _buildCategoryItem(
+                                  context: context,
                                   iconPath: categories[firstIndex]["icon"]!,
                                   name: categories[firstIndex]["name"]!,
                                   iconSize: screenWidth * 0.1, // Adjusted for responsiveness
@@ -76,6 +78,7 @@ class ProductsL1Page extends StatelessWidget {
                                 _buildVerticalDivider(screenHeight: screenHeight),
                                 if (secondIndex < categories.length)
                                   _buildCategoryItem(
+                                    context: context,
                                     iconPath: categories[secondIndex]["icon"]!,
                                     name: categories[secondIndex]["name"]!,
                                     iconSize: screenWidth * 0.1, // Adjusted for responsiveness
@@ -103,7 +106,7 @@ class ProductsL1Page extends StatelessWidget {
             right: 0,
             child: Padding(
               padding: EdgeInsets.only(bottom: screenHeight * 0.005), // Add 5px dynamic padding to the bottom
-              child: const ProductsHeaderContent(),
+              child: const ProductsHeaderContent(showBreadcrumbs: false), // Breadcrumbs disabled
             ),
           ),
         ],
@@ -113,39 +116,50 @@ class ProductsL1Page extends StatelessWidget {
 
   // Widget for a single category item
   Widget _buildCategoryItem({
+    required BuildContext context,
     required String iconPath,
     required String name,
     required double iconSize,
   }) {
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Use Image.network to load the image
-          Image.asset(
-            iconPath,
-            width: iconSize,
-            height: iconSize,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              // Fallback widget in case the image fails to load
-              return Icon(
-                Icons.broken_image,
-                size: iconSize,
-                color: Colors.grey,
-              );
-            },
-          ),
-          const SizedBox(height: 8), // Spacing between icon and text
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+      child: GestureDetector(
+        onTap: () {
+          if (name == "Circuit Protection") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductsL2Page()),
+            );
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Use Image.asset to load the image
+            Image.asset(
+              iconPath,
+              width: iconSize,
+              height: iconSize,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback widget in case the image fails to load
+                return Icon(
+                  Icons.broken_image,
+                  size: iconSize,
+                  color: Colors.grey,
+                );
+              },
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            const SizedBox(height: 8), // Spacing between icon and text
+            Text(
+              name,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

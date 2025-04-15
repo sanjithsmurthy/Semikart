@@ -3,10 +3,9 @@ import '../common/header.dart'; // Import the Header widget
 import '../products/products_static.dart'; // Import the ProductsHeaderContent widget
 import '../products/l2_page_redbox.dart'; // Import the L2PageRedBox widget
 import '../products/products_l1.dart'; // Import the ProductsL1Page widget
-import '../products/products_l3.dart'; // Import the ProductsL3Page widget
 
-class ProductsL2Page extends StatelessWidget {
-  const ProductsL2Page({super.key});
+class ProductsL3Page extends StatelessWidget {
+  const ProductsL3Page({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class ProductsL2Page extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ProductsL1Page()),
-          ); // Navigate to the ProductsL1Page
+          ); // Navigate back to the previous page
         },
         onLogoTap: () {
           Navigator.pushNamed(context, '/home'); // Navigate to the home page
@@ -38,27 +37,19 @@ class ProductsL2Page extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
 
                   // Step 2: Implement l2_page_redbox.dart
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ProductsL3Page()),
-                      );
-                    },
-                    child: const RedBorderBox(text: 'L2 Component 1'),
-                  ),
+                  const RedBorderBox(text: 'L3 Component 1'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                  const RedBorderBox(text: 'L2 Component 2'),
+                  const RedBorderBox(text: 'L3 Component 2'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                  const RedBorderBox(text: 'L2 Component 3'),
+                  const RedBorderBox(text: 'L3 Component 3'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                  const RedBorderBox(text: 'L2 Component 4'),
+                  const RedBorderBox(text: 'L3 Component 4'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                  const RedBorderBox(text: 'L2 Component 5'),
+                  const RedBorderBox(text: 'L3 Component 5'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                  const RedBorderBox(text: 'L2 Component 6'),
+                  const RedBorderBox(text: 'L3 Component 6'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                  const RedBorderBox(text: 'L2 Component 7'),
+                  const RedBorderBox(text: 'L3 Component 7'),
                 ],
               ),
             ),
