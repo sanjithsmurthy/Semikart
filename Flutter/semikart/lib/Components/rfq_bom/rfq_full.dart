@@ -33,7 +33,8 @@ class RFQFullPage extends StatelessWidget {
               // Add the CustomSquare component
               CustomSquare(),
 
-              const SizedBox(height: 20),
+              const SizedBox(
+                  height: 40), // Increased height by 4 pixels (20 + 4)
 
               // Add the RFQTextComponent
               RFQTextComponent(),
