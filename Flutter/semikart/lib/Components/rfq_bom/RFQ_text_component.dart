@@ -198,7 +198,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
         children: [
           // Add the instruction text
           Padding(
-            padding: EdgeInsets.only(bottom: 30), // Padding below the text
+            padding: EdgeInsets.only(bottom: 20), // Padding below the text
             child: Text(
               "Manually enter each product\nrequirement below.",
               style: TextStyle(
@@ -220,8 +220,10 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             alignment: Alignment.centerRight,
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 15,
-                  right: 20), // Spacing between button and last component
+                top: 15,
+                right:
+                    0, // Adjusted from 20 to 15 to move the button 5 pixels right
+              ),
               child: RedButton(
                 width: screenWidth * 0.25, // Make button width responsive
                 height: 34, // Adjusted height
