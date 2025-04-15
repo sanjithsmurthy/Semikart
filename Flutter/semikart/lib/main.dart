@@ -6,6 +6,13 @@ import 'Components/trial/testing.dart'; // Import ButtonNavigationPage
 import 'managers/auth_manager.dart'; // Import AuthManager provider
 
 void main() {
+  // Lock the app orientation to portrait mode
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // Lock to portrait mode
+    DeviceOrientation.portraitDown, // Optional: Allow upside-down portrait
+  ]);
+
   // Set global status bar and navigation bar styles
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
