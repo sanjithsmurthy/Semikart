@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import '../common/search_builtin.dart' as custom_search; // Import the SearchBar widget
 import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
+import '../common/breadcrumbs.dart'; // Import the Breadcrumbs widget
 
 class ProductsHeaderContent extends StatelessWidget {
-  const ProductsHeaderContent({super.key});
+  final bool showBreadcrumbs; // Parameter to control breadcrumbs visibility
+
+  const ProductsHeaderContent({super.key, this.showBreadcrumbs = true}); // Default is true
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Material( // Wrap the content in a Material widget
+    return Material(
       color: Colors.white, // Set the background color to white
       child: SingleChildScrollView(
         child: Column(
@@ -41,6 +44,18 @@ class ProductsHeaderContent extends StatelessWidget {
             Center(
               child: const RFQComponent(), // Add the RFQ_CTA widget here
             ),
+            const SizedBox(height: 16), // Add spacing before breadcrumbs
+
+            // Breadcrumbs (conditionally displayed)
+            if (showBreadcrumbs)
+              Center(
+                child: Breadcrumbs(
+                  items: [
+                    BreadcrumbItem(label: 'Home', onTap: () => Navigator.of(context).pop()),
+                    BreadcrumbItem(label: 'Products', onTap: () {}),
+                  ],
+                ), // Add the Breadcrumbs widget here
+              ),
           ],
         ),
       ),
