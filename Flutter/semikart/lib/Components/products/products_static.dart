@@ -11,6 +11,7 @@ class ProductsHeaderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Material(
       color: Colors.white, // Set the background color to white
@@ -31,13 +32,13 @@ class ProductsHeaderContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 16), // Add spacing before the search bar
+            SizedBox(height: screenHeight * 0.02), // Add spacing before the search bar
 
             // Search Bar
             Center(
               child: custom_search.SearchBar(), // Add the SearchBar widget here
             ),
-            const SizedBox(height: 16), // Add spacing before RFQ_CTA
+            SizedBox(height: screenHeight * 0.02), // Add spacing before RFQ_CTA
 
             // RFQ Component
             Center(
@@ -50,8 +51,8 @@ class ProductsHeaderContent extends StatelessWidget {
               Center(
                 child: Breadcrumbs(
                   items: [
-                    BreadcrumbItem(label: 'Home', onTap: () => Navigator.of(context).pop()),
-                    BreadcrumbItem(label: 'Products', onTap: () {}),
+                    BreadcrumbItem(label: 'Products', onTap: () => Navigator.of(context).pop()),
+                    BreadcrumbItem(label: 'L1 components', onTap: () {}),
                   ],
                 ), // Add the Breadcrumbs widget here
               ),
