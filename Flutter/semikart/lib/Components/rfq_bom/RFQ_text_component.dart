@@ -221,8 +221,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             child: Padding(
               padding: const EdgeInsets.only(
                 top: 15,
-                right:
-                    0, // Adjusted from 20 to 15 to move the button 5 pixels right
+                right:0, // Adjusted from 20 to 15 to move the button 5 pixels right
               ),
               child: RedButton(
                 width: screenWidth * 0.25, // Make button width responsive
