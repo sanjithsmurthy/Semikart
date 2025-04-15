@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'edit_textbox.dart';
-import 'edit_textbox2.dart';
+import '../common/edit_textbox.dart';
+import '../common/edit_textbox2.dart';
 import 'items_dropdown.dart';
-import 'red_button.dart';
-import 'ship_bill.dart';
+import '../common/red_button.dart';
+import '../common/ship_bill.dart';
 
 
 class EditPage extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomSquareBox extends StatelessWidget {
+class CustomSquare extends StatelessWidget {
   final String imagePath;
   final String text;
   final TextStyle? textStyle;
   final Color backgroundColor;
   final EdgeInsetsGeometry padding;
 
-  const CustomSquareBox({
+  const CustomSquare({
     super.key,
     required this.imagePath,
     required this.text,
@@ -45,7 +45,7 @@ class CustomSquareBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Dynamically scalable image
-          Image.asset(
+          Image.network(
             imagePath,
             width: imageSize, // Dynamically set the width
             height: imageSize, // Dynamically set the height
@@ -75,7 +75,7 @@ void main() {
     home: Scaffold(
       appBar: AppBar(title: const Text("CustomSquareBox Example")),
       body: Center(
-        child: CustomSquareBox(
+        child: CustomSquare(
           imagePath:
               'public/assets/images/products/Category Icons_Circuit Protection.png', // Correct image path
           text: 'Circuit Protection',

@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import '../products/prodl1_component.dart'; // Import the CustomSquareBox component
+import '../common/congradulations.dart'; // Import CongratulationsScreen
 
 class TestLayoutSoma extends StatelessWidget {
   const TestLayoutSoma({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Test Layout Soma"),
-      ),
-      body: Center(
-        child: CustomSquareBox(
-          imagePath:
-              'public/assets/icon/circuit_protection.png', // Example image URL
-          text: 'Circuit Protection',
-        ),
-      ),
-    );
+    return const CongratulationsScreen(); // Directly show the CongratulationsScreen
   }
 }
 

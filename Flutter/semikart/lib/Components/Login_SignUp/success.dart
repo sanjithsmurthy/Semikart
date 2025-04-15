@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../common/red_button.dart'; // Import the RedButton widget
-import '../home/home_page.dart'; // Import the HomePage widget
+import '../home/home_screen.dart'; // Import the HomePage widget
 
 class SuccessScreen extends StatelessWidget {
   @override

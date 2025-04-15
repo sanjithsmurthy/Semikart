@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'header_withback.dart';
 
 class Productsonerow extends StatelessWidget {
   const Productsonerow({super.key});
@@ -11,34 +10,14 @@ class Productsonerow extends StatelessWidget {
 
     // List of categories with their icons and names
     final List<Map<String, String>> categories = [
-      {"icon": "whatsapp.svg", "name": "Circuit Protection"},
-      {"icon": "assets/icons/connectors.png", "name": "Connectors"},
+      {"icon": "public/assets/icon/circuit_protection.png", "name": "Circuit Protection"},
+      {"icon": "public/assets/icon/connectors.png", "name": "Connectors"},
     ];
 
     return Scaffold(
-      appBar: CombinedAppBar(
-        title: 'Products', // Set your product category title here
-        onBackPressed: () {
-          Navigator.pop(context); // Standard back navigation
-        },
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Heading
-          Container(
-            padding: EdgeInsets.all(screenWidth * 0.04),
-            child: const Text(
-              'Electronic Components Categories Line Card',
-              style: TextStyle(
-                color: Color(0xFFA51414), // Red color (A51414)
-                fontSize: 20, // Font size 20px
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          // First row with vertical and horizontal lines
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
@@ -79,11 +58,20 @@ class Productsonerow extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Use Image.network to load the image
           Image.asset(
             iconPath,
             width: iconSize,
             height: iconSize,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              // Fallback widget in case the image fails to load
+              return Icon(
+                Icons.broken_image,
+                size: iconSize,
+                color: Colors.grey,
+              );
+            },
           ),
           const SizedBox(height: 8), // Spacing between icon and text
           Text(
