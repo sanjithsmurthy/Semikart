@@ -40,6 +40,12 @@ class ProductsL2Page extends StatelessWidget {
                   const RedBorderBox(text: 'L2 Component 3'),
                   SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
                   const RedBorderBox(text: 'L2 Component 4'),
+                  SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
+                  const RedBorderBox(text: 'L2 Component 5'),
+                  SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
+                  const RedBorderBox(text: 'L2 Component 6'),
+                  SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
+                  const RedBorderBox(text: 'L2 Component 7'),
                 ],
               ),
             ),
