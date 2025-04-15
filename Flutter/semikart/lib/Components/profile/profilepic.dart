@@ -31,19 +31,27 @@ class _ProfilePictureState extends State<ProfilePicture> {
         maxHeight: 1000,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
-        // Get MIME type for both web and mobile
+        // Get MIME type and file extension
         final mimeType = image.mimeType?.toLowerCase() ?? '';
-        final isImage = mimeType.startsWith('image/');
-        
+        final fileExtension = image.path.split('.').last.toLowerCase();
+
+        debugPrint('Image path: ${image.path}');
+        debugPrint('MIME type: $mimeType');
+        debugPrint('File extension: $fileExtension');
+
+        // Validate MIME type or file extension
+        final isImage = mimeType.startsWith('image/') ||
+            ['jpg', 'jpeg', 'png', 'gif', 'webp'].contains(fileExtension);
+
         if (!isImage) {
           if (context.mounted) {
             await CustomPopup.show(
               context: context,
               title: 'Invalid File Type',
-              message: 'Please select an image file (JPG, PNG, GIF or WEBP)',
-              imagePath: 'public/assets/images/Alert.png',  // Add your image path here
+              message: 'Please select an image file (JPG, PNG, GIF, or WEBP)',
+              imagePath: 'public/assets/images/Alert.png', // Add your image path here
             );
           }
           return;
@@ -56,7 +64,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
             _selectedImage = File(image.path);
           }
         });
-        
+
+        // Notify parent widget about the selected image
         if (!kIsWeb && _selectedImage != null) {
           widget.onImageSelected(_selectedImage!);
         }
@@ -70,7 +79,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
           message: 'Failed to select image. Please try again.',
         );
       }
-      print('Error picking image: $e');
+      debugPrint('Error picking image: $e');
     }
   }
 
@@ -82,7 +91,6 @@ class _ProfilePictureState extends State<ProfilePicture> {
     // Dynamically calculate sizes based on screen width
     final profileSize = screenWidth * 0.25; // Reduced size to 25% of screen width
     final editIconSize = profileSize * 0.22; // Edit icon size is 22% of profile picture size
-    final borderWidth = profileSize * 0.015; // Border width is 1.5% of profile picture size
 
     return SizedBox(
       width: profileSize,
@@ -95,19 +103,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
             height: profileSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: Color(0xFFA51414),
-                width: borderWidth, // Dynamically calculated border width
-              ),
+              color: Colors.grey[200], // Background color for the circle
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey[200],
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: _getImageWidget(profileSize), // Pass profile size for dynamic scaling
-            ),
+            clipBehavior: Clip.antiAlias,
+            child: _getImageWidget(profileSize), // Pass profile size for dynamic scaling
           ),
           // Edit Icon
           Positioned(
@@ -118,7 +117,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
               child: Container(
                 width: editIconSize, // Dynamically calculated edit icon size
                 height: editIconSize, // Dynamically calculated edit icon size
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(0xFFA51414),
                 ),

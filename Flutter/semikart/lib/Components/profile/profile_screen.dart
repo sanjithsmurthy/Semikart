@@ -37,12 +37,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     debugPrint("ProfileScreen is being rendered");
 
     return Scaffold(
-      appBar: Header(
+      appBar: const Header(
         showBackButton: true,
         title: 'Profile',
-        onBackPressed: () {
-          Navigator.pop(context);
-        },
+        onBackPressed: null, // Navigator.pop is runtime, so no const here
       ),
       body: SingleChildScrollView(
         controller: _scrollController,
@@ -93,12 +91,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ).then((_) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginPasswordScreen()),
+                          MaterialPageRoute(builder: (context) =>  LoginPasswordScreen()),
                         );
                       });
                     },
-                    width: screenWidth * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.05, // Dynamically scalable height
+                    width: screenWidth * 0.8, // Runtime value, so no const
+                    height: screenHeight * 0.05, // Runtime value, so no const
                   ),
                   const SizedBox(height: 16),
 
@@ -108,11 +106,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const ResetPasswordScreen()),
+                        MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
                       );
                     },
-                    width: screenWidth * 0.8,
-                    height: screenHeight * 0.05,
+                    width: screenWidth * 0.8, // Runtime value, so no const
+                    height: screenHeight * 0.05, // Runtime value, so no const
                   ),
                   const SizedBox(height: 32),
 

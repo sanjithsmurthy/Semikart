@@ -51,8 +51,8 @@ class ProductsHeaderContent extends StatelessWidget {
               Center(
                 child: Breadcrumbs(
                   items: [
-                    BreadcrumbItem(label: 'Home', onTap: () => Navigator.of(context).pop()),
-                    BreadcrumbItem(label: 'Products', onTap: () {}),
+                    BreadcrumbItem(label: 'Products', onTap: () => Navigator.of(context).pop()),
+                    BreadcrumbItem(label: 'L1 components', onTap: () {}),
                   ],
                 ), // Add the Breadcrumbs widget here
               ),
