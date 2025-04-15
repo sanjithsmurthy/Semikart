@@ -5,8 +5,8 @@ import '../cart/payment_failed.dart'; // Import the PaymentFailedScreen widget
 import '../common/searchbar.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
-import '../common/header_withback.dart' as header; // Import the Header and CombinedAppBar widgets with an alias
-import '../products/products_l1.dart'; 
+import '../common/header.dart'; // Import the Header widget
+import '../products/products_l1.dart';
 import '../products/products_l2.dart'; // Import the ProductsL1Page widget
 import '../products/l1_tiles_row.dart'; // Import the Productsonerow widget
 import '../products/products_static.dart'; // Import the Productsstaticheader widget
@@ -60,21 +60,16 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Components'),
-          backgroundColor: Colors.red,
+        appBar: Header(
+          showBackButton: true,
+          title: "Components",
+          onBackPressed: () {
+            Navigator.pop(context); // Handle back button press
+          },
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header Section
-            header.CombinedAppBar(
-              title: "GO BACK", // Set the title for the page
-              onBackPressed: () {
-                // Handle back button press
-                Navigator.pop(context);
-              },
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

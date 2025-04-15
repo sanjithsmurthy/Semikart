@@ -1,20 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:semikart/Components/home/home_screen.dart';
+import '../cart/cart_page.dart'; // Import CartPage
+import '../products/products_l1.dart'; // Import ProductsL1Page
 import 'header.dart'; // Import the unified Header
 import 'hamburger.dart'; // Import the HamburgerMenu
+import '../home/home_page.dart' as home_page; // Import HomePage with alias
 
 final ValueNotifier<int> cartItemCount = ValueNotifier<int>(0); // Define cartItemCount
 
-class BaseScaffold extends StatelessWidget {
-  final Widget body;
-  final int selectedIndex;
-  final Function(int) onNavTap;
+class BaseScaffold extends StatefulWidget {
+  const BaseScaffold({super.key});
 
-  const BaseScaffold({
-    super.key,
-    required this.body,
-    required this.selectedIndex,
-    required this.onNavTap,
-  });
+  @override
+  State<BaseScaffold> createState() => _BaseScaffoldState();
+}
+
+class _BaseScaffoldState extends State<BaseScaffold> {
+  int _selectedIndex = 0; // Track the currently selected tab
+
+  // List of pages for navigation
+  final List<Widget> _pages = [
+    home_page.HomePage(), // Use the aliased HomePage widget
+    const ProductsL1Page(), // Use ProductsL1Page from products_l1.dart
+    const Center(child: Text('Search Page')), // Replace with your SearchPage widget
+     CartPage(), // Use CartPage from cart.dart
+    const Center(child: Text('Profile Page')), // Replace with your ProfilePage widget
+  ];
+
+  void _onNavTap(int index) {
+    setState(() {
+      _selectedIndex = index; // Update the selected index
+    });
+  }
 
   String? _getTitle(int index) {
     switch (index) {
@@ -35,26 +52,26 @@ class BaseScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Header(
-        showBackButton: selectedIndex != 0,
-        title: _getTitle(selectedIndex),
-        onBackPressed: () => onNavTap(0),
-        onLogoTap: () => onNavTap(0),
+        showBackButton: _selectedIndex != 0,
+        title: _getTitle(_selectedIndex),
+        onBackPressed: () => _onNavTap(0), // Navigate back to Home
+        onLogoTap: () => _onNavTap(0), // Navigate to Home when logo is tapped
       ),
-      drawer: const HamburgerMenu(),
-      body: body,
+      drawer: const HamburgerMenu(), // Attach the HamburgerMenu widget
+      body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: selectedIndex,
-        selectedItemColor: const Color(0xFFA51414),
-        unselectedItemColor: Colors.grey,
+        currentIndex: _selectedIndex, // Highlight the active tab
+        selectedItemColor: const Color(0xFFA51414), // Red for selected items
+        unselectedItemColor: Colors.grey, // Grey for unselected items
         backgroundColor: Colors.white, // Set bottom bar color to white
-        onTap: onNavTap,
+        onTap: _onNavTap, // Handle tab switching
         items: [
-          _buildNavItem(context, Icons.home, "Home", 0, selectedIndex),
-          _buildNavItem(context, Icons.inventory, "Products", 1, selectedIndex),
-          _buildNavItem(context, Icons.search, "Search", 2, selectedIndex),
-          _buildCartNavItem(context, Icons.shopping_cart, "Cart", 3, selectedIndex),
-          _buildNavItem(context, Icons.person, "Profile", 4, selectedIndex),
+          _buildNavItem(context, Icons.home, "Home", 0, _selectedIndex),
+          _buildNavItem(context, Icons.inventory, "Products", 1, _selectedIndex),
+          _buildNavItem(context, Icons.search, "Search", 2, _selectedIndex),
+          _buildCartNavItem(context, Icons.shopping_cart, "Cart", 3, _selectedIndex),
+          _buildNavItem(context, Icons.person, "Profile", 4, _selectedIndex),
         ],
       ),
     );
