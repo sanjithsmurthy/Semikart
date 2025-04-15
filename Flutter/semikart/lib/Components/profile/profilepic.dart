@@ -33,9 +33,17 @@ class _ProfilePictureState extends State<ProfilePicture> {
       );
 
       if (image != null) {
-        // Get MIME type for both web and mobile
+        // Get MIME type and file extension
         final mimeType = image.mimeType?.toLowerCase() ?? '';
-        final isImage = mimeType.startsWith('image/');
+        final fileExtension = image.path.split('.').last.toLowerCase();
+
+        debugPrint('Image path: ${image.path}');
+        debugPrint('MIME type: $mimeType');
+        debugPrint('File extension: $fileExtension');
+
+        // Validate MIME type or file extension
+        final isImage = mimeType.startsWith('image/') ||
+            ['jpg', 'jpeg', 'png', 'gif', 'webp'].contains(fileExtension);
 
         if (!isImage) {
           if (context.mounted) {
