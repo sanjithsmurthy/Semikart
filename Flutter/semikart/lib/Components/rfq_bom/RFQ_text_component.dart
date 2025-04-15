@@ -200,9 +200,10 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
           Padding(
             padding: EdgeInsets.only(bottom: 20), // Padding below the text
             child: Text(
-              "Manually enter each product\nrequirement below.",
+              "Manually enter each product requirement\nbelow.",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20
+                ,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
