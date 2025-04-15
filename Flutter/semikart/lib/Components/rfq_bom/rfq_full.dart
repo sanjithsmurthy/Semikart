@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../common/header_withback.dart'; // Import the CombinedAppBar
 import 'upload_file.dart'; // Import the CustomSquare component
 import 'RFQ_text_component.dart'; // Import the RFQTextComponent
 import 'rfq_adress_details.dart'; // Import the RFQAddressDetails component
@@ -11,6 +12,14 @@ class RFQFullPage extends StatelessWidget {
     return Scaffold(
       // Set the background color of the screen to white
       backgroundColor: Colors.white,
+
+      // Add the CombinedAppBar as the app bar
+      appBar: CombinedAppBar(
+        title: "Request For Quote", // Set the title of the app bar
+        onBackPressed: () {
+          Navigator.pop(context); // Navigate back to the previous screen
+        },
+      ),
 
       // Main body content
       body: SingleChildScrollView(
