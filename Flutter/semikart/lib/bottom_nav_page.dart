@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Components/common/base_scaffold.dart'; // Import BaseScaffold
-import 'Components/home/home_screen.dart'; // Import HomePage
+import 'Components/home/custom_base_scaffold_rendering.dart'; // Import HomePage
 import 'Components/cart/cart_page.dart'; // Import CartPage
 import 'Components/profile/profile_screen.dart'; // Import ProfilePage
 

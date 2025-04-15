@@ -149,7 +149,9 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // Zip Code and State
               Row(
                 children: [
-                  Flexible(
+                  // Zip Code
+                  Expanded(
+                    flex: 1,
                     child: GreyTextBox(
                       nameController: zipCodeController,
                       text: 'Zip code',
@@ -157,8 +159,12 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           Color(0xFFE4E8EC), // Grey background color
                     ),
                   ),
-                  SizedBox(width: 10), // Adjusted padding to match other fields
-                  Flexible(
+                  SizedBox(
+                      width:
+                          30), // Match the spacing between Quantity and Price
+                  // State
+                  Expanded(
+                    flex: 1,
                     child: GreyTextBox(
                       nameController: stateController,
                       text: 'State',
@@ -174,7 +180,9 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               // City and Country
               Row(
                 children: [
-                  Flexible(
+                  // City
+                  Expanded(
+                    flex: 1,
                     child: GreyTextBox(
                       nameController: cityController,
                       text: 'City',
@@ -182,8 +190,12 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           Color(0xFFE4E8EC), // Grey background color
                     ),
                   ),
-                  SizedBox(width: 10), // Adjusted padding to match other fields
-                  Flexible(
+                  SizedBox(
+                      width:
+                          30), // Match the spacing between Quantity and Price
+                  // Country
+                  Expanded(
+                    flex: 1,
                     child: GreyTextBox(
                       nameController: countryController,
                       text: 'Country',
