@@ -212,6 +212,6 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => showBackButton
-      ? const Size.fromHeight(120.0)
+      ? const Size.fromHeight(126.0)
       : const Size.fromHeight(66.0);
 }
