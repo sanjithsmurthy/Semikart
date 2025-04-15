@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+`import 'package:flutter/material.dart';
 import '../common/search_builtin.dart' as custom_search; // Import the SearchBar widget
 import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
 
