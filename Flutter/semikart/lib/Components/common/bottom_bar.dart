@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../cart/cart_page.dart'; // Import CartPage
 import '../common/header.dart'; // Import the unified Header
+import '../profile/profile_screen.dart'; // Import ProfileScreen
+import '../home/home_screen.dart'; // Import HomeScreen
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -14,11 +16,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   // List of pages for navigation
   final List<Widget> _pages = [
-    const PlaceholderPage(title: 'Home Page'), // Placeholder for HomePage
+     HomePage(), // Navigate to HomeScreen
     const PlaceholderPage(title: 'Products Page'), // Placeholder for ProductsPage
     const PlaceholderPage(title: 'Search Page'), // Placeholder for SearchPage
-    CartPage(), // CartPage
-    const PlaceholderPage(title: 'Profile Page'), // Placeholder for ProfilePage
+    CartPage(), // Navigate to CartPage
+    const ProfileScreen(), // Navigate to ProfileScreen
   ];
 
   void _onItemTapped(int index) {
@@ -35,12 +37,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
         title: _getPageTitle(_selectedIndex), // Set the title based on the selected page
         onBackPressed: () {
           setState(() {
-            _selectedIndex = 0; // Navigate back to HomePage
+            _selectedIndex = 0; // Navigate back to HomeScreen
           });
         },
         onLogoTap: () {
           setState(() {
-            _selectedIndex = 0; // Navigate to HomePage when logo is tapped
+            _selectedIndex = 0; // Navigate to HomeScreen when logo is tapped
           });
         },
       ),
@@ -55,21 +57,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
         unselectedItemColor: Colors.grey, // Unselected item color
         backgroundColor: Colors.white, // Set the background color to white
         onTap: _onItemTapped,
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.inventory),
             label: 'Products',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.search), // Search icon
             label: 'Search',
           ),
-          _buildCartNavItem(Icons.shopping_cart, "Cart", 3), // Cart with badge
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -90,57 +95,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
       case 4:
         return 'Profile';
       default:
-        return null; // No title for HomePage
+        return null; // No title for HomeScreen
     }
-  }
-
-  // Cart Item with Badge
-  BottomNavigationBarItem _buildCartNavItem(IconData icon, String label, int index) {
-    return BottomNavigationBarItem(
-      icon: Stack(
-        clipBehavior: Clip.none, // Ensures the badge is not clipped
-        children: [
-          Icon(
-            icon,
-            color: _selectedIndex == index ? const Color(0xFFA51414) : Colors.grey,
-            size: 30,
-          ),
-          ValueListenableBuilder<int>(
-            valueListenable: cartItemCount, // Listen to cartItemCount
-            builder: (context, count, child) {
-              if (count > 0) {
-                return Positioned(
-                  right: -2, // Adjusted to align the badge inside the cart icon
-                  top: -2, // Adjusted to align the badge inside the cart icon
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFA51414), // Badge color
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 20,
-                      minHeight: 20,
-                    ),
-                    child: Text(
-                      count.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                );
-              }
-              return const SizedBox.shrink(); // Hide badge if count is 0
-            },
-          ),
-        ],
-      ),
-      label: label,
-    );
   }
 }
 
