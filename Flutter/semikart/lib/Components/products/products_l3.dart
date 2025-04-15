@@ -62,7 +62,7 @@ class ProductsL3Page extends StatelessWidget {
             right: 0,
             child: Padding(
               padding: EdgeInsets.only(bottom: screenHeight * 0.005), // Add 5px dynamic padding to the bottom
-              child: const ProductsHeaderContent(),
+              child: const ProductsHeaderContent(showL2ComponentBreadcrumb: true),
             ),
           ),
         ],

@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import '../common/search_builtin.dart' as custom_search; // Import the SearchBar widget
 import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
 import '../common/breadcrumbs.dart'; // Import the Breadcrumbs widget
-import 'products_l2.dart'; // Import the ProductsL1Page widget
+import 'products_l2.dart'; // Import the ProductsL2Page widget
 
 class ProductsHeaderContent extends StatelessWidget {
   final bool showBreadcrumbs; // Parameter to control breadcrumbs visibility
+  final bool showL2ComponentBreadcrumb; // Parameter to control 'L2 Component 1' breadcrumb visibility
 
-  const ProductsHeaderContent({super.key, this.showBreadcrumbs = true}); // Default is true
+  const ProductsHeaderContent({
+    super.key,
+    this.showBreadcrumbs = true, // Default is true
+    this.showL2ComponentBreadcrumb = false, // Default is false
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,10 @@ class ProductsHeaderContent extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
                 child: Breadcrumbs(
                   items: [
-                    BreadcrumbItem(label: 'Products', onTap: () => Navigator.of(context).pop()),
+                    BreadcrumbItem(
+                      label: 'Products',
+                      onTap: () => Navigator.of(context).pop(),
+                    ),
                     BreadcrumbItem(
                       label: 'Circuit Protection',
                       onTap: () {
@@ -65,6 +73,16 @@ class ProductsHeaderContent extends StatelessWidget {
                         );
                       },
                     ),
+                    if (showL2ComponentBreadcrumb) // Conditionally show 'L2 Component 1'
+                      BreadcrumbItem(
+                        label: 'L2 Component 1',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProductsL2Page()),
+                          );
+                        },
+                      ),
                   ],
                 ), // Add the Breadcrumbs widget here
               ),
