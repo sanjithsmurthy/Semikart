@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'upload_file.dart'; // Import the CustomSquare component
-import 'RFQ_text_component.dart'; // Import the RFQTextComponent
+import 'rfq_text_component.dart'; // Import the RFQTextComponent
 import 'rfq_adress_details.dart'; // Import the RFQAddressDetails component
 
 class RFQFullPage extends StatelessWidget {

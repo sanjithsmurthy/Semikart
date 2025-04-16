@@ -1,33 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'package:flutter/services.dart'; // Import SystemChrome
-import 'package:semikart/Components/Login_SignUp/Loginpassword.dart';
-import 'Components/trial/testing.dart'; // Import ButtonNavigationPage
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+import 'package:Semikart/Components/login_signup/login_password.dart';
+import 'package:logging/logging.dart';
+import 'base_scaffold.dart'; // Import BaseScaffold directly
 import 'managers/auth_manager.dart'; // Import AuthManager provider
 
 void main() {
-  // Lock the app orientation to portrait mode
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock Orientation
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp, // Lock to portrait mode
-    DeviceOrientation.portraitDown, // Optional: Allow upside-down portrait
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
   ]);
 
-  // Set global status bar and navigation bar styles
+  // Set System UI Styles
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.grey, // White background for the status bar
-      statusBarIconBrightness: Brightness.dark, // Dark icons for visibility
-      systemNavigationBarColor: Colors.white, // White background for the bottom navigation bar
-      systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for visibility
+      statusBarColor: Colors.white, // White status bar
+      statusBarIconBrightness: Brightness.dark, // Dark icons for status bar
+      systemNavigationBarColor: Colors.white, // White navigation bar
+      systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for navigation bar
     ),
   );
 
+  // Configure logging
+  _setupLogging();
+
   runApp(
-    ProviderScope( // Initialize Riverpod
-      child: const MyApp(),
+    const ProviderScope( // Initialize Riverpod
+      child: MyApp(),
     ),
   );
+}
+
+// Logging setup function
+void _setupLogging() {
+  Logger.root.level = Level.ALL; // Log messages of all levels
+  Logger.root.onRecord.listen((record) {
+    // Simple console output: [LEVEL] logger_name: message
+    debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
+    // You could add more details like time, error, stacktrace if needed:
+    // print('${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
+    // if (record.error != null) {
+    //   print('Error: ${record.error}');
+    // }
+    // if (record.stackTrace != null) {
+    //   print('StackTrace: ${record.stackTrace}');
+    // }
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -36,39 +58,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Semikart Components',
+      title: 'Semikart',
       theme: ThemeData(
         primaryColor: const Color(0xFFA51414),
         scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Product Sans',
       ),
-      home: const ModeWrapper(),
+      home: const AuthWrapper(), // Use AuthWrapper to decide the initial screen
       debugShowCheckedModeBanner: false,
+      // Define routes for pre-login navigation if needed
+      // routes: {
+      //   '/signup': (context) => SignUpScreen(), // Example
+      // },
     );
   }
 }
 
-class ModeWrapper extends ConsumerWidget {
-  const ModeWrapper({super.key});
+/// This widget decides which UI flow to show based on auth state.
+class AuthWrapper extends ConsumerWidget {
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the current testing mode state
-    final isTestingMode = ref.watch(authManagerProvider);
+    // Watch the authentication state from the provider
+    final authState = ref.watch(authManagerProvider);
 
-    // Navigate to LoginPasswordScreen by default
-    return Scaffold(
-      body: LoginPasswordScreen(), // Display LoginPasswordScreen
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to testing.dart when the button is clicked
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ButtonNavigationPage()),
-          );
-        },
-        backgroundColor: isTestingMode ? Colors.green : Colors.grey,
-        child: const Icon(Icons.bug_report), // Icon for testing mode
-      ),
-    );
+    // --- Handle Initial Unknown/Loading State ---
+    if (authState.status == AuthStatus.unknown) {
+      print("AuthWrapper: State is Unknown. Showing Loading Indicator.");
+      // Show a loading indicator while checking storage
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator(color: Color(0xFFA51414))), // Use app's primary color
+      );
+    }
+
+    // --- Determine Screen based on Status ---
+    // *** CORRECTED CHECK: Use authState.status ***
+    if (authState.status == AuthStatus.authenticated) {
+      // User is logged in - Show the main app structure
+      print("AuthWrapper: State is Authenticated. Showing BaseScaffold.");
+      return const BaseScaffold();
+    } else {
+      // User is not logged in (AuthStatus.unauthenticated)
+      print("AuthWrapper: State is Unauthenticated. Showing LoginPasswordScreen.");
+      return LoginPasswordScreen(); // Show the pre-login entry screen
+    }
   }
 }

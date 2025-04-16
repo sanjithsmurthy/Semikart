@@ -6,7 +6,7 @@ import 'custom_text_field.dart'; // Import the CustomTextField widget
 import 'password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
 import '../common/red_button.dart'; // Import the RedButton widget
-import 'signupscreen.dart'; // Import the SignUpScreen widget
+import 'signup_screen.dart'; // Import the SignUpScreen widget
 import 'forgot_password.dart'; // Import the ForgotPassword screen
 
 class LoginPasswordNewScreen extends StatelessWidget { // Renamed the class

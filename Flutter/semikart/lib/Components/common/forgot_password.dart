@@ -13,7 +13,7 @@ class ForgotPasswordButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final fontSize = screenWidth * 0.04; // Font size scales with screen width
+    final fontSize = screenWidth * 0.03; // Font size scales with screen width
     final iconSize = screenWidth * 0.05; // Icon size scales with screen width
 
     return GestureDetector(
@@ -27,8 +27,6 @@ class ForgotPasswordButton extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: fontSize, // Dynamically scaled font size
-              fontWeight: FontWeight.w500, // Medium weight
-              fontFamily: 'Product Sans', // Use the specified font
               color: Colors.black, // Text color
             ),
           ),

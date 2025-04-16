@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../common/search_builtin.dart' as custom_search; // Import the SearchBar widget
 import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
-import '../common/breadcrumbs.dart'; // Import the Breadcrumbs widget
+import 'breadcrumbs.dart'; // Import the Breadcrumbs widget
 import 'products_l2.dart'; // Import the ProductsL2Page widget
 
 class ProductsHeaderContent extends StatelessWidget {

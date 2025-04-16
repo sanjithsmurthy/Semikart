@@ -69,7 +69,7 @@ class _TwoRadioButtonsState extends State<TwoRadioButtons> {
                         child: Text(
                           label,
                           style: const TextStyle(
-                            fontFamily: 'Product Sans',
+
                             fontSize: 17,
                             color: Color(0xFF000000),
                           ),

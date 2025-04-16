@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home/home_screen.dart'; // Import HomePage
+import 'package:Semikart/Components/home/home_page.dart'; // Import HomePage
 
 void main() {
   runApp(const MaterialApp(
@@ -13,6 +13,6 @@ class TestLayoutSanjith extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage(); // Directly use HomePage as the body
+    return HomePageContent(); // Directly use HomePage as the body
   }
 }
