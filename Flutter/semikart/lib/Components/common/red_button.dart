@@ -26,13 +26,28 @@ class RedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Get the screen width
+        // Get the screen width and height
         final screenWidth = MediaQuery.of(context).size.width;
+        final screenHeight = MediaQuery.of(context).size.height;
 
         // Dynamically calculate button width, height, and font size
-        final buttonWidth = width ?? (screenWidth < 400 ? screenWidth * 0.9 : 343.0); // 90% of screen width for small screens
-        final buttonHeight = height ?? 48.0; // Default height is 48
-        final textFontSize = fontSize ?? (screenWidth < 400 ? 14.0 : 16.0); // Adjust font size for smaller screens
+        final buttonWidth = width ??
+            (screenWidth < 400
+                ? screenWidth * 0.9
+                : screenWidth *
+                    0.7); // 90% of screen width for small screens, 70% for larger screens
+        final buttonHeight =
+            height ?? screenHeight * 0.06; // 6% of screen height
+        final textFontSize = fontSize ??
+            (screenWidth < 400
+                ? screenWidth * 0.035
+                : screenWidth *
+                    0.04); // 3.5% of screen width for small screens, 4% for larger screens
+        final borderRadius = screenWidth * 0.0625; // 6.25% of screen width
+        final progressIndicatorSize = screenWidth * 0.05; // 5% of screen width
+        final borderWidth = screenWidth * 0.0025; // 0.25% of screen width
+        final progressIndicatorStrokeWidth =
+            screenWidth * 0.005; // 0.5% of screen width
 
         return SizedBox(
           width: buttonWidth,
@@ -40,23 +55,29 @@ class RedButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: isLoading ? null : onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: isWhiteButton ? Colors.white : const Color(0xFFA51414), // White or red background
+              backgroundColor: isWhiteButton
+                  ? Colors.white
+                  : const Color(0xFFA51414), // White or red background
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(borderRadius),
                 side: isWhiteButton
-                    ? const BorderSide(color: Color(0xFFA51414), width: 2.0) // Border for white button
+                    ? BorderSide(
+                        color: const Color(0xFFA51414),
+                        width: borderWidth) // Border for white button
                     : BorderSide.none, // No border for red button
               ),
               elevation: 0,
-              padding: padding ?? EdgeInsets.zero, // Use provided padding or default to zero
+              padding: padding ??
+                  EdgeInsets.zero, // Use provided padding or default to zero
             ),
             child: isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
+                ? SizedBox(
+                    width: progressIndicatorSize,
+                    height: progressIndicatorSize,
                     child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: progressIndicatorStrokeWidth,
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
                 : Container(
@@ -64,10 +85,13 @@ class RedButton extends StatelessWidget {
                     child: Text(
                       label,
                       style: TextStyle(
-                        color: isWhiteButton ? const Color(0xFFA51414) : Colors.white, // Text color based on variant
-                        fontSize: textFontSize, // Dynamically calculated font size
+                        color: isWhiteButton
+                            ? const Color(0xFFA51414)
+                            : Colors.white, // Text color based on variant
+                        fontSize:
+                            textFontSize, // Dynamically calculated font size
                         height: 1.0,
-                        
+
                         fontWeight: FontWeight.normal,
                       ),
                     ),
