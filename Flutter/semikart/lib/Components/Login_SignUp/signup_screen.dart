@@ -253,7 +253,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             
                             color: Colors.black,
                           ),
-                          textAlign: TextAlign.right, // Align text to the right
+                          textAlign: TextAlign.center, // Align text to the right
                         ),
                       ),
                     ],
