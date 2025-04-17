@@ -188,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // controller: mobileNumberController, // Keep commented if not needed
                     decoration: InputDecoration(
                       labelText: 'Mobile Number',
-                      labelStyle: TextStyle(color: Color(0xFFA51414)), // Style from CustomTextField
+                      labelStyle: TextStyle(color: Color(0xFF757575)), // Style from CustomTextField
                       floatingLabelStyle: TextStyle(color: Color(0xFFA51414)), // Style from CustomTextField
                       border: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0xFFA51414),width: 2.0),
