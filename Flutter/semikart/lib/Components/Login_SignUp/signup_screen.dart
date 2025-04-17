@@ -3,7 +3,11 @@ import '../../base_scaffold.dart'; // Import BaseScaffold for navigation
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
+<<<<<<< HEAD
 import 'mobile_number_input.dart'; // Import the MobileNumberField component
+=======
+import '../login_signup/mobile_number_input.dart'; // Import the MobileNumberField component
+>>>>>>> e1b9ee71364598bbee1867da7d88e2aa10e02df9
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
 import 'login_password.dart'; // Import the LoginScreen component (assuming login_password_new.dart)
@@ -230,10 +234,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // Checkbox for Terms and Conditions
-                Align(
-                  alignment: Alignment.centerRight, // Align the entire row to the right
+                Center( // Wrap the Row with Center
                   child: Row(
                     mainAxisSize: MainAxisSize.min, // Minimize the row's width
+                    mainAxisAlignment: MainAxisAlignment.center, // Center items within the row
                     children: [
                       Checkbox(
                         value: isTermsAccepted,
@@ -250,10 +254,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           "I agree to the terms and conditions",
                           style: TextStyle(
                             fontSize: screenWidth * 0.035, // Specify font size
-                            
+                            // fontFamily: 'Product Sans', // Use Product Sans font if available
                             color: Colors.black,
                           ),
-                          textAlign: TextAlign.right, // Align text to the right
+                          textAlign: TextAlign.center, // No longer needed as Row centers
                         ),
                       ),
                     ],

@@ -22,14 +22,14 @@ class PopularCategoriesGrid extends StatelessWidget {
       {'label': 'Connectors', 'imagePath': 'public/assets/icon/connectors.ico'},
       {'label': 'Optoelectronics', 'imagePath': 'public/assets/icon/optoelectronics.ico'},
       {'label': 'Semiconductors', 'imagePath': 'public/assets/icon/semiconductors.ico'},
-      {'label': 'Electro-mechanical', 'imagePath': 'public/assets/icon/electromechanical.ico'},
+      {'label': 'Electro-\nmechanical', 'imagePath': 'public/assets/icon/electromechanical.ico'},
       {'label': 'Enclosures', 'imagePath': 'public/assets/icon/enclosures.ico'},
       {'label': 'Engineering \nDevelopment', 'imagePath': 'public/assets/icon/engineering_development.ico'},
       {'label': 'Industrial \nAutomation', 'imagePath': 'public/assets/icon/industrial_automation.ico'},
       {'label': 'Ciruit Protection', 'imagePath': 'public/assets/icon/circuit_protection.ico'},
-      {'label': 'Passive Components', 'imagePath': 'public/assets/icon/passive_components.ico'},
+      {'label': 'Passive \nComponents', 'imagePath': 'public/assets/icon/passive_components.ico'},
       {'label': 'Sensors', 'imagePath': 'public/assets/icon/sensors.ico'},
-      {'label': 'Cables and \nWire', 'imagePath': 'public/assets/icon/wire_and_cable.ico'},
+      {'label': 'Cables & \nWire', 'imagePath': 'public/assets/icon/wire_and_cable.ico'},
       {'label': 'Embeded \nSolutions', 'imagePath': 'public/assets/icon/embeded_solutions.ico'},
     ];
 
