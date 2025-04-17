@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Semikart/Components/home/home_page.dart';
+import '../../base_scaffold.dart'; // Import BaseScaffold for navigation
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
@@ -242,7 +242,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => HomePageContent()), // Navigate to HomePage
+                              MaterialPageRoute(builder: (context) => BaseScaffold()), // Navigate to HomePage
                             );
                           },
                         )
