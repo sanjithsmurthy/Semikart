@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../common/search_bar.dart' as custom_search; // Import the SearchBar widget
-import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
+ // Import the RFQ_CTA widget
 import 'breadcrumbs.dart'; // Import the Breadcrumbs widget
 import 'products_l2.dart'; // Import the ProductsL2Page widget
 
@@ -50,7 +50,7 @@ class ProductsHeaderContent extends StatelessWidget {
             // RFQ Component
             Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: const RFQComponent(), // Add the RFQ_CTA widget here
+              // child: const RFQComponent(), // Add the RFQ_CTA widget here
             ),
             SizedBox(height: screenHeight * 0.001), // Further reduced spacing before breadcrumbs by 5px
 
