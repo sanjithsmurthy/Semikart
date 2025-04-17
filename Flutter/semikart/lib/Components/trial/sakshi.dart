@@ -3,7 +3,7 @@ import '../cart/payment_page.dart'; // Import the PaymentPage (EditPage) widget
 import '../cart/payment_progress.dart'; // Import the PaymentProgress widget
 import '../cart/payment_failed.dart'; // Import the PaymentFailedScreen widget
 import '../cart/cart_page.dart'; // Import the CartPage widget
-import '../common/searchbar_r.dart' as custom; // Import the SearchBar widget with an alias
+// import '../common/searchbar_r.dart' as custom; // Import the SearchBar widget with an alias
 import '../common/edit_textbox.dart' as edit; // Import the EditTextBox widget with an alias
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
 import '../common/header.dart'; // Import the Header widget
@@ -251,7 +251,7 @@ class _TestLayoutSakshiState extends State<TestLayoutSakshi> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10.0), // Add 10px padding around SearchBar
-                        child: custom.SearchBar(searchController: searchController),
+                        // child: custom.SearchBar(searchController: searchController),
                       ),
                       const edit.EditTextBox(), // Use the EditTextBox widget here
                       const SizedBox(height: 16), // Add spacing between components

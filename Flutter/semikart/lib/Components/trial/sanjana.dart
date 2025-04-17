@@ -11,9 +11,9 @@ import '../common/RFQ_CTA.dart';
 import '../common/cartempty.dart';
 import '../common/order_view.dart';
 import '../profile/profilepic.dart';
-import '../common/product_search.dart'; // Import the ProductSearch page
+import '../search/product_search.dart'; // Import the ProductSearch page
 import '../common/search_bar.dart' as custom; // Import the built-in SearchBar with alias
-import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
+import '../login_signup/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../login_signup/password_text_field.dart'; // Import the PasswordTextField widget
 import '../login_signup/login_password_new.dart'; // Import the LoginPasswordScreen
 import '../login_signup/login_otp.dart'; // Adjust the path as needed
