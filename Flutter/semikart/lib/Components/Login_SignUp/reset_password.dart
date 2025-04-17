@@ -109,7 +109,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 },
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Add spacing below the ConfirmPasswordScreen
+              SizedBox(height: screenHeight * 0.05), // Add spacing below the ConfirmPasswordScreen
 
               // Confirm Button
               Center(
@@ -132,7 +132,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       ),
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Add spacing below the button
+              SizedBox(height: screenHeight * 0.01), // Add spacing below the button
             ],
           ),
         ),
