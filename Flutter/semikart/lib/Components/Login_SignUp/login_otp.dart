@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
-import 'vertical_radios.dart'; // Import the VerticalRadios widget
+import 'horizontal_radios.dart'; // Import the HorizontalRadios widget
 import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the RedButton widget
@@ -114,26 +114,31 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
               ),
             ),
 
-            // Positioned SignInWithGoogleButton
+            // Centered SignInWithGoogleButton (Positioned like login_password_new.dart)
             Positioned(
               left: screenWidth * 0.05, // 5% of screen width
-              top: screenHeight * 0.25, // 25% of screen height
-              child: SignInWithGoogleButton(
-                onPressed: () {
-                  // Handle the Google sign-in logic here
-                  print('Google Sign-In button pressed');
-                },
-                isLoading: false, // Set to true if loading state is required
-                isTwoLine: true, // Display the text in two lines
+              right: screenWidth * 0.05, // 5% padding on both sides
+              top: screenHeight * 0.23, // 23% of screen height (Adjusted to match)
+              child: Center(
+                child: SignInWithGoogleButton(
+                  onPressed: () {
+                    // Handle the Google sign-in logic here
+                    print('Google Sign-In button pressed');
+                  },
+                  isLoading: false, // Set to true if loading state is required
+                ),
               ),
             ),
 
-            // Positioned VerticalRadios
+            // HorizontalRadios below Google Sign-In button (Positioned like login_password_new.dart)
             Positioned(
-              left: screenWidth * 0.55, // 55% of screen width
-              top: screenHeight * 0.22, // 22% of screen height
-              child: VerticalRadios(
-                initialOption: "otp",
+              left: screenWidth * 0.05, // 5% of screen width
+              right: screenWidth * 0.05, // 5% padding on both sides
+              top: screenHeight * 0.33, // 33% of screen height (Adjusted to match)
+              child: Center(
+                child: HorizontalRadios(
+                  initialOption: "otp", // Set the initial selected option to OTP
+                ),
               ),
             ),
 
@@ -181,7 +186,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                       "Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}",
                       style: TextStyle(
                         fontSize: screenWidth * 0.035, // Scaled font size
-                        
+
                         color: Colors.red,
                       ),
                       textAlign: TextAlign.center, // Center the text
