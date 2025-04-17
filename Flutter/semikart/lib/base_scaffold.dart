@@ -5,6 +5,7 @@ import 'Components/common/header.dart'; // Import the unified Header
 import 'Components/common/hamburger.dart'; // Import the HamburgerMenu
 import 'Components/home/home_page.dart'; // Import the updated home_page.dart
 import 'Components/profile/profile_screen.dart';
+import 'Components/search/product_search.dart'; // Import ProductSearch for search functionality
 // import 'Components/common/placeholder_page.dart'; // Assuming you have a placeholder page - Removed as file doesn't exist
 
 class BaseScaffold extends StatefulWidget {
@@ -30,7 +31,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   final List<Widget> _pages = [
     const HomePageContent(), // Use the content widget from home_page.dart
     const ProductsL1Page(), // Products Page (Example)
-    const Placeholder(), // Search Page (Using Flutter's Placeholder)
+    ProductSearch(), // Search Page (Using Flutter's Placeholder)
     CartPage(), // Cart Page
     const ProfileScreen(), // Profile Page
   ];
@@ -69,17 +70,24 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // This line is correctly set to prevent resizing,
+      // which should keep the AppBar stationary.
+      resizeToAvoidBottomInset: false,
       appBar: Header(
-        showBackButton: _selectedIndex != 0, // Show back button if not on Home
-        title: _getTitle(_selectedIndex), // Get title based on index
+        showBackButton: _selectedIndex != 0,
+        title: _getTitle(_selectedIndex),
         onBackPressed: () {
-          // --- CORRECTED LOGIC ---
-          // Pop the current route off the navigation stack to go back
-          Navigator.pop(context);
-          // --- END CORRECTION ---
+          // --- MODIFIED LOGIC ---
+          if (_selectedIndex != 0) {
+            // If not on the home page (index 0), navigate back to home
+            _onNavTap(0);
+          }
+          // If already on the home page, the back button in the header does nothing.
+          // The system back button (on Android) would handle exiting.
+          // --- END MODIFICATION ---
         },
         onLogoTap: () {
-          _onNavTap(0); // Navigate to Home on logo tap
+          _onNavTap(0);
         },
       ),
       drawer: const HamburgerMenu(), // Add the hamburger menu drawer
