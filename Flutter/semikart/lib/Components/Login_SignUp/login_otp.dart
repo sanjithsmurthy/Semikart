@@ -6,7 +6,7 @@ import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/forgot_password.dart';
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'login_password.dart'; // Import the LoginPassword screen
+import 'login_password_new.dart'; // Import the LoginPassword screen
 import 'signup_screen.dart'; // Import the SignUpScreen
 import '../common/popup.dart'; // Import the CustomPopup widget
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login_password.dart'; // Import the LoginPassword screen
 import 'login_otp.dart'; // Import the LoginOTP screen
+
 class HorizontalRadios extends StatefulWidget {
   final String initialOption; // Add a parameter to set the initial selected option
 
@@ -29,11 +30,12 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
     final textFontSize = screenHeight * 0.015; // Adjusted font size for labels
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Space out the radios evenly
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // First Radio (Login with Password)
-        Column(
+        const Spacer(flex: 1), // Pushes the first radio group towards the 1/3 mark
+
+        // First Radio (Login with Password) - Changed Column to Row
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
@@ -43,8 +45,10 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
                 value: "password", // Value for the first radio
                 groupValue: _selectedOption, // Current selected option
                 activeColor: Color(0xFFA51414), // Red color for selected radio
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap area
+                visualDensity: VisualDensity.compact, // Make radio more compact
                 onChanged: (value) {
-                  if (value != null) {
+                  if (value != null && value != _selectedOption) { // Prevent re-navigation if already selected
                     setState(() {
                       _selectedOption = value; // Update the selected radio option
                     });
@@ -57,12 +61,10 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
                 },
               ),
             ),
-            const SizedBox(height: 4), // Spacing between radio and text
+            // const SizedBox(width: 4), // Spacing between radio and text (optional)
             Text(
               "Password",
-              textAlign: TextAlign.center,
               style: TextStyle(
-                
                 fontSize: textFontSize,
                 fontWeight: FontWeight.normal,
                 color: Color(0xFF000000),
@@ -71,8 +73,10 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
           ],
         ),
 
-        // Second Radio (Login with OTP)
-        Column(
+        const Spacer(flex: 1), // Creates space between the two radio groups
+
+        // Second Radio (Login with OTP) - Changed Column to Row
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
@@ -82,8 +86,10 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
                 value: "otp", // Value for the second radio
                 groupValue: _selectedOption, // Current selected option
                 activeColor: Color(0xFFA51414), // Red color for selected radio
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap area
+                visualDensity: VisualDensity.compact, // Make radio more compact
                 onChanged: (value) {
-                  if (value != null) {
+                  if (value != null && value != _selectedOption) { // Prevent re-navigation if already selected
                     setState(() {
                       _selectedOption = value; // Update the selected radio option
                     });
@@ -96,12 +102,10 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
                 },
               ),
             ),
-            const SizedBox(height: 4), // Spacing between radio and text
+            // const SizedBox(width: 4), // Spacing between radio and text (optional)
             Text(
               "OTP",
-              textAlign: TextAlign.center,
               style: TextStyle(
-                
                 fontSize: textFontSize,
                 fontWeight: FontWeight.normal,
                 color: Color(0xFF000000),
@@ -109,6 +113,8 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
             ),
           ],
         ),
+
+        const Spacer(flex: 1), // Pushes the second radio group away from the end
       ],
     );
   }
