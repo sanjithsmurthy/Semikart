@@ -6,7 +6,7 @@ import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'login_password_new.dart'; // Import the LoginScreen component
+import 'login_password.dart'; // Import the LoginScreen component (assuming login_password_new.dart)
 import '../common/forgot_password.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   bool passwordsMatch = false; // Track if passwords match
   bool isTermsAccepted = false; // Track if the checkbox is checked
+  bool _areAllFieldsFilled = false; // Track if all required fields are filled
 
   // Controllers for text fields
   final TextEditingController firstNameController = TextEditingController();
@@ -24,11 +25,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNumberController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
+  // Note: Password controllers are inside ConfirmPasswordScreen
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listeners to all controllers to check field status
+    firstNameController.addListener(_checkAllFieldsFilled);
+    lastNameController.addListener(_checkAllFieldsFilled);
+    emailController.addListener(_checkAllFieldsFilled);
+    mobileNumberController.addListener(_checkAllFieldsFilled);
+    companyNameController.addListener(_checkAllFieldsFilled);
+  }
+
+  @override
+  void dispose() {
+    // Remove listeners
+    firstNameController.removeListener(_checkAllFieldsFilled);
+    lastNameController.removeListener(_checkAllFieldsFilled);
+    emailController.removeListener(_checkAllFieldsFilled);
+    mobileNumberController.removeListener(_checkAllFieldsFilled);
+    companyNameController.removeListener(_checkAllFieldsFilled);
+
+    // Dispose controllers
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    mobileNumberController.dispose();
+    companyNameController.dispose();
+    super.dispose();
+  }
+
+  // Function to check if all required fields are non-empty
+  void _checkAllFieldsFilled() {
+    setState(() {
+      _areAllFieldsFilled = firstNameController.text.isNotEmpty &&
+          lastNameController.text.isNotEmpty &&
+          emailController.text.isNotEmpty &&
+          mobileNumberController.text.isNotEmpty &&
+          companyNameController.text.isNotEmpty;
+          // Note: Password field check is handled by the passwordsMatch flag
+          // which comes from ConfirmPasswordScreen
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // Determine if the sign-up button should be active
+    final bool isSignUpButtonActive = _areAllFieldsFilled && passwordsMatch && isTermsAccepted;
 
     return Scaffold(
       body: SafeArea(
@@ -49,23 +96,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
-                // Display Name
-                const Text(
-                  'GFXAgency',
-                  style: TextStyle(
-                    fontSize: 20, // Set font size to 20
-                    fontWeight: FontWeight.normal, // Remove bold styling
-                     // Use Product Sans font
-                    color: Colors.black, // Set text color to black
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.03), // Add spacing
-
                 // "Create Your Account" Text
                 Text(
                   'Create Your Account',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.06, // 6% of screen width
+                    fontSize: screenWidth * 0.055, // 6% of screen width
                      // Use Product Sans font
                     color: Colors.black, // Black text color
                     fontWeight: FontWeight.bold, // Bold font weight
@@ -116,8 +151,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // CustomTextField for First Name
                 Center(
                   child: CustomTextField(
-                    width: screenWidth * 0.75, // Specify width
-                    height: screenHeight * 0.06, // Specify height
                     controller: firstNameController,
                     label: "First Name",
                   ),
@@ -127,8 +160,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // CustomTextField for Last Name
                 Center(
                   child: CustomTextField(
-                    width: screenWidth * 0.75, // Specify width
-                    height: screenHeight * 0.06, // Specify height
                     controller: lastNameController,
                     label: "Last Name",
                   ),
@@ -138,8 +169,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // CustomTextField for Email
                 Center(
                   child: CustomTextField(
-                    width: screenWidth * 0.75, // Specify width
-                    height: screenHeight * 0.06, // Specify height
                     controller: emailController,
                     label: "Email",
                   ),
@@ -149,8 +178,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // MobileNumberField
                 Center(
                   child: MobileNumberField(
-                    width: screenWidth * 0.75, // Specify width
-                    height: screenHeight * 0.06, // Specify height
                     controller: mobileNumberController,
                     label: 'Mobile Number',
                     countryCodes: ['+91', '+1', '+44'],
@@ -168,8 +195,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // CustomTextField for Company Name
                 Center(
                   child: CustomTextField(
-                    width: screenWidth * 0.75, // Specify width
-                    height: screenHeight * 0.06, // Specify height
                     controller: companyNameController,
                     label: "Company Name",
                   ),
@@ -178,12 +203,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
-                  width: screenWidth, // Specify width
-                  height: screenHeight * 0.06, // Specify height
                   onPasswordsMatch: (match) {
-                    setState(() {
-                      passwordsMatch = match; // Update the passwordsMatch state
-                    });
+                    if (passwordsMatch != match) {
+                      setState(() {
+                        passwordsMatch = match; // Update the passwordsMatch state
+                      });
+                      _checkAllFieldsFilled();
+                    }
                   },
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
@@ -215,17 +241,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           setState(() {
                             isTermsAccepted = value ?? false; // Update the checkbox state
                           });
+                          _checkAllFieldsFilled();
                         },
                         activeColor: Color(0xFFA51414), // Set checkbox color
                       ),
-                      Text(
-                        "I agree to the terms and conditions",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035, // Specify font size
-                          
-                          color: Colors.black,
+                      Flexible(
+                        child: Text(
+                          "I agree to the terms and conditions",
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.035, // Specify font size
+                            
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.right, // Align text to the right
                         ),
-                        textAlign: TextAlign.right, // Align text to the right
                       ),
                     ],
                   ),
@@ -234,12 +263,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // Sign Up Button
                 Center(
-                  child: passwordsMatch && isTermsAccepted
+                  child: isSignUpButtonActive
                       ? RedButton(
                           label: "Sign Up", // Specify label
                           width: screenWidth * 0.9, // Specify width
                           height: screenHeight * 0.06, // Specify height
                           onPressed: () {
+                            print("Sign Up Initiated!");
+                            print("First Name: ${firstNameController.text}");
+                            print("Last Name: ${lastNameController.text}");
+                            print("Email: ${emailController.text}");
+                            print("Mobile: ${mobileNumberController.text}");
+                            print("Company: ${companyNameController.text}");
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => BaseScaffold()), // Navigate to HomePage
@@ -252,7 +287,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: screenHeight * 0.06, // Specify height
                         ),
                 ),
-                SizedBox(height: screenHeight * 0.03), // Add spacing
+                SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 30), // Keyboard height + buffer
               ],
             ),
           ),

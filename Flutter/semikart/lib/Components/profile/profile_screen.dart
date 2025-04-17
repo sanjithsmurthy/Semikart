@@ -3,7 +3,7 @@ import '../common/header.dart'; // Import the Header widget
 import 'profilepic.dart'; // Import the ProfilePicture widget
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/popup.dart'; // Import the CustomPopup widget
-import '../login_signup/login_password_new.dart'; // Import the LoginPasswordScreen
+import '../login_signup/login_password.dart'; // Import the LoginPasswordScreen
 import '../login_signup/reset_password.dart'; // Import the ResetPasswordScreen
 import 'user_info.dart'; // Import the UserInfo widget
 

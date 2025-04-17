@@ -70,7 +70,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 child: Text(
                   "Set Your Password",
                   style: TextStyle(
-                    fontSize: screenWidth * 0.06, // Dynamically scale font size
+                    fontSize: screenWidth * 0.055, // Dynamically scale font size
                     fontWeight: FontWeight.bold, // Bold font weight
                     color: Colors.black, // Black color
                      // Product Sans font
@@ -87,7 +87,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   "to create a strong password.",
                   textAlign: TextAlign.center, // Center align the text
                   style: TextStyle(
-                    fontSize: screenWidth * 0.045, // Dynamically scale font size
+                    fontSize: screenWidth * 0.033, // Dynamically scale font size
                     fontWeight: FontWeight.w400, // Regular font weight
                     color: Color(0xFF989DA3), // Subtle grey color
                      // Product Sans font
@@ -109,7 +109,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 },
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Add spacing below the ConfirmPasswordScreen
+              SizedBox(height: screenHeight * 0.05), // Add spacing below the ConfirmPasswordScreen
 
               // Confirm Button
               Center(
@@ -132,7 +132,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       ),
               ),
 
-              SizedBox(height: screenHeight * 0.03), // Add spacing below the button
+              SizedBox(height: screenHeight * 0.01), // Add spacing below the button
             ],
           ),
         ),

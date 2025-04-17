@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_password_new.dart'; // Import the LoginPassword screen
+import 'login_password.dart'; // Import the LoginPassword screen
 import 'login_otp.dart'; // Import the LoginOTP screen
 
 class HorizontalRadios extends StatefulWidget {
