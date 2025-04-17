@@ -32,11 +32,11 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Spacer(flex: 1), // Pushes the first radio group towards the 1/3 mark
+        const Spacer(), // Takes up space before the first radio group
 
-        // First Radio (Login with Password) - Changed Column to Row
+        // First Radio (Login with Password)
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // Ensure this Row takes minimum space
           children: [
             SizedBox(
               width: radioSize,
@@ -73,11 +73,12 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
           ],
         ),
 
-        const Spacer(flex: 1), // Creates space between the two radio groups
+        // Explicit space between the two radio groups - Reduced width
+        SizedBox(width: screenWidth / 4), // Space is 1/4 of screen width (Adjust as needed)
 
-        // Second Radio (Login with OTP) - Changed Column to Row
+        // Second Radio (Login with OTP)
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // Ensure this Row takes minimum space
           children: [
             SizedBox(
               width: radioSize,
@@ -114,7 +115,7 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
           ],
         ),
 
-        const Spacer(flex: 1), // Pushes the second radio group away from the end
+        const Spacer(), // Takes up space after the second radio group
       ],
     );
   }
