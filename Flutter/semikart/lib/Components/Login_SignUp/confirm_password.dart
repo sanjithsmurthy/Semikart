@@ -50,12 +50,16 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
     final double verticalSpacingMedium = screenHeight * 0.02;
     final double verticalSpacingLarge = screenHeight * 0.03;
     final double textFieldHeight = screenHeight * 0.06; // Example height
-    final double headingFontSize = screenWidth * 0.04;
-    final double requirementFontSize = screenWidth * 0.035;
+    // --- Reduced font sizes by 25% (multiply by 0.75) ---
+    final double headingFontSize = screenWidth * 0.04 * 0.75; // 75% of original size
+    final double requirementFontSize = screenWidth * 0.035 * 0.75; // 75% of original size
+    // --- Keep other sizes ---
     final double bulletIconSize = screenWidth * 0.03;
     final double checkIconSize = screenWidth * 0.05;
     final double alertIconSize = screenWidth * 0.04;
     final double alertFontSize = screenWidth * 0.03;
+    // --- Added Left Padding Value ---
+    final double leftPaddingValue = screenWidth * 0.075; // Adjust this value as needed (e.g., 2% of screen width)
 
     // The outer SizedBox controls the overall width of this component
     return SizedBox(
@@ -83,27 +87,30 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Password Requirements Heading
-              Text(
-                "YOUR PASSWORD MUST CONTAIN",
-                style: TextStyle(
-                  fontSize: headingFontSize, // Dynamic font size
-                  fontWeight: FontWeight.bold, // Bold text
-                  color: Color(0xFF989DA3), // Grey text color
-                   // Product Sans font (Ensure font is added to pubspec.yaml)
+              // Password Requirements Heading - Added Padding
+              Padding(
+                padding: EdgeInsets.only(left: leftPaddingValue), // Add left padding
+                child: Text(
+                  "YOUR PASSWORD MUST CONTAIN",
+                  style: TextStyle(
+                    fontSize: headingFontSize, // Use reduced font size
+                    fontWeight: FontWeight.bold, // Bold text
+                    color: Color(0xFF989DA3), // Grey text color
+                     // Product Sans font (Ensure font is added to pubspec.yaml)
+                  ),
                 ),
               ),
 
               SizedBox(height: verticalSpacingSmall), // Dynamic spacing
 
-              // Password Requirements List
-              _buildRequirementItem("Between 8 and 20 characters", hasMinLength, requirementFontSize, bulletIconSize, verticalSpacingSmall),
+              // Password Requirements List - Pass reduced font size and padding value
+              _buildRequirementItem("Between 8 and 20 characters", hasMinLength, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
               SizedBox(height: verticalSpacingSmall), // Dynamic spacing
-              _buildRequirementItem("1 upper case letter", hasUpperCase, requirementFontSize, bulletIconSize, verticalSpacingSmall),
+              _buildRequirementItem("1 upper case letter", hasUpperCase, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
               SizedBox(height: verticalSpacingSmall), // Dynamic spacing
-              _buildRequirementItem("1 or more numbers", hasNumber, requirementFontSize, bulletIconSize, verticalSpacingSmall),
+              _buildRequirementItem("1 or more numbers", hasNumber, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
               SizedBox(height: verticalSpacingSmall), // Dynamic spacing
-              _buildRequirementItem("1 or more special characters", hasSpecialChar, requirementFontSize, bulletIconSize, verticalSpacingSmall),
+              _buildRequirementItem("1 or more special characters", hasSpecialChar, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
             ],
           ),
 
@@ -129,10 +136,11 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
             },
           ),
 
-          // Alert Text for Password Mismatch
+          // Alert Text for Password Mismatch - Added Padding
           if (!_isPasswordMatching() && confirmPasswordController.text.isNotEmpty)
             Padding(
-              padding: EdgeInsets.only(top: verticalSpacingSmall), // Dynamic spacing
+              // Add left padding here as well
+              padding: EdgeInsets.only(top: verticalSpacingSmall, left: leftPaddingValue),
               child: Row(
                 children: [
                   Icon(
@@ -158,26 +166,31 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
     );
   }
 
-  // Helper method to build each password requirement item with dynamic sizes
-  Widget _buildRequirementItem(String text, bool isSatisfied, double fontSize, double iconSize, double spacing) {
-    return Row(
-      children: [
-        Icon(
-          Icons.circle, // Use a circle icon for the bullet
-          size: iconSize, // Use dynamic icon size
-          color: isSatisfied ? Color.fromARGB(255, 25, 107, 27) : Color(0xFF989DA3), // Dark green for satisfied, grey otherwise
-        ),
-        SizedBox(width: spacing * 2), // Dynamic spacing between bullet and text
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: fontSize, // Use dynamic font size
-            fontWeight: FontWeight.w600, // Semi-bold font weight
-            color: Color(0xFF989DA3), // Keep text color grey
-             // Product Sans font (Ensure font is added to pubspec.yaml)
+  // Helper method to build each password requirement item with dynamic sizes and padding
+  Widget _buildRequirementItem(String text, bool isSatisfied, double fontSize, double iconSize, double spacing, double leftPadding) {
+    // Note: fontSize passed here is already reduced
+    return Padding( // Wrap the Row in Padding
+      padding: EdgeInsets.only(left: leftPadding),
+      child: Row(
+        children: [
+          Icon(
+            Icons.circle, // Use a circle icon for the bullet
+            size: iconSize, // Use dynamic icon size
+            color: isSatisfied ? Color.fromARGB(255, 25, 107, 27) : Color(0xFF989DA3), // Dark green for satisfied, grey otherwise
           ),
-        ),
-      ],
+          // Increased spacing slightly to compensate for overall left shift
+          SizedBox(width: spacing * 2.5), // Dynamic spacing between bullet and text
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: fontSize, // Use the reduced font size passed in
+              fontWeight: FontWeight.w600, // Semi-bold font weight
+              color: Color(0xFF989DA3), // Keep text color grey
+               // Product Sans font (Ensure font is added to pubspec.yaml)
+            ),
+          ),
+        ],
+      ),
     );
   }
 
