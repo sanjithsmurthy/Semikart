@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 import '../common/search_bar.dart' as custom_search; // Import the SearchBar widget
-import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
-import 'breadcrumbs.dart'; // Import the Breadcrumbs widget
-import 'products_l2.dart'; // Import the ProductsL2Page widget
+import '../common/red_button.dart'; // Import the RedButton widget
 
 class ProductsHeaderContent extends StatelessWidget {
-  final bool showBreadcrumbs; // Parameter to control breadcrumbs visibility
-  final bool showL2ComponentBreadcrumb; // Parameter to control 'L2 Component 1' breadcrumb visibility
-
-  const ProductsHeaderContent({
-    super.key,
-    this.showBreadcrumbs = true, // Default is true
-    this.showL2ComponentBreadcrumb = false, // Default is false
-  });
+  const ProductsHeaderContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +19,11 @@ class ProductsHeaderContent extends StatelessWidget {
             // Heading
             Container(
               padding: EdgeInsets.all(screenWidth * 0.04),
-              child: const Text(
+              child: Text(
                 'Electronic Components Categories Line Card',
                 style: TextStyle(
                   color: Color(0xFFA51414), // Red color (A51414)
-                  fontSize: 25, // Font size 25px
-                  fontWeight: FontWeight.bold,
+                  fontSize: screenHeight * 0.025, // Font size 25px
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -47,45 +37,18 @@ class ProductsHeaderContent extends StatelessWidget {
             ),
             SizedBox(height: screenHeight * 0.02), // Add spacing before RFQ_CTA
 
-            // RFQ Component
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: const RFQComponent(), // Add the RFQ_CTA widget here
-            ),
-            SizedBox(height: screenHeight * 0.001), // Further reduced spacing before breadcrumbs by 5px
-
-            // Breadcrumbs (conditionally displayed)
-            if (showBreadcrumbs)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-                child: Breadcrumbs(
-                  items: [
-                    BreadcrumbItem(
-                      label: 'Products',
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                    BreadcrumbItem(
-                      label: 'Circuit Protection',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ProductsL2Page()),
-                        );
-                      },
-                    ),
-                    if (showL2ComponentBreadcrumb) // Conditionally show 'L2 Component 1'
-                      BreadcrumbItem(
-                        label: 'L2 Component 1',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const ProductsL2Page()),
-                          );
-                        },
-                      ),
-                  ],
-                ), // Add the Breadcrumbs widget here
+            // Red Button
+            Center(
+              child: RedButton(
+                label: 'RFQ',
+                onPressed: () {
+                  // Add your RFQ button logic here
+                  print('RFQ button pressed!');
+                },
+                width: screenWidth * 0.3, // Adjust width as needed
+                height: screenHeight * 0.06, // Adjust height as needed
               ),
+            ),
           ],
         ),
       ),

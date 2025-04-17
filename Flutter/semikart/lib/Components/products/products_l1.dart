@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
 import 'products_l2.dart'; // Import the ProductsL2Page widget
+import '../../base_scaffold.dart'; // Import the BaseScaffold widget
 
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
@@ -32,21 +33,12 @@ class ProductsL1Page extends StatelessWidget {
     ];
 
     return Scaffold(
-      // appBar: Header(
-      //   showBackButton: true, // Show the back button
-      //   title: 'Products', // Set the title
-      //   onBackPressed: () {
-      //     Navigator.pop(context); // Navigate back to the previous page
-      //   },
-      //   onLogoTap: () {
-      //     Navigator.pushNamed(context, '/home'); // Navigate to the home page
-      //   },
-      // ),
-      body: Stack(
+      body: Column(
         children: [
-          // Main content
-          Padding(
-            padding: EdgeInsets.only(top: screenHeight * 0.4), // Leave space for the fixed header
+          // Header
+          ProductsHeaderContent(),
+
+          Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,17 +89,6 @@ class ProductsL1Page extends StatelessWidget {
               ),
             ),
           ),
-
-          // Fixed header
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.005), // Add 5px dynamic padding to the bottom
-              child: const ProductsHeaderContent(showBreadcrumbs: false), // Breadcrumbs disabled
-            ),
-          ),
         ],
       ),
     );
@@ -126,7 +107,10 @@ class ProductsL1Page extends StatelessWidget {
           if (name == "Circuit Protection") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProductsL2Page()),
+              MaterialPageRoute(builder: (context) => const BaseScaffold(
+                body: ProductsL2Page(),
+              
+              )),
             );
           }
         },

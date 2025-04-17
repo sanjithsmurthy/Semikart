@@ -1,9 +1,9 @@
+import 'package:Semikart/base_scaffold.dart';
 import 'package:flutter/material.dart';
-import '../common/header.dart'; // Import the Header widget
 import '../products/products_static.dart'; // Import the ProductsHeaderContent widget
 import '../products/l2_page_redbox.dart'; // Import the L2PageRedBox widget
-import '../products/products_l1.dart'; // Import the ProductsL1Page widget
 import '../products/products_l3.dart'; // Import the ProductsL3Page widget
+import '../../base_scaffold.dart';
 
 class ProductsL2Page extends StatelessWidget {
   const ProductsL2Page({super.key});
@@ -13,24 +13,12 @@ class ProductsL2Page extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: Header(
-        showBackButton: true, // Show the back button
-        title: 'Products', // Set the title
-        onBackPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ProductsL1Page()),
-          ); // Navigate to the ProductsL1Page
-        },
-        onLogoTap: () {
-          Navigator.pushNamed(context, '/home'); // Navigate to the home page
-        },
-      ),
-      body: Stack(
+      body: Column(
         children: [
-          // Main content
-          Padding(
-            padding: EdgeInsets.only(top: screenHeight * 0.4), // Leave space for the fixed header
+          // Header
+          ProductsHeaderContent(),
+
+          Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -42,7 +30,9 @@ class ProductsL2Page extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ProductsL3Page()),
+                        MaterialPageRoute(builder: (context) => BaseScaffold(
+                          body: const ProductsL3Page(),
+                        )),
                       );
                     },
                     child: const RedBorderBox(text: 'L2 Component 1'),
@@ -61,17 +51,6 @@ class ProductsL2Page extends StatelessWidget {
                   const RedBorderBox(text: 'L2 Component 7'),
                 ],
               ),
-            ),
-          ),
-
-          // Fixed header
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.005), // Add 5px dynamic padding to the bottom
-              child: const ProductsHeaderContent(),
             ),
           ),
         ],
