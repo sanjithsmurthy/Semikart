@@ -105,7 +105,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     // Confirm Password Component
                     ConfirmPasswordScreen(
                       width: screenWidth * 0.9, // 90% of screen width
-                      height: screenHeight * 0.06, // Dynamically scale height
                       onPasswordsMatch: (match) {
                         // Use WidgetsBinding to avoid calling setState during build
                         WidgetsBinding.instance.addPostFrameCallback((_) {
