@@ -194,8 +194,8 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             alignment: Alignment.centerRight,
             child: Padding(
               padding: EdgeInsets.only(
-                top: addRowButtonPaddingTop,
-                right: addRowButtonPaddingRight,
+                top: addRowButtonPaddingTop ,
+                right: addRowButtonPaddingRight - 15,
               ),
               child: RedButton(
                 width: addRowButtonWidth,

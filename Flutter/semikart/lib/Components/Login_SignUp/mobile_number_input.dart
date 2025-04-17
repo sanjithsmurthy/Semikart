@@ -22,9 +22,10 @@ class MobileNumberField extends StatefulWidget {
     this.onValidationFailed,
     this.padding,
     this.width, // Optional width parameter
-    this.height, // Optional height parameter
+    this.height, // Optional height parameter - THIS CONTROLS THE OVERALL HEIGHT
   });
 
+  // Default country codes list remains the same
   static const List<String> _defaultCountryCodes = [
     '+1', '+44', '+91', '+61', '+81', '+49', '+33', '+39', '+86', '+7', '+55', '+27', '+34', '+82', '+31', '+47',
     '+46', '+41', '+64', '+52', '+60', '+65', '+62', '+63', '+66', '+92', '+20', '+212', '+213', '+216',
@@ -53,8 +54,9 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
 
   void _validateMobileNumber(String number) {
     // Example validation logic based on country code
-    final isValid = RegExp(r'^\d{10}$').hasMatch(number); // Validate for 10 digits
-    if (!isValid) {
+    // Basic check for 10 digits, adjust as needed for different country codes
+    final isValid = RegExp(r'^\d{10}$').hasMatch(number);
+    if (!isValid && number.isNotEmpty) { // Show error only if not empty and invalid
       setState(() {
         _errorMessage = 'Invalid mobile number';
       });
@@ -63,170 +65,191 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
       }
     } else {
       setState(() {
-        _errorMessage = null; // Clear error message
+        _errorMessage = null; // Clear error message if valid or empty
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Calculate responsive widths and heights
-        final totalWidth = widget.width ?? constraints.maxWidth; // Use provided width or max available width
-        final fieldHeight = widget.height ?? 60.0; // Use provided height or default to 60.0
+    // Calculate the width dynamically based on screen size - SAME AS PasswordTextField
+    final screenWidth = MediaQuery.of(context).size.width;
+    // Use provided width or default to 90% of screen width
+    final calculatedWidth = widget.width ?? (screenWidth * 0.9);
 
-        return Padding(
-          padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SizedBox(
-            width: totalWidth, // Use the calculated width
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Country Code Dropdown
-                    Flexible(
-                      flex: 3, // Adjust flex ratio as needed
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedCountryCode,
-                        decoration: InputDecoration(
-                          labelText: "Code",
-                          labelStyle: TextStyle(
-                            color: Color(0xFF757575),
-                            fontSize: 16,
-                            
-                          ),
-                          floatingLabelStyle: TextStyle(
-                            color: Color(0xFFA51414),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold, // Make floating label bold
-                            
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
+    // Define the border style - same for all states to prevent visual changes
+    // Use BorderRadius.circular(20) to match PasswordTextField
+    var borderStyle = OutlineInputBorder( // Make const
+      borderRadius: BorderRadius.circular(20), // Match PasswordTextField
+      borderSide: BorderSide(
+        color: Color(0xFFA51414), // Keep the red border color consistent
+        width: 2.0, // Consistent border width
+      ),
+    );
+
+    return Padding(
+      // Default padding to 0 to match PasswordTextField
+      padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 0),
+      child: SizedBox(
+        width: calculatedWidth, // Use the calculated width (defaults to 90% screen width)
+        // Use the height passed from the constructor. If null, intrinsic height is used.
+        height: widget.height,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min, // Take minimum vertical space
+          children: [
+            // --- Wrap Row with IntrinsicHeight ---
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch children vertically
+                children: [
+                  // Country Code Dropdown
+                  Flexible(
+                    flex: 3, // Adjust flex ratio as needed (e.g., 30% width)
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedCountryCode,
+                      decoration: InputDecoration(
+                        // labelText: "Code", // Removed label to save space if needed
+                        labelStyle: const TextStyle( // Make const
+                          color: Color(0xFF757575),
+                          fontSize: 16,
                         ),
-                        items: MobileNumberField._defaultCountryCodes.map((String code) {
-                          return DropdownMenuItem<String>(
-                            value: code,
-                            child: Text(
-                              code,
-                              style: TextStyle(
-                                color: Color(0xFF757575),
-                                fontSize: 16,
-                                
-                              ),
+                        floatingLabelStyle: const TextStyle( // Make const
+                          color: Color(0xFFA51414),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        // Apply consistent border style
+                        border: borderStyle,
+                        enabledBorder: borderStyle,
+                        focusedBorder: borderStyle,
+                        // Use the standard border style even for error
+                        errorBorder: borderStyle,
+                        focusedErrorBorder: borderStyle,
+                        filled: true,
+                        fillColor: Colors.white,
+                        // Adjust content padding for vertical alignment if needed
+                        // Matched vertical padding with PasswordTextField
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0), // Make const
+                        // --- Add isDense for potentially better alignment ---
+                        isDense: true,
+                      ),
+                      items: MobileNumberField._defaultCountryCodes.map((String code) {
+                        return DropdownMenuItem<String>(
+                          value: code,
+                          child: Text(
+                            code,
+                            style: const TextStyle( // Make const
+                              color: Color(0xFF757575),
+                              fontSize: 16, // Matched font size
                             ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
                           setState(() {
-                            _selectedCountryCode = value!;
+                            _selectedCountryCode = value;
                           });
                           if (widget.onCountryCodeChanged != null) {
-                            widget.onCountryCodeChanged!(value!);
+                            widget.onCountryCodeChanged!(value);
                           }
-                        },
-                        icon: Icon(Icons.arrow_drop_down, color: Color(0xFF757575)),
-                        isExpanded: true,
-                        dropdownColor: Colors.white,
-                      ),
+                          // Re-validate number when country code changes (optional)
+                          _validateMobileNumber(widget.controller.text);
+                        }
+                      },
+                      icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF757575)), // Make const
+                      isExpanded: true,
+                      dropdownColor: Colors.white,
                     ),
-                    const SizedBox(width: 8), // Spacing between dropdown and text field
+                  ),
+                  const SizedBox(width: 8), // Spacing between dropdown and text field
 
-                    // Mobile Number Input Field
-                    Flexible(
-                      flex: 7, // Adjust flex ratio as needed
-                      child: TextField(
-                        controller: widget.controller,
-                        keyboardType: TextInputType.number, // Set keyboard type to number
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Allow only numeric input
-                        cursorColor: Colors.black, // Set the cursor color to black
-                        textAlignVertical: TextAlignVertical.center, // Vertically center the text
-                        decoration: InputDecoration(
-                          labelText: widget.label,
-                          labelStyle: TextStyle(
-                            color: Color(0xFF757575),
-                            fontSize: 16,
-                            
-                          ),
-                          floatingLabelStyle: TextStyle(
-                            color: Color(0xFFA51414),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold, // Make floating label bold
-                            
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Border weight 2.0
-                          ),
+                  // Mobile Number Input Field
+                  Flexible(
+                    flex: 7, // Adjust flex ratio as needed (e.g., 70% width)
+                    child: TextFormField( // Use TextFormField for potential validation integration
+                      controller: widget.controller,
+                      keyboardType: TextInputType.number, // Set keyboard type to number
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Allow only numeric input
+                      cursorColor: Colors.black, // Set the cursor color to black
+                      cursorHeight: 20.0, // Match PasswordTextField cursor height
+                      textAlignVertical: TextAlignVertical.center, // Vertically center the text
+                      decoration: InputDecoration(
+                        labelText: widget.label,
+                        labelStyle: const TextStyle( // Make const
+                          color: Color(0xFF757575),
+                          fontSize: 16, // Matched font size
+                          height: 1.2, // Match PasswordTextField
                         ),
-                        onChanged: (value) {
-                          _validateMobileNumber(value);
-                        },
+                        floatingLabelStyle: const TextStyle( // Make const
+                          color: Color(0xFFA51414),
+                          fontSize: 16, // Matched font size
+                          // fontWeight: FontWeight.bold, // Optional: match PasswordTextField
+                        ),
+                        // Apply consistent border style
+                        border: borderStyle,
+                        enabledBorder: borderStyle,
+                        focusedBorder: borderStyle,
+                        // --- Use the standard border style for error states ---
+                        errorBorder: borderStyle,
+                        focusedErrorBorder: borderStyle,
+                        // Match content padding
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // Make const
+                        // Hide default error text space if using custom error display
+                        errorStyle: const TextStyle(height: 0, fontSize: 0), // Make const
+                        // --- Add isDense for potentially better alignment ---
+                        isDense: true,
+                      ),
+                      onChanged: (value) {
+                        _validateMobileNumber(value);
+                      },
+                      // Optional: Add validator for Form integration
+                      validator: (value) {
+                         if (value == null || value.isEmpty) return null; // Allow empty
+                         final isValid = RegExp(r'^\d{10}$').hasMatch(value); // Example validation
+                         // Return an error message triggers the error state, but the border is now controlled by errorBorder
+                         return isValid ? null : ' '; // Return non-empty string for error state, but hide it
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction, // Validate on interaction
+                      style: const TextStyle( // Added style to match PasswordTextField
+                        fontSize: 16,
+                        height: 1.2,
                       ),
                     ),
-                  ],
-                ),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFFA51414),
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.priority_high,
-                            color: Colors.white,
-                            size: 14,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          _errorMessage!,
-                          style: TextStyle(
-                            color: Color(0xFFA51414),
-                            fontSize: 14,
-                            
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
-              ],
+              ),
             ),
-          ),
-        );
-      },
+            // Custom Error Message Display (below the fields)
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  // Optional: Add padding to align with text field content
+                  // SizedBox(width: calculatedWidth * 0.3 + 8), // Align with number field start
+                  const Icon( // Make const
+                    Icons.error_outline, // Use a standard error icon
+                    color: Color(0xFFA51414),
+                    size: 18, // Adjust size
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _errorMessage!,
+                      style: const TextStyle( // Make const
+                        color: Color(0xFFA51414),
+                        fontSize: 12, // Smaller font for error
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
