@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFFA51414),
         scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Product Sans',
+        
       ),
       home: const AuthWrapper(), // Use AuthWrapper to decide the initial screen
       debugShowCheckedModeBanner: false,

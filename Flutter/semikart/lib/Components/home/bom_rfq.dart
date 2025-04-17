@@ -91,7 +91,7 @@ class BomRfqCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.white,
                           ),
                         ),
@@ -101,7 +101,7 @@ class BomRfqCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: bodyFontSize,
                             color: Colors.white,
-                            fontFamily: 'Product Sans',
+                            
                           ),
                         ),
                       ],
@@ -160,7 +160,7 @@ class BomRfqCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: titleFontSize,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Product Sans',
+                          
                           color: Colors.white,
                         ),
                       ),
@@ -170,7 +170,7 @@ class BomRfqCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: bodyFontSize,
                           color: Colors.white,
-                          fontFamily: 'Product Sans',
+                          
                         ),
                       ),
                     ],

@@ -62,7 +62,7 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
               "Password",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Product Sans',
+                
                 fontSize: textFontSize,
                 fontWeight: FontWeight.normal,
                 color: Color(0xFF000000),
@@ -101,7 +101,7 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
               "OTP",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Product Sans',
+                
                 fontSize: textFontSize,
                 fontWeight: FontWeight.normal,
                 color: Color(0xFF000000),

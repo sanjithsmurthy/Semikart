@@ -76,7 +76,7 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       Text(
                         "Login with",
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: textFontSize,
                           fontWeight: FontWeight.normal,
                           color: Color(0xFF000000),
@@ -85,7 +85,7 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       Text(
                         "Password",
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: textFontSize,
                           fontWeight: FontWeight.normal,
                           color: Color(0xFF000000),
@@ -129,7 +129,7 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       Text(
                         "Login with",
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: textFontSize,
                           fontWeight: FontWeight.normal,
                           color: Color(0xFF000000),
@@ -138,7 +138,7 @@ class _VerticalRadiosState extends State<VerticalRadios> {
                       Text(
                         "OTP",
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: textFontSize,
                           fontWeight: FontWeight.normal,
                           color: Color(0xFF000000),

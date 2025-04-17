@@ -73,7 +73,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     fontSize: screenWidth * 0.06, // Dynamically scale font size
                     fontWeight: FontWeight.bold, // Bold font weight
                     color: Colors.black, // Black color
-                    fontFamily: 'Product Sans', // Product Sans font
+                     // Product Sans font
                   ),
                 ),
               ),
@@ -90,7 +90,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     fontSize: screenWidth * 0.045, // Dynamically scale font size
                     fontWeight: FontWeight.w400, // Regular font weight
                     color: Color(0xFF989DA3), // Subtle grey color
-                    fontFamily: 'Product Sans', // Product Sans font
+                     // Product Sans font
                     height: 1.5, // Line height for better readability
                   ),
                 ),

@@ -96,13 +96,13 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                           labelStyle: TextStyle(
                             color: Color(0xFF757575),
                             fontSize: 16,
-                            fontFamily: 'Product Sans',
+                            
                           ),
                           floatingLabelStyle: TextStyle(
                             color: Color(0xFFA51414),
                             fontSize: 16,
                             fontWeight: FontWeight.bold, // Make floating label bold
-                            fontFamily: 'Product Sans',
+                            
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -127,7 +127,7 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                               style: TextStyle(
                                 color: Color(0xFF757575),
                                 fontSize: 16,
-                                fontFamily: 'Product Sans',
+                                
                               ),
                             ),
                           );
@@ -161,13 +161,13 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                           labelStyle: TextStyle(
                             color: Color(0xFF757575),
                             fontSize: 16,
-                            fontFamily: 'Product Sans',
+                            
                           ),
                           floatingLabelStyle: TextStyle(
                             color: Color(0xFFA51414),
                             fontSize: 16,
                             fontWeight: FontWeight.bold, // Make floating label bold
-                            fontFamily: 'Product Sans',
+                            
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -215,7 +215,7 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                           style: TextStyle(
                             color: Color(0xFFA51414),
                             fontSize: 14,
-                            fontFamily: 'Product Sans',
+                            
                           ),
                         ),
                       ),

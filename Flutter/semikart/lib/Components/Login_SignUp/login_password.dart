@@ -79,7 +79,7 @@ class _LoginPasswordScreenState extends State<LoginPasswordScreen> {
                   'Login',
                   style: TextStyle(
                     fontSize: screenWidth * 0.055,
-                    fontFamily: 'Product Sans',
+                    
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),

@@ -173,7 +173,7 @@ class TrackOrder extends StatelessWidget {
                   step.title,
                   style: TextStyle(
                     fontSize: 14.0,
-                    fontFamily: 'Product Sans',
+                    
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFA51414),
                   ),
@@ -184,7 +184,7 @@ class TrackOrder extends StatelessWidget {
                     step.timestamp!,
                     style: TextStyle(
                       fontSize: 12.0,
-                      fontFamily: 'Product Sans',
+                      
                       color: Color(0xFF757575),
                     ),
                   ),
@@ -195,7 +195,7 @@ class TrackOrder extends StatelessWidget {
                     step.location,
                     style: TextStyle(
                       fontSize: 10.0,
-                      fontFamily: 'Product Sans',
+                      
                       fontWeight: FontWeight.normal,
                       color: Color(0xFF757575),
                     ),

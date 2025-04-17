@@ -41,7 +41,7 @@ class RedBorderBox extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
-                  fontFamily: 'Product Sans',
+                  
                 ),
             textAlign: TextAlign.center,
           ),
