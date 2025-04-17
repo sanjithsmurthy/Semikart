@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
 import 'products_l2.dart'; // Import the ProductsL2Page widget
 
