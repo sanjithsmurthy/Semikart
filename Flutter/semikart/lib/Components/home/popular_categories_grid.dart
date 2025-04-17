@@ -29,7 +29,7 @@ class PopularCategoriesGrid extends StatelessWidget {
       {'label': 'Ciruit Protection', 'imagePath': 'public/assets/icon/circuit_protection.ico'},
       {'label': 'Passive Components', 'imagePath': 'public/assets/icon/passive_components.ico'},
       {'label': 'Sensors', 'imagePath': 'public/assets/icon/sensors.ico'},
-      {'label': 'Cable and \nWires', 'imagePath': 'public/assets/icon/wire_and_cable.ico'},
+      {'label': 'Cables and \nWire', 'imagePath': 'public/assets/icon/wire_and_cable.ico'},
       {'label': 'Embeded \nSolutions', 'imagePath': 'public/assets/icon/embeded_solutions.ico'},
     ];
 

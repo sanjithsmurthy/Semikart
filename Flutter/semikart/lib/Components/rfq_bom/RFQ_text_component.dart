@@ -178,7 +178,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
           Padding(
             padding: EdgeInsets.only(bottom: instructionPaddingBottom),
             child: Text(
-              "Manually enter each product\nrequirement below.",
+              "Manually enter each product requirement below.",
               style: TextStyle(
                 fontSize: instructionTextFontSize,
                 fontWeight: FontWeight.bold,
