@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_password.dart'; // Import the LoginPassword screen
+import 'login_password_new.dart'; // Import the LoginPassword screen
 import 'login_otp.dart'; // Import the LoginOTP screen
 
 class HorizontalRadios extends StatefulWidget {
@@ -32,11 +32,11 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Spacer(flex: 1), // Pushes the first radio group towards the 1/3 mark
+        const Spacer(), // Takes up space before the first radio group
 
-        // First Radio (Login with Password) - Changed Column to Row
+        // First Radio (Login with Password)
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // Ensure this Row takes minimum space
           children: [
             SizedBox(
               width: radioSize,
@@ -55,7 +55,7 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
                     // Navigate to LoginPassword screen
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPasswordScreen()),
+                      MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
                     );
                   }
                 },
@@ -73,11 +73,12 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
           ],
         ),
 
-        const Spacer(flex: 1), // Creates space between the two radio groups
+        // Explicit space between the two radio groups - Reduced width further
+        SizedBox(width: screenWidth / 5), // Space is 1/5 of screen width (Adjust as needed)
 
-        // Second Radio (Login with OTP) - Changed Column to Row
+        // Second Radio (Login with OTP)
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // Ensure this Row takes minimum space
           children: [
             SizedBox(
               width: radioSize,
@@ -114,7 +115,7 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
           ],
         ),
 
-        const Spacer(flex: 1), // Pushes the second radio group away from the end
+        const Spacer(), // Takes up space after the second radio group
       ],
     );
   }
