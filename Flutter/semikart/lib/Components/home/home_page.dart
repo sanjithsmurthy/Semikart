@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../common/search_builtin.dart' as custom; // Import SearchBar with alias
+import '../common/search_bar.dart' as custom; // Import SearchBar with alias
 import 'popular_categories_grid.dart';
 import 'bom_rfq.dart'; // Import BomRfqCard
 
