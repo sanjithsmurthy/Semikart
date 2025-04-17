@@ -46,6 +46,7 @@ class _CartPageState extends State<CartPage> {
     // Update the cart item count based on the number of items
     cartItemCount.value = cartItems.length;
   }
+  
 
   @override
   Widget build(BuildContext context) {

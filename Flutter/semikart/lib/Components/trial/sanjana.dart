@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../Login_SignUp/custom_text_field.dart';
+import '../login_signup/custom_text_field.dart';
 import '../common/textfield_dropdown.dart';
 import '../common/red_button.dart';
 import '../common/inactive_red_button.dart';
-import '../common/white_button.dart';
 import '../common/track_order.dart';
 import '../common/captcha.dart';
 import '../common/signinwith_google.dart';
@@ -15,17 +14,17 @@ import '../profile/profilepic.dart';
 import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
-import '../Login_SignUp/password_text_field.dart'; // Import the PasswordTextField widget
-import '../Login_SignUp/Loginpassword.dart'; // Import the LoginPasswordScreen
-import '../Login_SignUp/LoginOTP.dart'; // Adjust the path as needed
-import '../Login_SignUp/vertical_radios.dart'; // Import the VerticalRadios widget
-import '../Login_SignUp/confirm_password.dart'; // Import the ConfirmPasswordScreen
+import '../login_signup/password_text_field.dart'; // Import the PasswordTextField widget
+import '../login_signup/login_password.dart'; // Import the LoginPasswordScreen
+import '../login_signup/login_otp.dart'; // Adjust the path as needed
+import '../login_signup/vertical_radios.dart'; // Import the VerticalRadios widget
+import '../login_signup/confirm_password.dart'; // Import the ConfirmPasswordScreen
 import 'dart:io';
-import '../Login_SignUp/success.dart';
+import '../login_signup/success.dart';
 import '../common/hamburger.dart'; // Import the HamburgerMenu widget
 import '../profile/profile_screen.dart'; // Import the ProfileScreen
-import '../common/breadcrumbs.dart'; // Import the Breadcrumbs widget
-import '../Login_SignUp/login_password_new.dart'; // Import the LoginPasswordNewDotDot page
+import '../products/breadcrumbs.dart'; // Import the Breadcrumbs widget
+import '../login_signup/login_password_new.dart'; // Import the LoginPasswordNewDotDot page
 
 class TestLayoutSanjana extends StatefulWidget {
   const TestLayoutSanjana({super.key});
@@ -244,15 +243,6 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                               ),
                             ),
                             SizedBox(height: 16),
-                            SizedBox(
-                              width: buttonWidth,
-                              child: WhiteButton(
-                                label: "White Button",
-                                onPressed: () {
-                                  print('White button pressed!');
-                                },
-                              ),
-                            ),
                           ],
                         ),
                       ),

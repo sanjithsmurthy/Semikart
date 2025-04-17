@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../rfq_bom/rfq_full.dart'; // Import RFQFullPage
 import 'red_button.dart';
 
 class RFQComponent extends StatelessWidget {
@@ -45,13 +46,20 @@ class RFQComponent extends StatelessWidget {
           ),
           Positioned(
             left: screenWidth * 0.37, // 37% of the screen width
-            top: screenHeight * 0.06, // Adjusted to ensure 10px space from the text
+            top: screenHeight *
+                0.06, // Adjusted to ensure 10px space from the text
             child: SizedBox(
               width: screenWidth * 0.4, // 40% of the screen width
               child: RedButton(
                 label: "Submit RFQ",
                 onPressed: () {
-                  print('RFQ button pressed');
+                  // Navigate to RFQFullPage
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RFQFullPage(),
+                    ),
+                  );
                 },
                 width: screenWidth * 0.4, // 40% of the screen width
               ),

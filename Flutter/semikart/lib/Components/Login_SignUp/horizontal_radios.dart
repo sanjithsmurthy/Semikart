@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Loginpassword.dart'; // Import the LoginPassword screen
-import 'LoginOTP.dart'; // Import the LoginOTP screen
-
+import 'login_password.dart'; // Import the LoginPassword screen
+import 'login_otp.dart'; // Import the LoginOTP screen
 class HorizontalRadios extends StatefulWidget {
   final String initialOption; // Add a parameter to set the initial selected option
 

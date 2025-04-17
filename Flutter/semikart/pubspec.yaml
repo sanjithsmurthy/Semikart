@@ -1,4 +1,4 @@
-name: semikart
+name: Semikart
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -41,20 +41,17 @@ dependencies:
   image_picker: ^1.0.7
   font_awesome_flutter: ^10.4.0
   provider: ^6.1.4
-  # file_picker: ^5.2.2 # Use the latest version
+  file_picker: ^5.2.2 # Use the latest version
+  flutter_secure_storage: ^9.2.4
+  logging: ^1.2.0
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  
+  flutter_launcher_icons: ^0.13.1 # Use the latest version
+  flutter_native_splash: ^2.4.0 # Use the latest version
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -107,3 +104,45 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: "launcher_icon" # can be true or string name
+  ios: true
+  image_path: "public/assets/icon/semikart_small.png" # <--- PATH TO YOUR ICON
+  min_sdk_android: 21 # Optional: Your minimum Android SDK version
+  # Optional: For adaptive icons on Android 8.0+
+  # adaptive_icon_background: "#FFFFFF" # Background color
+  # adaptive_icon_foreground: "public/assets/icon/app_logo_foreground.png" # Path to foreground layer
+  web:
+    generate: true
+    image_path: "public/assets/icon/semikart_small.png"
+    background_color: "#FFFFFF" # Match your app theme
+    theme_color: "#A51414"      # Match your app theme
+  windows:
+    generate: true
+    image_path: "public/assets/icon/semikart_small.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "public/assets/icon/semikart_small.png"
+
+flutter_native_splash:
+  # Background color of the splash screen
+  color: "#FFFFFF" # White background (match your app's initial background)
+  # Optional: Use a background image instead of color
+  # background_image: "public/assets/images/splash_background.png"
+
+  # The logo/image to show on the splash screen
+  image: public/assets/icon/semikart_large.png # <--- PATH TO YOUR SPLASH LOGO
+
+  # Optional: Specify platform-specific images or settings
+  android_12:
+    # Settings specific to Android 12+ splash screen API
+    color: "#FFFFFF" # Background color for Android 12+
+    image: public/assets/icon/semikart_large.png # Optional: Different logo for A12+
+    # icon_background_color: "#A51414" # Optional: Background for the icon itself
+
+  # You can disable splash generation for specific platforms
+  android: true
+  ios: true
+  web: true # Set to false if you don't want web splash screen generation

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:semikart/Components/home/home_screen.dart';
+import 'package:Semikart/Components/home/home_page.dart';
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'loginpassword.dart'; // Import the LoginScreen component
+import 'login_password.dart'; // Import the LoginScreen component
 import '../common/forgot_password.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -242,7 +242,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => HomePage()), // Navigate to HomePage
+                              MaterialPageRoute(builder: (context) => HomePageContent()), // Navigate to HomePage
                             );
                           },
                         )
