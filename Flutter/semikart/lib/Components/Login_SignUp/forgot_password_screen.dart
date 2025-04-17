@@ -10,6 +10,8 @@ import '../common/popup.dart'; // Import the CustomPopup widget
 class ForgotPasswordScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController(); // Controller for email input
 
+  ForgotPasswordScreen({super.key}); // Add key to constructor
+
   @override
   Widget build(BuildContext context) {
     // Set the status bar to have a white background with black content
@@ -27,46 +29,35 @@ class ForgotPasswordScreen extends StatelessWidget {
       backgroundColor: Colors.white, // Set the background color to white
       // resizeToAvoidBottomInset: true, // This is the default and correct behavior
       body: SafeArea( // Ensures content avoids system intrusions like notches
-        child: SingleChildScrollView( // *** This makes the content scrollable ***
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Consistent padding
-            // Use ConstrainedBox to ensure the Column tries to fill at least the available screen height
-            // This helps SingleChildScrollView determine if scrolling is needed.
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: availableHeight, // Minimum height is the screen height minus safe area insets
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes content to top and button towards bottom
-                children: [
-                  // --- Top Content Group ---
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView( // *** This makes the ENTIRE child content scrollable ***
+          // Wrap content in a SizedBox to give Stack a defined height for scrolling
+          child: SizedBox(
+            // Ensure stack has enough height for scrolling content + positioned items
+            height: availableHeight > screenHeight ? availableHeight : screenHeight,
+            width: screenWidth,
+            child: Stack( // Use Stack for positioning the back button
+              children: [
+                // --- Main Content Area (Scrollable) ---
+                Padding(
+                  // Apply horizontal padding to the entire content column
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Left-align content within the column
+                    mainAxisAlignment: MainAxisAlignment.start, // Align content to the top
                     children: [
-                      SizedBox(height: screenHeight * 0.05), // Spacing at the top
-
-                      // Back Button
-                      IconButton(
-                        icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)),
-                        iconSize: screenWidth * 0.06,
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
-                          );
-                        },
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
+                      // --- Top Content Group ---
+                      // Add space at the top to push content below the positioned back button
+                      SizedBox(height: screenHeight * 0.15), // Increased height to push content down
 
                       // Forgot Password Title
                       Text(
                         "Forgot Password",
                         style: TextStyle(
-                          fontSize: screenWidth * 0.07,
+                          fontSize: screenWidth * 0.055, // Adjusted font size
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
                         ),
+                        textAlign: TextAlign.left, // Explicitly left align
                       ),
                       SizedBox(height: screenHeight * 0.02),
 
@@ -74,12 +65,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                       Text(
                         "Enter your registered email address. You will receive a link to create a new password via email.",
                         style: TextStyle(
-                          fontSize: screenWidth * 0.045,
+                          fontSize: screenWidth * 0.032, // Adjusted font size
                           fontWeight: FontWeight.w400,
                           color: Color(0xFFb6b6b6),
                           height: 1.5,
                         ),
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.left, // Explicitly left align
                       ),
                       SizedBox(height: screenHeight * 0.04),
 
@@ -87,63 +78,77 @@ class ForgotPasswordScreen extends StatelessWidget {
                       CustomTextField(
                         controller: emailController,
                         label: "Email",
+                        // Width is handled by Padding
                       ),
+                      SizedBox(height: screenHeight * 0.05), // Space between input and button
+
+                      // --- Bottom Content Group (Button) ---
+                      // Button is now part of the main flow, aligned left by Column's crossAxisAlignment
+                      RedButton(
+                        label: "Send Reset Link",
+                        width: screenWidth * 0.9, // Button takes full padded width
+                        height: screenHeight * 0.06, // 6% of screen height
+                        onPressed: () async {
+                          // Simulate checking the email in the database
+                          String email = emailController.text.trim();
+                          bool emailExists = _checkEmailInDatabase(email);
+
+                          if (!context.mounted) return;
+
+                          if (!emailExists) {
+                            await CustomPopup.show(
+                              context: context,
+                              title: 'Email Not Found',
+                              message: "Don't have an account.",
+                              buttonText: 'SignUp',
+                              imagePath: 'public/assets/images/Alert.png',
+                            ).then((_) {
+                              if (context.mounted) {
+                                 Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                                 );
+                              }
+                            });
+                          } else {
+                            if (context.mounted) {
+                               Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
+                               );
+                            }
+                          }
+                        },
+                      ),
+
+                      // Add extra space at the very bottom INSIDE the scrollable area
+                      SizedBox(height: screenHeight * 0.05), // Padding at the end
                     ],
                   ),
+                ),
 
-                  // --- Bottom Content Group ---
-                  // This Column will be pushed towards the bottom by MainAxisAlignment.spaceBetween
-                  Column(
-                     children: [
-                        SizedBox(height: screenHeight * 0.04), // Add some space above the button regardless
-
-                        // Send Reset Link Button
-                        Center(
-                          child: RedButton(
-                            label: "Send Reset Link",
-                            width: screenWidth * 0.9,
-                            height: screenHeight * 0.06,
-                            onPressed: () async {
-                              // Simulate checking the email in the database
-                              String email = emailController.text.trim();
-                              bool emailExists = _checkEmailInDatabase(email);
-
-                              if (!emailExists) {
-                                await CustomPopup.show(
-                                  context: context,
-                                  title: 'Email Not Found',
-                                  message: "Don't have an account.",
-                                  buttonText: 'SignUp',
-                                  imagePath: 'public/assets/images/Alert.png',
-                                ).then((_) {
-                                  // Ensure context is still valid before navigating
-                                  if (Navigator.canPop(context)) {
-                                     Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => SignUpScreen()),
-                                     );
-                                  }
-                                });
-                              } else {
-                                // Ensure context is still valid before navigating
-                                if (Navigator.canPop(context)) {
-                                   Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-                                   );
-                                }
-                              }
-                            },
-                          ),
-                        ),
-
-                        // Add extra space at the very bottom INSIDE the scrollable area
-                        // This ensures there's room to scroll the button well above the keyboard
-                        SizedBox(height: screenHeight * 0.05), // Adjust as needed
-                     ],
+                // --- Positioned Back Button (Remains Fixed) ---
+                Positioned(
+                  left: screenWidth * 0.05, // 5% of screen width
+                  top: screenHeight * 0.08,  // 8% of screen height
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)),
+                    iconSize: screenWidth * 0.06, // Example: 6% of screen width
+                    onPressed: () {
+                      // Ensure context is valid before navigating
+                      if (Navigator.canPop(context)) {
+                         Navigator.pop(context); // Use pop instead of pushReplacement for back button
+                      } else {
+                         // Fallback if cannot pop (e.g., first screen)
+                         Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                         );
+                      }
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -153,7 +158,10 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   // Simulated function to check if the email exists in the database
   bool _checkEmailInDatabase(String email) {
-    List<String> registeredEmails = ["user1@example.com", "user2@example.com", "user3@example.com"];
-    return registeredEmails.contains(email);
+    List<String> registeredEmails = ["user1@example.com", "user2@example.com", "user3@example.com", "test@test.com"];
+    print("Checking email: $email");
+    bool exists = registeredEmails.contains(email.toLowerCase());
+    print("Email exists: $exists");
+    return exists;
   }
 }

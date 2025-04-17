@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
-import 'forgot_password.dart'; // Import the ForgotPasswordScreen
+import 'forgot_password_screen.dart'; // Import the ForgotPasswordScreen
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveRedButton widget
