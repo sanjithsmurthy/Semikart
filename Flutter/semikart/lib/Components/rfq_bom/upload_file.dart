@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import '../common/red_button.dart';
 import 'dart:io';
 
@@ -16,21 +16,20 @@ class _CustomSquareState extends State<CustomSquare> {
   File? _selectedFile;
 
   Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['xlsx', 'xls', 'pdf'],
+    final XTypeGroup typeGroup = XTypeGroup(
+      label: 'documents',
+      extensions: ['xlsx', 'xls', 'pdf'],
     );
+    final XFile? xFile = await openFile(acceptedTypeGroups: [typeGroup]);
+    final File? file = xFile != null ? File(xFile.path) : null;
 
-    if (result != null && result.files.isNotEmpty) {
-      final file = result.files.first;
+    if (file != null) {
       setState(() {
-        _fileName = file.name;
-        _fileExtension = file.extension;
-        if (file.path != null) {
-          _selectedFile = File(file.path!);
-        }
+        _fileName = file.path.split('/').last;
+        _fileExtension = file.path.split('.').last;
+        _selectedFile = file;
       });
-      print('File selected: ${file.name}');
+      print('File selected: ${file.path}');
     } else {
       print('File selection canceled.');
     }
