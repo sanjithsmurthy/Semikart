@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'password_text_field.dart'; // Import for the password field
 import 'custom_text_field.dart'; // Import for the custom field
+import 'confirm_password.dart'; // Import your ConfirmPasswordScreen
 
 class ConfirmPasswordScreen extends StatefulWidget {
   final void Function(bool match)? onPasswordsMatch; // Optional callback for passwords match
@@ -194,5 +195,71 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
   // Check if all password requirements are satisfied
   bool _areAllRequirementsSatisfied() {
     return hasMinLength && hasUpperCase && hasNumber && hasSpecialChar;
+  }
+}
+
+// Example Parent Screen (e.g., SignUpScreen.dart)
+class SignUpScreen extends StatefulWidget {
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  bool _passwordsMatch = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Sign Up")),
+      // resizeToAvoidBottomInset: true, // Default is true
+      body: SafeArea(
+        // Wrap the main content column/stack in SingleChildScrollView
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0), // Add padding if needed
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // ... other sign-up fields (like Email, Name, etc.) ...
+
+                Text("Create Your Password"),
+                SizedBox(height: 20),
+
+                // Use your ConfirmPasswordScreen widget here
+                ConfirmPasswordScreen(
+                  onPasswordsMatch: (match) {
+                    // Update state based on whether passwords match
+                    setState(() {
+                      _passwordsMatch = match;
+                    });
+                    print("Passwords match: $match");
+                  },
+                  // Pass width/height if needed, otherwise it uses defaults
+                  // width: MediaQuery.of(context).size.width * 0.9,
+                ),
+
+                SizedBox(height: 30),
+
+                // Example Sign Up Button (Enable based on password match)
+                ElevatedButton(
+                  onPressed: _passwordsMatch
+                      ? () {
+                          // Handle sign up logic
+                          print("Sign Up button pressed");
+                        }
+                      : null, // Disable button if passwords don't match/requirements not met
+                  child: Text("Sign Up"),
+                ),
+
+                // Add extra space at the bottom if needed to ensure
+                // the button doesn't get stuck right above the keyboard
+                SizedBox(height: 50),
+
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

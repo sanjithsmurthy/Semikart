@@ -15,7 +15,7 @@ import '../common/product_search.dart'; // Import the ProductSearch page
 import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../login_signup/password_text_field.dart'; // Import the PasswordTextField widget
-import '../login_signup/login_password.dart'; // Import the LoginPasswordScreen
+import '../login_signup/login_password_new.dart'; // Import the LoginPasswordScreen
 import '../login_signup/login_otp.dart'; // Adjust the path as needed
 import '../login_signup/vertical_radios.dart'; // Import the VerticalRadios widget
 import '../login_signup/confirm_password.dart'; // Import the ConfirmPasswordScreen
@@ -495,7 +495,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginPasswordScreen(),
+                              builder: (context) => LoginPasswordNewScreen(),
                             ),
                           );
                         },
