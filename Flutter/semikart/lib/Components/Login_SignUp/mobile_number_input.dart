@@ -87,16 +87,6 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
       ),
     );
 
-    // Define the error border style (optional, but good practice)
-    var errorBorderStyle = OutlineInputBorder( // Make const
-      borderRadius: BorderRadius.circular(20), // Match PasswordTextField
-      borderSide: BorderSide(
-        color: Colors.red, // Standard error color
-        width: 2.0,
-      ),
-    );
-
-
     return Padding(
       // Default padding to 0 to match PasswordTextField
       padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 0),
@@ -133,8 +123,9 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                         border: borderStyle,
                         enabledBorder: borderStyle,
                         focusedBorder: borderStyle,
-                        errorBorder: errorBorderStyle, // Use error style if needed
-                        focusedErrorBorder: errorBorderStyle, // Use error style if needed
+                        // Use the standard border style even for error
+                        errorBorder: borderStyle,
+                        focusedErrorBorder: borderStyle,
                         filled: true,
                         fillColor: Colors.white,
                         // Adjust content padding for vertical alignment if needed
@@ -200,8 +191,9 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                         border: borderStyle,
                         enabledBorder: borderStyle,
                         focusedBorder: borderStyle,
-                        errorBorder: errorBorderStyle, // Use error style if needed
-                        focusedErrorBorder: errorBorderStyle, // Use error style if needed
+                        // --- Use the standard border style for error states ---
+                        errorBorder: borderStyle,
+                        focusedErrorBorder: borderStyle,
                         // Match content padding
                         contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // Make const
                         // Hide default error text space if using custom error display
@@ -216,7 +208,8 @@ class _MobileNumberFieldState extends State<MobileNumberField> {
                       validator: (value) {
                          if (value == null || value.isEmpty) return null; // Allow empty
                          final isValid = RegExp(r'^\d{10}$').hasMatch(value); // Example validation
-                         return isValid ? null : 'Invalid number'; // Return error string or null
+                         // Return an error message triggers the error state, but the border is now controlled by errorBorder
+                         return isValid ? null : ' '; // Return non-empty string for error state, but hide it
                       },
                       autovalidateMode: AutovalidateMode.onUserInteraction, // Validate on interaction
                       style: const TextStyle( // Added style to match PasswordTextField

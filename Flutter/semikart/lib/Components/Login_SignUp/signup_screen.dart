@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../../base_scaffold.dart'; // Import BaseScaffold for navigation
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
-import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
-import 'mobile_number_input.dart'; // Import the MobileNumberField component
+import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component // Import the MobileNumberField component
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
 import 'login_password.dart'; // Import the LoginScreen component (assuming login_password_new.dart)
 import '../common/forgot_password.dart';
+import 'package:intl_phone_field/intl_phone_field.dart'; // Import the IntlPhoneField package
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -175,19 +175,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // MobileNumberField
                 Center(
-                  child: MobileNumberField(
-                    controller: mobileNumberController,
-                    label: 'Mobile Number',
-                    countryCodes: ['+91', '+1', '+44'],
-                    defaultCountryCode: '+91',
-                    onCountryCodeChanged: (code) {
-                      print('Selected country code: $code');
+                  child: LayoutBuilder( // Use LayoutBuilder to get constraints if needed, or just use MediaQuery
+                  builder: (context, constraints) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    // Calculate a responsive border radius. 25% of width/height might be too much,
+                    // let's use a fraction of screen width for a scalable effect.
+                    // Adjust the multiplier (e.g., 0.06) as needed for the desired curve.
+                    final double responsiveBorderRadius = screenWidth * 0.06; // Example: 6% of screen width
+
+                    return IntlPhoneField(
+                    // controller: mobileNumberController, // Keep commented if not needed
+                    decoration: InputDecoration(
+                      labelText: 'Mobile Number',
+                      labelStyle: TextStyle(color: Color(0xFF757575)), // Style from CustomTextField
+                      floatingLabelStyle: TextStyle(color: Color(0xFFA51414)), // Style from CustomTextField
+                      border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFA51414),width: 2.0),
+                      borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFA51414),width: 2.0),
+                      borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Style from CustomTextField
+                      borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0), // Style from CustomTextField
+                    ),
+                    initialCountryCode: 'IN', // Default country code
+                    onChanged: (phone) {
+                      // Update state or controller if needed
+                      mobileNumberController.text = phone.completeNumber; // Assuming you want to store the full number
+                       _checkAllFieldsFilled(); // Call check function on change
+                      print(phone.completeNumber);
                     },
-                    onValidationFailed: (number) {
-                      print('Invalid mobile number: $number');
+                    onCountryChanged: (country) {
+                      print('Country changed to: ' + country.name);
                     },
+                    // Style the dropdown icon color
+                    dropdownIcon: Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)),
+                    );
+                  }
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.025), // Add spacing
