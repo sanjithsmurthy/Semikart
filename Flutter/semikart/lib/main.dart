@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
-import 'package:Semikart/Components/login_signup/login_password_new.dart';
+import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
 import 'base_scaffold.dart'; // Import BaseScaffold directly
 import 'managers/auth_manager.dart'; // Import AuthManager provider
