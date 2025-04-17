@@ -3,7 +3,7 @@ import '../../base_scaffold.dart'; // Import BaseScaffold for navigation
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
-import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
+import '../login_signup/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
 import 'login_password.dart'; // Import the LoginScreen component (assuming login_password_new.dart)
@@ -96,23 +96,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
-                // Display Name (Optional - consider if this should be an input)
-                const Text(
-                  'GFXAgency', // Assuming this is static or comes from elsewhere
-                  style: TextStyle(
-                    fontSize: 20, // Set font size to 20
-                    fontWeight: FontWeight.normal, // Remove bold styling
-                     // Use Product Sans font
-                    color: Colors.black, // Set text color to black
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.03), // Add spacing
-
                 // "Create Your Account" Text
                 Text(
                   'Create Your Account',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.06, // 6% of screen width
+                    fontSize: screenWidth * 0.055, // 6% of screen width
                      // Use Product Sans font
                     color: Colors.black, // Black text color
                     fontWeight: FontWeight.bold, // Bold font weight
@@ -163,7 +151,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // CustomTextField for First Name
                 Center(
                   child: CustomTextField(
-                    // Removed fixed width/height to allow natural sizing or control via parent
                     controller: firstNameController,
                     label: "First Name",
                   ),
@@ -191,7 +178,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // MobileNumberField
                 Center(
                   child: MobileNumberField(
-                    // Removed fixed width/height
                     controller: mobileNumberController,
                     label: 'Mobile Number',
                     countryCodes: ['+91', '+1', '+44'],
@@ -209,7 +195,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // CustomTextField for Company Name
                 Center(
                   child: CustomTextField(
-                    // Removed fixed width/height
                     controller: companyNameController,
                     label: "Company Name",
                   ),
@@ -218,21 +203,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // Confirm Password Component
                 ConfirmPasswordScreen(
-                  // Removed fixed width/height - let it size naturally or control via parent
                   onPasswordsMatch: (match) {
-                    // Only update state if the match status actually changes
                     if (passwordsMatch != match) {
                       setState(() {
                         passwordsMatch = match; // Update the passwordsMatch state
                       });
-                      // Re-check all fields when password match status changes
                       _checkAllFieldsFilled();
                     }
                   },
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // ForgotPasswordButton (Already have an account?)
+                // ForgotPasswordButton
                 Align(
                   alignment: Alignment.centerRight, // Align to the right
                   child: ForgotPasswordButton(
@@ -259,12 +241,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           setState(() {
                             isTermsAccepted = value ?? false; // Update the checkbox state
                           });
-                          // Re-check all fields when terms acceptance changes
                           _checkAllFieldsFilled();
                         },
                         activeColor: Color(0xFFA51414), // Set checkbox color
                       ),
-                      // Wrap Text in Flexible/Expanded if it can overflow
                       Flexible(
                         child: Text(
                           "I agree to the terms and conditions",
@@ -273,7 +253,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             
                             color: Colors.black,
                           ),
-                          textAlign: TextAlign.right, // Align text to the right
+                          textAlign: TextAlign.center, // Align text to the right
                         ),
                       ),
                     ],
@@ -281,7 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // Sign Up Button - Conditional rendering based on all checks
+                // Sign Up Button
                 Center(
                   child: isSignUpButtonActive
                       ? RedButton(
@@ -289,14 +269,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: screenWidth * 0.9, // Specify width
                           height: screenHeight * 0.06, // Specify height
                           onPressed: () {
-                            // All conditions met, proceed with sign up
                             print("Sign Up Initiated!");
                             print("First Name: ${firstNameController.text}");
                             print("Last Name: ${lastNameController.text}");
                             print("Email: ${emailController.text}");
                             print("Mobile: ${mobileNumberController.text}");
                             print("Company: ${companyNameController.text}");
-                            // Add actual sign-up logic here
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => BaseScaffold()), // Navigate to HomePage
@@ -309,7 +287,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: screenHeight * 0.06, // Specify height
                         ),
                 ),
-                // Add extra space at the bottom INSIDE the scroll view
                 SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 30), // Keyboard height + buffer
               ],
             ),
