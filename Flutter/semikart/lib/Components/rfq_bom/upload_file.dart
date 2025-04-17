@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart'; // Import file_picker for selecting files
-import '../common/red_button.dart'; // Import the RedButton class
+import 'package:file_picker/file_picker.dart';
+import '../common/red_button.dart';
 import 'dart:io';
 
 class CustomSquare extends StatefulWidget {
-  const CustomSquare({super.key});
+  const CustomSquare({Key? key}) : super(key: key);
 
   @override
   State<CustomSquare> createState() => _CustomSquareState();
 }
 
 class _CustomSquareState extends State<CustomSquare> {
-  String? _fileName; // Store the file name
-  String? _fileExtension; // Store the file extension
-  File? _selectedFile; // Store the selected file
+  String? _fileName;
+  String? _fileExtension;
+  File? _selectedFile;
 
   Future<void> _pickFile() async {
-    // Allow the user to pick files (Excel and PDF documents)
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['xlsx', 'xls', 'pdf'], // Allowed file types
+      allowedExtensions: ['xlsx', 'xls', 'pdf'],
     );
 
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.first;
       setState(() {
-        _fileName = file.name; // Set the file name
-        _fileExtension = file.extension; // Set the file extension
+        _fileName = file.name;
+        _fileExtension = file.extension;
         if (file.path != null) {
-          _selectedFile = File(file.path!); // Set the selected file
+          _selectedFile = File(file.path!);
         }
       });
       print('File selected: ${file.name}');
@@ -37,47 +36,67 @@ class _CustomSquareState extends State<CustomSquare> {
     }
   }
 
-  Widget _getFileIcon() {
-    // Return an appropriate icon based on the file type
+  Widget _getFileIcon(double screenWidth) {
+    double iconSize = screenWidth * 0.125; // 12.5% of screen width
+
     if (_fileExtension == null) {
       return Image.asset(
-        'public/assets/images/cloud_icon.png', // Default cloud icon
+        'public/assets/images/cloud_icon.png',
         fit: BoxFit.contain,
       );
     }
 
     if (_fileExtension!.toLowerCase() == 'pdf') {
-      return const Icon(Icons.picture_as_pdf,
-          size: 50, color: Colors.red); // PDF icon
+      return Icon(Icons.picture_as_pdf, size: iconSize, color: Colors.red);
     } else if (['xlsx', 'xls'].contains(_fileExtension!.toLowerCase())) {
-      return const Icon(Icons.table_chart,
-          size: 50, color: Colors.green); // Excel file icon
+      return Icon(Icons.table_chart, size: iconSize, color: Colors.green);
     }
 
-    return const Icon(Icons.insert_drive_file,
-        size: 50, color: Colors.grey); // Default file icon
+    return Icon(Icons.insert_drive_file, size: iconSize, color: Colors.grey);
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Dynamic dimensions based on screen width
+    final double containerHorizontalPadding =
+        screenWidth * 0.04; // 4% of screen width
+    final double innerContainerPadding =
+        screenWidth * 0.04; // 4% of screen width
+    final double borderRadius = screenWidth * 0.05; // 5% of screen width
+    final double shadowSpreadRadius =
+        screenWidth * 0.0125; // 1.25% of screen width
+    final double shadowBlurRadius = screenWidth * 0.025; // 2.5% of screen width
+    final double iconWidth = screenWidth * 0.25; // 25% of screen width
+    final double iconHeight = screenWidth *
+        0.25; // 25% of screen width (to maintain square aspect ratio)
+    final double fileNameFontSize = screenWidth * 0.035; // 3.5% of screen width
+    final double uploadTextFontSize = screenWidth * 0.04; // 4% of screen width
+    final double supportedFormatsFontSize =
+        screenWidth * 0.03; // 3% of screen width
+    final double sizedBoxHeightSmall =
+        screenWidth * 0.025; // 2.5% of screen width
+    final double sizedBoxHeightMedium =
+        screenWidth * 0.0375; // 3.75% of screen width
+    final double buttonWidth = screenWidth * 0.3; // 30% of screen width
+    final double buttonHeight = screenWidth * 0.1; // 10% of screen width
 
     return Container(
-      color: Colors.white, // Set the background color to white
-      width: screenWidth, // Match the width of RFQ_text_component.dart
-      padding: const EdgeInsets.symmetric(
-          horizontal: 16), // Horizontal padding for alignment
+      color: Colors.white,
+      width: screenWidth,
+      padding: EdgeInsets.symmetric(horizontal: containerHorizontalPadding),
       child: Container(
-        padding: const EdgeInsets.all(16), // Inner padding for the square box
+        padding: EdgeInsets.all(innerContainerPadding),
         decoration: BoxDecoration(
-          color: Colors.white, // Background color of the square
-          borderRadius: BorderRadius.circular(20), // Corner radius
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(borderRadius),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // Gray shadow with opacity
-              spreadRadius: 5, // Spread radius of the shadow
-              blurRadius: 10, // Blur radius of the shadow
-              offset: const Offset(0, 3), // Offset of the shadow (x, y)
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: shadowSpreadRadius,
+              blurRadius: shadowBlurRadius,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -85,28 +104,26 @@ class _CustomSquareState extends State<CustomSquare> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Display the file icon or the default cloud icon
             GestureDetector(
-              onTap: _pickFile, // Call the _pickFile method when tapped
+              onTap: _pickFile,
               child: Column(
                 children: [
                   SizedBox(
-                    width: screenWidth * 0.25, // 25% of the screen width
-                    height: 100, // Fixed height for the icon
-                    child: _getFileIcon(), // Display the file icon
+                    width: iconWidth,
+                    height: iconHeight,
+                    child: _getFileIcon(screenWidth),
                   ),
-                  if (_fileName != null) // Display the file name if available
+                  if (_fileName != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: EdgeInsets.only(top: sizedBoxHeightSmall),
                       child: Text(
                         _fileName!,
                         style: TextStyle(
-                          fontSize: screenWidth * 0.035,
+                          fontSize: fileNameFontSize,
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.center,
-                        overflow:
-                            TextOverflow.ellipsis, // Handle long file names
+                        overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
                     ),
@@ -114,34 +131,33 @@ class _CustomSquareState extends State<CustomSquare> {
               ),
             ),
             if (_fileName == null) ...[
-              const SizedBox(
-                  height: 10), // Reduced space between image and text
+              SizedBox(height: sizedBoxHeightSmall),
               Text(
                 'Upload Parts List',
                 style: TextStyle(
-                  fontSize: screenWidth * 0.04, // 4% of the screen width
+                  fontSize: uploadTextFontSize,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFF000000), // Black color
+                  color: const Color(0xFF000000),
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8), // Reduced space between text lines
+              SizedBox(height: sizedBoxHeightSmall),
               Text(
                 'Supported formats: Excel (XLS, XLSX), PDF.',
                 style: TextStyle(
-                  fontSize: screenWidth * 0.03, // 3% of the screen width
-                  color: const Color(0xFF757575), // Gray color
+                  fontSize: supportedFormatsFontSize,
+                  color: const Color(0xFF757575),
                 ),
                 textAlign: TextAlign.center,
               ),
             ],
-            const SizedBox(height: 15), // Reduced space between text and button
-
-            // Make the "Browse" button clickable
+            SizedBox(height: sizedBoxHeightMedium),
             Center(
               child: RedButton(
                 label: _fileName == null ? "Browse" : "Replace File",
-                onPressed: _pickFile, // Call the _pickFile method
+                onPressed: _pickFile,
+                width: buttonWidth,
+                height: buttonHeight,
               ),
             ),
           ],

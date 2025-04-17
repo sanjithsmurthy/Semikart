@@ -54,12 +54,30 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    final screenHeight =
+        MediaQuery.of(context).size.height; // Get screen height
+
+    // Dynamic dimensions based on screen width
+    final double titleFontSize = screenWidth * 0.05; // 5% of screen width
+    final double sectionSpacing = screenWidth * 0.04; // 4% of screen width
+    final double textBoxSpacing = screenWidth * 0.025; // 2.5% of screen width
+    final double rowSpacing = screenWidth * 0.025; // 2.5% of screen width
+    final double textBoxWidth = screenWidth * 0.9; // 90% of screen width
+    final double reCaptchaHeight = screenHeight * 0.06; // 6% of screen height
+    final double reCaptchaFontSize =
+        screenWidth * 0.035; // 3.5% of screen width
+    final double submitButtonSpacing = screenWidth * 0.05; // 5% of screen width
+    final double textBoxLabelFontSize =
+        screenWidth * 0.0325; // 3.25% of screen width
+    final double textBoxHeight = screenHeight * 0.05; // 5% of screen height
+    final double rowHorizontalSpacing =
+        screenWidth * 0.075; // 7.5% of screen width
 
     return Container(
       color: Colors.white, // Set the background color to white
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(sectionSpacing),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,84 +85,100 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
               Text(
                 widget.title,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: titleFontSize,
                   fontWeight: FontWeight.bold,
                   color: Colors.black, // Changed to black
                 ),
               ),
-              SizedBox(height: 20), // Space below the title
+              SizedBox(height: sectionSpacing), // Space below the title
 
               // First Name
               GreyTextBox(
                 nameController: firstNameController,
                 text: 'First name',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Email
               GreyTextBox(
                 nameController: emailController,
                 text: 'Email',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Mobile
               GreyTextBox(
                 nameController: mobileController,
                 text: 'Mobile number',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Company
               GreyTextBox(
                 nameController: companyController,
                 text: 'Company name',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // GST No
               GreyTextBox(
                 nameController: gstNoController,
                 text: 'GST number',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Address 1
               GreyTextBox(
                 nameController: address1Controller,
                 text: 'Address line 1',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Address 2
               GreyTextBox(
                 nameController: address2Controller,
                 text: 'Address line 2',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Landmark
               GreyTextBox(
                 nameController: landmarkController,
                 text: 'Landmark',
                 backgroundColor: Color(0xFFE4E8EC), // Grey background color
+                labelFontSize: textBoxLabelFontSize,
+                textBoxHeight: textBoxHeight,
               ),
 
-              SizedBox(height: 10), // Space between fields
+              SizedBox(height: textBoxSpacing), // Space between fields
 
               // Zip Code and State
               Row(
@@ -157,11 +191,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                       text: 'Zip code',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
+                      labelFontSize: textBoxLabelFontSize,
+                      textBoxHeight: textBoxHeight,
                     ),
                   ),
                   SizedBox(
                       width:
-                          30), // Match the spacing between Quantity and Price
+                          rowHorizontalSpacing), // Match the spacing between Quantity and Price
                   // State
                   Expanded(
                     flex: 1,
@@ -170,12 +206,14 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                       text: 'State',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
+                      labelFontSize: textBoxLabelFontSize,
+                      textBoxHeight: textBoxHeight,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 10), // Space between rows
+              SizedBox(height: rowSpacing), // Space between rows
 
               // City and Country
               Row(
@@ -188,11 +226,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                       text: 'City',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
+                      labelFontSize: textBoxLabelFontSize,
+                      textBoxHeight: textBoxHeight,
                     ),
                   ),
                   SizedBox(
                       width:
-                          30), // Match the spacing between Quantity and Price
+                          rowHorizontalSpacing), // Match the spacing between Quantity and Price
                   // Country
                   Expanded(
                     flex: 1,
@@ -201,16 +241,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                       text: 'Country',
                       backgroundColor:
                           Color(0xFFE4E8EC), // Grey background color
+                      labelFontSize: textBoxLabelFontSize,
+                      textBoxHeight: textBoxHeight,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 20), // Space before reCAPTCHA
+              SizedBox(height: sectionSpacing), // Space before reCAPTCHA
 
               // reCAPTCHA Placeholder
               Container(
-                height: 50,
+                height: reCaptchaHeight,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(5),
@@ -219,14 +261,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   child: Text(
                     "I'm not a robot",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: reCaptchaFontSize,
                       color: Colors.grey,
                     ),
                   ),
                 ),
               ),
 
-              SizedBox(height: 20), // Space before Submit button
+              SizedBox(
+                  height: submitButtonSpacing), // Space before Submit button
 
               // Submit Button
               Center(
@@ -248,6 +291,8 @@ class GreyTextBox extends StatelessWidget {
   final String text; // Single parameter for both label and hint text
   final double? width; // Optional width parameter
   final Color backgroundColor; // Background color parameter
+  final double labelFontSize; // Font size for the label
+  final double textBoxHeight; // Height for the text box
 
   GreyTextBox({
     Key? key,
@@ -256,6 +301,8 @@ class GreyTextBox extends StatelessWidget {
     this.width, // Optional width
     this.backgroundColor =
         const Color(0xFFE4E8EC), // Default grey background color
+    required this.labelFontSize, // Font size for the label
+    required this.textBoxHeight, // Height for the text box
   }) : super(key: key);
 
   @override
@@ -269,7 +316,7 @@ class GreyTextBox extends StatelessWidget {
         Text(
           text, // Use the single parameter for label text
           style: TextStyle(
-            fontSize: 13,
+            fontSize: labelFontSize,
             color: Color(0xFFA51414), // Adjust the color as needed
           ),
         ),
@@ -278,7 +325,7 @@ class GreyTextBox extends StatelessWidget {
           width: width ??
               screenWidth *
                   0.9, // Default to 90% of screen width if width is not provided
-          height: 41.54,
+          height: textBoxHeight,
           decoration: BoxDecoration(
             color: backgroundColor, // Use the customizable background color
             borderRadius: BorderRadius.circular(9),
