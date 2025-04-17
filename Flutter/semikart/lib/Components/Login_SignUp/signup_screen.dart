@@ -3,7 +3,7 @@ import '../../base_scaffold.dart'; // Import BaseScaffold for navigation
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
-import './mobile_number_input.dart'; // Import the MobileNumberField component
+import '../login_signup/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
 import 'login_password.dart'; // Import the LoginScreen component (assuming login_password_new.dart)
@@ -253,7 +253,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             
                             color: Colors.black,
                           ),
-                          textAlign: TextAlign.right, // Align text to the right
+                          textAlign: TextAlign.center, // Align text to the right
                         ),
                       ),
                     ],
