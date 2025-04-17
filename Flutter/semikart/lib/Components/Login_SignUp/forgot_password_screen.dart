@@ -52,7 +52,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   fontSize: screenWidth * 0.07, // Dynamically scale font size
                   fontWeight: FontWeight.w600, // Semi-bold weight for emphasis
                   color: Colors.black, // Black color for a clean look
-                  fontFamily: 'Product Sans', // Product Sans font
+                   // Product Sans font
                 ),
               ),
               SizedBox(height: screenHeight * 0.02), // Add spacing below the title
@@ -64,7 +64,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   fontSize: screenWidth * 0.045, // Dynamically scale font size
                   fontWeight: FontWeight.w400, // Regular weight for a clean and professional look
                   color: Color(0xFFb6b6b6), // Subtle grey color for instructions
-                  fontFamily: 'Product Sans', // Product Sans font
+                   // Product Sans font
                   height: 1.5, // Line height for better readability
                 ),
                 textAlign: TextAlign.left, // Align text to the left

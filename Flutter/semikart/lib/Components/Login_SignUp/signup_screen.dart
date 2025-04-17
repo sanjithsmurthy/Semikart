@@ -55,7 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style: TextStyle(
                     fontSize: 20, // Set font size to 20
                     fontWeight: FontWeight.normal, // Remove bold styling
-                    fontFamily: 'Product Sans', // Use Product Sans font
+                     // Use Product Sans font
                     color: Colors.black, // Set text color to black
                   ),
                 ),
@@ -66,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   'Create Your Account',
                   style: TextStyle(
                     fontSize: screenWidth * 0.06, // 6% of screen width
-                    fontFamily: 'Product Sans', // Use Product Sans font
+                     // Use Product Sans font
                     color: Colors.black, // Black text color
                     fontWeight: FontWeight.bold, // Bold font weight
                   ),
@@ -98,7 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       'OR',
                       style: TextStyle(
                         fontSize: screenWidth * 0.04, // Specify font size
-                        fontFamily: 'Product Sans',
+                        
                         color: Colors.black,
                       ),
                     ),
@@ -222,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         "I agree to the terms and conditions",
                         style: TextStyle(
                           fontSize: screenWidth * 0.035, // Specify font size
-                          fontFamily: 'Product Sans',
+                          
                           color: Colors.black,
                         ),
                         textAlign: TextAlign.right, // Align text to the right

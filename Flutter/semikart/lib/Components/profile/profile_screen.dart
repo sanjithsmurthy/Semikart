@@ -72,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.normal,
-                      fontFamily: 'Product Sans',
+                      
                       color: Colors.black,
                     ),
                   ),

@@ -168,7 +168,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Custom TextField',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -195,7 +195,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Custom Dropdown',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -215,7 +215,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Button Types',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -251,7 +251,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Sign in with Google',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -269,7 +269,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Captcha Validation',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -287,7 +287,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Radio Options',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -298,7 +298,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Default Two Radio Buttons',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -317,7 +317,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Three Radio Buttons',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -336,7 +336,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Vertical Radios Example',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -347,7 +347,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Order Tracking',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -362,7 +362,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Request For Quote',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -387,7 +387,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Profile Picture',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -407,7 +407,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Order Details',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -422,7 +422,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Mobile Number Field',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -445,7 +445,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Password Field',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -462,7 +462,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Product Search Page',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline, // Add underline for clickable text
@@ -482,7 +482,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           'Go to Product Search Page',
                           style: TextStyle(
                             fontSize: 16,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.blue,
                             decoration: TextDecoration.underline,
                           ),
@@ -503,7 +503,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           'LoginPassword Page',
                           style: TextStyle(
                             fontSize: 18,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.blue, // Blue color to indicate it's clickable
                             decoration: TextDecoration.underline, // Underline for clickable text
                           ),
@@ -524,7 +524,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           'LoginOTP Page',
                           style: TextStyle(
                             fontSize: 18,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.blue, // Blue color to indicate it's clickable
                             decoration: TextDecoration.underline, // Underline for clickable text
                           ),
@@ -543,7 +543,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           'Profile Screen',
                           style: TextStyle(
                             fontSize: 18,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.blue, // Blue color to indicate it's clickable
                             decoration: TextDecoration.underline, // Underline for clickable text
                           ),
@@ -562,7 +562,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           'Go to Success Screen',
                           style: TextStyle(
                             fontSize: 18,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.blue,
                             decoration: TextDecoration.underline,
                           ),
@@ -573,7 +573,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                         'Built-in SearchBar Example',
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
+                          
                           color: Color(0xFFA51414),
                           fontWeight: FontWeight.bold,
                         ),
@@ -600,7 +600,7 @@ class _TestLayoutSanjanaState extends State<TestLayoutSanjana> {
                           'Go to LoginPasswordNewDotDot Page',
                           style: TextStyle(
                             fontSize: 18,
-                            fontFamily: 'Product Sans',
+                            
                             color: Colors.blue, // Blue color to indicate it's clickable
                             decoration: TextDecoration.underline, // Underline for clickable text
                           ),

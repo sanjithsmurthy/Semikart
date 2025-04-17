@@ -57,7 +57,7 @@ class Capsule extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: screenWidth * 0.025, // Dynamically scalable font size (~14px)
-                  fontFamily: 'Product Sans',
+                  
                   fontWeight: FontWeight.normal,
                   color: Colors.black,
                 ),

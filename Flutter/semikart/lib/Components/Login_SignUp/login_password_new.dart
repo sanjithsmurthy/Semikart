@@ -46,7 +46,7 @@ class LoginPasswordNewScreen extends StatelessWidget { // Renamed the class
                 'Login',
                 style: TextStyle(
                   fontSize: screenWidth * 0.055, // 5.5% of screen width
-                  fontFamily: 'Product Sans', // Product Sans font
+                   // Product Sans font
                   color: Colors.black, // Black color
                   fontWeight: FontWeight.bold, // Bold weight
                 ),

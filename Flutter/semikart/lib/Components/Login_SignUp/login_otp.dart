@@ -107,7 +107,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                 'Login',
                 style: TextStyle(
                   fontSize: screenWidth * 0.055, // 5.5% of screen width
-                  fontFamily: 'Product Sans', // Product Sans font
+                   // Product Sans font
                   color: Colors.black, // Black color
                   fontWeight: FontWeight.bold, // Bold weight
                 ),
@@ -181,7 +181,7 @@ class _LoginOTPScreenState extends State<LoginOTPScreen> {
                       "Resend OTP in ${countdown ~/ 60}:${(countdown % 60).toString().padLeft(2, '0')}",
                       style: TextStyle(
                         fontSize: screenWidth * 0.035, // Scaled font size
-                        fontFamily: 'Product Sans',
+                        
                         color: Colors.red,
                       ),
                       textAlign: TextAlign.center, // Center the text

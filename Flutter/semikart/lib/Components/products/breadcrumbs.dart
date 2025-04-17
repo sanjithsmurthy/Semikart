@@ -18,7 +18,7 @@ class Breadcrumbs extends StatelessWidget {
                 color: i == items.length - 1 ? const Color(0xFFA51414) : Colors.black,
                 fontWeight: i == items.length - 1 ? FontWeight.bold : FontWeight.normal,
 fontSize: 14, // Set font size to 14
-                fontFamily: 'Product Sans', // Use Product Sans font
+                 // Use Product Sans font
                 decoration: i == items.length - 1 ? TextDecoration.none : TextDecoration.underline,
               ),
             ),

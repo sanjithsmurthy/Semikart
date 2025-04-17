@@ -37,7 +37,7 @@ class RFQComponent extends StatelessWidget {
                 'Request for quote',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Product Sans',
+                  
                   fontWeight: FontWeight.normal,
                   color: Color(0xFFA51414),
                 ),
