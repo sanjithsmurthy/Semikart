@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../common/search_bar.dart' as custom_search; // Import the SearchBar widget
-import '../common/RFQ_CTA.dart'; // Import the RFQ_CTA widget
 import 'breadcrumbs.dart'; // Import the Breadcrumbs widget
-import 'products_l2.dart'; // Import the ProductsL2Page widget
+import 'products_l2.dart';
+import '../common/red_button.dart'; // Import the RedButton widget
 
 class ProductsHeaderContent extends StatelessWidget {
   final bool showBreadcrumbs; // Parameter to control breadcrumbs visibility
@@ -28,29 +28,46 @@ class ProductsHeaderContent extends StatelessWidget {
             // Heading
             Container(
               padding: EdgeInsets.all(screenWidth * 0.04),
-              child: const Text(
+              child: Text(
                 'Electronic Components Categories Line Card',
                 style: TextStyle(
-                  color: Color(0xFFA51414), // Red color (A51414)
-                  fontSize: 25, // Font size 25px
+                  color: const Color(0xFFA51414), // Red color (A51414)
+                  fontSize: screenHeight *0.02, // Font size 25px
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: screenHeight * 0.02), // Add spacing before the search bar
+            SizedBox(height: screenHeight * 0.005), // Add spacing before the search bar
 
             // Search Bar
             Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
               child: custom_search.SearchBar(), // Add the SearchBar widget here
             ),
-            SizedBox(height: screenHeight * 0.02), // Add spacing before RFQ_CTA
+            SizedBox(height: screenHeight * 0.015), // Add spacing before RFQ_CTA
 
-            // RFQ Component
+            // RFQ Component (Using RedButton)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: const RFQComponent(), // Add the RFQ_CTA widget here
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+              // --- Proper RedButton Call ---
+              child: RedButton(
+                // isWhiteButton: true,
+                label: 'Request for Quote', // Provide a meaningful label
+                onPressed: () {
+                  // Define the action when the button is pressed
+                  // Example: Navigate to RFQ page or show a dialog
+                  print('RFQ Button Pressed!');
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => RFQPage())); // Example navigation
+                },
+                // Optional parameters (can be omitted to use defaults):
+                // isLoading: false, // Set to true to show loading indicator
+                // width: screenWidth * 0.8, // Example custom width
+                // height: 50, // Example custom height
+                // fontSize: 16, // Example custom font size
+                // isWhiteButton: false, // Set to true for the white variant
+              ),
+              // --- End of RedButton Call ---
             ),
             SizedBox(height: screenHeight * 0.001), // Further reduced spacing before breadcrumbs by 5px
 
