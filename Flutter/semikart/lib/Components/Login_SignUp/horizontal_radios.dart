@@ -73,8 +73,8 @@ class _HorizontalRadiosState extends State<HorizontalRadios> {
           ],
         ),
 
-        // Explicit space between the two radio groups - Reduced width
-        SizedBox(width: screenWidth / 4), // Space is 1/4 of screen width (Adjust as needed)
+        // Explicit space between the two radio groups - Reduced width further
+        SizedBox(width: screenWidth / 5), // Space is 1/5 of screen width (Adjust as needed)
 
         // Second Radio (Login with OTP)
         Row(

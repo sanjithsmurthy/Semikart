@@ -20,101 +20,131 @@ class ForgotPasswordScreen extends StatelessWidget {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    // Calculate available height excluding status bar and bottom padding (like navigation bar)
+    final availableHeight = screenHeight - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Add horizontal padding
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: screenHeight * 0.05), // Add spacing at the top
-
-              // Back Button
-              IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)), // Left-facing arrow icon
-                iconSize: screenWidth * 0.06, // Dynamically scale the icon size
-                onPressed: () {
-                  // Navigate back to LoginPasswordScreen
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
-                  );
-                },
+      // resizeToAvoidBottomInset: true, // This is the default and correct behavior
+      body: SafeArea( // Ensures content avoids system intrusions like notches
+        child: SingleChildScrollView( // *** This makes the content scrollable ***
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Consistent padding
+            // Use ConstrainedBox to ensure the Column tries to fill at least the available screen height
+            // This helps SingleChildScrollView determine if scrolling is needed.
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: availableHeight, // Minimum height is the screen height minus safe area insets
               ),
-              SizedBox(height: screenHeight * 0.02), // Add spacing below the back button
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes content to top and button towards bottom
+                children: [
+                  // --- Top Content Group ---
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: screenHeight * 0.05), // Spacing at the top
 
-              // Forgot Password Title
-              Text(
-                "Forgot Password",
-                style: TextStyle(
-                  fontSize: screenWidth * 0.07, // Dynamically scale font size
-                  fontWeight: FontWeight.w600, // Semi-bold weight for emphasis
-                  color: Colors.black, // Black color for a clean look
-                   // Product Sans font
-                ),
+                      // Back Button
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)),
+                        iconSize: screenWidth * 0.06,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                          );
+                        },
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+
+                      // Forgot Password Title
+                      Text(
+                        "Forgot Password",
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.07,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+
+                      // Instruction Text
+                      Text(
+                        "Enter your registered email address. You will receive a link to create a new password via email.",
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.045,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFFb6b6b6),
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(height: screenHeight * 0.04),
+
+                      // Email Input Field
+                      CustomTextField(
+                        controller: emailController,
+                        label: "Email",
+                      ),
+                    ],
+                  ),
+
+                  // --- Bottom Content Group ---
+                  // This Column will be pushed towards the bottom by MainAxisAlignment.spaceBetween
+                  Column(
+                     children: [
+                        SizedBox(height: screenHeight * 0.04), // Add some space above the button regardless
+
+                        // Send Reset Link Button
+                        Center(
+                          child: RedButton(
+                            label: "Send Reset Link",
+                            width: screenWidth * 0.9,
+                            height: screenHeight * 0.06,
+                            onPressed: () async {
+                              // Simulate checking the email in the database
+                              String email = emailController.text.trim();
+                              bool emailExists = _checkEmailInDatabase(email);
+
+                              if (!emailExists) {
+                                await CustomPopup.show(
+                                  context: context,
+                                  title: 'Email Not Found',
+                                  message: "Don't have an account.",
+                                  buttonText: 'SignUp',
+                                  imagePath: 'public/assets/images/Alert.png',
+                                ).then((_) {
+                                  // Ensure context is still valid before navigating
+                                  if (Navigator.canPop(context)) {
+                                     Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => SignUpScreen()),
+                                     );
+                                  }
+                                });
+                              } else {
+                                // Ensure context is still valid before navigating
+                                if (Navigator.canPop(context)) {
+                                   Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
+                                   );
+                                }
+                              }
+                            },
+                          ),
+                        ),
+
+                        // Add extra space at the very bottom INSIDE the scrollable area
+                        // This ensures there's room to scroll the button well above the keyboard
+                        SizedBox(height: screenHeight * 0.05), // Adjust as needed
+                     ],
+                  ),
+                ],
               ),
-              SizedBox(height: screenHeight * 0.02), // Add spacing below the title
-
-              // Instruction Text
-              Text(
-                "Enter your registered email address. You will receive a link to create a new password via email.",
-                style: TextStyle(
-                  fontSize: screenWidth * 0.045, // Dynamically scale font size
-                  fontWeight: FontWeight.w400, // Regular weight for a clean and professional look
-                  color: Color(0xFFb6b6b6), // Subtle grey color for instructions
-                   // Product Sans font
-                  height: 1.5, // Line height for better readability
-                ),
-                textAlign: TextAlign.left, // Align text to the left
-              ),
-              SizedBox(height: screenHeight * 0.04), // Add spacing below the instructions
-
-              // Email Input Field (Using CustomTextField)
-              CustomTextField(
-                controller: emailController,
-                label: "Email", // Label for the email field
-                width: screenWidth * 0.9, // Dynamically scale width
-                height: screenHeight * 0.06, // Dynamically scale height
-              ),
-              SizedBox(height: screenHeight * 0.04), // Add spacing below the email field
-
-              // Send Reset Link Button (Using RedButton)
-              RedButton(
-                label: "Send Reset Link", // Button label
-                width: screenWidth * 0.9, // Dynamically scale width
-                height: screenHeight * 0.06, // Dynamically scale height
-                onPressed: () async {
-                  // Simulate checking the email in the database
-                  String email = emailController.text.trim();
-                  bool emailExists = _checkEmailInDatabase(email); // Simulated database check
-
-                  if (!emailExists) {
-                    // Show popup if email is not found
-                    await CustomPopup.show(
-                      context: context,
-                      title: 'Email Not Found',
-                      message: "Don't have an account.",
-                      buttonText: 'SignUp',
-                      imagePath: 'public/assets/images/Alert.png', // Optional image path
-                    ).then((_) {
-                      // Navigate to SignUpScreen when popup button is clicked
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUpScreen()),
-                      );
-                    });
-                  } else {
-                    // Navigate to ResetPasswordScreen if email exists
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-                    );
-                  }
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -123,7 +153,6 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   // Simulated function to check if the email exists in the database
   bool _checkEmailInDatabase(String email) {
-    // Simulate a database with a list of registered emails
     List<String> registeredEmails = ["user1@example.com", "user2@example.com", "user3@example.com"];
     return registeredEmails.contains(email);
   }
