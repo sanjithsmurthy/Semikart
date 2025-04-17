@@ -86,7 +86,7 @@ class SignInWithGoogleButton extends StatelessWidget {
                                 color: const Color(0xFF000000),
                                 fontSize: fontSize, // Dynamically calculated font size
                                 fontWeight: FontWeight.w500,
-                                fontFamily: 'Product Sans', // Use Product Sans font if available
+                                 // Use Product Sans font if available
                               ),
                             ),
                             Text(
@@ -95,7 +95,7 @@ class SignInWithGoogleButton extends StatelessWidget {
                                 color: const Color(0xFF000000),
                                 fontSize: fontSize, // Dynamically calculated font size
                                 fontWeight: FontWeight.w500,
-                                fontFamily: 'Product Sans', // Use Product Sans font if available
+                                 // Use Product Sans font if available
                               ),
                             ),
                           ],
@@ -106,7 +106,7 @@ class SignInWithGoogleButton extends StatelessWidget {
                             color: const Color(0xFF000000),
                             fontSize: fontSize, // Dynamically calculated font size
                             fontWeight: FontWeight.w500,
-                            fontFamily: 'Product Sans', // Use Product Sans font if available
+                             // Use Product Sans font if available
                           ),
                         ),
                 ],

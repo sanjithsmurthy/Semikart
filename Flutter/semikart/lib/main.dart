@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
-import 'package:Semikart/Components/login_signup/login_password.dart';
+import 'package:Semikart/Components/login_signup/login_password_new.dart';
 import 'package:logging/logging.dart';
 import 'base_scaffold.dart'; // Import BaseScaffold directly
 import 'managers/auth_manager.dart'; // Import AuthManager provider
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFFA51414),
         scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Product Sans',
+        
       ),
       home: const AuthWrapper(), // Use AuthWrapper to decide the initial screen
       debugShowCheckedModeBanner: false,
@@ -101,7 +101,7 @@ class AuthWrapper extends ConsumerWidget {
     } else {
       // User is not logged in (AuthStatus.unauthenticated)
       print("AuthWrapper: State is Unauthenticated. Showing LoginPasswordScreen.");
-      return LoginPasswordScreen(); // Show the pre-login entry screen
+      return LoginPasswordNewScreen(); // Show the pre-login entry screen
     }
   }
 }

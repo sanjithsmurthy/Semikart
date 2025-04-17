@@ -79,7 +79,7 @@ class _CustomCaptchaState extends State<CustomCaptcha> {
                   child: Text(
                     _captchaText,
                     style: TextStyle(
-                      fontFamily: 'Product Sans',
+                      
                       fontSize: 16, // Reduced from 20
                       fontWeight: FontWeight.w500,
                       letterSpacing: 3, // Reduced from 4
@@ -114,14 +114,14 @@ class _CustomCaptchaState extends State<CustomCaptcha> {
               controller: _controller,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Product Sans',
+                
                 fontSize: 14,
                 color: Color(0xFF000000),
               ),
               decoration: InputDecoration(
                 hintText: 'Enter the code above',
                 hintStyle: TextStyle(
-                  fontFamily: 'Product Sans',
+                  
                   fontSize: 14,
                   color: Color(0xFF757575),
                 ),
@@ -198,7 +198,7 @@ class _CustomCaptchaState extends State<CustomCaptcha> {
                       Text(
                         "I'm not a robot",
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
                           color: Color(0xFF000000),

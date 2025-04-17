@@ -31,7 +31,7 @@ class SuccessScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22, // Font size
                 fontWeight: FontWeight.normal, // Regular weight
-                fontFamily: 'Product Sans', // Product Sans font
+                 // Product Sans font
                 color: Colors.black, // Black color
               ),
             ),
@@ -45,7 +45,7 @@ class SuccessScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18, // Font size
                 fontWeight: FontWeight.normal, // Regular weight
-                fontFamily: 'Product Sans', // Product Sans font
+                 // Product Sans font
                 color: Color(0xFFB6B6B6), // Grey color
               ),
             ),

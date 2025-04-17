@@ -44,7 +44,7 @@ class CustomPopup {
                     title,
                     style: TextStyle(
                       fontSize: popupWidth * 0.05, // Scale font size to 5% of popup width
-                      fontFamily: 'Product Sans',
+                      
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -57,7 +57,7 @@ class CustomPopup {
                     message,
                     style: TextStyle(
                       fontSize: popupWidth * 0.04, // Scale font size to 4% of popup width
-                      fontFamily: 'Product Sans',
+                      
                     ),
                     textAlign: TextAlign.center,
                   ),

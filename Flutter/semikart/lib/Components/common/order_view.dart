@@ -19,7 +19,7 @@ class OrderView extends StatelessWidget {
 
         final textStyle = TextStyle(
           fontSize: fontSize, // Dynamically calculated font size
-          fontFamily: 'Product Sans',
+          
           fontWeight: FontWeight.normal,
           color: Color(0xFF000000),
           letterSpacing: -0.14,

@@ -48,7 +48,7 @@ class InactiveButton extends StatelessWidget {
                   color: Colors.white.withOpacity(0.5),
                   fontSize: fontSize, // Dynamically calculated font size
                   height: 1.0,
-                  fontFamily: 'Product Sans',
+                  
                   fontWeight: FontWeight.normal,
                 ),
               ),

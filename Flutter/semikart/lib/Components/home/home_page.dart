@@ -60,7 +60,7 @@ class HomePageContent extends StatelessWidget {
                         child: Text(
                           'One stop shop for all your electronic components!',
                           style: TextStyle(
-                            fontFamily: 'Product Sans',
+                            
                             fontSize: screenWidth * 0.045, // Adjusted font size
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF4D0102), // Dark red text
@@ -122,7 +122,7 @@ class HomePageContent extends StatelessWidget {
                       Text(
                         'Explore Our Popular Categories',
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: screenWidth * 0.045,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -133,7 +133,7 @@ class HomePageContent extends StatelessWidget {
                       Text(
                         'Explore a wide selection of connectors, semiconductors, all other electronic parts.',
                         style: TextStyle(
-                          fontFamily: 'Product Sans',
+                          
                           fontSize: screenWidth * 0.035, // Adjusted font size
                           fontWeight: FontWeight.normal,
                           color: Colors.black54, // Slightly lighter text

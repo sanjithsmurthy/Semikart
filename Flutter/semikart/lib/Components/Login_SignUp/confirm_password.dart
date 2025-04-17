@@ -72,7 +72,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                         fontSize: 16, // Increased font size
                         fontWeight: FontWeight.bold, // Bold text
                         color: Color(0xFF989DA3), // Grey text color
-                        fontFamily: 'Product Sans', // Product Sans font
+                         // Product Sans font
                       ),
                     ),
 
@@ -131,7 +131,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
                           fontSize: 11, // Font size
                           fontWeight: FontWeight.w600, // Semi-bold font weight
                           color: Color(0xFFA51414), // Red color for the alert text
-                          fontFamily: 'Product Sans', // Product Sans font
+                           // Product Sans font
                         ),
                       ),
                     ],
@@ -161,7 +161,7 @@ class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
             fontSize: 11, // Fixed font size
             fontWeight: FontWeight.w600, // Semi-bold font weight
             color: Color(0xFF989DA3), // Keep text color grey
-            fontFamily: 'Product Sans', // Product Sans font
+             // Product Sans font
           ),
         ),
       ],
