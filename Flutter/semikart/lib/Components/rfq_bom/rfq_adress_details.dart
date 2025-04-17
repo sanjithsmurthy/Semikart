@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../common/red_button.dart'; // Import the RedButton widget
-import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
+import 'package:flutter/services.dart'; // Import for TextInputType
+import '../common/red_button.dart';
+import '../common/grey_text_box.dart';
 
 class RFQAddressDetails extends StatefulWidget {
   final String title;
@@ -32,6 +33,9 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   final TextEditingController stateController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+
+  // Form key for validation
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -78,207 +82,288 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(sectionSpacing),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              Text(
-                widget.title,
-                style: TextStyle(
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Changed to black
-                ),
-              ),
-              SizedBox(height: sectionSpacing), // Space below the title
-
-              // First Name
-              GreyTextBox(
-                nameController: firstNameController,
-                text: 'First name',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Email
-              GreyTextBox(
-                nameController: emailController,
-                text: 'Email',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Mobile
-              GreyTextBox(
-                nameController: mobileController,
-                text: 'Mobile number',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Company
-              GreyTextBox(
-                nameController: companyController,
-                text: 'Company name',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // GST No
-              GreyTextBox(
-                nameController: gstNoController,
-                text: 'GST number',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Address 1
-              GreyTextBox(
-                nameController: address1Controller,
-                text: 'Address line 1',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Address 2
-              GreyTextBox(
-                nameController: address2Controller,
-                text: 'Address line 2',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Landmark
-              GreyTextBox(
-                nameController: landmarkController,
-                text: 'Landmark',
-                backgroundColor: Color(0xFFE4E8EC), // Grey background color
-                labelFontSize: textBoxLabelFontSize,
-                textBoxHeight: textBoxHeight,
-              ),
-
-              SizedBox(height: textBoxSpacing), // Space between fields
-
-              // Zip Code and State
-              Row(
-                children: [
-                  // Zip Code
-                  Expanded(
-                    flex: 1,
-                    child: GreyTextBox(
-                      nameController: zipCodeController,
-                      text: 'Zip code',
-                      backgroundColor:
-                          Color(0xFFE4E8EC), // Grey background color
-                      labelFontSize: textBoxLabelFontSize,
-                      textBoxHeight: textBoxHeight,
-                    ),
-                  ),
-                  SizedBox(
-                      width:
-                          rowHorizontalSpacing), // Match the spacing between Quantity and Price
-                  // State
-                  Expanded(
-                    flex: 1,
-                    child: GreyTextBox(
-                      nameController: stateController,
-                      text: 'State',
-                      backgroundColor:
-                          Color(0xFFE4E8EC), // Grey background color
-                      labelFontSize: textBoxLabelFontSize,
-                      textBoxHeight: textBoxHeight,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: rowSpacing), // Space between rows
-
-              // City and Country
-              Row(
-                children: [
-                  // City
-                  Expanded(
-                    flex: 1,
-                    child: GreyTextBox(
-                      nameController: cityController,
-                      text: 'City',
-                      backgroundColor:
-                          Color(0xFFE4E8EC), // Grey background color
-                      labelFontSize: textBoxLabelFontSize,
-                      textBoxHeight: textBoxHeight,
-                    ),
-                  ),
-                  SizedBox(
-                      width:
-                          rowHorizontalSpacing), // Match the spacing between Quantity and Price
-                  // Country
-                  Expanded(
-                    flex: 1,
-                    child: GreyTextBox(
-                      nameController: countryController,
-                      text: 'Country',
-                      backgroundColor:
-                          Color(0xFFE4E8EC), // Grey background color
-                      labelFontSize: textBoxLabelFontSize,
-                      textBoxHeight: textBoxHeight,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: sectionSpacing), // Space before reCAPTCHA
-
-              // reCAPTCHA Placeholder
-              Container(
-                height: reCaptchaHeight,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Center(
-                  child: Text(
-                    "I'm not a robot",
-                    style: TextStyle(
-                      fontSize: reCaptchaFontSize,
-                      color: Colors.grey,
-                    ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black, // Changed to black
                   ),
                 ),
-              ),
+                SizedBox(height: sectionSpacing), // Space below the title
 
-              SizedBox(
-                  height: submitButtonSpacing), // Space before Submit button
-
-              // Submit Button
-              Center(
-                child: RedButton(
-                  label: widget.submitButtonText,
-                  onPressed: widget.onSubmit,
+                // First Name
+                GreyTextBox(
+                  nameController: firstNameController,
+                  text: 'First name*',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your first name';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-            ],
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Email
+                GreyTextBox(
+                  nameController: emailController,
+                  text: 'Email*',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Mobile
+                GreyTextBox(
+                  nameController: mobileController,
+                  text: 'Mobile number*',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your mobile number';
+                    }
+                    if (value.length < 10) {
+                      return 'Please enter a valid mobile number';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Company
+                GreyTextBox(
+                  nameController: companyController,
+                  text: 'Company name',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // GST No
+                GreyTextBox(
+                  nameController: gstNoController,
+                  text: 'GST number',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Address 1
+                GreyTextBox(
+                  nameController: address1Controller,
+                  text: 'Address line 1*',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your address line 1';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Address 2
+                GreyTextBox(
+                  nameController: address2Controller,
+                  text: 'Address line 2*',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your address line 2';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Landmark
+                GreyTextBox(
+                  nameController: landmarkController,
+                  text: 'Landmark*',
+                  backgroundColor: Color(0xFFE4E8EC),
+                  labelFontSize: textBoxLabelFontSize,
+                  textBoxHeight: textBoxHeight,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your landmark';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: textBoxSpacing), // Space between fields
+
+                // Zip Code and State
+                Row(
+                  children: [
+                    // Zip Code
+                    Expanded(
+                      flex: 1,
+                      child: GreyTextBox(
+                        nameController: zipCodeController,
+                        text: 'Zip code*',
+                        backgroundColor: Color(0xFFE4E8EC),
+                        labelFontSize: textBoxLabelFontSize,
+                        textBoxHeight: textBoxHeight,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your zip code';
+                          }
+                          if (value.length < 6) {
+                            return 'Please enter a valid zip code';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                        width:
+                            rowHorizontalSpacing), // Match the spacing between Quantity and Price
+                    // State
+                    Expanded(
+                      flex: 1,
+                      child: GreyTextBox(
+                        nameController: stateController,
+                        text: 'State*',
+                        backgroundColor: Color(0xFFE4E8EC),
+                        labelFontSize: textBoxLabelFontSize,
+                        textBoxHeight: textBoxHeight,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your state';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: rowSpacing), // Space between rows
+
+                // City and Country
+                Row(
+                  children: [
+                    // City
+                    Expanded(
+                      flex: 1,
+                      child: GreyTextBox(
+                        nameController: cityController,
+                        text: 'City*',
+                        backgroundColor: Color(0xFFE4E8EC),
+                        labelFontSize: textBoxLabelFontSize,
+                        textBoxHeight: textBoxHeight,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your city';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                        width:
+                            rowHorizontalSpacing), // Match the spacing between Quantity and Price
+                    // Country
+                    Expanded(
+                      flex: 1,
+                      child: GreyTextBox(
+                        nameController: countryController,
+                        text: 'Country*',
+                        backgroundColor: Color(0xFFE4E8EC),
+                        labelFontSize: textBoxLabelFontSize,
+                        textBoxHeight: textBoxHeight,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your country';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: sectionSpacing), // Space before reCAPTCHA
+
+                // reCAPTCHA Placeholder
+                Container(
+                  height: reCaptchaHeight,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "I'm not a robot",
+                      style: TextStyle(
+                        fontSize: reCaptchaFontSize,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                    height: submitButtonSpacing), // Space before Submit button
+
+                // Submit Button
+                Center(
+                  child: RedButton(
+                    label: widget.submitButtonText,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        widget.onSubmit();
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -293,6 +378,9 @@ class GreyTextBox extends StatelessWidget {
   final Color backgroundColor; // Background color parameter
   final double labelFontSize; // Font size for the label
   final double textBoxHeight; // Height for the text box
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator;
 
   GreyTextBox({
     Key? key,
@@ -303,6 +391,9 @@ class GreyTextBox extends StatelessWidget {
         const Color(0xFFE4E8EC), // Default grey background color
     required this.labelFontSize, // Font size for the label
     required this.textBoxHeight, // Height for the text box
+    this.keyboardType,
+    this.inputFormatters,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -330,15 +421,18 @@ class GreyTextBox extends StatelessWidget {
             color: backgroundColor, // Use the customizable background color
             borderRadius: BorderRadius.circular(9),
           ),
-          child: TextField(
+          child: TextFormField(
             cursorColor: Colors.black, // Set the cursor color to black
             controller: nameController,
+            keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             decoration: InputDecoration(
               hintText: text, // Use the same parameter for hint text
               border: InputBorder.none,
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             ),
+            validator: validator,
           ),
         ),
       ],

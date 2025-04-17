@@ -11,9 +11,15 @@
 // import '../common/cartempty.dart';
 // import '../common/order_view.dart';
 // import '../profile/profilepic.dart';
+<<<<<<< HEAD
 // import '../common/product_search.dart'; // Import the ProductSearch page
 // import '../common/search_builtin.dart' as custom; // Import the built-in SearchBar with alias
 // import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
+=======
+// import '../search/product_search.dart'; // Import the ProductSearch page
+// import '../common/search_bar.dart' as custom; // Import the built-in SearchBar with alias
+// import '../login_signup/mobile_number_input.dart'; // Import the MobileNumberField component
+>>>>>>> 7d9f5b1484a2c99d06e78a163faf9e859d4df959
 // import '../login_signup/password_text_field.dart'; // Import the PasswordTextField widget
 // import '../login_signup/login_password_new.dart'; // Import the LoginPasswordScreen
 // import '../login_signup/login_otp.dart'; // Adjust the path as needed
@@ -24,7 +30,11 @@
 // import '../common/hamburger.dart'; // Import the HamburgerMenu widget
 // import '../profile/profile_screen.dart'; // Import the ProfileScreen
 // import '../products/breadcrumbs.dart'; // Import the Breadcrumbs widget
+<<<<<<< HEAD
 // import '../login_signup/login_password_new.dart'; // Import the LoginPasswordNewDotDot page
+=======
+// // import '../login_signup/login_password_new.dart'; // Import the LoginPasswordNewDotDot page
+>>>>>>> 7d9f5b1484a2c99d06e78a163faf9e859d4df959
 
 // class TestLayoutSanjana extends StatefulWidget {
 //   const TestLayoutSanjana({super.key});
