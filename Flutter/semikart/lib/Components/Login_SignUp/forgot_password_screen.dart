@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
-import 'login_password_new.dart'; // Import the LoginPasswordScreen
+import 'login_password.dart'; // Import the LoginPasswordScreen
 import 'signup_screen.dart'; // Import the SignUpScreen
 import 'reset_password.dart'; // Import the ResetPasswordScreen
 import 'custom_text_field.dart'; // Import the CustomTextField widget

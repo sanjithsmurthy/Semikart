@@ -6,7 +6,7 @@ import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
 import '../common/mobile_number_input.dart'; // Import the MobileNumberField component
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'login_password_new.dart'; // Import the LoginScreen component
+import 'login_password.dart'; // Import the LoginScreen component
 import '../common/forgot_password.dart';
 
 class SignUpScreen extends StatefulWidget {
