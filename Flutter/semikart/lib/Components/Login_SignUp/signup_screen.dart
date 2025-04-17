@@ -230,10 +230,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
                 // Checkbox for Terms and Conditions
-                Align(
-                  alignment: Alignment.centerRight, // Align the entire row to the right
+                Center( // Wrap the Row with Center
                   child: Row(
                     mainAxisSize: MainAxisSize.min, // Minimize the row's width
+                    mainAxisAlignment: MainAxisAlignment.center, // Center items within the row
                     children: [
                       Checkbox(
                         value: isTermsAccepted,
@@ -250,10 +250,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           "I agree to the terms and conditions",
                           style: TextStyle(
                             fontSize: screenWidth * 0.035, // Specify font size
-                            
+                            // fontFamily: 'Product Sans', // Use Product Sans font if available
                             color: Colors.black,
                           ),
-                          textAlign: TextAlign.center, // Align text to the right
+                          textAlign: TextAlign.center, // No longer needed as Row centers
                         ),
                       ),
                     ],
