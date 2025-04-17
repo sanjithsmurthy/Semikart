@@ -67,7 +67,6 @@ class RedButton extends StatelessWidget {
                         color: isWhiteButton ? const Color(0xFFA51414) : Colors.white, // Text color based on variant
                         fontSize: textFontSize, // Dynamically calculated font size
                         height: 1.0,
-                        fontFamily: 'Product Sans',
                         fontWeight: FontWeight.normal,
                       ),
                     ),
