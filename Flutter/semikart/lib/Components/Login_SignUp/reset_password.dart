@@ -56,7 +56,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               // ResetMan Image
               Center(
                 child: Image.asset(
-55, // Dynamically scale font size
+                  'public/assets/images/resetman.png', // Replace with the actual path to resetman.png
+                  width: screenWidth * 0.5, // Dynamically scale width
+                  height: screenHeight * 0.25, // Dynamically scale height
+                  fit: BoxFit.contain, // Ensure the image fits within the bounds
+                ),
+              ),
+
+              SizedBox(height: screenHeight * 0.02), // Add spacing below the image
+
+              // "Set Your Password" Text
+              Center(
+                child: Text(
+                  "Set Your Password",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.055, // Dynamically scale font size
                     fontWeight: FontWeight.bold, // Bold font weight
                     color: Colors.black, // Black color
                      // Product Sans font
