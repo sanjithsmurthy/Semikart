@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
+import 'package:email_validator/email_validator.dart'; // Keep this import
 
 // Adjust path
 
@@ -33,10 +33,10 @@ class CustomTextField extends StatelessWidget {
     this.onValidationChanged, // Add new callback to constructor
   });
 
-  // Standard email validation regex
-  static final RegExp _emailRegExp = RegExp(
-    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-  );
+  // Remove the internal email regex, we'll use the package now
+  // static final RegExp _emailRegExp = RegExp(
+  //   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +69,10 @@ class CustomTextField extends StatelessWidget {
           obscureText: isPassword, // Toggle password visibility if it's a password field
           // --- Modified onChanged ---
           onChanged: (value) {
-            // 1. Perform internal email validation if applicable
+            // 1. Perform email validation using the package if applicable
             if (isEmailField && onValidationChanged != null) {
-              // Consider email valid only if non-empty and matches regex
-              bool isValid = value.isNotEmpty && _emailRegExp.hasMatch(value);
+              // Use EmailValidator.validate()
+              bool isValid = EmailValidator.validate(value);
               onValidationChanged!(isValid); // Report status to parent
             }
             // 2. Call the user-provided onChanged callback if it exists
@@ -81,7 +81,7 @@ class CustomTextField extends StatelessWidget {
             }
           },
           onTap: onTap, // Attach the onTap callback
-          validator: validator, // Use external validator ONLY (no internal email validator here)
+          validator: validator, // Use external validator if provided
           // autovalidateMode can be adjusted based on external validator needs
           autovalidateMode: AutovalidateMode.onUserInteraction,
           cursorHeight: (height ?? 72) * 0.5, // Adjust cursor height based on potential height
