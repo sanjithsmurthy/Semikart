@@ -203,6 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0), // Style from CustomTextField
+                      counterText: '', // Add this line to remove the counter
                     ),
                     initialCountryCode: 'IN', // Default country code
                     onChanged: (phone) {
