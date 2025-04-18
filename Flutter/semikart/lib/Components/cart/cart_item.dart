@@ -80,18 +80,20 @@ class CartItem extends StatelessWidget {
           _buildDetailRow("Customer Part Number", customerPartNumber, fontSize), // Updated label and variable
           const SizedBox(height: 4),
           Text(
-            description,
+            description, // Removed maxLines and overflow
             style: TextStyle(
-              fontSize: fontSize,
+              fontSize: screenWidth * 0.027,
               color: Colors.grey[700],
             ),
           ),
-          const SizedBox(height: 16),
-          // Vendor Part #, Manufacturer, Supplier
+          const SizedBox(height: 16), // Keep spacing before this group
+          // Vendor Part #, Manufacturer, Supplier - Reduced spacing between these
           _buildDetailRow("Vendor Part #", vendorPartNumber, fontSize),
+          // Removed SizedBox between Vendor Part # and Manufacturer
           _buildDetailRow("Manufacturer", manufacturer, fontSize),
+          // Removed SizedBox between Manufacturer and Supplier
           _buildDetailRow("Supplier", supplier, fontSize),
-          const SizedBox(height: 16),
+          const SizedBox(height: 16), // Keep spacing after this group
           // Pricing Details
           _buildDetailRow("Basic Unit Price", "₹${basicUnitPrice.toStringAsFixed(2)}", fontSize),
           _buildDetailRow("Final Unit Price", "₹${finalUnitPrice.toStringAsFixed(2)}", fontSize),
@@ -109,15 +111,17 @@ class CartItem extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: screenWidth * 0.2, // Dynamic width for the text field
+                width: screenWidth * 0.1, // Adjusted width
+                height: screenWidth * 0.1, // Adjusted height
                 child: TextField(
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(screenWidth * 0.01),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.009),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                    contentPadding: EdgeInsets.all(screenWidth*0.01), // Adjusted padding
+                    isDense: true, // Make it compact
                   ),
                   controller: TextEditingController(text: quantity.toString()),
                 ),
@@ -134,9 +138,11 @@ class CartItem extends StatelessWidget {
     );
   }
 
+  // Helper method to build detail rows with reduced vertical padding
   Widget _buildDetailRow(String label, String value, double fontSize) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      // Reduced vertical padding from 4.0 to 2.0
+      padding: const EdgeInsets.symmetric(vertical: 2.0), // <-- Keep this reduced value
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -156,7 +162,7 @@ class CartItem extends StatelessWidget {
                 color: Colors.black,
               ),
               textAlign: TextAlign.right,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis, // Keep ellipsis for value if needed
             ),
           ),
         ],

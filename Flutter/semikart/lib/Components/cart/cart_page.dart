@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cart_item.dart';
-import 'share_cart.dart';
+// import 'share_cart.dart';
 import '../common/red_button.dart'; // Import RedButton
 
 // Global ValueNotifier to track cart item count
@@ -58,19 +58,24 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(spacing * 2),
+          padding: EdgeInsets.only(
+            top: spacing * 0,    // Specify top padding
+            bottom: spacing * 2, // Specify bottom padding
+            left: spacing * 2,   // Specify left padding
+            right: spacing * 2,  // Specify right padding
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Share Cart Section
-              ShareCart(
-                cartName: 'Cart:2025-02-28 15:01:50',
-                accessId: 'dx5tf0uyxx',
-                onShare: () {
-                  // Add share functionality
-                },
-              ),
-              const SizedBox(height: 16),
+              // ShareCart(
+              //   cartName: 'Cart:2025-02-28 15:01:50',
+              //   accessId: 'dx5tf0uyxx',
+              //   onShare: () {
+              //     // Add share functionality
+              //   },
+              // ),
+              // const SizedBox(height: 16),
 
               // Cart Items Section
               ListView.builder(
@@ -120,7 +125,7 @@ class _CartPageState extends State<CartPage> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start, // Keep this if you want 'Grand Total' left-aligned
                   children: [
                     _buildPriceRow(
                       'Grand Total',
@@ -129,16 +134,22 @@ class _CartPageState extends State<CartPage> {
                       isBold: true,
                     ),
                     const SizedBox(height: 16),
-                    // Use RedButton for "Proceed to Checkout"
-                    RedButton(
-                      label: 'Proceed to Checkout',
-                      onPressed: () {
-                        // Add functionality for checkout
-                        print("Proceeding to checkout...");
-                      },
-                      width: double.infinity, // Full-width button
-                      height: 50.0, // Custom height
-                      fontSize: 16.0, // Custom font size
+                    // Wrap RedButton with Center widget
+                    Center(
+                      child: RedButton(
+                        label: 'Proceed to Checkout',
+                        fontWeight: FontWeight.bold,
+                        height: screenWidth * 0.1,
+                        onPressed: () {
+                          // Add functionality for checkout
+                          print("Proceeding to checkout...");
+                        },
+
+
+                       
+                         width: screenWidth * 0.55, // You might not need a fixed width when centered
+                        fontSize: 16.0, // Custom font size
+                      ),
                     ),
                   ],
                 ),
