@@ -4,6 +4,27 @@ import 'red_button.dart'; // Import your custom RedButton
 import 'popup.dart'; // Import your CustomPopup widget
 import '../login_signup/login_password.dart';
 import '../profile/profile_screen.dart';
+import '../../base_scaffold.dart'; // Import BaseScaffold
+
+// Helper function for creating a Fade Transition Page Route
+Route _createFadeRoute(Widget page, {int? initialIndex}) {
+  final Widget targetPage = (page is BaseScaffold && initialIndex != null)
+      ? BaseScaffold(key: ValueKey('BaseScaffold_$initialIndex'), initialIndex: initialIndex)
+      : page;
+
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => targetPage,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      // Use FadeTransition for a smooth fade effect
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+    // Faster transition duration
+    transitionDuration: const Duration(milliseconds: 200), // Reduced from 300ms
+  );
+}
 
 class HamburgerMenu extends StatelessWidget {
   const HamburgerMenu({super.key});
@@ -39,7 +60,7 @@ class HamburgerMenu extends StatelessWidget {
                       ),
                       iconSize: screenWidth * 0.06, // Dynamically scale the icon size
                       onPressed: () {
-                        Navigator.pop(context); // Navigate back to the previous page
+                        Navigator.pop(context); // Close the drawer
                       },
                     ),
                   ),
@@ -97,10 +118,11 @@ class HamburgerMenu extends StatelessWidget {
                       RedButton(
                         label: 'Edit Profile',
                         onPressed: () {
-                          // Navigate to Edit Profile Screen
+                          Navigator.pop(context); // Close drawer first
+                          // Navigate using the faster Fade Transition
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => ProfileScreen()), // Navigate to HomePage
+                            _createFadeRoute(const BaseScaffold(), initialIndex: 4), // Index 4 for Profile
                           );
                         },
                         width: screenWidth * 0.3,
@@ -109,28 +131,27 @@ class HamburgerMenu extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
 
-                      // Logout Button
+                      // Logout Button - Keep using pushAndRemoveUntil
                       RedButton(
                         label: 'Logout',
                         onPressed: () {
-                          // Show Logout Confirmation Popup
                           CustomPopup.show(
                             context: context,
                             title: 'Logout',
                             message: 'Are you sure you want to logout?',
                             buttonText: 'Confirm',
-                            imagePath: 'public/assets/images/Alert.png', // Replace with your logout icon path
+                            imagePath: 'public/assets/images/Alert.png',
                           ).then((_) {
-                            // Navigate to LoginPasswordScreen when popup button is clicked
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                              MaterialPageRoute(builder: (context) => const LoginPasswordNewScreen()),
+                              (Route<dynamic> route) => false,
                             );
                           });
                         },
                         width: screenWidth * 0.3,
                         height: 40,
-                        isWhiteButton: true, // Make the button outlined
+                        isWhiteButton: true,
                       ),
                     ],
                   ),
@@ -142,44 +163,43 @@ class HamburgerMenu extends StatelessWidget {
             // Menu Items
             Expanded(
               child: ListView(
+                padding: EdgeInsets.zero, // Remove default ListView padding
                 children: [
                   _buildMenuItem(
                     context,
                     icon: Icons.shopping_bag,
                     text: 'Products',
                     onTap: () {
-                      // Navigate to Products Screen
-                      Navigator.pushNamed(context, '/products');
+                      Navigator.pop(context); // Close drawer first
+                      // Navigate using the faster Fade Transition
+                      Navigator.pushReplacement(
+                        context,
+                        _createFadeRoute(const BaseScaffold(), initialIndex: 1), // Index 1 for Products
+                      );
                     },
                   ),
-                  SizedBox(height: 16), // Add spacing between menu items
+                  const SizedBox(height: 16), // Add spacing between menu items
                   _buildMenuItem(
                     context,
                     icon: Icons.history,
                     text: 'Order History',
                     onTap: () {
-                      // Navigate to Order History Screen
-                      Navigator.pushNamed(context, '/orderHistory');
+                      Navigator.pop(context); // Close drawer first
+                      // TODO: Replace with actual navigation using _createFadeRoute if needed
+                      // Example: Navigator.push(context, _createFadeRoute(const OrderHistoryPage()));
+                      print("Navigate to Order History"); // Placeholder
                     },
                   ),
-                  SizedBox(height: 16), // Add spacing between menu items
-                  _buildMenuItem(
-                    context,
-                    icon: Icons.list_alt,
-                    text: 'BOM History',
-                    onTap: () {
-                      // Navigate to BOM History Screen
-                      Navigator.pushNamed(context, '/bomHistory');
-                    },
-                  ),
-                  SizedBox(height: 16), // Add spacing between menu items
+                  const SizedBox(height: 16), // Add spacing between menu items
                   _buildMenuItem(
                     context,
                     icon: Icons.contact_support,
                     text: 'Contact Us',
                     onTap: () {
-                      // Navigate to Contact Us Screen
-                      Navigator.pushNamed(context, '/contactUs');
+                      Navigator.pop(context); // Close drawer first
+                      // TODO: Replace with actual navigation using _createFadeRoute if needed
+                      // Example: Navigator.push(context, _createFadeRoute(const ContactUsPage()));
+                       print("Navigate to Contact Us"); // Placeholder
                     },
                   ),
                 ],
@@ -211,12 +231,15 @@ class HamburgerMenu extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        trailing: Icon(
+        trailing: const Icon( // Added const
           Icons.arrow_forward_ios,
-          color: const Color(0xFFA51414), // Red right arrow icon
+          color: Color(0xFFA51414), // Red right arrow icon
           size: 24, // Match size with left icon
         ),
-        onTap: onTap,
+        onTap: onTap, // Use the provided onTap callback
+        // Add visual feedback
+        hoverColor: Colors.grey.shade100,
+        splashColor: Colors.red.shade100,
       ),
     );
   }

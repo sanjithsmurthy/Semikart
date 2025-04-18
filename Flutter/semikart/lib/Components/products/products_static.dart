@@ -40,13 +40,14 @@ class ProductsHeaderContent extends StatelessWidget {
             // Red Button
             Center(
               child: RedButton(
-                label: 'RFQ',
+                label: 'Request for Quote (RFQ)',
+                fontWeight: FontWeight.bold,
                 onPressed: () {
                   // Add your RFQ button logic here
                   print('RFQ button pressed!');
                 },
-                width: screenWidth * 0.3, // Adjust width as needed
-                height: screenHeight * 0.06, // Adjust height as needed
+                width: screenWidth * 0.5, // Adjust width as needed
+                height: screenHeight * 0.05, // Adjust height as needed
               ),
             ),
           ],
