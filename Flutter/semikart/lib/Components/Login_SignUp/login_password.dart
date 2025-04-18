@@ -10,6 +10,7 @@ import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widg
 import '../common/red_button.dart'; // Import the RedButton widget
 import 'signup_screen.dart'; // Import the SignUpScreen widget
 import 'forgot_password_screen.dart'; // Import the ForgotPassword screen
+import '../../base_scaffold.dart';
 
 // --- Changed to ConsumerStatefulWidget ---
 class LoginPasswordNewScreen extends ConsumerStatefulWidget {
@@ -189,7 +190,13 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
                           label: "Login", // Set the label to "Login"
                           width: screenWidth * 0.90, // 90% of screen width
                           height: screenHeight * 0.06, // 6% of screen height
-                          onPressed: _login, // Call the login function
+                          onPressed: () {
+                            
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => BaseScaffold()), // Navigate to HomePage
+                            );
+                          }, // Call the login function
                         ),
                 ),
                  SizedBox(height: screenHeight * 0.05), // Bottom padding
