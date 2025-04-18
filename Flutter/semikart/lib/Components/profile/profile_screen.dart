@@ -46,6 +46,7 @@ class ProfileScreen extends StatelessWidget {
                 Expanded( // Make Button 1 flexible
                   child: RedButton(
                     label: 'Change Password',
+                    // isWhiteButton: true,
                     fontWeight: FontWeight.bold,
                     height: screenWidth * 0.12,
                     width: screenWidth * 0.3, // Adjust height as needed
