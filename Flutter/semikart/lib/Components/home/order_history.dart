@@ -199,7 +199,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                 orderId: '1. 50486T2025040942440',
                 orderStatus: 'Order Cancelled',
                 transactionId: 'T2025040942440',
-                orderDate: '09-Apr-2025 /n 6:50:06 PM',
+                orderDate: '09-Apr-2025 6:50:06 PM',
                 poDate: ' ',
                 customerPo: ' ',
                 paymentStatus: 'PENDING',
