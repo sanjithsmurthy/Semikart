@@ -186,10 +186,10 @@ class HamburgerMenu extends StatelessWidget {
                     text: 'Order History',
                     onTap: () {
                       Navigator.pop(context); // Close drawer first
-                      // Navigate to Order History page
+                      // Navigate to Order History page using MaterialPageRoute to fix date picker issue
                       Navigator.push(
                         context,
-                        _createFadeRoute(OrderHistory()),
+                        MaterialPageRoute(builder: (context) => OrderHistory()),
                       );
                     },
                   ),
