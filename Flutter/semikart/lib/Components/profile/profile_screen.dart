@@ -3,298 +3,278 @@ import 'dart:io'; // Still needed by the dummy callback type
 import 'profilepic.dart'; // Import the custom ProfilePicture widget
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../Login_SignUp/custom_text_field.dart'; // Import CustomTextField
-import '../Login_SignUp/reset_password.dart'; // Keep import if needed for navigation
-import '../common/two_radios.dart';
-
-class ProfileScreen extends StatelessWidget {
+import '../common/two_radios.dart'; // Import TwoRadioButtons
+import '../Login_SignUp/reset_password.dart';
+import '../Login_SignUp/login_password.dart';
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
-  // Dummy callback function - does nothing in this simplified version
-  void _doNothing(File image) {
-    // This function is required by ProfilePicture, but we don't
-    // handle the image selection in this screen anymore.
-    print("Image selected (but not handled in ProfileScreen): ${image.path}");
-  }
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
-  // Dummy controllers - For real usage, convert to StatefulWidget and create separate controllers
-  static final _sampleFieldController = TextEditingController();
-  static final _phoneController = TextEditingController();
-  static final _altPhoneController = TextEditingController();
+class _ProfileScreenState extends State<ProfileScreen> {
+  // State variable to track edit mode
+  bool isEditing = false;
+
+  // Controllers for text fields
+  final _firstNameController = TextEditingController(text: 'John');
+  final _lastNameController = TextEditingController(text: 'Doe');
+  final _companyNameController = TextEditingController(text: 'Semikart');
+  final _emailController = TextEditingController(text: 'john.doe@example.com');
+  final _phoneController = TextEditingController(text: '1234567890');
+  final _altPhoneController = TextEditingController(text: '0987654321');
+  final _gstinController = TextEditingController(text: 'GSTIN12345');
+  final _typeController = TextEditingController(text: 'Type1');
+  final _sourceController = TextEditingController(text: 'Source1');
+
+  @override
+  void dispose() {
+    // Dispose controllers
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _companyNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _altPhoneController.dispose();
+    _gstinController.dispose();
+    _typeController.dispose();
+    _sourceController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    // Define padding and spacing dynamically
-    final horizontalPadding = screenWidth * 0.05;
-    final verticalSpacing = screenWidth * 0.04; // Define vertical spacing based on width
-    final buttonSpacing = screenWidth * 0.04; // Dynamic spacing between buttons
-    final titleFontSize = screenWidth * 0.05; // Dynamic font size for title (approx 20 on medium screens)
-    final iconSize = screenWidth * 0.07; // Dynamic size for icon
-    final textFieldHeight = screenWidth * 0.14; // Define a height for text fields
-    final fieldSpacing = screenWidth * 0.03; // Spacing between fields in a row
+    final verticalSpacing = screenWidth * 0.03;
 
     return Scaffold(
-      // appBar: AppBar(title: const Text('Profile')), // Optional AppBar
-      body: SafeArea( // Added SafeArea
-        child: SingleChildScrollView( // Added SingleChildScrollView
-          child: Padding( // Add padding around the entire Column
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalSpacing), // Add vertical padding too
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: verticalSpacing),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Profile Picture Section using the custom widget
-                Padding(
-                  // No horizontal padding needed here as it's handled by the outer Padding
-                  padding: const EdgeInsets.only(top: 0), // Ensure zero top padding
-                  child: Center( // Horizontally center the ProfilePicture widget
-                    child: ProfilePicture(
-                      // imageUrl: 'YOUR_INITIAL_IMAGE_URL_HERE', // Optional: Provide an initial image URL
-                      onImageSelected: _doNothing, // Pass the dummy callback
-                    ),
+                // Profile Picture Section
+                Center(
+                  child: ProfilePicture(
+                    onImageSelected: (File image) {
+                      print("Image selected: ${image.path}");
+                    },
                   ),
                 ),
 
-                // Use dynamic spacing
                 SizedBox(height: verticalSpacing * 1.5),
 
-                // Row for the two buttons using Expanded for flexible scaling
+                // Row for Red Buttons
                 Row(
                   children: [
-                    Expanded( // Make Button 1 flexible
+                    Expanded(
                       child: RedButton(
                         label: 'Change Password',
-                        isWhiteButton: true, // Make it outlined
+                         // White button variant
                         height: screenWidth * 0.12,
-                        // width: screenWidth * 0.24, // REMOVE fixed width when using Expanded
                         onPressed: () {
-                          // Navigator.pushReplacement(
-                          //         context,
-                          //         MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-                          //      );
-                          print('Button 1 pressed');
-                          // Add functionality for Button 1
+                         Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
+                           );
+                          // Add functionality for Change Password
                         },
                       ),
                     ),
-                    SizedBox(width: buttonSpacing), // Dynamic spacing between buttons
-                    Expanded( // Make Button 2 flexible
+                    SizedBox(width: screenWidth * 0.03), // Spacing between buttons
+                    Expanded(
                       child: RedButton(
                         label: 'Logout',
-                        isWhiteButton: true, // Make it outlined
-                        // width: screenWidth * 0.24, // REMOVE fixed width when using Expanded
-                        height: screenWidth * 0.12, // Adjust height as needed
+                        // White button variant
+                        height: screenWidth * 0.12,
                         onPressed: () {
-                          print('Button 2 pressed');
-                          // Add functionality for Button 2
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                           );
+                          // Add functionality for Logout
                         },
                       ),
                     ),
                   ],
                 ),
 
-                // Use dynamic spacing below buttons
                 SizedBox(height: verticalSpacing * 1.5),
 
-                // --- User Information Title Row ---
+                // Row for Edit Icon
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes items to ends
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    
                     Text(
                       'User Information',
                       style: TextStyle(
-                        // fontFamily: 'Product Sans', // Uncomment if Product Sans is configured
-                        fontSize: titleFontSize, // Use dynamic font size
+                        fontSize: screenWidth * 0.05,
                         color: Colors.black,
-                        fontWeight: FontWeight.normal, // Regular weight
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                     IconButton(
                       icon: Icon(
-                        Icons.edit,
-                        color: const Color(0xFFA51414), // Red color
-                        size: iconSize, // Use dynamic icon size
+                        isEditing ? Icons.check : Icons.edit,
+                        color: const Color(0xFFA51414),
+                        size: screenWidth * 0.07,
                       ),
                       onPressed: () {
-                        print('Edit User Info pressed');
-                        // Add functionality for edit button
+                        setState(() {
+                          isEditing = !isEditing; // Toggle edit mode
+                        });
                       },
                     ),
                   ],
                 ),
 
-                // Add spacing between title row and text field
-                SizedBox(height: screenWidth*0.015),
+                SizedBox(height: verticalSpacing),
 
-                // First Name
+                // Custom Text Fields
                 CustomTextField(
-                  controller: _sampleFieldController, // Use the dummy controller
-                  label: 'First Name', // Provide a label
-                  height: screenWidth*0.13, // Adjust height as needed
-                  // CustomTextField uses 90% width internally by default
+                  controller: _firstNameController,
+                  label: 'First Name',
+                  height: screenWidth * 0.13,
+                  readOnly: !isEditing, // Make read-only if not in edit mode
                 ),
-
-                // Add spacing between title row and text field
-                SizedBox(height: screenWidth*0.03),
-
-                // Last Name
+                SizedBox(height: verticalSpacing),
                 CustomTextField(
-                  controller: _sampleFieldController, // Use the dummy controller
+                  controller: _lastNameController,
                   label: 'Last Name',
-                  height: screenWidth*0.13, // Provide a label
-                                    // CustomTextField uses 90% width internally by default
+                  height: screenWidth * 0.13,
+                  readOnly: !isEditing,
                 ),
-
-                // Add spacing between title row and text field
-                SizedBox(height: screenWidth*0.03),
-
-                // Company Name
+                SizedBox(height: verticalSpacing),
                 CustomTextField(
-                  controller: _sampleFieldController, // Use the dummy controller
-                  label: 'Company Name', 
-                  height: screenWidth*0.13,// Provide a label
-                                    // CustomTextField uses 90% width internally by default
+                  controller: _companyNameController,
+                  label: 'Company Name',
+                  height: screenWidth * 0.13,
+                  readOnly: !isEditing,
                 ),
-
-                // Add spacing between title row and text field
-                SizedBox(height: screenWidth*0.03),
-
-                // Your Email
+                SizedBox(height: verticalSpacing),
                 CustomTextField(
-                  controller: _sampleFieldController, // Use the dummy controller
-                  label: 'Your Email', 
-                  height: screenWidth*0.13,// Provide a label
-                                    // CustomTextField uses 90% width internally by default
+                  controller: _emailController,
+                  label: 'Your Email',
+                  height: screenWidth * 0.13,
+                  readOnly: !isEditing,
                 ),
+                SizedBox(height: verticalSpacing),
 
-                // Add spacing before the row of phone numbers
-                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
-
-                // --- Row for Phone Numbers ---
+                // Row for Phone Numbers
                 Row(
                   children: [
                     Expanded(
                       child: CustomTextField(
-                        controller: _phoneController, // Use specific controller
+                        controller: _phoneController,
                         label: 'Phone Number',
-                        height: textFieldHeight, // Apply the defined height
-                        width: null, // Crucial: Allow Expanded to control width
+                        height: screenWidth * 0.13,
+                        readOnly: !isEditing,
                       ),
                     ),
-                    SizedBox(width: fieldSpacing), // Horizontal spacing between fields
+                    SizedBox(width: screenWidth * 0.03),
                     Expanded(
                       child: CustomTextField(
-                        controller: _altPhoneController, // Use specific controller
+                        controller: _altPhoneController,
                         label: 'Alternate No.',
-                        height: textFieldHeight, // Apply the defined height
-                        width: null, // Crucial: Allow Expanded to control width
+                        height: screenWidth * 0.13,
+                        readOnly: !isEditing,
                       ),
                     ),
                   ],
                 ),
 
-
-                // Add spacing between title row and text field
-                SizedBox(height: screenWidth*0.03),
-
-                // Your Email
+                SizedBox(height: verticalSpacing),
                 CustomTextField(
-                  controller: _sampleFieldController, // Use the dummy controller
-                  label: 'GSTIN NO', 
-                  height: screenWidth*0.13,// Provide a label
-                                    // CustomTextField uses 90% width internally by default
+                  controller: _gstinController,
+                  label: 'GSTIN NO',
+                  height: screenWidth * 0.13,
+                  readOnly: !isEditing,
                 ),
+                SizedBox(height: verticalSpacing),
 
-                // Add spacing before the row of phone numbers
-                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
-
-                // --- Row for Phone Numbers ---
+                // Row for Type and Source
                 Row(
                   children: [
                     Expanded(
                       child: CustomTextField(
-                        controller: _phoneController, // Use specific controller
+                        controller: _typeController,
                         label: 'Type',
-                        height: textFieldHeight, // Apply the defined height
-                        width: null, // Crucial: Allow Expanded to control width
+                        height: screenWidth * 0.13,
+                        readOnly: !isEditing,
                       ),
                     ),
-                    SizedBox(width: fieldSpacing), // Horizontal spacing between fields
+                    SizedBox(width: screenWidth * 0.03),
                     Expanded(
                       child: CustomTextField(
-                        controller: _altPhoneController, // Use specific controller
+                        controller: _sourceController,
                         label: 'Source',
-                        height: textFieldHeight, // Apply the defined height
-                        width: null, // Crucial: Allow Expanded to control width
+                        height: screenWidth * 0.13,
+                        readOnly: !isEditing,
                       ),
                     ),
                   ],
                 ),
-                
-                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
 
-                // --- Row for Phone Numbers ---
+                SizedBox(height: verticalSpacing * 1.5),
+
+                // Radio Button Rows
                 Row(
                   children: [
-                     Padding(padding: EdgeInsets.only(left: screenWidth*0.02)),
+                    Padding(padding: EdgeInsets.only(left: screenWidth * 0.02)),
                     Expanded(
                       child: Text(
-                    "Send Order Update Emails",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal, // Removed bold styling
-                      color: Color(0xFFA51414),
+                        "Send Order Update Emails",
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFFA51414),
+                        ),
+                        softWrap: false,
+                      ),
                     ),
-                    softWrap: false, // Prevent wrapping to the next line
-                    // overflow: TextOverflow.ellipsis, // Truncate text if it overflows
-                  ),
-                    ),
-                    SizedBox(width: screenWidth*0.005), // Horizontal spacing between fields
+                    SizedBox(width: screenWidth * 0.005),
                     Expanded(
                       child: TwoRadioButtons(
-                       forceHorizontalLayout: true, // Force horizontal layout
-                  options: ['Yes', 'No'],
-                  initialSelection: 0,
-                  onSelectionChanged: (value) => print("Email Radio: $value"),
-                ),
+                        forceHorizontalLayout: true,
+                        options: ['Yes', 'No'],
+                        initialSelection: 0,
+                        onSelectionChanged: (value) => print("Email Radio: $value"),
+                      ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
+                SizedBox(height: verticalSpacing),
 
-                // --- Row for Phone Numbers ---
                 Row(
                   children: [
-                    Padding(padding: EdgeInsets.only(left: screenWidth*0.02)), // Add padding to the left
+                    Padding(padding: EdgeInsets.only(left: screenWidth * 0.02)),
                     Expanded(
                       child: Text(
-                    "Send Order Update SMS",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal, // Removed bold styling
-                      color: Color(0xFFA51414),
+                        "Send Order Update SMS",
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFFA51414),
+                        ),
+                        softWrap: false,
+                      ),
                     ),
-                    softWrap: false, // Prevent wrapping to the next line
-                    // overflow: TextOverflow.ellipsis, // Truncate text if it overflows
-                  ),
-                    ),
-                    SizedBox(width: screenWidth*0.003), // Horizontal spacing between fields
+                    SizedBox(width: screenWidth * 0.005),
                     Expanded(
                       child: TwoRadioButtons(
-                       forceHorizontalLayout: true, // Force horizontal layout
-                  options: ['Yes', 'No'],
-                  initialSelection: 0,
-                  onSelectionChanged: (value) => print("Email Radio: $value"),
-                ),
+                        forceHorizontalLayout: true,
+                        options: ['Yes', 'No'],
+                        initialSelection: 0,
+                        onSelectionChanged: (value) => print("SMS Radio: $value"),
+                      ),
                     ),
                   ],
                 ),
-
-                
-                
-
-                // Add other widgets below if needed
-                // SizedBox(height: verticalSpacing),
-                // const Text('Other Content...'),
               ],
             ),
           ),

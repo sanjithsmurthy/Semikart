@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onTap; // Optional onTap callback
   final FormFieldValidator<String>? validator; // Optional external validator for VISUAL feedback (if needed)
   final void Function(bool isValid)? onValidationChanged; // New callback for validity status
+  final bool readOnly; // Add readOnly property
 
   const CustomTextField({
     super.key,
@@ -31,12 +32,8 @@ class CustomTextField extends StatelessWidget {
     this.onTap, // Optional onTap callback
     this.validator, // Optional external validator
     this.onValidationChanged, // Add new callback to constructor
+    this.readOnly = false, // Default to false
   });
-
-  // Remove the internal email regex, we'll use the package now
-  // static final RegExp _emailRegExp = RegExp(
-  //   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-  // );
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +64,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           focusNode: focusNode, // Attach the FocusNode
           obscureText: isPassword, // Toggle password visibility if it's a password field
+          readOnly: readOnly, // Use the readOnly property
           // --- Modified onChanged ---
           onChanged: (value) {
             // 1. Perform email validation using the package if applicable
