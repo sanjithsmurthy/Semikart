@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../common/red_button.dart';
+import 'order_history_item.dart';
 
 class OrderHistory extends StatefulWidget {
   const OrderHistory({Key? key}) : super(key: key);
@@ -172,9 +173,55 @@ class _OrderHistoryState extends State<OrderHistory> {
               SizedBox(height: screenHeight * 0.03),
               RedButton(
                 label: 'Search',
+                isWhiteButton: true, // Set the isWhite parameter to true
                 onPressed: () {
                   // Implement search functionality here
                   print('Search button pressed');
+                },
+              ),
+              SizedBox(height: screenHeight * 0.01),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: screenHeight * 0.006, // 2px top padding
+                  bottom: screenHeight * 0.001, // 1px bottom padding
+                ),
+                child: Text(
+                  'Orders',
+                  style: TextStyle(
+                    fontSize: fontSize * 1.4,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.001), // 1px space between "Orders" and the first container
+              OrderHistoryItem(
+                orderId: '1. 50486T2025040942440',
+                orderStatus: 'Order Cancelled',
+                transactionId: 'T2025040942440',
+                orderDate: '09-Apr-2025 /n 6:50:06 PM',
+                poDate: ' ',
+                customerPo: ' ',
+                paymentStatus: 'PENDING',
+                amount: '15484.43',
+                onMakePayment: () {
+                  // Implement payment functionality here
+                  print('Make Payment button pressed');
+                },
+              ),
+              SizedBox(height: screenHeight * 0.001), // 1px space between containers
+              OrderHistoryItem(
+                orderId: '2. 50486T2025040948976',
+                orderStatus: 'Order Cancelled',
+                transactionId: 'T2025040842411',
+                orderDate: '08-Apr-2025 12:48:24 PM',
+                poDate: ' ',
+                customerPo: ' ',
+                paymentStatus: 'PENDING',
+                amount: '15479.80',
+                onMakePayment: () {
+                  // Implement payment functionality here
+                  print('Make Payment button pressed');
                 },
               ),
             ],

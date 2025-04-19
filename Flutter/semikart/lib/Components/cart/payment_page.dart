@@ -217,36 +217,7 @@ class _EditPageState extends State<EditPage> {
                   }
                 },
               ),
-              const SizedBox(height: 8),
-              // Add New Button
-              // Align(
-              //   alignment: Alignment.centerRight,
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       // Add logic for adding a new shipping address
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => ShipBillForm(), // Navigate to the form for adding a new address
-              //         ),
-              //       );
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: const Color(0xFFA51414), // Button color
-              //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              //     ),
-              //     child: const Text(
-              //       'Add New',
-              //       style: TextStyle(
-              //         color: Colors.white,
-              //         fontSize: 14,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
-
+             
               // My Items Container
               Container(
                 width: double.infinity,
