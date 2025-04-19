@@ -9,7 +9,6 @@ class RedButton extends StatelessWidget {
   final double? height; // Optional custom height
   final double? fontSize; // Custom font size for the button text
   final bool isWhiteButton; // Attribute to trigger the white button variant
-  final FontWeight? fontWeight; // <-- 1. Add fontWeight field
 
   const RedButton({
     super.key,
@@ -21,7 +20,6 @@ class RedButton extends StatelessWidget {
     this.height, // Optional custom height
     this.fontSize, // Optional custom font size
     this.isWhiteButton = false, // Default to false (red button is default)
-    this.fontWeight, // <-- 2. Add fontWeight to constructor
   });
 
   @override
@@ -93,8 +91,8 @@ class RedButton extends StatelessWidget {
                         fontSize:
                             textFontSize, // Dynamically calculated font size
                         height: 1.0,
-                        // <-- 3. Apply fontWeight, default to normal if null
-                        fontWeight: fontWeight ?? FontWeight.normal,
+                        // Set fontWeight directly to bold
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
