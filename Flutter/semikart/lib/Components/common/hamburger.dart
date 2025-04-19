@@ -5,6 +5,7 @@ import 'popup.dart'; // Import your CustomPopup widget
 import '../login_signup/login_password.dart';
 import '../profile/profile_screen.dart';
 import '../../base_scaffold.dart'; // Import BaseScaffold
+import '../home/order_history.dart';
 
 // Helper function for creating a Fade Transition Page Route
 Route _createFadeRoute(Widget page, {int? initialIndex}) {
@@ -185,9 +186,11 @@ class HamburgerMenu extends StatelessWidget {
                     text: 'Order History',
                     onTap: () {
                       Navigator.pop(context); // Close drawer first
-                      // TODO: Replace with actual navigation using _createFadeRoute if needed
-                      // Example: Navigator.push(context, _createFadeRoute(const OrderHistoryPage()));
-                      print("Navigate to Order History"); // Placeholder
+                      // Navigate to Order History page using MaterialPageRoute to fix date picker issue
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrderHistory()),
+                      );
                     },
                   ),
                   const SizedBox(height: 16), // Add spacing between menu items

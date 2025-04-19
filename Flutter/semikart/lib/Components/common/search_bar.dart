@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'search_failed.dart'; // Import the SearchFailed widget
 
 class SearchBar extends StatefulWidget {
   final String hintText;
   final Color backgroundColor;
   final Color iconColor;
   final double borderRadius;
+  final ValueChanged<String>? onChanged; // Optional onChanged callback
 
   const SearchBar({
     super.key,
@@ -12,6 +14,7 @@ class SearchBar extends StatefulWidget {
     this.backgroundColor = const Color(0xFFE4E8EC), // Default grey background
     this.iconColor = const Color(0xFFA51414), // Default red icon color
     this.borderRadius = 20.0, // Default border radius
+    this.onChanged, // Optional onChanged callback
   });
 
   @override
@@ -62,6 +65,11 @@ class _SearchBarState extends State<SearchBar> {
             .where((item) => item.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
+
+      // Call the onChanged callback if provided
+      if (widget.onChanged != null) {
+        widget.onChanged!(query);
+      }
     });
   }
 
@@ -69,6 +77,11 @@ class _SearchBarState extends State<SearchBar> {
     setState(() {
       _controller.text = suggestion;
       _showSuggestions = false;
+
+      // Call the onChanged callback with the selected suggestion
+      if (widget.onChanged != null) {
+        widget.onChanged!(suggestion);
+      }
     });
   }
 
@@ -108,11 +121,11 @@ class _SearchBarState extends State<SearchBar> {
             ],
           ),
         ),
-        // Suggestions Overlay
+        // Suggestions Overlay or SearchFailed
         if (_showSuggestions)
           Container(
             width: screenWidth * 0.9,
-            margin: const EdgeInsets.only(top: 8.0),
+            margin: const EdgeInsets.only(top: 40.0), // Increased top margin for spacing
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -125,67 +138,74 @@ class _SearchBarState extends State<SearchBar> {
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Manufacturer Results
-                if (_filteredManufacturerResults.isNotEmpty) ...[
-                  Text(
-                    'Manufacturer Results',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: widget.iconColor,
-                    ),
+            child: _filteredManufacturerResults.isEmpty &&
+                    _filteredCategoryResults.isEmpty &&
+                    _filteredPartNumberResults.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 16.0), // Add top padding for SearchFailed
+                    child: const SearchFailed(), // Show SearchFailed if no results
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Manufacturer Results
+                      if (_filteredManufacturerResults.isNotEmpty) ...[
+                        Text(
+                          'Manufacturer Results',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: widget.iconColor,
+                          ),
+                        ),
+                        Divider(color: Colors.grey),
+                        ..._filteredManufacturerResults.map((result) {
+                          return ListTile(
+                            title: Text(result),
+                            onTap: () => _onSuggestionSelected(result),
+                          );
+                        }).toList(),
+                      ],
+                      // Category Results
+                      if (_filteredCategoryResults.isNotEmpty) ...[
+                        SizedBox(height: 8),
+                        Text(
+                          'Category Results',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: widget.iconColor,
+                          ),
+                        ),
+                        Divider(color: Colors.grey),
+                        ..._filteredCategoryResults.map((result) {
+                          return ListTile(
+                            title: Text(result),
+                            onTap: () => _onSuggestionSelected(result),
+                          );
+                        }).toList(),
+                      ],
+                      // Part Number Results
+                      if (_filteredPartNumberResults.isNotEmpty) ...[
+                        SizedBox(height: 8),
+                        Text(
+                          'Part Number Results',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: widget.iconColor,
+                          ),
+                        ),
+                        Divider(color: Colors.grey),
+                        ..._filteredPartNumberResults.map((result) {
+                          return ListTile(
+                            title: Text(result),
+                            onTap: () => _onSuggestionSelected(result),
+                          );
+                        }).toList(),
+                      ],
+                    ],
                   ),
-                  Divider(color: Colors.grey),
-                  ..._filteredManufacturerResults.map((result) {
-                    return ListTile(
-                      title: Text(result),
-                      onTap: () => _onSuggestionSelected(result),
-                    );
-                  }).toList(),
-                ],
-                // Category Results
-                if (_filteredCategoryResults.isNotEmpty) ...[
-                  SizedBox(height: 8),
-                  Text(
-                    'Category Results',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: widget.iconColor,
-                    ),
-                  ),
-                  Divider(color: Colors.grey),
-                  ..._filteredCategoryResults.map((result) {
-                    return ListTile(
-                      title: Text(result),
-                      onTap: () => _onSuggestionSelected(result),
-                    );
-                  }).toList(),
-                ],
-                // Part Number Results
-                if (_filteredPartNumberResults.isNotEmpty) ...[
-                  SizedBox(height: 8),
-                  Text(
-                    'Part Number Results',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: widget.iconColor,
-                    ),
-                  ),
-                  Divider(color: Colors.grey),
-                  ..._filteredPartNumberResults.map((result) {
-                    return ListTile(
-                      title: Text(result),
-                      onTap: () => _onSuggestionSelected(result),
-                    );
-                  }).toList(),
-                ],
-              ],
-            ),
           ),
       ],
     );
