@@ -32,65 +32,63 @@ class ProductsL1Page extends StatelessWidget {
       {"icon": "public/assets/icon/wire_and_cable.png", "name": "Wire Cables"},
     ];
 
-    return Scaffold(
-      body: Column(
-        children: [
-          // Header
-          ProductsHeaderContent(),
+    // Return the Column directly, NO Scaffold here
+    return Column(
+      children: [
+        // Header
+        ProductsHeaderContent(),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: screenHeight * 0.02), // Add spacing between header and grid
 
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: screenHeight * 0.02), // Add spacing between header and grid
+                // Grid-like layout with lines
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                  child: ListView.builder(
+                    shrinkWrap: true, // Ensures the ListView takes only the required space
+                    physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
+                    itemCount: (categories.length / 2).ceil(),
+                    itemBuilder: (context, index) {
+                      final int firstIndex = index * 2;
+                      final int secondIndex = firstIndex + 1;
 
-                  // Grid-like layout with lines
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-                    child: ListView.builder(
-                      shrinkWrap: true, // Ensures the ListView takes only the required space
-                      physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
-                      itemCount: (categories.length / 2).ceil(),
-                      itemBuilder: (context, index) {
-                        final int firstIndex = index * 2;
-                        final int secondIndex = firstIndex + 1;
-
-                        return Column(
-                          children: [
-                            Row(
-                              children: [
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              _buildCategoryItem(
+                                context: context,
+                                iconPath: categories[firstIndex]["icon"]!,
+                                name: categories[firstIndex]["name"]!,
+                                iconSize: screenWidth * 0.1, // Adjusted for responsiveness
+                              ),
+                              _buildVerticalDivider(screenHeight: screenHeight),
+                              if (secondIndex < categories.length)
                                 _buildCategoryItem(
                                   context: context,
-                                  iconPath: categories[firstIndex]["icon"]!,
-                                  name: categories[firstIndex]["name"]!,
+                                  iconPath: categories[secondIndex]["icon"]!,
+                                  name: categories[secondIndex]["name"]!,
                                   iconSize: screenWidth * 0.1, // Adjusted for responsiveness
-                                ),
-                                _buildVerticalDivider(screenHeight: screenHeight),
-                                if (secondIndex < categories.length)
-                                  _buildCategoryItem(
-                                    context: context,
-                                    iconPath: categories[secondIndex]["icon"]!,
-                                    name: categories[secondIndex]["name"]!,
-                                    iconSize: screenWidth * 0.1, // Adjusted for responsiveness
-                                  )
-                                else
-                                  const Spacer(), // Empty space if no second item
-                              ],
-                            ),
-                            if (index < (categories.length / 2).ceil() - 1)
-                              _buildHorizontalDivider(screenWidth: screenWidth),
-                          ],
-                        );
-                      },
-                    ),
+                                )
+                              else
+                                const Spacer(), // Empty space if no second item
+                            ],
+                          ),
+                          if (index < (categories.length / 2).ceil() - 1)
+                            _buildHorizontalDivider(screenWidth: screenWidth),
+                        ],
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -104,15 +102,12 @@ class ProductsL1Page extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          if (name == "Circuit Protection") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const BaseScaffold(
-                body: ProductsL2Page(),
-              
-              )),
-            );
-          }
+          // Navigate directly to ProductsL2Page for any category tap
+          Navigator.push(
+            context,
+            // Push ONLY the content page, not a new BaseScaffold
+            MaterialPageRoute(builder: (context) => const ProductsL2Page()),
+          );
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
