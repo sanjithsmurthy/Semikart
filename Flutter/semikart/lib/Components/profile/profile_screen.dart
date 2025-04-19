@@ -4,7 +4,7 @@ import 'profilepic.dart'; // Import the custom ProfilePicture widget
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../Login_SignUp/custom_text_field.dart'; // Import CustomTextField
 import '../Login_SignUp/reset_password.dart'; // Keep import if needed for navigation
-import '../common/two_radios.dart'; // Import the TwoRadioButtons widget
+import '../common/two_radios.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -234,21 +234,53 @@ class ProfileScreen extends StatelessWidget {
                 // --- Row for Phone Numbers ---
                 Row(
                   children: [
+                     Padding(padding: EdgeInsets.only(left: screenWidth*0.02)),
                     Expanded(
                       child: Text(
                     "Send Order Update Emails",
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.normal, // Removed bold styling
                       color: Color(0xFFA51414),
                     ),
                     softWrap: false, // Prevent wrapping to the next line
-                    overflow: TextOverflow.ellipsis, // Truncate text if it overflows
+                    // overflow: TextOverflow.ellipsis, // Truncate text if it overflows
                   ),
                     ),
-                    SizedBox(width: fieldSpacing), // Horizontal spacing between fields
+                    SizedBox(width: screenWidth*0.005), // Horizontal spacing between fields
                     Expanded(
                       child: TwoRadioButtons(
+                       forceHorizontalLayout: true, // Force horizontal layout
+                  options: ['Yes', 'No'],
+                  initialSelection: 0,
+                  onSelectionChanged: (value) => print("Email Radio: $value"),
+                ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
+
+                // --- Row for Phone Numbers ---
+                Row(
+                  children: [
+                    Padding(padding: EdgeInsets.only(left: screenWidth*0.02)), // Add padding to the left
+                    Expanded(
+                      child: Text(
+                    "Send Order Update SMS",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal, // Removed bold styling
+                      color: Color(0xFFA51414),
+                    ),
+                    softWrap: false, // Prevent wrapping to the next line
+                    // overflow: TextOverflow.ellipsis, // Truncate text if it overflows
+                  ),
+                    ),
+                    SizedBox(width: screenWidth*0.003), // Horizontal spacing between fields
+                    Expanded(
+                      child: TwoRadioButtons(
+                       forceHorizontalLayout: true, // Force horizontal layout
                   options: ['Yes', 'No'],
                   initialSelection: 0,
                   onSelectionChanged: (value) => print("Email Radio: $value"),
