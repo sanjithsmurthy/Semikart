@@ -15,10 +15,10 @@ class ProfileScreen extends StatelessWidget {
     print("Image selected (but not handled in ProfileScreen): ${image.path}");
   }
 
-  // Dummy controller for the single text field
-  // Note: For real usage, this screen would likely need to be StatefulWidget
-  // to manage controllers properly (including disposal).
+  // Dummy controllers - For real usage, convert to StatefulWidget and create separate controllers
   static final _sampleFieldController = TextEditingController();
+  static final _phoneController = TextEditingController();
+  static final _altPhoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,8 @@ class ProfileScreen extends StatelessWidget {
     final buttonSpacing = screenWidth * 0.04; // Dynamic spacing between buttons
     final titleFontSize = screenWidth * 0.05; // Dynamic font size for title (approx 20 on medium screens)
     final iconSize = screenWidth * 0.07; // Dynamic size for icon
+    final textFieldHeight = screenWidth * 0.14; // Define a height for text fields
+    final fieldSpacing = screenWidth * 0.03; // Spacing between fields in a row
 
     return Scaffold(
       // appBar: AppBar(title: const Text('Profile')), // Optional AppBar
@@ -59,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                     Expanded( // Make Button 1 flexible
                       child: RedButton(
                         label: 'Change Password',
-                        // Make it outlined
+                        isWhiteButton: true, // Make it outlined
                         height: screenWidth * 0.12,
                         // width: screenWidth * 0.24, // REMOVE fixed width when using Expanded
                         onPressed: () {
@@ -76,7 +78,7 @@ class ProfileScreen extends StatelessWidget {
                     Expanded( // Make Button 2 flexible
                       child: RedButton(
                         label: 'Logout',
-                         // Make it outlined
+                        isWhiteButton: true, // Make it outlined
                         // width: screenWidth * 0.24, // REMOVE fixed width when using Expanded
                         height: screenWidth * 0.12, // Adjust height as needed
                         onPressed: () {
@@ -99,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
                       'User Information',
                       style: TextStyle(
                         // fontFamily: 'Product Sans', // Uncomment if Product Sans is configured
-                        fontSize: screenWidth*0.04, // Use dynamic font size
+                        fontSize: titleFontSize, // Use dynamic font size
                         color: Colors.black,
                         fontWeight: FontWeight.normal, // Regular weight
                       ),
@@ -121,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
                 // Add spacing between title row and text field
                 SizedBox(height: screenWidth*0.015),
 
-                // Add a single CustomTextField below the title row
+                // First Name
                 CustomTextField(
                   controller: _sampleFieldController, // Use the dummy controller
                   label: 'First Name', // Provide a label
@@ -132,36 +134,102 @@ class ProfileScreen extends StatelessWidget {
                 // Add spacing between title row and text field
                 SizedBox(height: screenWidth*0.03),
 
-                // Add a single CustomTextField below the title row
+                // Last Name
                 CustomTextField(
                   controller: _sampleFieldController, // Use the dummy controller
                   label: 'Last Name',
                   height: screenWidth*0.13, // Provide a label
-                  // CustomTextField uses 90% width internally by default
+                                    // CustomTextField uses 90% width internally by default
                 ),
 
                 // Add spacing between title row and text field
                 SizedBox(height: screenWidth*0.03),
 
-                // Add a single CustomTextField below the title row
+                // Company Name
                 CustomTextField(
                   controller: _sampleFieldController, // Use the dummy controller
                   label: 'Company Name', 
                   height: screenWidth*0.13,// Provide a label
-                  // CustomTextField uses 90% width internally by default
+                                    // CustomTextField uses 90% width internally by default
                 ),
 
                 // Add spacing between title row and text field
                 SizedBox(height: screenWidth*0.03),
 
-                // Add a single CustomTextField below the title row
+                // Your Email
                 CustomTextField(
                   controller: _sampleFieldController, // Use the dummy controller
                   label: 'Your Email', 
                   height: screenWidth*0.13,// Provide a label
-                  // CustomTextField uses 90% width internally by default
+                                    // CustomTextField uses 90% width internally by default
                 ),
 
+                // Add spacing before the row of phone numbers
+                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
+
+                // --- Row for Phone Numbers ---
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        controller: _phoneController, // Use specific controller
+                        label: 'Phone Number',
+                        height: textFieldHeight, // Apply the defined height
+                        width: null, // Crucial: Allow Expanded to control width
+                      ),
+                    ),
+                    SizedBox(width: fieldSpacing), // Horizontal spacing between fields
+                    Expanded(
+                      child: CustomTextField(
+                        controller: _altPhoneController, // Use specific controller
+                        label: 'Alternate No.',
+                        height: textFieldHeight, // Apply the defined height
+                        width: null, // Crucial: Allow Expanded to control width
+                      ),
+                    ),
+                  ],
+                ),
+
+
+                // Add spacing between title row and text field
+                SizedBox(height: screenWidth*0.03),
+
+                // Your Email
+                CustomTextField(
+                  controller: _sampleFieldController, // Use the dummy controller
+                  label: 'GSTIN NO', 
+                  height: screenWidth*0.13,// Provide a label
+                                    // CustomTextField uses 90% width internally by default
+                ),
+
+                // Add spacing before the row of phone numbers
+                SizedBox(height: screenWidth*0.03), // Use standard vertical spacing
+
+                // --- Row for Phone Numbers ---
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        controller: _phoneController, // Use specific controller
+                        label: 'Type',
+                        height: textFieldHeight, // Apply the defined height
+                        width: null, // Crucial: Allow Expanded to control width
+                      ),
+                    ),
+                    SizedBox(width: fieldSpacing), // Horizontal spacing between fields
+                    Expanded(
+                      child: CustomTextField(
+                        controller: _altPhoneController, // Use specific controller
+                        label: 'Source',
+                        height: textFieldHeight, // Apply the defined height
+                        width: null, // Crucial: Allow Expanded to control width
+                      ),
+                    ),
+                  ],
+                ),
+                
+                
+                
 
                 // Add other widgets below if needed
                 // SizedBox(height: verticalSpacing),
