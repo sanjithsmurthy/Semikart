@@ -138,7 +138,7 @@ class _CartPageState extends State<CartPage> {
                     Center(
                       child: RedButton(
                         label: 'Proceed to Checkout',
-                        fontWeight: FontWeight.bold,
+                        
                         height: screenWidth * 0.1,
                         onPressed: () {
                           // Add functionality for checkout
