@@ -123,7 +123,7 @@ class _EditPageState extends State<EditPage> {
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text('Missing Information'),
-                          content: const Text('Please fill all mandatory billing address fields first (Name, Pincode, Address1, City, State, Phone)'),
+                          content: const Text('Please fill all mandatory billing address fields'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
