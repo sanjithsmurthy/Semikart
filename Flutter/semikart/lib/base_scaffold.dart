@@ -4,7 +4,7 @@ import 'Components/search/product_search.dart';
 import 'Components/profile/profile_screen.dart';
 import 'Components/common/header.dart';
 import 'Components/common/hamburger.dart';
-import 'Components/Navigators/products_navigator.dart';
+import 'Components/navigators/products_navigator.dart';
 import 'Components/navigators/home_navigator.dart';
 
 class BaseScaffold extends StatefulWidget {
