@@ -69,346 +69,343 @@ class _EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              EditTextBox(
-                address1: address1,
-                address2: address2,
-                onEdit: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ShipBillForm(
-                        initialAddress1: address1,
-                        initialAddress2: address2,
-                      ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            EditTextBox(
+              address1: address1,
+              address2: address2,
+              onEdit: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShipBillForm(
+                      initialAddress1: address1,
+                      initialAddress2: address2,
                     ),
-                  );
-                  if (result != null) {
-                    setState(() {
-                      name = result['name'];
-                      pincode = result['pincode'];
-                      address1 = result['address1'];
-                      address2 = result['address2'];
-                      landmark = result['landmark'];
-                      city = result['city'];
-                      state = result['state'];
-                      phone = result['phone'];
-                      company = result['company'];
-                      gstn = result['gstn'];
-                    });
-                  }
-                },
-              ),
-              const SizedBox(height: 16),
-              CheckboxListTile(
-                value: isChecked,
-                onChanged: (bool? value) async {
-                  if (value == true) {
-                    // Check if all mandatory billing fields are filled
-                    if (name == null || name!.isEmpty ||
-                        pincode == null || pincode!.isEmpty ||
-                        address1 == null || address1!.isEmpty ||
-                        city == null || city!.isEmpty ||
-                        state == null || state!.isEmpty ||
-                        phone == null || phone!.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Missing Information'),
-                          content: const Text('Please fill all mandatory billing address fields first (Name, Pincode, Address1, City, State, Phone)'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                      return;
-                    }
-
-                    // Copy all billing fields to shipping
-                    setState(() {
-                      isChecked = true;
-                      shippingName = name;
-                      shippingPincode = pincode;
-                      shippingAddress1 = address1;
-                      shippingAddress2 = address2;
-                      shippingLandmark = landmark;
-                      shippingCity = city;
-                      shippingState = state;
-                      shippingPhone = phone;
-                      shippingCompany = company;
-                      shippingGstn = gstn;
-                    });
-                  } else {
-                    // Clear all shipping address fields when unchecked
-                    setState(() {
-                      isChecked = false;
-                      shippingName = null;
-                      shippingPincode = null;
-                      shippingAddress1 = null;
-                      shippingAddress2 = null;
-                      shippingLandmark = null;
-                      shippingCity = null;
-                      shippingState = null;
-                      shippingPhone = null;
-                      shippingCompany = null;
-                      shippingGstn = null;
-                    });
-                  }
-                },
-                title: const Text(
-                  "Billing Address same as shipping address",
-                  style: TextStyle(fontSize: 16),
-                ),
-                controlAffinity: ListTileControlAffinity.leading,
-                activeColor: Color(0xFFA51414),
-                contentPadding: EdgeInsets.zero,
-              ),
-              const SizedBox(height: 16),
-              EditTextBox2(
-                title: 'Shipping Address',
-                address1: shippingAddress1,
-                address2: shippingAddress2,
-                onEdit: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ShipBillForm(
-                        initialAddress1: shippingAddress1,
-                        initialAddress2: shippingAddress2,
-                      ),
-                    ),
-                  );
-                  if (result != null) {
-                    setState(() {
-                      shippingName = result['name'];
-                      shippingPincode = result['pincode'];
-                      shippingAddress1 = result['address1'];
-                      shippingAddress2 = result['address2'];
-                      shippingLandmark = result['landmark'];
-                      shippingCity = result['city'];
-                      shippingState = result['state'];
-                      shippingPhone = result['phone'];
-                      shippingCompany = result['company'];
-                      shippingGstn = result['gstn'];
-                      if (isChecked) {
-                        name = shippingName;
-                        pincode = shippingPincode;
-                        address1 = shippingAddress1;
-                        address2 = shippingAddress2;
-                        landmark = shippingLandmark;
-                        city = shippingCity;
-                        state = shippingState;
-                        phone = shippingPhone;
-                        company = shippingCompany;
-                        gstn = shippingGstn;
-                      }
-                    });
-                  }
-                },
-              ),
-             
-              // My Items Container
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                margin: const EdgeInsets.only(bottom: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      offset: const Offset(0, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'My Items',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            // Add edit functionality here
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Color(0xFFA51414),
-                          ),
-                          padding: EdgeInsets.zero,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    ...items.map((item) => Column(
-                      children: [
-                        ItemDropdownCard(
-                          serialNo: item['serialNo'],
-                          mfrPartNumber: item['mfrPartNumber'],
-                          manufacturer: item['manufacturer'],
-                          basicUnitPrice: item['basicUnitPrice'],
-                          quantity: item['quantity'],
-                          finalUnitPrice: item['finalUnitPrice'],
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    )).toList(),
-                    const SizedBox(height: 16),
-                    // Grand Total Row
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0.1),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Grand Total   ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '₹${calculateGrandTotal().toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFA51414),
-                            ),
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    name = result['name'];
+                    pincode = result['pincode'];
+                    address1 = result['address1'];
+                    address2 = result['address2'];
+                    landmark = result['landmark'];
+                    city = result['city'];
+                    state = result['state'];
+                    phone = result['phone'];
+                    company = result['company'];
+                    gstn = result['gstn'];
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            CheckboxListTile(
+              value: isChecked,
+              onChanged: (bool? value) async {
+                if (value == true) {
+                  // Check if all mandatory billing fields are filled
+                  if (name == null || name!.isEmpty ||
+                      pincode == null || pincode!.isEmpty ||
+                      address1 == null || address1!.isEmpty ||
+                      city == null || city!.isEmpty ||
+                      state == null || state!.isEmpty ||
+                      phone == null || phone!.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Missing Information'),
+                        content: const Text('Please fill all mandatory billing address fields first (Name, Pincode, Address1, City, State, Phone)'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('OK'),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                    );
+                    return;
+                  }
 
-              // Razorpay Container
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      offset: const Offset(0, 2),
-                      blurRadius: 4,
+                  // Copy all billing fields to shipping
+                  setState(() {
+                    isChecked = true;
+                    shippingName = name;
+                    shippingPincode = pincode;
+                    shippingAddress1 = address1;
+                    shippingAddress2 = address2;
+                    shippingLandmark = landmark;
+                    shippingCity = city;
+                    shippingState = state;
+                    shippingPhone = phone;
+                    shippingCompany = company;
+                    shippingGstn = gstn;
+                  });
+                } else {
+                  // Clear all shipping address fields when unchecked
+                  setState(() {
+                    isChecked = false;
+                    shippingName = null;
+                    shippingPincode = null;
+                    shippingAddress1 = null;
+                    shippingAddress2 = null;
+                    shippingLandmark = null;
+                    shippingCity = null;
+                    shippingState = null;
+                    shippingPhone = null;
+                    shippingCompany = null;
+                    shippingGstn = null;
+                  });
+                }
+              },
+              title: const Text(
+                "Billing Address same as shipping address",
+                style: TextStyle(fontSize: 16),
+              ),
+              controlAffinity: ListTileControlAffinity.leading,
+              activeColor: Color(0xFFA51414),
+              contentPadding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: 16),
+            EditTextBox2(
+              title: 'Shipping Address',
+              address1: shippingAddress1,
+              address2: shippingAddress2,
+              onEdit: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShipBillForm(
+                      initialAddress1: shippingAddress1,
+                      initialAddress2: shippingAddress2,
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Default Payment Option",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Icon(Icons.radio_button_checked, color: Color(0xFFA51414)),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            "Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater",
-                            style: TextStyle(fontSize: 14),
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    shippingName = result['name'];
+                    shippingPincode = result['pincode'];
+                    shippingAddress1 = result['address1'];
+                    shippingAddress2 = result['address2'];
+                    shippingLandmark = result['landmark'];
+                    shippingCity = result['city'];
+                    shippingState = result['state'];
+                    shippingPhone = result['phone'];
+                    shippingCompany = result['company'];
+                    shippingGstn = result['gstn'];
+                    if (isChecked) {
+                      name = shippingName;
+                      pincode = shippingPincode;
+                      address1 = shippingAddress1;
+                      address2 = shippingAddress2;
+                      landmark = shippingLandmark;
+                      city = shippingCity;
+                      state = shippingState;
+                      phone = shippingPhone;
+                      company = shippingCompany;
+                      gstn = shippingGstn;
+                    }
+                  });
+                }
+              },
+            ),
+           
+            // My Items Container
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.only(bottom: 16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'My Items',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          // Add edit functionality here
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Color(0xFFA51414),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ...items.map((item) => Column(
+                    children: [
+                      ItemDropdownCard(
+                        serialNo: item['serialNo'],
+                        mfrPartNumber: item['mfrPartNumber'],
+                        manufacturer: item['manufacturer'],
+                        basicUnitPrice: item['basicUnitPrice'],
+                        quantity: item['quantity'],
+                        finalUnitPrice: item['finalUnitPrice'],
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  )).toList(),
+                  const SizedBox(height: 16),
+                  // Grand Total Row
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0.1),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Grand Total   ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '₹${calculateGrandTotal().toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFA51414),
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              // Terms & Conditions Container
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                margin: const EdgeInsets.only(top: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      offset: const Offset(0, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Terms & Conditions",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 12),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "1. We hereby declare that, the parts procured from Aqtronics/SemiKart against our PO number is not sold to any of the restricted entity by US or UK and also not used in any of the products/applications such as weapon of mass destruction/aerospace or defence systems restricted by US & UK. Furthermore these parts are not to be sold to any such entities within India. In doing so, we are aware a flag will be raised to the respective supplier and all business proceedings will be cancelled.",
-                              style: TextStyle(fontSize: 14, height: 1.6),
-                            ),
-                            SizedBox(height: 12),
-                            Text(
-                              "2. Order delivery timelines may differ when procured from multiple suppliers.",
-                              style: TextStyle(fontSize: 14, height: 1.6),
-                            ),
-                            SizedBox(height: 12),
-                            Text(
-                              "3. Standard lead time will be 2-3 weeks for stock parts after receiving of PO.",
-                              style: TextStyle(fontSize: 14, height: 1.6),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
+            // Razorpay Container
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              RedButton(
-                label: 'Continue to payment',
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => PaymentConfirmationDialog(
-                      amount: calculateGrandTotal(),
-                      onConfirm: () {
-                        Navigator.pop(context);
-                        // Add actual payment processing logic here
-                      },
-                    ),
-                  );
-                },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Default Payment Option",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Icon(Icons.radio_button_checked, color: Color(0xFFA51414)),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          "Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // Terms & Conditions Container
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.only(top: 16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Terms & Conditions",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "1. We hereby declare that, the parts procured from Aqtronics/SemiKart against our PO number is not sold to any of the restricted entity by US or UK and also not used in any of the products/applications such as weapon of mass destruction/aerospace or defence systems restricted by US & UK. Furthermore these parts are not to be sold to any such entities within India. In doing so, we are aware a flag will be raised to the respective supplier and all business proceedings will be cancelled.",
+                            style: TextStyle(fontSize: 14, height: 1.6),
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            "2. Order delivery timelines may differ when procured from multiple suppliers.",
+                            style: TextStyle(fontSize: 14, height: 1.6),
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            "3. Standard lead time will be 2-3 weeks for stock parts after receiving of PO.",
+                            style: TextStyle(fontSize: 14, height: 1.6),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            RedButton(
+              label: 'Continue to payment',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => PaymentConfirmationDialog(
+                    amount: calculateGrandTotal(),
+                    onConfirm: () {
+                      Navigator.pop(context);
+                      // Add actual payment processing logic here
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -548,38 +545,4 @@ class PaymentConfirmationDialog extends StatelessWidget {
       ),
     );
   }
-}
-
-class CombinedAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final VoidCallback onBackPressed;
-
-  const CombinedAppBar({
-    super.key,
-    required this.title,
-    required this.onBackPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      leading: IconButton(
-        icon: SvgPicture.asset(
-          'public/assets/images/back.svg',
-          color: const Color(0xFFA51414),
-        ),
-        iconSize: 24.0,
-        onPressed: onBackPressed,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(color: Colors.black),
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(150);
 }
