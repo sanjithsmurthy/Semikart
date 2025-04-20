@@ -5,7 +5,7 @@ import 'Components/search/product_search.dart';
 import 'Components/profile/profile_screen.dart';
 import 'Components/common/header.dart';
 import 'Components/common/hamburger.dart';
-import 'Components/navigators/products_navigator.dart';
+import 'Components/Navigators/products_navigator.dart';
 import 'Components/navigators/home_navigator.dart';
 import 'Components/navigators/cart_navigator.dart';
 import 'Components/cart/cart_page.dart'; // Keep this for cartItemCount
@@ -31,11 +31,14 @@ class BaseScaffold extends StatefulWidget {
 
 class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex;
+
   final GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _productsNavKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _cartNavKey = GlobalKey<NavigatorState>(); // Add key for CartNavigator
 
   late List<Widget> _pages;
+
+  DateTime? _lastPressedAt;
 
   @override
   void initState() {
@@ -60,6 +63,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
   void switchToTab(int index) {
     if (index >= 0 && index < _pages.length) {
+      // Clear current tab stack before switching
+      final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+      if (currentNavKey?.currentState?.canPop() ?? false) {
+        currentNavKey?.currentState?.popUntil((route) => route.isFirst);
+      }
+
       setState(() {
         _selectedIndex = index;
       });
@@ -84,21 +93,53 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   Future<bool> _handleWillPop() async {
     final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
 
-    if (currentNavKey != null &&
-        currentNavKey.currentState != null &&
-        currentNavKey.currentState!.canPop()) {
-      currentNavKey.currentState!.pop();
+    // Pop inside current tab if possible
+    if (currentNavKey?.currentState?.canPop() ?? false) {
+      currentNavKey?.currentState?.pop();
       return false;
     }
 
-    // If not popping within a nested navigator and not on the home tab, switch to home
+    // If on Products, Search, Cart, or Profile, go to Home tab
     if (_selectedIndex != 0) {
-      _onNavTap(0);
+      setState(() {
+        _selectedIndex = 0;
+      });
       return false;
     }
 
-    // If on the home tab and cannot pop, allow the app to exit
-    return true;
+    // If on Home tab, handle back press with timer functionality
+    if (_lastPressedAt == null ||
+        DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 2)) {
+      // Show custom styled snackbar and reset timer
+      _lastPressedAt = DateTime.now();
+      _showExitPromptSnackbar();
+      return false; // Prevent app from closing
+    } else {
+      // If within 2 seconds, exit the app
+      return true; // Allow exit
+    }
+  }
+
+  void _showExitPromptSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Press back again to exit",
+          style: TextStyle(
+            color: Colors.black, // Set text color to black
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.white.withOpacity(0.7), // Transparent white background
+        behavior: SnackBarBehavior.floating, // Floating style for modern look
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Rounded corners
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Centered and more spaced
+        padding: EdgeInsets.all(16), // Custom padding inside snackbar
+      ),
+    );
   }
 
   GlobalKey<NavigatorState>? _getNavigatorKeyForIndex(int index) {
@@ -119,7 +160,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     return WillPopScope(
       onWillPop: _handleWillPop,
       child: Scaffold(
-        key: BaseScaffold.navigatorKey, // <-- This connects the global key
+        key: BaseScaffold.navigatorKey,
         resizeToAvoidBottomInset: false,
         appBar: Header(
           // Show back button if not on the root of the current navigator OR if not on the home tab (index 0)
@@ -128,10 +169,8 @@ class _BaseScaffoldState extends State<BaseScaffold> {
           onBackPressed: () {
             final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
 
-            if (currentNavKey != null &&
-                currentNavKey.currentState != null &&
-                currentNavKey.currentState!.canPop()) {
-              currentNavKey.currentState!.pop();
+            if (currentNavKey?.currentState?.canPop() ?? false) {
+              currentNavKey?.currentState?.pop();
             } else if (_selectedIndex != 0) {
               // If cannot pop within the navigator, go back to the home tab
               _onNavTap(0);
@@ -146,11 +185,10 @@ class _BaseScaffoldState extends State<BaseScaffold> {
           },
         ),
         drawer: const HamburgerMenu(),
-        body: widget.body ??
-            IndexedStack(
-              index: _selectedIndex,
-              children: _pages,
-            ),
+        body: widget.body ?? IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
