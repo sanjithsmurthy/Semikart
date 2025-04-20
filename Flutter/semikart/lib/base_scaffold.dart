@@ -28,6 +28,7 @@ class BaseScaffold extends StatefulWidget {
 
 class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex;
+
   final GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _productsNavKey = GlobalKey<NavigatorState>();
 
@@ -56,6 +57,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
   void switchToTab(int index) {
     if (index >= 0 && index < _pages.length) {
+      // Clear current tab stack before switching
+      final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+      if (currentNavKey?.currentState?.canPop() ?? false) {
+        currentNavKey?.currentState?.popUntil((route) => route.isFirst);
+      }
+
       setState(() {
         _selectedIndex = index;
       });
@@ -80,13 +87,21 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   Future<bool> _handleWillPop() async {
     final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
 
-    if (currentNavKey != null &&
-        currentNavKey.currentState != null &&
-        currentNavKey.currentState!.canPop()) {
-      currentNavKey.currentState!.pop();
+    // Pop inside current tab if possible
+    if (currentNavKey?.currentState?.canPop() ?? false) {
+      currentNavKey?.currentState?.pop();
       return false;
     }
 
+    // If on Products, Search, Cart, or Profile, go to Home tab
+    if (_selectedIndex != 0) {
+      setState(() {
+        _selectedIndex = 0;
+      });
+      return false;
+    }
+
+    // On Home tab with no stack to pop, allow app to close
     return true;
   }
 
@@ -106,7 +121,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     return WillPopScope(
       onWillPop: _handleWillPop,
       child: Scaffold(
-        key: BaseScaffold.navigatorKey, // <-- This connects the global key
+        key: BaseScaffold.navigatorKey,
         resizeToAvoidBottomInset: false,
         appBar: Header(
           showBackButton: _selectedIndex != 0,
@@ -114,10 +129,8 @@ class _BaseScaffoldState extends State<BaseScaffold> {
           onBackPressed: () {
             final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
 
-            if (currentNavKey != null &&
-                currentNavKey.currentState != null &&
-                currentNavKey.currentState!.canPop()) {
-              currentNavKey.currentState!.pop();
+            if (currentNavKey?.currentState?.canPop() ?? false) {
+              currentNavKey?.currentState?.pop();
             } else if (_selectedIndex != 0) {
               _onNavTap(0);
             }
