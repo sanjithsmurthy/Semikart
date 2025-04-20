@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'products_l1.dart';
-import 'products_l2.dart';
-import 'products_l3.dart';
+import '../products/products_l1.dart';
+import '../products/products_l2.dart';
+import '../products/products_l3.dart';
 
 class ProductsNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;

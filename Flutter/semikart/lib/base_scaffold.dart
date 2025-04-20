@@ -7,7 +7,7 @@ import 'Components/home/home_page.dart'; // Import the updated home_page.dart
 import 'Components/profile/profile_screen.dart';
 import 'Components/search/product_search.dart'; // Import ProductSearch for search functionality
 // import 'Components/common/placeholder_page.dart'; // Assuming you have a placeholder page - Removed as file doesn't exist
-import 'Components/products/products_navigator.dart'; // Import ProductsNavigator for internal navigation
+import 'Components/Navigators/products_navigator.dart'; // Import ProductsNavigator for internal navigation
 
 class BaseScaffold extends StatefulWidget {
   final Widget? body; // Optional custom body
