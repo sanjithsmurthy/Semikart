@@ -12,6 +12,9 @@ class BaseScaffold extends StatefulWidget {
   final int initialIndex;
   final ValueChanged<int>? onNavigationItemSelected;
 
+  static final GlobalKey<_BaseScaffoldState> navigatorKey =
+      GlobalKey<_BaseScaffoldState>();
+
   const BaseScaffold({
     super.key,
     this.body,
@@ -51,6 +54,14 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     widget.onNavigationItemSelected?.call(index);
   }
 
+  void switchToTab(int index) {
+    if (index >= 0 && index < _pages.length) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
   String? _getTitle(int index) {
     switch (index) {
       case 1:
@@ -66,33 +77,48 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     }
   }
 
+  Future<bool> _handleWillPop() async {
+    final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+
+    if (currentNavKey != null &&
+        currentNavKey.currentState != null &&
+        currentNavKey.currentState!.canPop()) {
+      currentNavKey.currentState!.pop();
+      return false;
+    }
+
+    return true;
+  }
+
+  GlobalKey<NavigatorState>? _getNavigatorKeyForIndex(int index) {
+    switch (index) {
+      case 0:
+        return _homeNavKey;
+      case 1:
+        return _productsNavKey;
+      default:
+        return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        if (_selectedIndex == 0 &&
-            _homeNavKey.currentState != null &&
-            _homeNavKey.currentState!.canPop()) {
-          _homeNavKey.currentState!.pop();
-          return false;
-        }
-
-        if (_selectedIndex == 1 &&
-            _productsNavKey.currentState != null &&
-            _productsNavKey.currentState!.canPop()) {
-          _productsNavKey.currentState!.pop();
-          return false;
-        }
-
-        return true; // Exit app if on root of current tab
-      },
+      onWillPop: _handleWillPop,
       child: Scaffold(
+        key: BaseScaffold.navigatorKey, // <-- This connects the global key
         resizeToAvoidBottomInset: false,
         appBar: Header(
           showBackButton: _selectedIndex != 0,
           title: _getTitle(_selectedIndex),
           onBackPressed: () {
-            if (_selectedIndex != 0) {
+            final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+
+            if (currentNavKey != null &&
+                currentNavKey.currentState != null &&
+                currentNavKey.currentState!.canPop()) {
+              currentNavKey.currentState!.pop();
+            } else if (_selectedIndex != 0) {
               _onNavTap(0);
             }
           },

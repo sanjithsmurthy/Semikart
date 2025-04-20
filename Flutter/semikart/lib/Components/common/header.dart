@@ -164,7 +164,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                             color: const Color(0xFFA51414),
                           ),
                           iconSize: screenWidth * 0.06, // 6% of screen width
-                          onPressed: onBackPressed ?? () => Navigator.pop(context),
+                          onPressed: onBackPressed,
+
                         ),
                       ),
                       SizedBox(width: screenWidth * 0.025), // Add spacing to move the title to the right
