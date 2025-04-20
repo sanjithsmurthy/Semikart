@@ -4,7 +4,7 @@ import 'Components/search/product_search.dart';
 import 'Components/profile/profile_screen.dart';
 import 'Components/common/header.dart';
 import 'Components/common/hamburger.dart';
-import 'Components/navigators/products_navigator.dart';
+import 'Components/Navigators/products_navigator.dart';
 import 'Components/navigators/home_navigator.dart';
 
 class BaseScaffold extends StatefulWidget {
@@ -33,6 +33,8 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   final GlobalKey<NavigatorState> _productsNavKey = GlobalKey<NavigatorState>();
 
   late List<Widget> _pages;
+
+  DateTime? _lastPressedAt;
 
   @override
   void initState() {
@@ -101,8 +103,39 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       return false;
     }
 
-    // On Home tab with no stack to pop, allow app to close
-    return true;
+    // If on Home tab, handle back press with timer functionality
+    if (_lastPressedAt == null ||
+        DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 2)) {
+      // Show custom styled snackbar and reset timer
+      _lastPressedAt = DateTime.now();
+      _showExitPromptSnackbar();
+      return false; // Prevent app from closing
+    } else {
+      // If within 2 seconds, exit the app
+      return true; // Allow exit
+    }
+  }
+
+  void _showExitPromptSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Press back again to exit",
+          style: TextStyle(
+            color: Colors.black, // Set text color to black
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.white.withOpacity(0.7), // Transparent white background
+        behavior: SnackBarBehavior.floating, // Floating style for modern look
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Rounded corners
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Centered and more spaced
+        padding: EdgeInsets.all(16), // Custom padding inside snackbar
+      ),
+    );
   }
 
   GlobalKey<NavigatorState>? _getNavigatorKeyForIndex(int index) {
@@ -140,11 +173,10 @@ class _BaseScaffoldState extends State<BaseScaffold> {
           },
         ),
         drawer: const HamburgerMenu(),
-        body: widget.body ??
-            IndexedStack(
-              index: _selectedIndex,
-              children: _pages,
-            ),
+        body: widget.body ?? IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
