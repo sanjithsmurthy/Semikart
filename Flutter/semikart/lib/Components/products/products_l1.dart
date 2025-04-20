@@ -103,11 +103,8 @@ class ProductsL1Page extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           // Navigate directly to ProductsL2Page for any category tap
-          Navigator.push(
-            context,
-            // Push ONLY the content page, not a new BaseScaffold
-            MaterialPageRoute(builder: (context) => const ProductsL2Page()),
-          );
+          Navigator.of(context).pushNamed('l2');
+
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
