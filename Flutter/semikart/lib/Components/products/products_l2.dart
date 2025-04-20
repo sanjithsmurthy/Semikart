@@ -25,11 +25,8 @@ class ProductsL2Page extends StatelessWidget {
                 // Step 2: Implement l2_page_redbox.dart
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      // Push only the ProductsL3Page, not a new BaseScaffold
-                      MaterialPageRoute(builder: (context) => const ProductsL3Page()),
-                    );
+                    Navigator.of(context).pushNamed('l3');
+
                   },
                   child: const RedBorderBox(text: 'L2 Component 1'),
                 ),
