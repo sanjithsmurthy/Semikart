@@ -112,14 +112,8 @@ class BomRfqCard extends StatelessWidget {
                   child: RedButton(
                     label: "RFQ",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BaseScaffold(
-                            body: RFQFullPage(), // Navigate to RFQFullPage
-                          ),
-                        ),
-                      );
+                      Navigator.of(context).pushNamed('rfq');
+
                     },
                     width: buttonWidth,
                     height: buttonHeight,

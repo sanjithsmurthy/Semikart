@@ -6,8 +6,9 @@ import 'Components/common/hamburger.dart'; // Import the HamburgerMenu
 import 'Components/home/home_page.dart'; // Import the updated home_page.dart
 import 'Components/profile/profile_screen.dart';
 import 'Components/search/product_search.dart'; // Import ProductSearch for search functionality
-// import 'Components/common/placeholder_page.dart'; // Assuming you have a placeholder page - Removed as file doesn't exist
 import 'Components/Navigators/products_navigator.dart'; // Import ProductsNavigator for internal navigation
+import 'Components/navigators/home_navigator.dart'; // Import HomeNavigator for internal navigation
+
 
 class BaseScaffold extends StatefulWidget {
   final Widget? body; // Optional custom body
@@ -31,6 +32,8 @@ class BaseScaffold extends StatefulWidget {
 class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex; // Track the currently selected tab
   final GlobalKey<NavigatorState> _productsNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
+
   late List<Widget> _pages;
 
 
@@ -50,7 +53,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     _selectedIndex = widget.initialIndex; // Initialize with provided index
 
     _pages = [
-    const HomePageContent(),
+     HomeNavigator(navigatorKey: _homeNavKey),
     ProductsNavigator(navigatorKey: _productsNavKey), // now works!
     ProductSearch(),
     CartPage(),
