@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'Components/cart/cart_page.dart';
+// Removed direct import of CartPage as it's now handled by CartNavigator
+// import 'Components/cart/cart_page.dart'; 
 import 'Components/search/product_search.dart';
 import 'Components/profile/profile_screen.dart';
 import 'Components/common/header.dart';
 import 'Components/common/hamburger.dart';
 import 'Components/navigators/products_navigator.dart';
 import 'Components/navigators/home_navigator.dart';
+import 'Components/navigators/cart_navigator.dart';
+import 'Components/cart/cart_page.dart'; // Keep this for cartItemCount
 
 class BaseScaffold extends StatefulWidget {
   final Widget? body;
@@ -30,6 +33,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex;
   final GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _productsNavKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> _cartNavKey = GlobalKey<NavigatorState>(); // Add key for CartNavigator
 
   late List<Widget> _pages;
 
@@ -42,7 +46,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       HomeNavigator(navigatorKey: _homeNavKey),
       ProductsNavigator(navigatorKey: _productsNavKey),
       ProductSearch(),
-      CartPage(),
+      CartNavigator(navigatorKey: _cartNavKey), // Use CartNavigator here
       const ProfileScreen(),
     ];
   }
@@ -87,6 +91,13 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       return false;
     }
 
+    // If not popping within a nested navigator and not on the home tab, switch to home
+    if (_selectedIndex != 0) {
+      _onNavTap(0);
+      return false;
+    }
+
+    // If on the home tab and cannot pop, allow the app to exit
     return true;
   }
 
@@ -96,6 +107,8 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         return _homeNavKey;
       case 1:
         return _productsNavKey;
+      case 3: // Add case for CartNavigator
+        return _cartNavKey;
       default:
         return null;
     }
@@ -109,7 +122,8 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         key: BaseScaffold.navigatorKey, // <-- This connects the global key
         resizeToAvoidBottomInset: false,
         appBar: Header(
-          showBackButton: _selectedIndex != 0,
+          // Show back button if not on the root of the current navigator OR if not on the home tab (index 0)
+          showBackButton: (_getNavigatorKeyForIndex(_selectedIndex)?.currentState?.canPop() ?? false) || _selectedIndex != 0,
           title: _getTitle(_selectedIndex),
           onBackPressed: () {
             final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
@@ -119,10 +133,15 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 currentNavKey.currentState!.canPop()) {
               currentNavKey.currentState!.pop();
             } else if (_selectedIndex != 0) {
+              // If cannot pop within the navigator, go back to the home tab
               _onNavTap(0);
             }
           },
           onLogoTap: () {
+             // Reset all navigators and go to home tab
+            _homeNavKey.currentState?.popUntil((route) => route.isFirst);
+            _productsNavKey.currentState?.popUntil((route) => route.isFirst);
+            _cartNavKey.currentState?.popUntil((route) => route.isFirst);
             _onNavTap(0);
           },
         ),

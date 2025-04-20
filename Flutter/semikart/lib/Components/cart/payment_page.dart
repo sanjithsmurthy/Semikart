@@ -69,7 +69,8 @@ class _EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    // Removed Scaffold widget
+    return SingleChildScrollView( 
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -248,7 +249,7 @@ class _EditPageState extends State<EditPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          // Add edit functionality here
+                          Navigator.of(context).pushNamed('cart');
                         },
                         icon: const Icon(
                           Icons.edit,

@@ -141,12 +141,9 @@ class _CartPageState extends State<CartPage> {
                         
                         height: screenWidth * 0.1,
                         onPressed: () {
-                          // Add functionality for checkout
-                          print("Proceeding to checkout...");
+                          // Navigate to the payment page using the CartNavigator
+                          Navigator.of(context).pushNamed('payment'); 
                         },
-
-
-                       
                          width: screenWidth * 0.55, // You might not need a fixed width when centered
                         fontSize: 16.0, // Custom font size
                       ),
