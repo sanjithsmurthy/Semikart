@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../base_scaffold.dart'; // Import BaseScaffold
 import '../common/red_button.dart'; // Import the RedButton component
 
 class SearchFailed extends StatelessWidget {
@@ -37,8 +38,13 @@ class SearchFailed extends StatelessWidget {
             RedButton(
               label: "Explore Categories", // Button text
               onPressed: () {
-                // Add your button action here
-                print("Explore Categories button pressed");
+                // Navigate to BaseScaffold with initial index 1
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BaseScaffold(initialIndex: 1),
+                  ),
+                );
               },
               width: 200, // Optional: Set a custom width for the button
             ),

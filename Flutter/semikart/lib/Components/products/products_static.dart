@@ -18,24 +18,25 @@ class ProductsHeaderContent extends StatelessWidget {
           children: [
             // Heading
             Container(
-              padding: EdgeInsets.all(screenWidth * 0.04),
+              padding: EdgeInsets.all(screenWidth * 0.01),
               child: Text(
                 'Electronic Components Categories Line Card',
                 style: TextStyle(
                   color: Color(0xFFA51414), // Red color (A51414)
-                  fontSize: screenHeight * 0.025, // Font size 25px
+                  fontSize: screenHeight * 0.019,
+                  fontWeight: FontWeight.bold, // Font size 25px
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: screenHeight * 0.02), // Add spacing before the search bar
+            SizedBox(height: screenHeight * 0.008), // Add spacing before the search bar
 
-            // Search Bar
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: custom_search.SearchBar(), // Add the SearchBar widget here
-            ),
-            SizedBox(height: screenHeight * 0.02), // Add spacing before RFQ_CTA
+            // // Search Bar
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+            //   child: custom_search.SearchBar(), // Add the SearchBar widget here
+            // ),
+            // SizedBox(height: screenHeight * 0.02), // Add spacing before RFQ_CTA
 
             // Red Button
             Center(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import intl package for date formatting
-import '../common/red_button.dart'; // Assuming red_button.dart is in the same directory
+import 'package:intl/intl.dart';
+
+import '../common/red_button.dart';
+import 'order_history_item.dart';
 
 class OrderHistory extends StatefulWidget {
-  const OrderHistory({super.key});
+  const OrderHistory({Key? key}) : super(key: key);
+
   @override
   _OrderHistoryState createState() => _OrderHistoryState();
 }
@@ -11,16 +14,17 @@ class OrderHistory extends StatefulWidget {
 class _OrderHistoryState extends State<OrderHistory> {
   int totalOrders = 0;
   int ongoingOrders = 0;
+  String? orderStatus;
+
   DateTime? fromDate;
   DateTime? toDate;
-  String? orderStatus;
 
   Future<void> _selectDate(BuildContext context, bool isFromDate) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      lastDate: DateTime(2050), // Updated lastDate
     );
     if (pickedDate != null) {
       setState(() {
@@ -38,20 +42,18 @@ class _OrderHistoryState extends State<OrderHistory> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Define responsive values based on screen size
     final double containerWidth = screenWidth > 600 ? 500 : screenWidth * 0.8;
     final double fontSize = screenWidth > 600 ? 16 : 14;
     final double padding = screenWidth > 600 ? 20 : 16;
     final double borderRadius = screenWidth > 600 ? 12 : 8;
 
-    return Material(
-      child: Padding(
+    return Scaffold(
+      body: Padding(
         padding: EdgeInsets.all(padding),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Order Summary
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -62,8 +64,6 @@ class _OrderHistoryState extends State<OrderHistory> {
                 ],
               ),
               SizedBox(height: screenHeight * 0.02),
-
-              // Search Bar
               Text('Search', style: TextStyle(fontSize: fontSize)),
               SizedBox(height: screenHeight * 0.005),
               TextFormField(
@@ -75,83 +75,66 @@ class _OrderHistoryState extends State<OrderHistory> {
                 ),
               ),
               SizedBox(height: screenHeight * 0.02),
-
-              // Date Range
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // From Date
-                  SizedBox(
-                    width: containerWidth * 0.4,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('From Date', style: TextStyle(fontSize: fontSize)),
-                        SizedBox(height: screenHeight * 0.005),
-                        InkWell(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('From Date', style: TextStyle(fontSize: fontSize)),
+                      SizedBox(height: screenHeight * 0.005),
+                      SizedBox(
+                        width: containerWidth / 2,
+                        child: InkWell(
                           onTap: () => _selectDate(context, true),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(borderRadius),
+                          child: InputDecorator(
+                            decoration: InputDecoration(
+                              hintText: 'DD/MM/YYYY',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(borderRadius),
+                              ),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: padding/2, vertical: padding/4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  fromDate == null
-                                      ? 'DD/MM/YYYY'
-                                      : DateFormat('dd/MM/yyyy').format(fromDate!),
-                                  style: TextStyle(fontSize: fontSize),
-                                ),
-                                Icon(Icons.calendar_today, size: fontSize + 4),
-                              ],
+                            child: Text(
+                              fromDate != null
+                                  ? DateFormat('dd/MM/yyyy').format(fromDate!)
+                                  : 'DD/MM/YYYY',
+                              style: TextStyle(fontSize: fontSize),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-
-                  // To Date
-                  SizedBox(
-                    width: containerWidth * 0.4,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('To Date', style: TextStyle(fontSize: fontSize)),
-                        SizedBox(height: screenHeight * 0.005),
-                        InkWell(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('To Date', style: TextStyle(fontSize: fontSize)),
+                      SizedBox(height: screenHeight * 0.005),
+                      SizedBox(
+                        width: containerWidth / 2,
+                        child: InkWell(
                           onTap: () => _selectDate(context, false),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(borderRadius),
+                          child: InputDecorator(
+                            decoration: InputDecoration(
+                              hintText: 'DD/MM/YYYY',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(borderRadius),
+                              ),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: padding/2, vertical: padding/4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  toDate == null
-                                      ? 'DD/MM/YYYY'
-                                      : DateFormat('dd/MM/yyyy').format(toDate!),
-                                  style: TextStyle(fontSize: fontSize),
-                                ),
-                                Icon(Icons.calendar_today, size: fontSize + 4),
-                              ],
+                            child: Text(
+                              toDate != null
+                                  ? DateFormat('dd/MM/yyyy').format(toDate!)
+                                  : 'DD/MM/YYYY',
+                              style: TextStyle(fontSize: fontSize),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               SizedBox(height: screenHeight * 0.02),
-
-              // Order Status
               Text('Order Status', style: TextStyle(fontSize: fontSize)),
               SizedBox(height: screenHeight * 0.005),
               DropdownButtonFormField<String>(
@@ -162,7 +145,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                 ),
                 value: orderStatus,
                 hint: Text('Select', style: TextStyle(fontSize: fontSize)),
-                items: <String>[
+                items: const <String>[
                   'Select',
                   'Order Placed',
                   'Order Accepted',
@@ -188,13 +171,57 @@ class _OrderHistoryState extends State<OrderHistory> {
                 },
               ),
               SizedBox(height: screenHeight * 0.03),
-
-              // Search Button
               RedButton(
                 label: 'Search',
+                isWhiteButton: true, // Set the isWhite parameter to true
                 onPressed: () {
                   // Implement search functionality here
                   print('Search button pressed');
+                },
+              ),
+              SizedBox(height: screenHeight * 0.01),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: screenHeight * 0.006, // 2px top padding
+                  bottom: screenHeight * 0.001, // 1px bottom padding
+                ),
+                child: Text(
+                  'Orders',
+                  style: TextStyle(
+                    fontSize: fontSize * 1.4,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.001), // 1px space between "Orders" and the first container
+              OrderHistoryItem(
+                orderId: '1. 50486T2025040942440',
+                orderStatus: 'Order Cancelled',
+                transactionId: 'T2025040942440',
+                orderDate: '09-Apr-2025 6:50:06 PM',
+                poDate: ' ',
+                customerPo: ' ',
+                paymentStatus: 'PENDING',
+                amount: '15484.43',
+                onMakePayment: () {
+                  // Implement payment functionality here
+                  print('Make Payment button pressed');
+                },
+              ),
+              SizedBox(height: screenHeight * 0.001), // 1px space between containers
+              OrderHistoryItem(
+                orderId: '2. 50486T2025040948976',
+                orderStatus: 'Order Cancelled',
+                transactionId: 'T2025040842411',
+                orderDate: '08-Apr-2025 12:48:24 PM',
+                poDate: ' ',
+                customerPo: ' ',
+                paymentStatus: 'PENDING',
+                amount: '15479.80',
+                onMakePayment: () {
+                  // Implement payment functionality here
+                  print('Make Payment button pressed');
                 },
               ),
             ],
