@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'Components/cart/cart_page.dart';
+import 'dart:async'; // Import for Future used in WillPopScope
+
 import 'Components/search/product_search.dart';
 import 'Components/profile/profile_screen.dart';
 import 'Components/common/header.dart';
 import 'Components/common/hamburger.dart';
-import 'app_navigator.dart'; // <--- central navigation
+import 'app_navigator.dart';
 
 class BaseScaffold extends StatefulWidget {
-  final Widget? body;
   final int initialIndex;
   final ValueChanged<int>? onNavigationItemSelected;
 
-  static final GlobalKey<_BaseScaffoldState> navigatorKey =
-      GlobalKey<_BaseScaffoldState>();
+  static final GlobalKey<_BaseScaffoldState> navigatorKey = GlobalKey<_BaseScaffoldState>();
 
   const BaseScaffold({
-    super.key,
-    this.body,
+    super.key = const ValueKey('BaseScaffold'),
     this.initialIndex = 0,
     this.onNavigationItemSelected,
   });
@@ -27,36 +25,53 @@ class BaseScaffold extends StatefulWidget {
 
 class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex;
-  DateTime? _lastBackPressed;
+  DateTime? _lastPressedAt;
 
-  late List<Widget> _pages;
+  final List<Widget> _pages = [
+    AppNavigator.homeNavigator(),
+    AppNavigator.productsNavigator(),
+    AppNavigator.searchNavigator(),
+    AppNavigator.cartNavigator(),
+    AppNavigator.profileNavigator(),
+  ];
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-
-    _pages = [
-      AppNavigator.homeNavigator(),
-      AppNavigator.productsNavigator(),
-      AppNavigator.searchNavigator(),
-      AppNavigator.cartNavigator(),
-      AppNavigator.profileNavigator(),
-    ];
-  }
-
-  void _onNavTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    widget.onNavigationItemSelected?.call(index);
   }
 
   void switchToTab(int index) {
-    if (index >= 0 && index < _pages.length) {
+    if (index >= 0 && index < _pages.length && _selectedIndex != index) {
+      _popToFirstRouteInCurrentTab();
       setState(() {
         _selectedIndex = index;
       });
+      widget.onNavigationItemSelected?.call(index);
+    }
+  }
+
+  void _popToFirstRouteInCurrentTab() {
+    final currentNavigatorKey = getNavigatorKeyForIndex(_selectedIndex);
+    if (currentNavigatorKey?.currentState?.canPop() ?? false) {
+      currentNavigatorKey!.currentState!.popUntil((route) => route.isFirst);
+    }
+  }
+
+  GlobalKey<NavigatorState>? getNavigatorKeyForIndex(int index) {
+    switch (index) {
+      case 0:
+        return AppNavigator.homeNavKey;
+      case 1:
+        return AppNavigator.productsNavKey;
+      case 2:
+        return AppNavigator.searchNavKey;
+      case 3:
+        return AppNavigator.cartNavKey;
+      case 4:
+        return AppNavigator.profileNavKey;
+      default:
+        return null;
     }
   }
 
@@ -75,116 +90,99 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     }
   }
 
-  GlobalKey<NavigatorState>? _getNavigatorKeyForIndex(int index) {
-    switch (index) {
-      case 0:
-        return AppNavigator.homeNavKey;
-      case 1:
-        return AppNavigator.productsNavKey;
-      case 2:
-        return AppNavigator.searchNavKey;
-      case 3:
-        return AppNavigator.cartNavKey;
-      case 4:
-        return AppNavigator.profileNavKey;
-      default:
-        return null;
-    }
-  }
-
   Future<bool> _handleWillPop() async {
-    final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+    final currentNavKey = getNavigatorKeyForIndex(_selectedIndex);
+    final navState = currentNavKey?.currentState;
 
-    if (currentNavKey?.currentState?.canPop() ?? false) {
-      currentNavKey?.currentState?.pop();
+    if (navState != null && navState.canPop()) {
+      navState.pop();
+      setState(() {});
       return false;
     }
 
     if (_selectedIndex != 0) {
-      _onNavTap(0);
+      switchToTab(0);
       return false;
     }
 
     final now = DateTime.now();
-    if (_lastBackPressed == null ||
-        now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
-      _lastBackPressed = now;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Press back again to exit"),
-          duration: Duration(seconds: 2),
-          backgroundColor: Color(0xFFA51414),
-        ),
-      );
+    if (_lastPressedAt == null || now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
+      _lastPressedAt = now;
+      _showExitPromptSnackbar();
       return false;
+    } else {
+      return true;
     }
+  }
 
-    return true;
+  void _showExitPromptSnackbar() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          "Press back again to exit",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.white.withOpacity(0.85),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool canPopNested = getNavigatorKeyForIndex(_selectedIndex)?.currentState?.canPop() ?? false;
+    final bool showHeaderBackButton = canPopNested || _selectedIndex != 0;
+
     return WillPopScope(
       onWillPop: _handleWillPop,
       child: Scaffold(
-        key: BaseScaffold.navigatorKey,
         resizeToAvoidBottomInset: false,
         appBar: Header(
-          showBackButton:
-              (_getNavigatorKeyForIndex(_selectedIndex)?.currentState?.canPop() ?? false) ||
-              _selectedIndex != 0,
+          showBackButton: showHeaderBackButton,
           title: _getTitle(_selectedIndex),
-          onBackPressed: () async {
-            final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+          onBackPressed: () {
+            final currentNavKey = getNavigatorKeyForIndex(_selectedIndex);
+            final navState = currentNavKey?.currentState;
 
-            if (currentNavKey?.currentState?.canPop() ?? false) {
-              currentNavKey?.currentState?.pop();
-              return;
+            if (navState != null && navState.canPop()) {
+              navState.pop();
+              setState(() {});
+            } else if (_selectedIndex != 0) {
+              switchToTab(0);
             }
-
-            if (_selectedIndex != 0) {
-              _onNavTap(0);
-              return;
-            }
-
-            final now = DateTime.now();
-            if (_lastBackPressed == null ||
-                now.difference(_lastBackPressed!) > const Duration(seconds: 2)) {
-              _lastBackPressed = now;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Press back again to exit"),
-                  duration: Duration(seconds: 2),
-                  backgroundColor: Color(0xFFA51414),
-                ),
-              );
-              return;
-            }
-
-            Navigator.of(context).maybePop();
           },
           onLogoTap: () {
-            AppNavigator.homeNavKey.currentState?.popUntil((route) => route.isFirst);
-            AppNavigator.productsNavKey.currentState?.popUntil((route) => route.isFirst);
-            AppNavigator.cartNavKey.currentState?.popUntil((route) => route.isFirst);
-            AppNavigator.searchNavKey.currentState?.popUntil((route) => route.isFirst);
-            AppNavigator.profileNavKey.currentState?.popUntil((route) => route.isFirst);
-            _onNavTap(0);
+            getNavigatorKeyForIndex(0)?.currentState?.popUntil((route) => route.isFirst);
+            getNavigatorKeyForIndex(1)?.currentState?.popUntil((route) => route.isFirst);
+            getNavigatorKeyForIndex(2)?.currentState?.popUntil((route) => route.isFirst);
+            getNavigatorKeyForIndex(3)?.currentState?.popUntil((route) => route.isFirst);
+            getNavigatorKeyForIndex(4)?.currentState?.popUntil((route) => route.isFirst);
+            switchToTab(0);
           },
         ),
         drawer: const HamburgerMenu(),
-        body: widget.body ??
-            IndexedStack(
-              index: _selectedIndex,
-              children: _pages,
-            ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,
           selectedItemColor: const Color(0xFFA51414),
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
-          onTap: _onNavTap,
+          onTap: switchToTab,
           items: [
             _buildNavItem(Icons.home, "Home", 0),
             _buildNavItem(Icons.inventory, "Products", 1),
@@ -197,23 +195,26 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     );
   }
 
-  static BottomNavigationBarItem _buildNavItem(
-      IconData icon, String label, int index) {
+  static BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
     return BottomNavigationBarItem(
       icon: Icon(icon),
       label: label,
     );
   }
 
-  BottomNavigationBarItem _buildCartNavItem(
-      IconData icon, String label, int index) {
+  BottomNavigationBarItem _buildCartNavItem(IconData icon, String label, int index) {
+    final cartItemCountProvider = ValueNotifier<int>(2);
+
     return BottomNavigationBarItem(
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
-          Icon(icon, size: 30),
+          Icon(
+            icon,
+            size: 30,
+          ),
           ValueListenableBuilder<int>(
-            valueListenable: cartItemCount,
+            valueListenable: cartItemCountProvider,
             builder: (context, count, child) {
               if (count > 0) {
                 return Positioned(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../app_navigator.dart';
 import 'capsule.dart';
 import '../common/red_button.dart';
-import '../../base_scaffold.dart';
 
 class PopularCategoriesGrid extends StatelessWidget {
   const PopularCategoriesGrid({super.key});
@@ -49,9 +48,8 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                        AppNavigator.openProductsL1FromAnywhere();
-},
-
+                  AppNavigator.openProductsRootPage(); // ✅ updated method call
+                },
               );
             },
           ),
@@ -60,10 +58,8 @@ class PopularCategoriesGrid extends StatelessWidget {
         RedButton(
           label: 'View All',
           onPressed: () {
-            AppNavigator.openProductsL1FromAnywhere();
+            AppNavigator.openProductsRootPage(); // ✅ updated method call
           },
-
-
           isWhiteButton: true,
           width: screenWidth * 0.23,
           height: screenWidth * 0.11,

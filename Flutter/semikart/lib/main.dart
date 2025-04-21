@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/services.dart'; // ✅ Required for SystemChrome
+import 'package:flutter/services.dart'; // Ensure this is imported
 import 'package:Semikart/Components/login_signup/login_password.dart';
-import 'package:logging/logging.dart';
-import 'base_scaffold.dart';
-import 'managers/auth_manager.dart';
+import 'package:logging/logging.dart'; // Assuming this is needed
+import 'base_scaffold.dart'; // Import BaseScaffold
+import 'managers/auth_manager.dart'; // Assuming this is needed
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,31 +44,16 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authManagerProvider);
-
     return MaterialApp(
       title: 'Semikart',
       theme: ThemeData(
-        primaryColor: const Color(0xFFA51414),
-        scaffoldBackgroundColor: Colors.white,
+        primarySwatch: Colors.red, // Or your custom theme
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: Builder(
-        builder: (context) {
-          if (authState.status == AuthStatus.unknown) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(color: Color(0xFFA51414)),
-              ),
-            );
-          }
-
-          if (authState.status == AuthStatus.authenticated) {
-            return const BaseScaffold();
-          }
-
-          return LoginPasswordNewScreen();
-        },
+      home: BaseScaffold(
+        key: BaseScaffold.navigatorKey, // <<< CORRECT
+        initialIndex: 0,
       ),
     );
   }

@@ -14,59 +14,53 @@ import 'Components/cart/cart_page.dart';
 import 'Components/cart/payment_page.dart';
 
 // Search
-import 'Components/search/product_search.dart'; // Add more pages if needed
+import 'Components/search/product_search.dart';
 
 // Profile
 import 'Components/profile/profile_screen.dart';
 
-
 import 'base_scaffold.dart';
 
 class AppNavigator {
-  // Navigator keys for each bottom nav tab
-  static final homeNavKey     = GlobalKey<NavigatorState>();
+  static final homeNavKey = GlobalKey<NavigatorState>();
   static final productsNavKey = GlobalKey<NavigatorState>();
-  static final searchNavKey   = GlobalKey<NavigatorState>();
-  static final cartNavKey     = GlobalKey<NavigatorState>();
-  static final profileNavKey  = GlobalKey<NavigatorState>();
+  static final searchNavKey = GlobalKey<NavigatorState>();
+  static final cartNavKey = GlobalKey<NavigatorState>();
+  static final profileNavKey = GlobalKey<NavigatorState>();
 
-  // Switch bottom tab
-  static void switchToTab(int index) {
-    BaseScaffold.navigatorKey.currentState?.switchToTab(index);
-  }
+  // Convenience methods to switch tabs using the BaseScaffold state
+  static void toHome() => BaseScaffold.navigatorKey.currentState?.switchToTab(0);
+  static void toProducts() => BaseScaffold.navigatorKey.currentState?.switchToTab(1);
+  static void toSearch() => BaseScaffold.navigatorKey.currentState?.switchToTab(2);
+  static void toCart() => BaseScaffold.navigatorKey.currentState?.switchToTab(3);
+  static void toProfile() => BaseScaffold.navigatorKey.currentState?.switchToTab(4);
 
-  static void toHome()     => switchToTab(0);
-  static void toProducts() => switchToTab(1);
-  static void toSearch()   => switchToTab(2);
-  static void toCart()     => switchToTab(3);
-  static void toProfile()  => switchToTab(4);
-
-  // Navigation functions for subroutes
+  // --- Methods to push routes within specific navigators ---
   static void pushHomeRFQ() {
+    // Use null-aware access ?.
     homeNavKey.currentState?.pushNamed('rfq');
   }
 
-  static void pushProductsL2() {
-    productsNavKey.currentState?.pushNamed('l2');
+  static void pushProductsL2({Object? arguments}) {
+    // Use null-aware access ?.
+    productsNavKey.currentState?.pushNamed('l2', arguments: arguments);
   }
 
-  static void pushProductsL3() {
-    productsNavKey.currentState?.pushNamed('l3');
+  static void pushProductsL3({Object? arguments}) {
+    // Use null-aware access ?.
+    productsNavKey.currentState?.pushNamed('l3', arguments: arguments);
   }
 
-  static void pushCartPayment() {
-    cartNavKey.currentState?.pushNamed('payment');
+  static void pushProductsL4({Object? arguments}) {
+    // Use null-aware access ?.
+    productsNavKey.currentState?.pushNamed('l4', arguments: arguments);
   }
 
-  static void pushSearchExample(String query) {
-    searchNavKey.currentState?.pushNamed('results', arguments: query);
+  static void pushCartPayment({Object? arguments}) {
+    // Use null-aware access ?.
+    cartNavKey.currentState?.pushNamed('payment', arguments: arguments);
   }
 
-  static void pushProfileEdit() {
-    profileNavKey.currentState?.pushNamed('edit');
-  }
-
-  // Each navigator widget — used in BaseScaffold
   static Widget homeNavigator() => Navigator(
         key: homeNavKey,
         initialRoute: 'home',
@@ -102,10 +96,6 @@ class AppNavigator {
         initialRoute: 'search',
         onGenerateRoute: (settings) {
           switch (settings.name) {
-            // case 'results':
-            //   final query = settings.arguments as String;
-            //   return MaterialPageRoute(
-            //       builder: (_) => ProductSearch(initialQuery: query));
             case 'search':
             default:
               return MaterialPageRoute(builder: (_) => const ProductSearch());
@@ -132,7 +122,6 @@ class AppNavigator {
         initialRoute: 'profile',
         onGenerateRoute: (settings) {
           switch (settings.name) {
-            
             case 'profile':
             default:
               return MaterialPageRoute(builder: (_) => const ProfileScreen());
@@ -140,21 +129,45 @@ class AppNavigator {
         },
       );
 
-      static void openProductsL1FromAnywhere() {
-  // Step 1: Switch to Products Tab
-  BaseScaffold.navigatorKey.currentState?.switchToTab(1);
+  /// Navigates to a specific tab and optionally pushes a route within that tab's navigator.
+  static void goTo(int tabIndex, {String? routeName, Object? arguments}) {
+    
 
-  // Step 2: Wait till the Products tab's widget tree is built
-  Future.delayed(Duration.zero, () {
-    // Safety check: has navigator mounted
-    final productsNavigator = productsNavKey.currentState;
-    if (productsNavigator != null) {
-      productsNavigator.popUntil((route) => route.isFirst);
-    } else {
-      debugPrint('productsNavKey not ready yet');
-    }
-  });
-}
+    // Try accessing state slightly delayed to ensure BaseScaffold might have built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+     
+      final state = BaseScaffold.navigatorKey.currentState;
 
+      if (state == null) {
+        
+        return;
+      }
+      
 
+      // 1. Switch to the target tab
+      
+      state.switchToTab(tabIndex);
+
+      // 2. If a routeName is provided, push it onto the tab's navigator stack
+      if (routeName != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          
+          final navigatorKey = state.getNavigatorKeyForIndex(tabIndex);
+          final navState = navigatorKey?.currentState; // Get state into a variable
+          if (navState != null) { // Explicit null check
+           
+            navState.pushNamed(routeName, arguments: arguments); // Call on non-null variable
+          } else {
+            
+          }
+        });
+      } 
+    });
+  }
+
+  /// Switches to the Products tab (index 1) and pops its navigator to the first route ('l1').
+  static void openProductsRootPage() {
+
+    goTo(1);
+  }
 }
