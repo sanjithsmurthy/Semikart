@@ -78,6 +78,17 @@ class _ShipBillFormState extends State<ShipBillForm> {
       return;
     }
 
+    // Validate GSTN if "Yes" is selected
+    if (hasGSTN && gstnController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('GSTN is required when "Do you have GSTN?" is set to Yes'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     final formData = {
       'name': nameController.text,
       'pincode': pincodeController.text,

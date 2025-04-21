@@ -122,7 +122,7 @@ class _EditPageState extends State<EditPage> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Missing Information'),
-                        content: const Text('Please fill all mandatory billing address fields first (Name, Pincode, Address1, City, State, Phone)'),
+                        content: const Text('Please fill all mandatory billing address fields'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
@@ -174,47 +174,50 @@ class _EditPageState extends State<EditPage> {
               contentPadding: EdgeInsets.zero,
             ),
             const SizedBox(height: 16),
-            EditTextBox2(
-              title: 'Shipping Address',
-              address1: shippingAddress1,
-              address2: shippingAddress2,
-              onEdit: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ShipBillForm(
-                      initialAddress1: shippingAddress1,
-                      initialAddress2: shippingAddress2,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0), // Add 16px bottom padding
+              child: EditTextBox2(
+                title: 'Shipping Address',
+                address1: shippingAddress1,
+                address2: shippingAddress2,
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShipBillForm(
+                        initialAddress1: shippingAddress1,
+                        initialAddress2: shippingAddress2,
+                      ),
                     ),
-                  ),
-                );
-                if (result != null) {
-                  setState(() {
-                    shippingName = result['name'];
-                    shippingPincode = result['pincode'];
-                    shippingAddress1 = result['address1'];
-                    shippingAddress2 = result['address2'];
-                    shippingLandmark = result['landmark'];
-                    shippingCity = result['city'];
-                    shippingState = result['state'];
-                    shippingPhone = result['phone'];
-                    shippingCompany = result['company'];
-                    shippingGstn = result['gstn'];
-                    if (isChecked) {
-                      name = shippingName;
-                      pincode = shippingPincode;
-                      address1 = shippingAddress1;
-                      address2 = shippingAddress2;
-                      landmark = shippingLandmark;
-                      city = shippingCity;
-                      state = shippingState;
-                      phone = shippingPhone;
-                      company = shippingCompany;
-                      gstn = shippingGstn;
-                    }
-                  });
-                }
-              },
+                  );
+                  if (result != null) {
+                    setState(() {
+                      shippingName = result['name'];
+                      shippingPincode = result['pincode'];
+                      shippingAddress1 = result['address1'];
+                      shippingAddress2 = result['address2'];
+                      shippingLandmark = result['landmark'];
+                      shippingCity = result['city'];
+                      shippingState = result['state'];
+                      shippingPhone = result['phone'];
+                      shippingCompany = result['company'];
+                      shippingGstn = result['gstn'];
+                      if (isChecked) {
+                        name = shippingName;
+                        pincode = shippingPincode;
+                        address1 = shippingAddress1;
+                        address2 = shippingAddress2;
+                        landmark = shippingLandmark;
+                        city = shippingCity;
+                        state = shippingState;
+                        phone = shippingPhone;
+                        company = shippingCompany;
+                        gstn = shippingGstn;
+                      }
+                    });
+                  }
+                },
+              ),
             ),
            
             // My Items Container
