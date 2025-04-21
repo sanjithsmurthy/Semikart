@@ -92,13 +92,23 @@ class _EditTextBox2State extends State<EditTextBox2> {
     widget.onAddressSelected?.call(index);
   }
 
+  void _deleteAddress(int index) {
+    setState(() {
+      _addresses.removeAt(index);
+      if (_selectedIndex == index) {
+        _selectedIndex = _addresses.isNotEmpty ? 0 : -1;
+      }
+    });
+    _notifyChanges();
+  }
+
   void _notifyChanges() {
     widget.onAddressesChanged?.call(_addresses);
   }
 
   Widget _buildAddressItem(Map<String, String> address, int index) {
     final addressText = '${address['address1'] ?? ''}${address['address1']?.isNotEmpty == true && address['address2']?.isNotEmpty == true ? ', ' : ''}${address['address2'] ?? ''}';
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -124,6 +134,10 @@ class _EditTextBox2State extends State<EditTextBox2> {
           IconButton(
             icon: const Icon(Icons.edit, color: Color(0xFFA51414)),
             onPressed: () => _editAddress(index),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.grey),
+            onPressed: () => _deleteAddress(index),
           ),
         ],
       ),
