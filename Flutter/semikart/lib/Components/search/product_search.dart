@@ -31,7 +31,8 @@ class _ProductSearchState extends State<ProductSearch> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final horizontalPadding = screenWidth * 0.05; // 5% padding on each side
-    final verticalPadding = 20.0; // Fixed vertical padding
+    final screenHeight = MediaQuery.of(context).size.height;
+    final verticalPadding = screenHeight * 0.03; // 3% of screen height for vertical padding
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -47,7 +48,7 @@ class _ProductSearchState extends State<ProductSearch> {
             borderRadius: screenWidth * 0.05,
             onChanged: _onSearch, // Pass the search query to the handler
           ),
-          const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02), // Use a percentage of screen height
 
           // Display Search Results
           Expanded(
