@@ -8,7 +8,8 @@ import '../login_signup/login_password.dart';
 import '../profile/profile_screen.dart';
 import '../../base_scaffold.dart';
 import '../home/order_history.dart';
-import '../../providers/profile_image_provider.dart'; // Adjust path if needed
+import '../../providers/profile_image_provider.dart';
+import '../../providers/user_profile_provider.dart'; // NEW: import user profile data
 
 class HamburgerMenu extends ConsumerWidget {
   const HamburgerMenu({super.key});
@@ -18,6 +19,7 @@ class HamburgerMenu extends ConsumerWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final profileImage = ref.watch(profileImageProvider);
+    final user = ref.watch(userProfileProvider); // NEW: get name + email
 
     return Drawer(
       width: screenWidth * 0.75,
@@ -59,15 +61,21 @@ class HamburgerMenu extends ConsumerWidget {
                             as ImageProvider,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Username',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+                  // ✅ Dynamic Full Name
+                  Text(
+                    user.fullName.isNotEmpty ? user.fullName : 'Username',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
+
                   const SizedBox(height: 4),
-                  const Text(
-                    'username@gmail.com',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+
+                  // ✅ Dynamic Email
+                  Text(
+                    user.email.isNotEmpty ? user.email : 'username@gmail.com',
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
+
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -136,7 +144,10 @@ class HamburgerMenu extends ConsumerWidget {
                     text: 'Order History',
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderHistory()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrderHistory()),
+                      );
                     },
                   ),
                   const SizedBox(height: 16),
