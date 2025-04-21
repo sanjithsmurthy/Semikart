@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../home/home_page.dart';
-import '../rfq_bom/rfq_full.dart';
+import '../Components/home/home_page.dart';
+import '../Components/rfq_bom/rfq_full.dart';
 
 class HomeNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;

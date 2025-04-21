@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-// Removed direct import of CartPage as it's now handled by CartNavigator
-// import 'Components/cart/cart_page.dart'; 
 import 'Components/search/product_search.dart';
 import 'Components/profile/profile_screen.dart';
 import 'Components/common/header.dart';
 import 'Components/common/hamburger.dart';
-import 'Components/Navigators/products_navigator.dart';
-import 'Components/navigators/home_navigator.dart';
-import 'Components/navigators/cart_navigator.dart';
-import 'Components/cart/cart_page.dart'; // Keep this for cartItemCount
-
+import 'Navigators/products_navigator.dart';
+import 'navigators/home_navigator.dart';
+import 'navigators/cart_navigator.dart';
+import 'Components/cart/cart_page.dart'; // For cartItemCount
+import 'components/products/products_l1.dart'; // For ProductsL1Page
 class BaseScaffold extends StatefulWidget {
   final Widget? body;
   final int initialIndex;
@@ -27,17 +25,47 @@ class BaseScaffold extends StatefulWidget {
 
   @override
   State<BaseScaffold> createState() => _BaseScaffoldState();
+
+
+// Public method to allow tab + page navigation from anywhere
+static void openProductsL1FromAnywhere() {
+  final state = navigatorKey.currentState;
+  if (state is _BaseScaffoldState) {
+    state.switchToTab(1);
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      final navKey = state.productsNavKey;
+      if (navKey.currentState != null) {
+        navKey.currentState!.push(
+          MaterialPageRoute(builder: (_) => const ProductsL1Page()),
+        );
+      }
+    });
+  }
+}
+
+static void navigateToProductsL1Tab() {
+    final state = navigatorKey.currentState;
+    if (state is _BaseScaffoldState) {
+      state.switchToTab(1); // Products tab
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        final navKey = state.productsNavKey;
+        navKey.currentState?.pushNamed('products_l1');
+      });
+    }
+  }
+
 }
 
 class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex;
 
   final GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _productsNavKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> _cartNavKey = GlobalKey<NavigatorState>(); // Add key for CartNavigator
+  final GlobalKey<NavigatorState> productsNavKey = GlobalKey<NavigatorState>(); // ✅ Made public
+  final GlobalKey<NavigatorState> _cartNavKey = GlobalKey<NavigatorState>();
 
   late List<Widget> _pages;
-
   DateTime? _lastPressedAt;
 
   @override
@@ -47,12 +75,30 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
     _pages = [
       HomeNavigator(navigatorKey: _homeNavKey),
-      ProductsNavigator(navigatorKey: _productsNavKey),
+      ProductsNavigator(navigatorKey: productsNavKey),
       ProductSearch(),
-      CartNavigator(navigatorKey: _cartNavKey), // Use CartNavigator here
+      CartNavigator(navigatorKey: _cartNavKey),
       const ProfileScreen(),
     ];
   }
+
+  GlobalKey<NavigatorState>? getNavigatorKeyForTab(int index) {
+  switch (index) {
+    case 0:
+      return _homeNavKey;
+    case 1:
+      return productsNavKey;
+    case 2:
+      return null; // Search has no nested navigator
+    case 3:
+      return _cartNavKey;
+    case 4:
+      return null; // Profile has no nested navigator
+    default:
+      return null;
+  }
+}
+
 
   void _onNavTap(int index) {
     setState(() {
@@ -62,18 +108,20 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   }
 
   void switchToTab(int index) {
-    if (index >= 0 && index < _pages.length) {
-      // Clear current tab stack before switching
-      final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
-      if (currentNavKey?.currentState?.canPop() ?? false) {
-        currentNavKey?.currentState?.popUntil((route) => route.isFirst);
-      }
+  debugPrint("Switching to tab: $index");
 
-      setState(() {
-        _selectedIndex = index;
-      });
+  if (index >= 0 && index < _pages.length) {
+    final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
+    if (currentNavKey?.currentState?.canPop() ?? false) {
+      currentNavKey?.currentState?.popUntil((route) => route.isFirst);
     }
+
+    setState(() {
+      _selectedIndex = index;
+    });
   }
+}
+
 
   String? _getTitle(int index) {
     switch (index) {
@@ -93,13 +141,11 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   Future<bool> _handleWillPop() async {
     final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
 
-    // Pop inside current tab if possible
     if (currentNavKey?.currentState?.canPop() ?? false) {
       currentNavKey?.currentState?.pop();
       return false;
     }
 
-    // If on Products, Search, Cart, or Profile, go to Home tab
     if (_selectedIndex != 0) {
       setState(() {
         _selectedIndex = 0;
@@ -107,52 +153,53 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       return false;
     }
 
-    // If on Home tab, handle back press with timer functionality
     if (_lastPressedAt == null ||
-        DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 2)) {
-      // Show custom styled snackbar and reset timer
+        DateTime.now().difference(_lastPressedAt!) > const Duration(seconds: 2)) {
       _lastPressedAt = DateTime.now();
       _showExitPromptSnackbar();
-      return false; // Prevent app from closing
+      return false;
     } else {
-      // If within 2 seconds, exit the app
-      return true; // Allow exit
+      return true;
     }
   }
 
   void _showExitPromptSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
+        content: const Text(
           "Press back again to exit",
           style: TextStyle(
-            color: Colors.black, // Set text color to black
+            color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.white.withOpacity(0.7), // Transparent white background
-        behavior: SnackBarBehavior.floating, // Floating style for modern look
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.white.withOpacity(0.7),
+        behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Rounded corners
+          borderRadius: BorderRadius.circular(10),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10), // Centered and more spaced
-        padding: EdgeInsets.all(16), // Custom padding inside snackbar
+        margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+        padding: const EdgeInsets.all(16),
       ),
     );
   }
 
   GlobalKey<NavigatorState>? _getNavigatorKeyForIndex(int index) {
     switch (index) {
-      case 0:
-        return _homeNavKey;
-      case 1:
-        return _productsNavKey;
-      case 3: // Add case for CartNavigator
-        return _cartNavKey;
-      default:
-        return null;
-    }
+    case 0:
+      return _homeNavKey;
+    case 1:
+      return productsNavKey;
+    case 2:
+      return null; // Search doesn't have a nested navigator
+    case 3:
+      return _cartNavKey;
+    case 4:
+      return null; // Profile doesn't have a nested navigator
+    default:
+      return null;
+  }
   }
 
   @override
@@ -163,23 +210,19 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         key: BaseScaffold.navigatorKey,
         resizeToAvoidBottomInset: false,
         appBar: Header(
-          // Show back button if not on the root of the current navigator OR if not on the home tab (index 0)
           showBackButton: (_getNavigatorKeyForIndex(_selectedIndex)?.currentState?.canPop() ?? false) || _selectedIndex != 0,
           title: _getTitle(_selectedIndex),
           onBackPressed: () {
             final currentNavKey = _getNavigatorKeyForIndex(_selectedIndex);
-
             if (currentNavKey?.currentState?.canPop() ?? false) {
               currentNavKey?.currentState?.pop();
             } else if (_selectedIndex != 0) {
-              // If cannot pop within the navigator, go back to the home tab
               _onNavTap(0);
             }
           },
           onLogoTap: () {
-             // Reset all navigators and go to home tab
             _homeNavKey.currentState?.popUntil((route) => route.isFirst);
-            _productsNavKey.currentState?.popUntil((route) => route.isFirst);
+            productsNavKey.currentState?.popUntil((route) => route.isFirst);
             _cartNavKey.currentState?.popUntil((route) => route.isFirst);
             _onNavTap(0);
           },
@@ -208,16 +251,14 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     );
   }
 
-  static BottomNavigationBarItem _buildNavItem(
-      IconData icon, String label, int index) {
+  static BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
     return BottomNavigationBarItem(
       icon: Icon(icon),
       label: label,
     );
   }
 
-  BottomNavigationBarItem _buildCartNavItem(
-      IconData icon, String label, int index) {
+  BottomNavigationBarItem _buildCartNavItem(IconData icon, String label, int index) {
     return BottomNavigationBarItem(
       icon: Stack(
         clipBehavior: Clip.none,
@@ -260,4 +301,11 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       label: label,
     );
   }
+
+ 
+
+
+
+
+
 }

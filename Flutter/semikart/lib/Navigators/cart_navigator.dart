@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../cart/cart_page.dart';
-import '../cart/payment_page.dart'; 
+import '../Components/cart/cart_page.dart';
+import '../Components/cart/payment_page.dart'; 
 // Dialogs like PaymentProgress and PaymentFailedDialog are typically shown 
 // over existing pages using showDialog, not navigated to as separate routes.
 // Therefore, they are not included in the navigator's routes.

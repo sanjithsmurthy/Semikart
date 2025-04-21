@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart'; // ✅ Required for SystemChrome
 import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
-import 'base_scaffold.dart'; // Import BaseScaffold directly
-import 'managers/auth_manager.dart'; // Import AuthManager provider
+import 'base_scaffold.dart';
+import 'managers/auth_manager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,93 +15,61 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Set System UI Styles
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // White status bar
-      statusBarIconBrightness: Brightness.dark, // Dark icons for status bar
-      systemNavigationBarColor: Colors.white, // White navigation bar
-      systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for navigation bar
-    ),
-  );
+  // ✅ System UI Overlay Style (Ensure flutter/services.dart is imported)
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.white,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.white,
+    systemNavigationBarIconBrightness: Brightness.dark,
+  ));
 
-  // Configure logging
   _setupLogging();
 
   runApp(
-    const ProviderScope( // Initialize Riverpod
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-// Logging setup function
 void _setupLogging() {
-  Logger.root.level = Level.ALL; // Log messages of all levels
+  Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
-    // Simple console output: [LEVEL] logger_name: message
     debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
-    // You could add more details like time, error, stacktrace if needed:
-    // print('${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
-    // if (record.error != null) {
-    //   print('Error: ${record.error}');
-    // }
-    // if (record.stackTrace != null) {
-    //   print('StackTrace: ${record.stackTrace}');
-    // }
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authManagerProvider);
+
     return MaterialApp(
       title: 'Semikart',
       theme: ThemeData(
         primaryColor: const Color(0xFFA51414),
         scaffoldBackgroundColor: Colors.white,
-        
       ),
-      home: const AuthWrapper(), // Use AuthWrapper to decide the initial screen
       debugShowCheckedModeBanner: false,
-      // Define routes for pre-login navigation if needed
-      // routes: {
-      //   '/signup': (context) => SignUpScreen(), // Example
-      // },
+      home: Builder(
+        builder: (context) {
+          if (authState.status == AuthStatus.unknown) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(color: Color(0xFFA51414)),
+              ),
+            );
+          }
+
+          if (authState.status == AuthStatus.authenticated) {
+            return const BaseScaffold();
+          }
+
+          return LoginPasswordNewScreen();
+        },
+      ),
     );
-  }
-}
-
-/// This widget decides which UI flow to show based on auth state.
-class AuthWrapper extends ConsumerWidget {
-  const AuthWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the authentication state from the provider
-    final authState = ref.watch(authManagerProvider);
-
-    // --- Handle Initial Unknown/Loading State ---
-    if (authState.status == AuthStatus.unknown) {
-      print("AuthWrapper: State is Unknown. Showing Loading Indicator.");
-      // Show a loading indicator while checking storage
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator(color: Color(0xFFA51414))), // Use app's primary color
-      );
-    }
-
-    // --- Determine Screen based on Status ---
-    // *** CORRECTED CHECK: Use authState.status ***
-    if (authState.status == AuthStatus.authenticated) {
-      // User is logged in - Show the main app structure
-      print("AuthWrapper: State is Authenticated. Showing BaseScaffold.");
-      return const BaseScaffold();
-    } else {
-      // User is not logged in (AuthStatus.unauthenticated)
-      print("AuthWrapper: State is Unauthenticated. Showing LoginPasswordScreen.");
-      return LoginPasswordNewScreen(); // Show the pre-login entry screen
-    }
   }
 }
