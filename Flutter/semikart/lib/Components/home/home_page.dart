@@ -8,9 +8,9 @@ import '../../base_scaffold.dart';
 class HomePageContent extends StatelessWidget {
   const HomePageContent({super.key});
 
-  void _navigateToProductsL1() {
-  BaseScaffold.navigateToProductsL1Tab();
-}
+//   void _navigateToProductsL1() {
+//   BaseScaffold.navigateToProductsL1Tab();
+// }
 
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../Navigators/app_navigator.dart';
+import '../../app_navigator.dart';
 import 'capsule.dart';
 import '../common/red_button.dart';
 import '../../base_scaffold.dart';
@@ -49,9 +49,7 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    BaseScaffold.openProductsL1FromAnywhere();
-  });
+                        AppNavigator.openProductsL1FromAnywhere();
 },
 
               );
@@ -62,9 +60,7 @@ class PopularCategoriesGrid extends StatelessWidget {
         RedButton(
           label: 'View All',
           onPressed: () {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    BaseScaffold.openProductsL1FromAnywhere();
-  });
+            AppNavigator.openProductsL1FromAnywhere();
           },
 
 
