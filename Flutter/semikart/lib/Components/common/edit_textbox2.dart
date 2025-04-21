@@ -156,13 +156,13 @@ class _EditTextBox2State extends State<EditTextBox2> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -177,7 +177,7 @@ class _EditTextBox2State extends State<EditTextBox2> {
               Text(
                 widget.title ?? 'Shipping Address',
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -201,12 +201,12 @@ class _EditTextBox2State extends State<EditTextBox2> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 5),
           if (_addresses.isEmpty)
             Text(
               'No ${widget.title?.toLowerCase()?.replaceAll(' address', '') ?? 'shipping'} addresses added',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 11,
                 color: Colors.black,
               ),
             )

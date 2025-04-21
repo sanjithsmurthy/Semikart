@@ -37,10 +37,10 @@ class _ItemDropdownCardState extends State<ItemDropdownCard> {
           duration: const Duration(milliseconds: 300),
           width: constraints.maxWidth > 400 ? 400 : constraints.maxWidth * 0.95,
           padding: EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            top: 12.0,
-            bottom: isExpanded ? 16.0 : 10.0, // Reduced by 2px when collapsed
+            left: 6.0,
+            right: 6.0,
+            top: 6.0,
+            bottom: isExpanded ? 6.0 : 3.0, // Reduced by 2px when collapsed
           ),
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8), // Reduced vertical margin
           decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class _ItemDropdownCardState extends State<ItemDropdownCard> {
                     child: Text(
                       '${widget.serialNo}. ${widget.mfrPartNumber}',
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -76,7 +76,7 @@ class _ItemDropdownCardState extends State<ItemDropdownCard> {
                       Text(
                       '₹${(totalPrice * 1.18 + shippingFee).toStringAsFixed(2)}',
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -98,7 +98,7 @@ class _ItemDropdownCardState extends State<ItemDropdownCard> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 4),
               
               // Detailed breakdown when expanded
               if (isExpanded)
