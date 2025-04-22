@@ -38,6 +38,7 @@ class _CartPageState extends State<CartPage> {
       "quantity": 5,
       "gstPercentage": 18.0,
     },
+    // Add more items as needed
   ];
 
   @override
@@ -46,36 +47,47 @@ class _CartPageState extends State<CartPage> {
     // Update the cart item count based on the number of items
     cartItemCount.value = cartItems.length;
   }
-  
+
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    // Reference screen dimensions
+    const double refWidth = 412.0;
+    const double refHeight = 917.0;
 
-    // Dynamic font sizes and spacing
-    final spacing = screenWidth * 0.02;
+    // Get current screen dimensions
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate scaling factors
+    final widthScale = screenWidth / refWidth;
+    final heightScale = screenHeight / refHeight;
+    // Use the smaller scale for general elements like padding, border radius, font sizes
+    final scale = widthScale < heightScale ? widthScale : heightScale;
+
+    // Scaled dimensions and font sizes
+    final double pagePadding = 16.0 * scale; // ref: 16px
+    final double itemBottomPadding = 16.0 * heightScale; // ref: 16px (vertical spacing)
+    final double sectionSpacing = 16.0 * heightScale; // ref: 16px (vertical spacing)
+    final double totalSectionPadding = 16.0 * scale; // ref: 16px
+    final double borderRadius = 8.0 * scale; // ref: 8px
+    final double shadowBlurRadius = 6.0 * scale; // ref: 6px
+    final double shadowSpreadRadius = 2.0 * scale; // ref: 2px
+    final double grandTotalFontSize = 18.0 * scale; // ref: 18px
+    final double buttonHeight = 50.0 * heightScale; // ref: 50px
+    final double buttonWidth = 220.0 * widthScale; // ref: 220px
+    final double buttonFontSize = 16.0 * scale; // ref: 16px
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(
-            top: spacing * 0,    // Specify top padding
-            bottom: spacing * 2, // Specify bottom padding
-            left: spacing * 2,   // Specify left padding
-            right: spacing * 2,  // Specify right padding
-          ),
+          padding: EdgeInsets.all(pagePadding), // Use scaled padding
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Share Cart Section
-              // ShareCart(
-              //   cartName: 'Cart:2025-02-28 15:01:50',
-              //   accessId: 'dx5tf0uyxx',
-              //   onShare: () {
-              //     // Add share functionality
-              //   },
-              // ),
-              // const SizedBox(height: 16),
+              // Share Cart Section (If you re-enable it, ensure it's also scaled)
+              // ShareCart(...)
+              // SizedBox(height: sectionSpacing), // Use scaled spacing
 
               // Cart Items Section
               ListView.builder(
@@ -85,8 +97,9 @@ class _CartPageState extends State<CartPage> {
                 itemBuilder: (context, index) {
                   final item = cartItems[index];
                   return Padding(
-                    padding: EdgeInsets.only(bottom: spacing * 2),
-                    child: CartItem(
+                    // Use specific vertical padding for items
+                    padding: EdgeInsets.only(bottom: itemBottomPadding),
+                    child: CartItem( // Assuming CartItem handles its own internal scaling
                       mfrPartNumber: item["mfrPartNumber"] as String,
                       customerPartNumber: item["customerPartNumber"] as String,
                       description: item["description"] as String,
@@ -107,45 +120,45 @@ class _CartPageState extends State<CartPage> {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: sectionSpacing), // Use scaled spacing
 
               // Grand Total Section
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(spacing * 2),
+                padding: EdgeInsets.all(totalSectionPadding), // Use scaled padding
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(borderRadius), // Use scaled radius
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
-                      blurRadius: 6.0,
-                      spreadRadius: 2.0,
+                      blurRadius: shadowBlurRadius, // Use scaled blur
+                      spreadRadius: shadowSpreadRadius, // Use scaled spread
+                      offset: Offset(0, 2 * heightScale), // Optional: scale offset vertically
                     ),
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Keep this if you want 'Grand Total' left-aligned
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildPriceRow(
                       'Grand Total',
                       '₹ ${_calculateGrandTotal(cartItems).toStringAsFixed(2)}',
-                      screenWidth * 0.045,
+                      grandTotalFontSize, // Use scaled font size
                       isBold: true,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: sectionSpacing), // Use scaled spacing
                     // Wrap RedButton with Center widget
                     Center(
                       child: RedButton(
                         label: 'Proceed to Checkout',
-                        
-                        height: screenWidth * 0.1,
+                        height: buttonHeight, // Use scaled height
+                        width: buttonWidth, // Use scaled width
+                        fontSize: buttonFontSize, // Use scaled font size
                         onPressed: () {
-                          // Navigate to the payment page using the CartNavigator
-                          Navigator.of(context).pushNamed('payment'); 
+                          // Navigate to the payment page
+                          Navigator.of(context).pushNamed('payment');
                         },
-                         width: screenWidth * 0.55, // You might not need a fixed width when centered
-                        fontSize: 16.0, // Custom font size
                       ),
                     ),
                   ],
@@ -158,6 +171,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  // Helper for price rows, now uses passed font size directly
   Widget _buildPriceRow(String label, String value, double fontSize, {bool isBold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,14 +179,14 @@ class _CartPageState extends State<CartPage> {
         Text(
           label,
           style: TextStyle(
-            fontSize: fontSize,
+            fontSize: fontSize, // Use the passed scaled font size
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            fontSize: fontSize,
+            fontSize: fontSize, // Use the passed scaled font size
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -180,6 +194,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  // Calculation logic remains the same
   double _calculateGrandTotal(List<Map<String, dynamic>> cartItems) {
     double grandTotal = 0.0;
     for (var item in cartItems) {
