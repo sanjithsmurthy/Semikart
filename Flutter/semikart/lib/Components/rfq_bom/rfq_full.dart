@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../app_navigator.dart'; // Import AppNavigator
 import 'upload_file.dart'; // Import the CustomSquare component
 import 'rfq_text_component.dart'; // Import the RFQTextComponent
 import 'rfq_adress_details.dart'; // Import the RFQAddressDetails component
@@ -8,35 +9,40 @@ class RFQFullPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Main body content - Returned directly
-    return SingleChildScrollView(
-      child: Padding(
-        padding:
-            const EdgeInsets.all(16.0), // Add padding inside the component
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Add the CustomSquare component
-            CustomSquare(),
+    return WillPopScope(
+      onWillPop: () async {
+        // Use context to navigate back to the Products RFQ section
+        Navigator.of(context).pop(); // Navigate back using context
+        AppNavigator.openProductsRFQPage(); // Navigate to Products RFQ section
+        return false; // Prevent default back behavior
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Add padding inside the component
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Add the CustomSquare component
+              CustomSquare(),
 
-            const SizedBox(
-                height: 40), // Increased height by 4 pixels (20 + 4)
+              const SizedBox(height: 40), // Increased height by 4 pixels (20 + 4)
 
-            // Add the RFQTextComponent
-            RFQTextComponent(),
+              // Add the RFQTextComponent
+              RFQTextComponent(),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // Add the RFQAddressDetails component
-            RFQAddressDetails(
-              onSubmit: () {
-                // Define what happens when the submit button is pressed
-                print('Submit button pressed!');
-              },
-            ),
+              // Add the RFQAddressDetails component
+              RFQAddressDetails(
+                onSubmit: () {
+                  // Define what happens when the submit button is pressed
+                  print('Submit button pressed!');
+                },
+              ),
 
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
