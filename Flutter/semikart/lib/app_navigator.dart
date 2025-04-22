@@ -90,7 +90,7 @@ class AppNavigator {
               // Link ProductListScreenExample from products_l4.dart
               return MaterialPageRoute(builder: (_) => ProductListScreenExample());
             case 'product_details':
-              return MaterialPageRoute(builder: (_) => ProductListScreenExample());
+              return MaterialPageRoute(builder: (_) => ProductDetailsContent());
             case 'l1':
             default:
               return MaterialPageRoute(builder: (_) => const ProductsL1Page());
