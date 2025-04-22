@@ -51,6 +51,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
               context: context,
               title: 'Invalid File Type',
               message: 'Please select an image file (JPG, PNG, GIF, or WEBP)',
+              buttonText: 'OK', // Add the required buttonText argument
               imagePath: 'public/assets/images/Alert.png', // Add your image path here
             );
           }
@@ -69,16 +70,28 @@ class _ProfilePictureState extends State<ProfilePicture> {
         if (!kIsWeb && _selectedImage != null) {
           widget.onImageSelected(_selectedImage!);
         }
+
+        // Show success popup
+        if (mounted) {
+          await CustomPopup.show(
+            context: context,
+            title: 'Success',
+            message: 'Profile picture updated successfully!',
+            buttonText: 'OK', // Add this line
+            imagePath: 'public/assets/images/Success.png',
+          );
+        }
       }
     } catch (e) {
-      // Show error popup for other errors
       if (context.mounted) {
         await CustomPopup.show(
           context: context,
           title: 'Error',
           message: 'Failed to select image. Please try again.',
+          buttonText: 'OK', // Add the required buttonText argument
         );
       }
+      debugPrint('Error picking image: $e');
       debugPrint('Error picking image: $e');
     }
   }

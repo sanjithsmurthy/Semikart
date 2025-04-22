@@ -16,7 +16,6 @@ enum AuthStatus {
 class AuthState {
   final AuthStatus status;
   final String? userToken; // Example: Store a token upon login
-  // You could add more user details here if needed (e.g., User object from Firebase Auth or your backend)
 
   const AuthState({required this.status, this.userToken});
 
@@ -34,18 +33,13 @@ class AuthState {
 /// Handles login, logout, signup, and checks initial authentication
 /// status using secure storage for persistence.
 class AuthManager extends StateNotifier<AuthState> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage(
-    // Optional: Configure Android options for encrypted shared preferences
-    // aOptions: AndroidOptions(encryptedSharedPreferences: true),
-  );
-  final String _tokenKey = 'auth_token'; // Key for storing the token in secure storage
-  // --- New Key for First Launch Flag ---
-  final String _firstLaunchKey = 'has_launched_before';
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final String _tokenKey = 'auth_token'; // Key for storing the token
 
   /// Initializes the AuthManager and checks the initial authentication state.
   AuthManager() : super(const AuthState.unknown()) {
-    // Use a microtask to ensure the check runs after the constructor completes
-    // This prevents potential issues if the check completes synchronously during construction.
+    // Check the initial state immediately or after a microtask
+    // Using microtask is slightly safer if initialization involves async work
     Future.microtask(() => _checkInitialAuthState());
   }
 
@@ -53,110 +47,71 @@ class AuthManager extends StateNotifier<AuthState> {
   Future<void> _checkInitialAuthState() async {
     print("AuthManager: Checking initial authentication state...");
     try {
-      // Read both values concurrently for efficiency
-      final results = await Future.wait([
-        _storage.read(key: _tokenKey),
-        _storage.read(key: _firstLaunchKey), // Read the first launch flag
-      ]);
-      final token = results[0];
-      final hasLaunchedBeforeStr = results[1];
-      final bool hasLaunchedBefore = hasLaunchedBeforeStr == 'true'; // Check if flag is 'true'
+      // --- Only check for the token ---
+      final token = await _storage.read(key: _tokenKey);
 
-      if (!mounted) return; // Check if the notifier is still mounted before updating state
+      if (!mounted) return; // Check if the notifier is still mounted
 
-      if (!hasLaunchedBefore) {
-        // --- First Launch Ever ---
-        print("AuthManager: First launch detected. Forcing unauthenticated state.");
-        state = const AuthState.unauthenticated(); // Show login screen
-
-        // Set the flag in storage so this block doesn't run again
-        try {
-          await _storage.write(key: _firstLaunchKey, value: 'true');
-          print("AuthManager: 'hasLaunchedBefore' flag set successfully.");
-        } catch (writeError) {
-          // Log error but proceed; the app will just show login again next time if write failed
-          print("AuthManager: Error setting 'hasLaunchedBefore' flag: $writeError");
-        }
+      if (token != null && token.isNotEmpty) {
+        // Token exists: User has logged in before and not logged out
+        state = AuthState(status: AuthStatus.authenticated, userToken: token);
+        print("AuthManager: User is authenticated from storage (Token found).");
       } else {
-        // --- Not the First Launch ---
-        print("AuthManager: Not first launch. Checking token...");
-        if (token != null && token.isNotEmpty) {
-          // Subsequent launch & token exists: User is logged in
-          state = AuthState(status: AuthStatus.authenticated, userToken: token);
-          print("AuthManager: User is authenticated from storage (Token: $token).");
-        } else {
-          // Subsequent launch & no token: User is logged out
-          state = const AuthState.unauthenticated();
-          print("AuthManager: User is unauthenticated (No token found).");
-        }
+        // No token: User has never logged in, or has logged out
+        state = const AuthState.unauthenticated();
+        print("AuthManager: User is unauthenticated (No token found or token is empty).");
       }
     } catch (e) {
       // Handle potential errors reading from storage
       print("AuthManager: Error checking initial auth state: $e");
       if (mounted) {
-        state = const AuthState.unauthenticated(); // Default to unauthenticated on error
+        // Default to unauthenticated on error
+        state = const AuthState.unauthenticated();
+        print("AuthManager: Setting state to unauthenticated due to error.");
       }
     }
   }
 
   /// Simulates a login process with email and password.
-  ///
-  /// Replace the simulation with your actual API call.
-  /// Returns `true` on successful login, `false` otherwise.
   Future<bool> login(String email, String password) async {
     print("AuthManager: Attempting login for $email...");
     // --- Simulate API Call ---
-    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
+    await Future.delayed(const Duration(seconds: 1));
 
     // TODO: Replace this with your actual API call and validation
-    // Example: final response = await yourApiService.login(email, password);
-    // if (response.isSuccessful && response.token != null) { ... }
-
-    if (email.isNotEmpty && password.isNotEmpty) { // Basic non-empty check for simulation
+    if (email.isNotEmpty && password.isNotEmpty) {
       const fakeToken = "fake_jwt_token_12345"; // Simulate receiving a token
 
       try {
-        // --- Store Token ---
         await _storage.write(key: _tokenKey, value: fakeToken);
-
-        // --- Update State ---
         if (mounted) {
           state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
         }
-        print("AuthManager: Login successful.");
-        return true; // Indicate success
+        print("AuthManager: Login successful. Token stored.");
+        return true;
       } catch (e) {
         print("AuthManager: Error saving token during login: $e");
         if (mounted) {
           state = const AuthState.unauthenticated(); // Revert state on error
         }
-        return false; // Indicate failure
+        return false;
       }
     } else {
-      // --- Login Failed ---
-      print("AuthManager: Login failed (Invalid credentials in simulation).");
-      // Ensure state is unauthenticated
+      print("AuthManager: Login failed (Simulated invalid credentials).");
       if (mounted && state.status != AuthStatus.unauthenticated) {
          state = const AuthState.unauthenticated();
       }
-      return false; // Indicate failure
+      return false;
     }
   }
 
   /// Simulates a signup process (optional).
-  ///
-  /// Replace the simulation with your actual API call.
-  /// Returns `true` on successful signup (and potential auto-login), `false` otherwise.
   Future<bool> signUp(String email, String password, String name) async {
     print("AuthManager: Attempting signup for $email...");
     // --- Simulate API Call for Signup ---
     await Future.delayed(const Duration(seconds: 1));
 
     // TODO: Replace with your actual signup API call
-    // Example: final response = await yourApiService.signUp(email, password, name);
-    // if (response.isSuccessful && response.token != null) { ... }
-
-    // Assume signup is successful and potentially logs the user in immediately
     const fakeToken = "fake_jwt_token_after_signup_67890";
 
     try {
@@ -164,7 +119,7 @@ class AuthManager extends StateNotifier<AuthState> {
       if (mounted) {
         state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
       }
-      print("AuthManager: Signup successful and user logged in.");
+      print("AuthManager: Signup successful and user logged in. Token stored.");
       return true;
     } catch (e) {
       print("AuthManager: Error saving token after signup: $e");
@@ -180,18 +135,15 @@ class AuthManager extends StateNotifier<AuthState> {
   Future<void> logout() async {
     print("AuthManager: Attempting logout...");
     try {
-      // --- Clear Token ---
       await _storage.delete(key: _tokenKey);
-
-      // --- Update State ---
       if (mounted) {
         state = const AuthState.unauthenticated();
       }
-      print("AuthManager: User logged out successfully.");
+      print("AuthManager: User logged out successfully. Token deleted.");
     } catch (e) {
       print("AuthManager: Error during logout: $e");
-      // Even if deletion fails, set state to unauthenticated for safety
       if (mounted) {
+        // Still set to unauthenticated even if delete fails
         state = const AuthState.unauthenticated();
       }
     }
@@ -199,11 +151,6 @@ class AuthManager extends StateNotifier<AuthState> {
 }
 
 // --- Provider Definition ---
-
-/// The global provider for accessing the [AuthManager] instance and its [AuthState].
-///
-/// Use `ref.watch(authManagerProvider)` to listen to state changes in widgets.
-/// Use `ref.read(authManagerProvider.notifier)` to call methods like `login`, `logout`.
 final authManagerProvider = StateNotifierProvider<AuthManager, AuthState>((ref) {
   return AuthManager();
 });

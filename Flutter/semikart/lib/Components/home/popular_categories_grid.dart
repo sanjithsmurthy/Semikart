@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../app_navigator.dart'; // Import AppNavigator
 import 'capsule.dart';
 import '../common/red_button.dart';
 
 class PopularCategoriesGrid extends StatelessWidget {
-  final VoidCallback onViewAll;
-
+  // Removed onViewAll as navigation is handled internally now
   const PopularCategoriesGrid({
     super.key,
-    required this.onViewAll,
+    // required this.onViewAll, // Removed
   });
 
   @override
@@ -53,8 +53,9 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                  // Handle capsule tap
-                  print('Tapped on ${category['label']}');
+                  // Handle capsule tap - Navigate using AppNavigator
+                  // print('Tapped on ${category['label']}'); // Keep for debugging if needed
+                  AppNavigator.openProductsRootPage(); // Navigate to products tab
                 },
               );
             },
@@ -63,7 +64,9 @@ class PopularCategoriesGrid extends StatelessWidget {
         SizedBox(height: screenWidth * 0.1), // Spacing before the "View All" button
         RedButton(
           label: 'View All',
-          onPressed: onViewAll,
+          onPressed: () {
+             AppNavigator.openProductsRootPage(); // Navigate to products tab
+          },
           isWhiteButton: true,
           width: screenWidth * 0.23, // Dynamically scalable width (~86px for typical screen widths)
           height: screenWidth * 0.11, // Dynamically scalable height (~41px for typical screen widths)

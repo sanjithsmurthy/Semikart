@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
+import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager provider
 import 'red_button.dart'; // Import your custom RedButton
 import 'popup.dart'; // Import your CustomPopup widget
-import '../login_signup/login_password.dart';
+// Removed LoginPassword import as AuthWrapper handles navigation
+// import '../login_signup/login_password.dart';
 import '../profile/profile_screen.dart';
 import '../../base_scaffold.dart'; // Import BaseScaffold
 import '../home/order_history.dart';
@@ -27,11 +30,13 @@ Route _createFadeRoute(Widget page, {int? initialIndex}) {
   );
 }
 
-class HamburgerMenu extends StatelessWidget {
+// --- Changed to ConsumerWidget ---
+class HamburgerMenu extends ConsumerWidget {
   const HamburgerMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  // --- Added WidgetRef ref ---
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -94,7 +99,7 @@ class HamburgerMenu extends StatelessWidget {
 
                   // Username and Email
                   const Text(
-                    'Username',
+                    'Username', // TODO: Replace with actual user data from state
                     style: TextStyle(
                       fontSize: 16, // Set font size to 16
                       fontWeight: FontWeight.bold,
@@ -103,7 +108,7 @@ class HamburgerMenu extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'username@gmail.com',
+                    'username@gmail.com', // TODO: Replace with actual user data from state
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
@@ -132,23 +137,29 @@ class HamburgerMenu extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
 
-                      // Logout Button - Keep using pushAndRemoveUntil
+                      // --- Updated Logout Button ---
                       RedButton(
                         label: 'Logout',
-                        onPressed: () {
-                          CustomPopup.show(
+                        onPressed: () async { // Make async
+                          // Close the drawer first
+                          Navigator.pop(context);
+                          // Show confirmation popup
+                          final confirmed = await CustomPopup.show( // Wait for popup result
                             context: context,
                             title: 'Logout',
                             message: 'Are you sure you want to logout?',
                             buttonText: 'Confirm',
+                            cancelButtonText: 'Cancel', // Add a cancel button
                             imagePath: 'public/assets/images/Alert.png',
-                          ).then((_) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => const LoginPasswordNewScreen()),
-                              (Route<dynamic> route) => false,
-                            );
-                          });
+                          );
+
+                          // If confirmed, call the logout method from AuthManager
+                          if (confirmed == true) { // Check if confirmed
+                            // Use ref.read to call the method
+                            await ref.read(authManagerProvider.notifier).logout();
+                            // No need for Navigator.pushAndRemoveUntil here,
+                            // AuthWrapper will handle showing the login screen.
+                          }
                         },
                         width: screenWidth * 0.3,
                         height: 40,
@@ -214,7 +225,7 @@ class HamburgerMenu extends StatelessWidget {
     );
   }
 
-  // Helper method to build menu items
+  // Helper method to build menu items (remains unchanged)
   Widget _buildMenuItem(BuildContext context, {required IconData icon, required String text, required VoidCallback onTap}) {
     final screenWidth = MediaQuery.of(context).size.width;
 

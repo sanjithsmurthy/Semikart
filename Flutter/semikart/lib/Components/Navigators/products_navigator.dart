@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../products/products_l1.dart';
 import '../products/products_l2.dart';
 import '../products/products_l3.dart';
+import '../products/products_l4.dart';
 class ProductsNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
 
@@ -17,6 +18,8 @@ class ProductsNavigator extends StatelessWidget {
           case 'l2':
             return MaterialPageRoute(builder: (_) => const ProductsL2Page());
           case 'l3':
+            return MaterialPageRoute(builder: (_) => const ProductsL3Page());
+          case 'l4':
             return MaterialPageRoute(builder: (_) => const ProductsL3Page());
           case 'l1':
           default:

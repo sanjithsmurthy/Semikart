@@ -26,22 +26,51 @@ class ProductsL2Page extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed('l3');
-
                   },
                   child: const RedBorderBox(text: 'L2 Component 1'),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                const RedBorderBox(text: 'L2 Component 2'),
+                GestureDetector( // Added GestureDetector
+                  onTap: () {
+                    Navigator.of(context).pushNamed('l3');
+                  },
+                  child: const RedBorderBox(text: 'L2 Component 2'),
+                ),
                 SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                const RedBorderBox(text: 'L2 Component 3'),
+                GestureDetector( // Added GestureDetector
+                  onTap: () {
+                    Navigator.of(context).pushNamed('l3');
+                  },
+                  child: const RedBorderBox(text: 'L2 Component 3'),
+                ),
                 SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                const RedBorderBox(text: 'L2 Component 4'),
+                GestureDetector( // Added GestureDetector
+                  onTap: () {
+                    Navigator.of(context).pushNamed('l3');
+                  },
+                  child: const RedBorderBox(text: 'L2 Component 4'),
+                ),
                 SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                const RedBorderBox(text: 'L2 Component 5'),
+                GestureDetector( // Added GestureDetector
+                  onTap: () {
+                    Navigator.of(context).pushNamed('l3');
+                  },
+                  child: const RedBorderBox(text: 'L2 Component 5'),
+                ),
                 SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                const RedBorderBox(text: 'L2 Component 6'),
+                GestureDetector( // Added GestureDetector
+                  onTap: () {
+                    Navigator.of(context).pushNamed('l3');
+                  },
+                  child: const RedBorderBox(text: 'L2 Component 6'),
+                ),
                 SizedBox(height: screenHeight * 0.02), // Dynamically scalable spacing (2% of screen height)
-                const RedBorderBox(text: 'L2 Component 7'),
+                GestureDetector( // Added GestureDetector
+                  onTap: () {
+                    Navigator.of(context).pushNamed('l3');
+                  },
+                  child: const RedBorderBox(text: 'L2 Component 7'),
+                ),
               ],
             ),
           ),

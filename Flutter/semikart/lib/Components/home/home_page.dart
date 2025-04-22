@@ -145,11 +145,11 @@ class HomePageContent extends StatelessWidget {
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 // Popular Categories Grid
-                PopularCategoriesGrid(
-                  onViewAll: () {
-                    print('View All clicked');
-                    // Add navigation logic if needed
-                  },
+                const PopularCategoriesGrid(
+                  // onViewAll: () { // Parameter removed as it's not defined in PopularCategoriesGrid
+                  //   print('View All clicked');
+                  //   // Add navigation logic if needed
+                  // },
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 // BOM RFQ Card
