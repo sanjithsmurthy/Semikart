@@ -171,6 +171,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(
+        content: const Text(
           "Press back again to exit",
           style: TextStyle(
             color: Colors.black, // Consider using theme text color
@@ -182,7 +183,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         backgroundColor: Colors.white.withOpacity(0.9), // Semi-transparent white background
         behavior: SnackBarBehavior.floating, // Floating appearance
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Rounded corners
+          borderRadius: BorderRadius.circular(10),
         ),
         // Adjust margin for centering and spacing from edges/bottom nav
         margin: const EdgeInsets.only(bottom: 80, left: 60, right: 60), // Increased bottom margin

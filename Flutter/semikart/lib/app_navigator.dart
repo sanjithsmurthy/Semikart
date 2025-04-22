@@ -131,89 +131,43 @@ class AppNavigator {
 
   /// Navigates to a specific tab and optionally pushes a route within that tab's navigator.
   static void goTo(int tabIndex, {String? routeName, Object? arguments}) {
-    debugPrint("[AppNavigator.goTo] Attempting navigation to tab: $tabIndex, route: $routeName");
+    
 
     // Try accessing state slightly delayed to ensure BaseScaffold might have built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      debugPrint("[AppNavigator.goTo] Inside postFrameCallback. Accessing BaseScaffold state...");
+     
       final state = BaseScaffold.navigatorKey.currentState;
 
       if (state == null) {
-        debugPrint("[AppNavigator.goTo] ERROR: BaseScaffold state is NULL inside postFrameCallback.");
-        debugPrint("[AppNavigator.goTo] Check if BaseScaffold key is assigned correctly in main.dart and if BaseScaffold is mounted.");
+        
         return;
       }
-      debugPrint("[AppNavigator.goTo] BaseScaffold state FOUND. Proceeding...");
+      
 
       // 1. Switch to the target tab
-      debugPrint("[AppNavigator.goTo] Calling state.switchToTab($tabIndex)");
+      
       state.switchToTab(tabIndex);
 
       // 2. If a routeName is provided, push it onto the tab's navigator stack
       if (routeName != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          debugPrint("[AppNavigator.goTo] Post-switch callback. Pushing route: $routeName");
+          
           final navigatorKey = state.getNavigatorKeyForIndex(tabIndex);
           final navState = navigatorKey?.currentState; // Get state into a variable
           if (navState != null) { // Explicit null check
-            debugPrint("[AppNavigator.goTo] Pushing '$routeName' onto navigator for tab $tabIndex.");
+           
             navState.pushNamed(routeName, arguments: arguments); // Call on non-null variable
           } else {
-            debugPrint("[AppNavigator.goTo] ERROR: Navigator for tab $tabIndex not ready after tab switch.");
+            
           }
         });
-      } else {
-        debugPrint("[AppNavigator.goTo] No routeName provided, only switching tab.");
-      }
+      } 
     });
   }
 
-  /// Switches to a specific tab and optionally pops its navigator stack to the first route.
-  static void goToTab(int tabIndex, {bool popToFirst = true}) {
-    // Directly access the state
-    final baseScaffoldState = BaseScaffold.navigatorKey.currentState;
-
-    if (baseScaffoldState != null) {
-      print("[AppNavigator.goToTab] BaseScaffold state found immediately. Switching tab.");
-      // If state exists, perform the action
-      if (popToFirst) {
-         final targetNavKey = baseScaffoldState.getNavigatorKeyForIndex(tabIndex);
-         // Pop only if the key and state exist and it can pop
-         if (targetNavKey?.currentState?.canPop() ?? false) {
-            targetNavKey!.currentState!.popUntil((route) => route.isFirst);
-         }
-      }
-      baseScaffoldState.switchToTab(tabIndex);
-    } else {
-      // State is null, schedule the action after the current frame build.
-      print("[AppNavigator.goToTab] BaseScaffold state is NULL. Scheduling switch after frame.");
-      // --- >>> UNCOMMENT THIS BLOCK <<< ---
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Try accessing the state AGAIN after the frame has been built
-        final stateAfterFrame = BaseScaffold.navigatorKey.currentState;
-        if (stateAfterFrame != null) {
-          print("[AppNavigator.goToTab] BaseScaffold state found after frame delay. Switching tab.");
-          if (popToFirst) {
-             final targetNavKey = stateAfterFrame.getNavigatorKeyForIndex(tabIndex);
-             // Pop only if the key and state exist and it can pop
-             if (targetNavKey?.currentState?.canPop() ?? false) {
-                targetNavKey!.currentState!.popUntil((route) => route.isFirst);
-             }
-          }
-          stateAfterFrame.switchToTab(tabIndex);
-        } else {
-          // If it's still null, something more fundamental might be wrong
-          print("[AppNavigator.goToTab] ERROR: BaseScaffold state still NULL after frame delay. Check widget tree structure and key assignment.");
-          // Consider logging this error more formally
-        }
-      });
-      // --- >>> END OF UNCOMMENTED BLOCK <<< ---
-    }
-  }
-
-  // Apply similar null checks to other methods accessing BaseScaffold.navigatorKey.currentState
+  /// Switches to the Products tab (index 1) and pops its navigator to the first route ('l1').
   static void openProductsRootPage() {
-     print("[AppNavigator.openProductsRootPage] Calling goToTab(1).");
-     goToTab(1, popToFirst: true); // Call goToTab which has popToFirst
+
+    goTo(1);
   }
 }

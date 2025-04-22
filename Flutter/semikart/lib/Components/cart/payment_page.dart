@@ -72,11 +72,16 @@ class _EditPageState extends State<EditPage> {
     // Removed Scaffold widget
     return SingleChildScrollView( 
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(
+  // top: 6.0,
+  bottom: 16.0,
+  left: 16.0,
+  right: 16.0,
+),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            // const SizedBox(height: 3),
             EditTextBox(
               address1: address1,
               address2: address2,
@@ -106,7 +111,7 @@ class _EditPageState extends State<EditPage> {
                 }
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 5),
             CheckboxListTile(
               value: isChecked,
               onChanged: (bool? value) async {
@@ -122,7 +127,7 @@ class _EditPageState extends State<EditPage> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Missing Information'),
-                        content: const Text('Please fill all mandatory billing address fields first (Name, Pincode, Address1, City, State, Phone)'),
+                        content: const Text('Please fill all mandatory billing address fields'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
@@ -167,61 +172,69 @@ class _EditPageState extends State<EditPage> {
               },
               title: const Text(
                 "Billing Address same as shipping address",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 14),
               ),
               controlAffinity: ListTileControlAffinity.leading,
               activeColor: Color(0xFFA51414),
               contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: 16),
-            EditTextBox2(
-              title: 'Shipping Address',
-              address1: shippingAddress1,
-              address2: shippingAddress2,
-              onEdit: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ShipBillForm(
-                      initialAddress1: shippingAddress1,
-                      initialAddress2: shippingAddress2,
+            const SizedBox(height: 5),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10), // Add 16px bottom padding
+              child: EditTextBox2(
+                title: 'Shipping Address',
+                address1: shippingAddress1,
+                address2: shippingAddress2,
+                onEdit: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShipBillForm(
+                        initialAddress1: shippingAddress1,
+                        initialAddress2: shippingAddress2,
+                      ),
                     ),
-                  ),
-                );
-                if (result != null) {
-                  setState(() {
-                    shippingName = result['name'];
-                    shippingPincode = result['pincode'];
-                    shippingAddress1 = result['address1'];
-                    shippingAddress2 = result['address2'];
-                    shippingLandmark = result['landmark'];
-                    shippingCity = result['city'];
-                    shippingState = result['state'];
-                    shippingPhone = result['phone'];
-                    shippingCompany = result['company'];
-                    shippingGstn = result['gstn'];
-                    if (isChecked) {
-                      name = shippingName;
-                      pincode = shippingPincode;
-                      address1 = shippingAddress1;
-                      address2 = shippingAddress2;
-                      landmark = shippingLandmark;
-                      city = shippingCity;
-                      state = shippingState;
-                      phone = shippingPhone;
-                      company = shippingCompany;
-                      gstn = shippingGstn;
-                    }
-                  });
-                }
-              },
+                  );
+                  if (result != null) {
+                    setState(() {
+                      shippingName = result['name'];
+                      shippingPincode = result['pincode'];
+                      shippingAddress1 = result['address1'];
+                      shippingAddress2 = result['address2'];
+                      shippingLandmark = result['landmark'];
+                      shippingCity = result['city'];
+                      shippingState = result['state'];
+                      shippingPhone = result['phone'];
+                      shippingCompany = result['company'];
+                      shippingGstn = result['gstn'];
+                      if (isChecked) {
+                        name = shippingName;
+                        pincode = shippingPincode;
+                        address1 = shippingAddress1;
+                        address2 = shippingAddress2;
+                        landmark = shippingLandmark;
+                        city = shippingCity;
+                        state = shippingState;
+                        phone = shippingPhone;
+                        company = shippingCompany;
+                        gstn = shippingGstn;
+                      }
+                    });
+                  }
+                },
+              ),
             ),
            
             // My Items Container
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              margin: const EdgeInsets.only(bottom: 16.0),
+              padding: const EdgeInsets.only(
+  top: 2.0,
+  bottom: 8.0,
+  left: 8.0,
+  right: 8.0,
+),
+              margin: const EdgeInsets.only(bottom: 8.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -242,7 +255,7 @@ class _EditPageState extends State<EditPage> {
                       const Text(
                         'My Items',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -259,7 +272,7 @@ class _EditPageState extends State<EditPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  // const SizedBox(height: 3),
                   ...items.map((item) => Column(
                     children: [
                       ItemDropdownCard(
@@ -270,10 +283,10 @@ class _EditPageState extends State<EditPage> {
                         quantity: item['quantity'],
                         finalUnitPrice: item['finalUnitPrice'],
                       ),
-                      const SizedBox(height: 10),
+                      // const SizedBox(height: 2),
                     ],
                   )).toList(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 6),
                   // Grand Total Row
                   Padding(
                     padding: const EdgeInsets.only(top: 0.1),
@@ -303,7 +316,12 @@ class _EditPageState extends State<EditPage> {
 
             // Razorpay Container
             Container(
-              padding: const EdgeInsets.all(16.0),
+             padding: const EdgeInsets.only(
+  top: 8.0,
+  bottom: 8.0,
+  left: 8.0,
+  right: 8.0,
+),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -320,7 +338,7 @@ class _EditPageState extends State<EditPage> {
                 children: [
                   const Text(
                     "Default Payment Option",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -331,7 +349,7 @@ class _EditPageState extends State<EditPage> {
                       Expanded(
                         child: Text(
                           "Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 11),
                         ),
                       ),
                     ],
@@ -343,7 +361,7 @@ class _EditPageState extends State<EditPage> {
             // Terms & Conditions Container
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.only(top: 16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -361,9 +379,9 @@ class _EditPageState extends State<EditPage> {
                 children: [
                   const Text(
                     "Terms & Conditions",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 6),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       return Column(
@@ -371,17 +389,17 @@ class _EditPageState extends State<EditPage> {
                         children: const [
                           Text(
                             "1. We hereby declare that, the parts procured from Aqtronics/SemiKart against our PO number is not sold to any of the restricted entity by US or UK and also not used in any of the products/applications such as weapon of mass destruction/aerospace or defence systems restricted by US & UK. Furthermore these parts are not to be sold to any such entities within India. In doing so, we are aware a flag will be raised to the respective supplier and all business proceedings will be cancelled.",
-                            style: TextStyle(fontSize: 14, height: 1.6),
+                            style: TextStyle(fontSize: 12, height: 1.6),
                           ),
                           SizedBox(height: 12),
                           Text(
                             "2. Order delivery timelines may differ when procured from multiple suppliers.",
-                            style: TextStyle(fontSize: 14, height: 1.6),
+                            style: TextStyle(fontSize: 12, height: 1.6),
                           ),
                           SizedBox(height: 12),
                           Text(
                             "3. Standard lead time will be 2-3 weeks for stock parts after receiving of PO.",
-                            style: TextStyle(fontSize: 14, height: 1.6),
+                            style: TextStyle(fontSize: 12, height: 1.6),
                           ),
                         ],
                       );
@@ -390,7 +408,7 @@ class _EditPageState extends State<EditPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             RedButton(
               label: 'Continue to payment',
               onPressed: () {

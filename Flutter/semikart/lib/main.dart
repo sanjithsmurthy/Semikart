@@ -15,31 +15,26 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Set System UI Styles
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // White status bar
-      statusBarIconBrightness: Brightness.dark, // Dark icons for status bar
-      systemNavigationBarColor: Colors.white, // White navigation bar
-      systemNavigationBarIconBrightness: Brightness.dark, // Dark icons for navigation bar
-    ),
-  );
+  // ✅ System UI Overlay Style (Ensure flutter/services.dart is imported)
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.white,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.white,
+    systemNavigationBarIconBrightness: Brightness.dark,
+  ));
 
-  // Configure logging
   _setupLogging();
 
   runApp(
-    const ProviderScope( // Initialize Riverpod
+    const ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-// Logging setup function
 void _setupLogging() {
-  Logger.root.level = Level.ALL; // Log messages of all levels
+  Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
-    // Simple console output: [LEVEL] logger_name: message
     debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
     // Optional: Add more details like time, error, stacktrace
     // if (record.error != null) {
@@ -55,7 +50,7 @@ class MyApp extends StatelessWidget { // Can be StatelessWidget as AuthWrapper h
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Semikart',
       theme: ThemeData(

@@ -21,13 +21,13 @@ class EditTextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -43,25 +43,25 @@ class EditTextBox extends StatelessWidget {
                 Text(
                   title ?? 'Billing Address',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Text(
                   (address1?.isNotEmpty == true || address2?.isNotEmpty == true)
                       ? '${address1 ?? ''}${address1?.isNotEmpty == true && address2?.isNotEmpty == true ? ', ' : ''}${address2 ?? ''}'
                       : 'Your ${title?.toLowerCase() ?? 'billing'} address',
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 11,
                     color: Colors.black,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
             GestureDetector(
             onTap: () {
               if (onEdit != null) {
