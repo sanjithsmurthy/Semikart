@@ -109,13 +109,22 @@ class HamburgerMenu extends ConsumerWidget {
                             buttonText: 'Confirm',
                             cancelButtonText: 'Cancel', // Add a cancel button
                             imagePath: 'public/assets/images/Alert.png',
-                          ).then((_) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
-                              (route) => false,
-                            );
-                          });
+                          ); // Get the boolean result from pop
+
+                          // --- Check if confirmed (popup returns true) ---
+                          if (confirmed == true) {
+                            // Call the logout method from AuthManager
+                            // AuthWrapper will handle navigation based on state change
+                            await ref.read(authManagerProvider.notifier).logout();
+                          }
+                          // --- Removed explicit navigation ---
+                          // .then((_) {
+                          //   Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                          //     (route) => false,
+                          //   );
+                          // });
                         },
                         width: screenWidth * 0.3,
                         height: 40,

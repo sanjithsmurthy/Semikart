@@ -58,8 +58,6 @@ class MyApp extends ConsumerWidget { // Changed to ConsumerWidget to use WidgetR
         primaryColor: const Color(0xFFA51414), // Example primary color
         scaffoldBackgroundColor: Colors.white, // Example background color
         // Add other theme properties like primarySwatch, textTheme, etc.
-        primarySwatch: Colors.red, // Keep or adjust as needed
-        visualDensity: VisualDensity.adaptivePlatformDensity, // Standard density
       ),
       // *** Use AuthWrapper as the home widget ***
       // AuthWrapper will decide whether to show LoginPasswordNewScreen or BaseScaffold
