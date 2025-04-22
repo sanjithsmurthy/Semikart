@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../common/search_bar.dart' as custom_search; // Import the SearchBar widget
 import '../common/red_button.dart'; // Import the RedButton widget
+import '../../app_navigator.dart';
 
 class ProductsHeaderContent extends StatelessWidget {
   const ProductsHeaderContent({super.key});
@@ -31,21 +32,13 @@ class ProductsHeaderContent extends StatelessWidget {
             ),
             SizedBox(height: screenHeight * 0.008), // Add spacing before the search bar
 
-            // // Search Bar
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-            //   child: custom_search.SearchBar(), // Add the SearchBar widget here
-            // ),
-            // SizedBox(height: screenHeight * 0.02), // Add spacing before RFQ_CTA
-
             // Red Button
             Center(
               child: RedButton(
                 label: 'Request for Quote (RFQ)',
-                
                 onPressed: () {
-                  // Add your RFQ button logic here
-                  print('RFQ button pressed!');
+                  // Navigate to the Home RFQ page
+                  AppNavigator.openHomeRFQPage();
                 },
                 width: screenWidth * 0.5, // Adjust width as needed
                 height: screenHeight * 0.05, // Adjust height as needed
