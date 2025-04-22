@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
-import '../../base_scaffold.dart'; // Import BaseScaffold for navigation
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
+import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager
+// Removed BaseScaffold import as AuthWrapper handles navigation
+// import '../../base_scaffold.dart';
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
-import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component // Import the MobileNumberField component
+import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
+import 'password_text_field.dart'; // Import the PasswordTextField widget
 import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'login_password.dart'; // Import the LoginScreen component (assuming login_password_new.dart)
+import 'login_password.dart'; // Import the LoginScreen component
 import '../common/forgot_password.dart';
 import 'package:intl_phone_field/intl_phone_field.dart'; // Import the IntlPhoneField package
 
-class SignUpScreen extends StatefulWidget {
+// --- Changed to ConsumerStatefulWidget ---
+class SignUpScreen extends ConsumerStatefulWidget {
+  const SignUpScreen({super.key}); // Added super.key
+
   @override
+  // --- Changed to ConsumerState ---
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+// --- Changed to ConsumerState ---
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool passwordsMatch = false; // Track if passwords match
   bool isTermsAccepted = false; // Track if the checkbox is checked
   bool _areAllFieldsFilled = false; // Track if all required fields are filled
+  bool _isLoading = false; // Loading indicator state
 
   // Controllers for text fields
   final TextEditingController firstNameController = TextEditingController();
@@ -25,7 +35,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileNumberController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
-  // Note: Password controllers are inside ConfirmPasswordScreen
+  // Password controllers are managed within ConfirmPasswordScreen, but we need access to the password itself
+  final TextEditingController _passwordController = TextEditingController(); // Add controller for password
+  final TextEditingController _confirmPasswordController = TextEditingController(); // Add controller for confirm password
 
   @override
   void initState() {
@@ -36,6 +48,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.addListener(_checkAllFieldsFilled);
     mobileNumberController.addListener(_checkAllFieldsFilled);
     companyNameController.addListener(_checkAllFieldsFilled);
+    _passwordController.addListener(_checkAllFieldsFilled); // Listen to password
+    _confirmPasswordController.addListener(_checkAllFieldsFilled); // Listen to confirm password
   }
 
   @override
@@ -46,6 +60,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.removeListener(_checkAllFieldsFilled);
     mobileNumberController.removeListener(_checkAllFieldsFilled);
     companyNameController.removeListener(_checkAllFieldsFilled);
+    _passwordController.removeListener(_checkAllFieldsFilled);
+    _confirmPasswordController.removeListener(_checkAllFieldsFilled);
 
     // Dispose controllers
     firstNameController.dispose();
@@ -53,29 +69,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.dispose();
     mobileNumberController.dispose();
     companyNameController.dispose();
+    _passwordController.dispose(); // Dispose password controller
+    _confirmPasswordController.dispose(); // Dispose confirm password controller
     super.dispose();
   }
 
-  // Function to check if all required fields are non-empty
+  // Function to check if all required fields are non-empty and passwords match
   void _checkAllFieldsFilled() {
     setState(() {
+      passwordsMatch = _passwordController.text.isNotEmpty &&
+                       _passwordController.text == _confirmPasswordController.text;
+
       _areAllFieldsFilled = firstNameController.text.isNotEmpty &&
           lastNameController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
           mobileNumberController.text.isNotEmpty &&
-          companyNameController.text.isNotEmpty;
-          // Note: Password field check is handled by the passwordsMatch flag
-          // which comes from ConfirmPasswordScreen
+          companyNameController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty; // Check password field too
     });
   }
+
+  // --- Sign Up Logic ---
+  Future<void> _signUp() async {
+    FocusScope.of(context).unfocus(); // Hide keyboard
+
+    if (!isSignUpButtonActive) return; // Should not happen if button is inactive, but good check
+
+    setState(() { _isLoading = true; });
+
+    final firstName = firstNameController.text.trim();
+    final lastName = lastNameController.text.trim();
+    final email = emailController.text.trim();
+    final mobile = mobileNumberController.text.trim(); // Assuming full number is stored
+    final company = companyNameController.text.trim();
+    final password = _passwordController.text.trim(); // Get password from its controller
+
+    // Use AuthManager via Riverpod
+    final authManager = ref.read(authManagerProvider.notifier);
+    // Pass necessary details (adjust based on your actual signup needs)
+    final success = await authManager.signUp(email, password, "$firstName $lastName"); // Combine names for simulation
+
+    if (!mounted) return;
+
+    setState(() { _isLoading = false; });
+
+    // AuthWrapper handles navigation on success. Show error if failed.
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sign up failed. Please try again.'),
+          backgroundColor: Color(0xFFA51414),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  // Determine if the sign-up button should be active
+  bool get isSignUpButtonActive => _areAllFieldsFilled && passwordsMatch && isTermsAccepted && !_isLoading;
+
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Determine if the sign-up button should be active
-    final bool isSignUpButtonActive = _areAllFieldsFilled && passwordsMatch && isTermsAccepted;
 
     return Scaffold(
       body: SafeArea(
@@ -101,7 +158,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   'Create Your Account',
                   style: TextStyle(
                     fontSize: screenWidth * 0.055, // 6% of screen width
-                     // Use Product Sans font
                     color: Colors.black, // Black text color
                     fontWeight: FontWeight.bold, // Bold font weight
                   ),
@@ -113,6 +169,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: SignInWithGoogleButton(
                     onPressed: () {
                       print('Google Sign-In button pressed');
+                       ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Google Sign-Up not implemented yet.')),
+                      );
                     },
                     isLoading: false,
                   ),
@@ -133,7 +192,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       'OR',
                       style: TextStyle(
                         fontSize: screenWidth * 0.04, // Specify font size
-                        
                         color: Colors.black,
                       ),
                     ),
@@ -171,52 +229,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: CustomTextField(
                     controller: emailController,
                     label: "Email",
+                    // keyboardType: TextInputType.emailAddress, // Set keyboard type - Parameter not defined in CustomTextField
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
+                // IntlPhoneField for Mobile Number
                 Center(
-                  child: LayoutBuilder( // Use LayoutBuilder to get constraints if needed, or just use MediaQuery
+                  child: LayoutBuilder(
                   builder: (context, constraints) {
                     final screenWidth = MediaQuery.of(context).size.width;
-                    // Calculate a responsive border radius. 25% of width/height might be too much,
-                    // let's use a fraction of screen width for a scalable effect.
-                    // Adjust the multiplier (e.g., 0.06) as needed for the desired curve.
-                    final double responsiveBorderRadius = screenWidth * 0.06; // Example: 6% of screen width
+                    final double responsiveBorderRadius = screenWidth * 0.06;
 
                     return IntlPhoneField(
-                    // controller: mobileNumberController, // Keep commented if not needed
                     decoration: InputDecoration(
                       labelText: 'Mobile Number',
-                      labelStyle: TextStyle(color: Color(0xFF757575)), // Style from CustomTextField
-                      floatingLabelStyle: TextStyle(color: Color(0xFFA51414)), // Style from CustomTextField
+                      labelStyle: const TextStyle(color: Color(0xFF757575)),
+                      floatingLabelStyle: const TextStyle(color: Color(0xFFA51414)),
                       border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFA51414),width: 2.0),
-                      borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
+                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 2.0),
+                      borderRadius: BorderRadius.circular(responsiveBorderRadius),
                       ),
                       enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFA51414),width: 2.0),
-                      borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
+                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 2.0),
+                      borderRadius: BorderRadius.circular(responsiveBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFA51414), width: 2.0), // Style from CustomTextField
-                      borderRadius: BorderRadius.circular(responsiveBorderRadius), // Use responsive radius
+                      borderSide: const BorderSide(color: Color(0xFFA51414), width: 2.0),
+                      borderRadius: BorderRadius.circular(responsiveBorderRadius),
                       ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0), // Style from CustomTextField
-                      counterText: '', // Add this line to remove the counter
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+                      counterText: '',
                     ),
-                    initialCountryCode: 'IN', // Default country code
+                    initialCountryCode: 'IN',
+                    keyboardType: TextInputType.phone, // Set keyboard type
                     onChanged: (phone) {
-                      // Update state or controller if needed
-                      mobileNumberController.text = phone.completeNumber; // Assuming you want to store the full number
-                       _checkAllFieldsFilled(); // Call check function on change
+                      mobileNumberController.text = phone.completeNumber;
+                       _checkAllFieldsFilled();
                       print(phone.completeNumber);
                     },
                     onCountryChanged: (country) {
                       print('Country changed to: ' + country.name);
                     },
-                    // Style the dropdown icon color
-                    dropdownIcon: Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)),
+                    dropdownIcon: const Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)),
                     );
                   }
                   ),
@@ -232,29 +287,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.015), // Add spacing
 
-                // Confirm Password Component
-                ConfirmPasswordScreen(
-                  onPasswordsMatch: (match) {
-                    if (passwordsMatch != match) {
-                      setState(() {
-                        passwordsMatch = match; // Update the passwordsMatch state
-                      });
-                      _checkAllFieldsFilled();
-                    }
-                  },
+                // --- Use PasswordTextField directly ---
+                PasswordTextField(
+                  controller: _passwordController,
+                  label: "Password",
+                  height: screenHeight * 0.06, // Match height if needed
+                  onChanged: (_) => _checkAllFieldsFilled(), // Check fields on change
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
+                PasswordTextField(
+                  controller: _confirmPasswordController,
+                  label: "Confirm Password",
+                  height: screenHeight * 0.06, // Match height if needed
+                  onChanged: (_) => _checkAllFieldsFilled(), // Check fields on change
+                ),
+                // Display error if passwords don't match and confirm field is touched
+                 if (_confirmPasswordController.text.isNotEmpty && !passwordsMatch)
+                   Padding(
+                     padding: const EdgeInsets.only(top: 8.0, left: 12.0), // Adjust padding
+                     child: Text(
+                       'Passwords do not match',
+                       style: TextStyle(color: Colors.red.shade700, fontSize: 12),
+                     ),
+                   ),
+                SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // ForgotPasswordButton
+
+                // ForgotPasswordButton for "Already have an account?"
                 Align(
                   alignment: Alignment.centerRight, // Align to the right
                   child: ForgotPasswordButton(
                     label: "Already have an account?", // Specify label
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()), // Navigate to LoginScreen
-                      );
+                      // Navigate back or to login screen
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      } else {
+                        // If cannot pop (e.g., deep linked), navigate explicitly
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPasswordNewScreen()),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -272,19 +346,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           setState(() {
                             isTermsAccepted = value ?? false; // Update the checkbox state
                           });
-                          _checkAllFieldsFilled();
+                          _checkAllFieldsFilled(); // Re-check button state
                         },
-                        activeColor: Color(0xFFA51414), // Set checkbox color
+                        activeColor: const Color(0xFFA51414), // Set checkbox color
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap area
+                        visualDensity: VisualDensity.compact, // Make checkbox smaller
                       ),
                       Flexible(
-                        child: Text(
-                          "I agree to the terms and conditions",
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.035, // Specify font size
-                            
-                            color: Colors.black,
+                        child: GestureDetector( // Allow tapping text to toggle checkbox
+                          onTap: () {
+                             setState(() {
+                               isTermsAccepted = !isTermsAccepted;
+                             });
+                             _checkAllFieldsFilled();
+                          },
+                          child: Text(
+                            "I agree to the terms and conditions",
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.035, // Specify font size
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.right, // Align text to the right
                           ),
-                          textAlign: TextAlign.right, // Align text to the right
                         ),
                       ),
                     ],
@@ -294,29 +377,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // Sign Up Button
                 Center(
-                  child: isSignUpButtonActive
-                      ? RedButton(
-                          label: "Sign Up", // Specify label
-                          width: screenWidth * 0.9, // Specify width
-                          height: screenHeight * 0.06, // Specify height
-                          onPressed: () {
-                            print("Sign Up Initiated!");
-                            print("First Name: ${firstNameController.text}");
-                            print("Last Name: ${lastNameController.text}");
-                            print("Email: ${emailController.text}");
-                            print("Mobile: ${mobileNumberController.text}");
-                            print("Company: ${companyNameController.text}");
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => BaseScaffold()), // Navigate to HomePage
-                            );
-                          },
-                        )
-                      : InactiveButton(
-                          label: "Sign Up", // Specify label
-                          width: screenWidth * 0.9, // Specify width
-                          height: screenHeight * 0.06, // Specify height
-                        ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Color(0xFFA51414))
+                      : isSignUpButtonActive
+                          ? RedButton(
+                              label: "Sign Up",
+                              width: screenWidth * 0.9,
+                              height: screenHeight * 0.06,
+                              onPressed: _signUp, // Call the signup function
+                              // --- REMOVED Navigator.pushReplacement ---
+                            )
+                          : InactiveButton(
+                              label: "Sign Up",
+                              width: screenWidth * 0.9,
+                              height: screenHeight * 0.06,
+                            ),
                 ),
                 SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 30), // Keyboard height + buffer
               ],

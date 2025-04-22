@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import this package
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpodmport BaseScaffold
-import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager provider
-import '../common/signinwith_google.dart'; // Import the SignInWithGoogleButton widget
-import 'horizontal_radios.dart'; // Import the HorizontalRadios widget
-import 'custom_text_field.dart'; // Import the CustomTextField widget
-import 'password_text_field.dart'; // Import the PasswordTextField widget
-import '../common/forgot_password.dart'; // Import the ForgotPasswordButton widget
-import '../common/red_button.dart'; // Import the RedButton widget
-import 'signup_screen.dart'; // Import the SignUpScreen widget
-import 'forgot_password_screen.dart'; // Import the ForgotPassword screen
-import '../../base_scaffold.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:Semikart/managers/auth_manager.dart';
+import '../common/signinwith_google.dart';
+import 'horizontal_radios.dart';
+import 'custom_text_field.dart';
+import 'password_text_field.dart';
+import '../common/forgot_password.dart';
+import '../common/red_button.dart';
+import 'signup_screen.dart';
+import 'forgot_password_screen.dart';
+// Removed import for BaseScaffold as navigation is handled by AuthWrapper
 
 // --- Changed to ConsumerStatefulWidget ---
 class LoginPasswordNewScreen extends ConsumerStatefulWidget {
@@ -47,7 +47,6 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
     final password = _passwordController.text.trim();
 
     // --- Use AuthManager via Riverpod ---
-    // Use ref.read to access the notifier and call the login method
     final authManager = ref.read(authManagerProvider.notifier);
     final success = await authManager.login(email, password);
 
@@ -65,13 +64,13 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
       // Show error message if login failed
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Invalid email or password.'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 2), // Show for a short duration
+          content: Text('Login failed. Please check your credentials.'), // More generic message
+          backgroundColor: Color(0xFFA51414), // Red color for error
+          duration: Duration(seconds: 3),
         ),
       );
     }
-    // --- End of Authentication Logic ---
+    // If login was successful, AuthWrapper will automatically rebuild and show BaseScaffold
   }
 
 
@@ -80,83 +79,65 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Watch the auth state to potentially show errors differently if needed
-    // final authState = ref.watch(authManagerProvider);
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          // Use Padding instead of SizedBox + Stack for better layout handling with keyboard
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Horizontal padding
-            child: Column( // Use Column for vertical layout
-              crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start (left)
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: screenHeight * 0.08), // Top spacing
-                // Semikart logo
+                SizedBox(height: screenHeight * 0.08),
                 Image.asset(
-                  'public/assets/images/semikart_logo_medium.png', // Path to the logo
-                  width: screenWidth * 0.4, // 40% of screen width
-                  height: screenHeight * 0.05, // 5% of screen height
-                  fit: BoxFit.contain, // Ensure the image fits within the dimensions
+                  'public/assets/images/semikart_logo_medium.png',
+                  width: screenWidth * 0.4,
+                  height: screenHeight * 0.05,
+                  fit: BoxFit.contain,
                 ),
-                SizedBox(height: screenHeight * 0.05), // Spacing after logo
-
-                // Login text
+                SizedBox(height: screenHeight * 0.05),
                 Text(
                   'Login',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.055, // 5.5% of screen width
-                    color: Colors.black, // Black color
-                    fontWeight: FontWeight.bold, // Bold weight
+                    fontSize: screenWidth * 0.055,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02), // Spacing after Login text
-
-                // SignInWithGoogleButton
-                Center( // Keep Google button centered if desired
+                SizedBox(height: screenHeight * 0.02),
+                Center(
                   child: SignInWithGoogleButton(
                     onPressed: () {
-                      // TODO: Handle the Google sign-in logic here
                       print('Google Sign-In button pressed');
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Google Sign-In not implemented yet.')),
                       );
                     },
-                    isLoading: false, // Set to true if loading state is required
+                    isLoading: false,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02), // Spacing after Google button
-
-                // HorizontalRadios
-                Center( // Keep radios centered
+                SizedBox(height: screenHeight * 0.02),
+                Center( // Removed const
                   child: HorizontalRadios(
-                    initialOption: "password", // Set the initial selected option
+                    initialOption: "password",
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.04), // Spacing after radios
-
-                // CustomTextField for Email
+                SizedBox(height: screenHeight * 0.04),
                 CustomTextField(
-                  controller: _emailController, // Use the controller
-                  label: "Email", // Set the label to "Email"
-                  height: screenHeight * 0.06, // 6% of screen height
+                  controller: _emailController,
+                  label: "Email",
+                  height: screenHeight * 0.06,
                 ),
-                SizedBox(height: screenHeight * 0.04), // Spacing after email field
-
-                // PasswordTextField for Password
+                SizedBox(height: screenHeight * 0.04),
                 PasswordTextField(
-                  controller: _passwordController, // Use the controller
-                  label: "Password", // Set the label to "Password"
-                  height: screenHeight * 0.06, // 6% of screen height
+                  controller: _passwordController,
+                  label: "Password",
+                  height: screenHeight * 0.06,
                 ),
-                SizedBox(height: screenHeight * 0.04), // Spacing after password field
-
-                // ForgotPasswordButton aligned to the right
+                SizedBox(height: screenHeight * 0.04),
                 Align(
                   alignment: Alignment.centerRight,
                   child: ForgotPasswordButton(
-                    label: "Forgot Password?", // Set the label
+                    label: "Forgot Password?",
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -165,13 +146,11 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
                     },
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.01), // Reduced spacing between buttons
-
-                // Don't have an account Button aligned to the right
-                Align( // Wrap with Align
-                  alignment: Alignment.centerRight, // Align to the right
+                SizedBox(height: screenHeight * 0.01),
+                Align(
+                  alignment: Alignment.centerRight,
                   child: ForgotPasswordButton(
-                    label: "Don't have an account?", // Set the label
+                    label: "Don't have an account?",
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -180,26 +159,20 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
                     },
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.05), // Spacing before Login button
-
-                // RedButton for Login
-                Center( // Keep Login button centered
+                SizedBox(height: screenHeight * 0.05),
+                Center(
                   child: _isLoading
-                      ? const CircularProgressIndicator(color: Color(0xFFA51414)) // Show loading indicator
+                      ? const CircularProgressIndicator(color: Color(0xFFA51414))
                       : RedButton(
-                          label: "Login", // Set the label to "Login"
-                          width: screenWidth * 0.90, // 90% of screen width
-                          height: screenHeight * 0.06, // 6% of screen height
-                          onPressed: () {
-                            
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => BaseScaffold()), // Navigate to HomePage
-                            );
-                          }, // Call the login function
+                          label: "Login",
+                          width: screenWidth * 0.90,
+                          height: screenHeight * 0.06,
+                          // *** Call the _login function ***
+                          onPressed: _login,
+                          // *** REMOVED Navigator.pushReplacement ***
                         ),
                 ),
-                 SizedBox(height: screenHeight * 0.05), // Bottom padding
+                 SizedBox(height: screenHeight * 0.05),
               ],
             ),
           ),

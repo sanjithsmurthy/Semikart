@@ -46,11 +46,11 @@ void _setupLogging() {
   });
 }
 
-class MyApp extends StatelessWidget { // Can be StatelessWidget as AuthWrapper handles state changes
+class MyApp extends ConsumerWidget { // Changed to ConsumerWidget to use WidgetRef
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) { // Now correctly overrides ConsumerWidget.build
     return MaterialApp(
       title: 'Semikart',
       theme: ThemeData(

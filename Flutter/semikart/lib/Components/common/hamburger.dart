@@ -6,6 +6,7 @@ import 'red_button.dart'; // Import your custom RedButton
 import 'popup.dart'; // Import your CustomPopup widget
 // Removed LoginPassword import as AuthWrapper handles navigation
 // import '../login_signup/login_password.dart';
+import '../login_signup/login_password.dart'; // Import the screen
 import '../profile/profile_screen.dart';
 import '../../base_scaffold.dart';
 import '../home/order_history.dart';
@@ -111,7 +112,7 @@ class HamburgerMenu extends ConsumerWidget {
                           ).then((_) {
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginPasswordNewScreen()),
+                              MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
                               (route) => false,
                             );
                           });

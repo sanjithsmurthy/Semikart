@@ -171,7 +171,6 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(
-        content: const Text(
           "Press back again to exit",
           style: TextStyle(
             color: Colors.black, // Consider using theme text color

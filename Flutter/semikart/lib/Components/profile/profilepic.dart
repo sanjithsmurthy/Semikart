@@ -48,6 +48,7 @@ class _ProfilePictureState extends ConsumerState<ProfilePicture> {
             context: context,
             title: 'Invalid File Type',
             message: 'Please select an image file (JPG, PNG, GIF, or WEBP)',
+            buttonText: 'OK', // Add the required buttonText argument
             imagePath: 'public/assets/images/Alert.png',
           );
         }

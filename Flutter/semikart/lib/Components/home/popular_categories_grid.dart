@@ -52,7 +52,7 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                  AppNavigator.openProductsRootPage(); // ✅ updated method call
+                  AppNavigator.openProductsRootPage(); // Assuming this method exists
                 },
               );
             },
@@ -62,7 +62,7 @@ class PopularCategoriesGrid extends StatelessWidget {
         RedButton(
           label: 'View All',
           onPressed: () {
-            AppNavigator.openProductsRootPage(); // ✅ updated method call
+            AppNavigator.openProductsRootPage(); // Assuming this method exists
           },
           isWhiteButton: true,
           width: screenWidth * 0.23,
