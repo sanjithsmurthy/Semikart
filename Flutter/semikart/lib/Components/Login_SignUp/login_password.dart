@@ -1,3 +1,4 @@
+import 'package:Semikart/Components/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import '../common/forgot_password.dart';
 import '../common/red_button.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
+import '../../managers/auth_manager.dart';
 // Removed import for BaseScaffold as navigation is handled by AuthWrapper
 
 // --- Changed to ConsumerStatefulWidget ---
@@ -60,11 +62,16 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
     // --- Navigation is handled by AuthWrapper based on AuthState ---
     // No explicit Navigator.pushReplacement needed here anymore.
 
-    if (!success) {
+    if (success) {
+      // AuthWrapper will handle navigation based on the new state
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => HomePageContent(), // Navigate to home
+      ));
+    } else {
       // Show error message if login failed
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Login failed. Please check your credentials.'), // More generic message
+          content: Text('Login failed. Please check your credentials.'),
           backgroundColor: Color(0xFFA51414), // Red color for error
           duration: Duration(seconds: 3),
         ),
