@@ -110,30 +110,41 @@ class AuthManager extends StateNotifier<AuthState> {
     }
   }
 
-  Future<bool> login(String email, String password) async {
-    try {
-      final csrf = await getCsrftoken();
-      if (csrf == null) return false;
+  // Future<bool> login(String email, String password) async {
+  //   try {
+  //     final csrf = await getCsrftoken();
+  //     if (csrf == null) return false;
 
-      FormData formData = FormData.fromMap({
-        "username": email,
-        "password": password,
-        "csrfmiddlewaretoken": csrf,
-      });
+  //     FormData formData = FormData.fromMap({
+  //       "username": email,
+  //       "password": password,
+  //       "csrfmiddlewaretoken": csrf,
+  //     });
 
-      Response response = await _dio.post(url, data: formData);
-      if (response.statusCode == 200) {
-        const fakeToken = "fake_jwt_token_12345";
-        await _storage.write(key: _tokenKey, value: fakeToken);
-        state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      print("Login error: $e");
-      return false;
-    }
+  //     Response response = await _dio.post(url, data: formData);
+  //     if (response.statusCode == 200) {
+  //       const fakeToken = "fake_jwt_token_12345";
+  //       await _storage.write(key: _tokenKey, value: fakeToken);
+  //       state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
+  //       return true;
+  //     }
+  //     return false;
+  //   } catch (e) {
+  //     print("Login error: $e");
+  //     return false;
+  //   }
+  // }
+
+    Future<bool> login(String email, String password) async {
+  // Simulated login logic
+  if (email == "s" && password == "s") {
+    const fakeToken = "fake_jwt_token";
+    await _storage.write(key: _tokenKey, value: fakeToken);
+    state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
+    return true;
   }
+  return false;
+}
 
   Future<bool> signUp(String email, String password, String fullName) async {
     print("AuthManager: Attempting sign-up for $email...");
@@ -170,4 +181,8 @@ class AuthManager extends StateNotifier<AuthState> {
 
 final authManagerProvider = StateNotifierProvider<AuthManager, AuthState>((ref) {
   return AuthManager();
+
+//   final success = await authManager.login(email, password);
+// print("Login success: $success");
 });
+

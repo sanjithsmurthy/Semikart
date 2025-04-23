@@ -11,6 +11,7 @@ import '../common/forgot_password.dart';
 import '../common/red_button.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
+import '../../base_scaffold.dart';
 import '../../managers/auth_manager.dart';
 // Removed import for BaseScaffold as navigation is handled by AuthWrapper
 
@@ -62,12 +63,7 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
     // --- Navigation is handled by AuthWrapper based on AuthState ---
     // No explicit Navigator.pushReplacement needed here anymore.
 
-    if (success) {
-      // AuthWrapper will handle navigation based on the new state
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => HomePageContent(), // Navigate to home
-      ));
-    } else {
+   if(!success) {
       // Show error message if login failed
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
