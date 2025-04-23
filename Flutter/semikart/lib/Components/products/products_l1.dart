@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
+import 'l1_tile.dart'; // Import the L1Tile widget
 
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
@@ -57,22 +58,33 @@ class ProductsL1Page extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              _buildCategoryItem(
-                                context: context,
-                                iconPath: categories[firstIndex]["icon"]!,
-                                name: categories[firstIndex]["name"]!,
-                                iconSize: screenWidth * 0.1, // Adjusted for responsiveness
+                              Expanded( // Keep Expanded to ensure items take equal width
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Navigate directly to ProductsL2Page for any category tap
+                                    Navigator.of(context).pushNamed('l2');
+                                  },
+                                  child: L1Tile(
+                                    iconPath: categories[firstIndex]["icon"]!,
+                                    text: categories[firstIndex]["name"]!,
+                                  ),
+                                ),
                               ),
                               _buildVerticalDivider(screenHeight: screenHeight),
-                              if (secondIndex < categories.length)
-                                _buildCategoryItem(
-                                  context: context,
-                                  iconPath: categories[secondIndex]["icon"]!,
-                                  name: categories[secondIndex]["name"]!,
-                                  iconSize: screenWidth * 0.1, // Adjusted for responsiveness
-                                )
-                              else
-                                const Spacer(), // Empty space if no second item
+                              Expanded( // Keep Expanded to ensure items take equal width
+                                child: secondIndex < categories.length
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          // Navigate directly to ProductsL2Page for any category tap
+                                          Navigator.of(context).pushNamed('l2');
+                                        },
+                                        child: L1Tile(
+                                          iconPath: categories[secondIndex]["icon"]!,
+                                          text: categories[secondIndex]["name"]!,
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(), // Use SizedBox.shrink() for empty space
+                              ),
                             ],
                           ),
                           if (index < (categories.length / 2).ceil() - 1)
@@ -87,53 +99,6 @@ class ProductsL1Page extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  // Widget for a single category item
-  Widget _buildCategoryItem({
-    required BuildContext context,
-    required String iconPath,
-    required String name,
-    required double iconSize,
-  }) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          // Navigate directly to ProductsL2Page for any category tap
-          Navigator.of(context).pushNamed('l2');
-
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Use Image.asset to load the image
-            Image.asset(
-              iconPath,
-              width: iconSize,
-              height: iconSize,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                // Fallback widget in case the image fails to load
-                return Icon(
-                  Icons.broken_image,
-                  size: iconSize,
-                  color: Colors.grey,
-                );
-              },
-            ),
-            const SizedBox(height: 8), // Spacing between icon and text
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
     );
   }
 

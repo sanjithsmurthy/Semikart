@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../common/popup.dart';
+import '../../managers/auth_manager.dart';
 import 'profilepic.dart';
 import '../common/red_button.dart';
 import '../Login_SignUp/custom_text_field.dart';
@@ -53,6 +54,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  Future<void> _handleLogout() async {
+    // --- Get the root navigator state BEFORE showing the dialog ---
+    // We store it early to ensure we have the correct navigator instance.
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+
+    final confirmed = await CustomPopup.show(
+      context: context, // Use the current context for the dialog
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+      imagePath: 'public/assets/images/Alert.png',
+    );
+
+    if (confirmed == true) {
+      await ref.read(authManagerProvider.notifier).logout();
+
+      // --- Use the stored rootNavigator instance ---
+      // Check if the widget is still mounted before navigating
+      if (mounted) {
+        // Use the rootNavigator instance we captured earlier
+        rootNavigator.pushNamedAndRemoveUntil('/', (route) => false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -92,12 +119,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     child: RedButton(
                       label: 'Logout',
                       height: screenWidth * 0.12,
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => LoginPasswordNewScreen()),
-                        );
-                      },
+                      onPressed: _handleLogout,
                     ),
                   ),
                 ],

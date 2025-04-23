@@ -60,11 +60,16 @@ class AuthWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the provider to trigger rebuilds on state changes
     final authState = ref.watch(authManagerProvider);
 
-    print("🔁 AuthWrapper: Status is ${authState.status}"); // Debug print
+    // --- Add diagnostic print statement ---
+    // This will print every time AuthWrapper rebuilds, showing the current auth status.
+    print("🔁 AuthWrapper: Building with AuthStatus = ${authState.status}");
 
+    // Handle unknown state (initial check)
     if (authState.status == AuthStatus.unknown) {
+       print(" -> AuthStatus is Unknown. Showing loading indicator.");
       return const Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -75,14 +80,23 @@ class AuthWrapper extends ConsumerWidget {
       );
     }
 
+    // Handle authenticated state
     if (authState.status == AuthStatus.authenticated) {
+       print(" -> AuthStatus is Authenticated. Showing BaseScaffold.");
+      // It's crucial that BaseScaffold uses its own Navigator keys
+      // for internal navigation, separate from the root navigator.
       return BaseScaffold(
-        key: BaseScaffold.navigatorKey,
+        // Using a ValueKey might help ensure it rebuilds cleanly if needed,
+        // though not strictly necessary here based on the logic.
+        // key: ValueKey('BaseScaffold_${authState.userToken ?? 'logged_in'}'),
+        key: BaseScaffold.navigatorKey, // Continue using the static key if required by AppNavigator
         initialIndex: 0,
       );
     }
 
-    // If unauthenticated or fallback
+    // Handle unauthenticated state (or any other state as fallback)
+    // This block will execute if status is AuthStatus.unauthenticated
+    print(" -> AuthStatus is Unauthenticated (or fallback). Showing LoginPasswordNewScreen.");
     return const LoginPasswordNewScreen();
   }
 }

@@ -48,8 +48,7 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                  // Navigate to the Products L2 page and switch to the Products tab
-                  AppNavigator.goTo(1, routeName: 'l2');
+                  AppNavigator.pushProductsL2(arguments: {'category': category['label']!});
                 },
               );
             },

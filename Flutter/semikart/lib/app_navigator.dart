@@ -10,6 +10,7 @@ import 'Components/products/products_l2.dart';
 import 'Components/products/products_l3.dart';
 import 'Components/products/products_l4.dart'; // Import products_l4.dart
 import 'Components/products/product_details_page.dart';
+import 'Components/products/l1_tiles_row.dart'; // Import L1TilesRow
 
 // Cart
 import 'Components/cart/cart_page.dart';
@@ -93,7 +94,12 @@ class AppNavigator {
               return MaterialPageRoute(builder: (_) => ProductDetailsContent());
             case 'l1':
             default:
-              return MaterialPageRoute(builder: (_) => const ProductsL1Page());
+              return MaterialPageRoute(
+                builder: (_) => Productsonerow(
+                  category1: {"icon": "assets/icons/category1.png", "name": "L1 Category 1"},
+                  category2: {"icon": "assets/icons/category2.png", "name": "L1 Category 2"},
+                ),
+              );
           }
         },
       );
@@ -168,10 +174,8 @@ class AppNavigator {
 
   /// Switches to the Products tab (index 1) and pops its navigator to the first route ('l1').
   static void openProductsRootPage() {
-
     goTo(1);
   }
-
   /// Switches to the Home tab (index 0) and navigates to the RFQ page.
   static void openHomeRFQPage() {
     goTo(0, routeName: 'rfq'); // Switch to Home tab and push 'rfq' route
