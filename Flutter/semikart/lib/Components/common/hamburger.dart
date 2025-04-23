@@ -21,6 +21,34 @@ class HamburgerMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // Reference screen dimensions
+    const double refWidth = 412.0;
+    const double refHeight = 917.0;
+
+    // Calculate scaling factors
+    final double widthScale = screenWidth / refWidth;
+    final double heightScale = screenHeight / refHeight;
+    // Use widthScale for font sizes and icon sizes for consistency
+    final double scale = widthScale;
+
+    // Scaled dimensions
+    final double leftPadding = 25.0 * widthScale;
+    final double topPadding = 40.0 * heightScale;
+    final double iconSize = 25.0 * scale;
+    final double logoHeight = 23.0 * heightScale;
+    final double horizontalSpacing = 8.0 * widthScale;
+    final double verticalSpacingSmall = 4.0 * heightScale;
+    final double verticalSpacingMedium = 8.0 * heightScale;
+    final double verticalSpacingLarge = 16.0 * heightScale;
+    final double verticalSpacingXLarge = 36.0 * heightScale;
+    final double avatarRadius = 50.0 * scale;
+    final double nameFontSize = 16.0 * scale;
+    final double emailFontSize = 14.0 * scale;
+    final double buttonWidth = 120.0 * widthScale;
+    final double buttonHeight = 40.0 * heightScale;
+    final double buttonFontSize = 14.0 * scale;
+
     final profileImage = ref.watch(profileImageProvider);
     final user = ref.watch(userProfileProvider); // NEW: get name + email
 
@@ -33,53 +61,53 @@ class HamburgerMenu extends ConsumerWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                left: screenWidth * 0.06,
-                top: screenHeight * 0.043,
+                left: leftPadding,
+                top: topPadding,
               ),
               child: Row(
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)),
-                    iconSize: screenWidth * 0.06,
+                    iconSize: iconSize,
                     onPressed: () => Navigator.pop(context),
                   ),
-                  SizedBox(width: screenWidth * 0.02),
+                  SizedBox(width: horizontalSpacing),
                   Image.asset(
                     'public/assets/images/semikart_logo_medium.png',
-                    height: screenHeight * 0.025,
+                    height: logoHeight,
                     fit: BoxFit.contain,
                   ),
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.04),
+            SizedBox(height: verticalSpacingXLarge),
             Center(
               child: Column(
                 children: [
                   CircleAvatar(
-                    radius: screenWidth * 0.12,
+                    radius: avatarRadius,
                     backgroundImage: profileImage != null
                         ? FileImage(profileImage)
                         : const AssetImage('public/assets/images/profile_picture.png')
                             as ImageProvider,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: verticalSpacingMedium),
 
                   // ✅ Dynamic Full Name
                   Text(
                     user.fullName.isNotEmpty ? user.fullName : 'Username',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: nameFontSize, fontWeight: FontWeight.bold),
                   ),
 
-                  const SizedBox(height: 4),
+                  SizedBox(height: verticalSpacingSmall),
 
                   // ✅ Dynamic Email
                   Text(
                     user.email.isNotEmpty ? user.email : 'username@gmail.com',
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(fontSize: emailFontSize, color: Colors.grey),
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: verticalSpacingLarge),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -92,9 +120,9 @@ class HamburgerMenu extends ConsumerWidget {
                             _createFadeRoute(const BaseScaffold(), initialIndex: 4),
                           );
                         },
-                        width: screenWidth * 0.3,
-                        height: 40,
-                        isWhiteButton: true,
+                        width: buttonWidth,
+                        height: buttonHeight,
+                        fontSize: buttonFontSize,
                       ),
                       const SizedBox(width: 16),
                       RedButton(
@@ -124,12 +152,34 @@ class HamburgerMenu extends ConsumerWidget {
   isWhiteButton: true,
 ),
 
+<<<<<<< HEAD
+=======
+                          // --- Check if confirmed (popup returns true) ---
+                          if (confirmed == true) {
+                            // Call the logout method from AuthManager
+                            // AuthWrapper will handle navigation based on state change
+                            await ref.read(authManagerProvider.notifier).logout();
+                          }
+                          // --- Removed explicit navigation ---
+                          // .then((_) {
+                          //   Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                          //     (route) => false,
+                          //   );
+                          // });
+                        },
+                        width: buttonWidth,
+                        height: buttonHeight,
+                        fontSize: buttonFontSize,
+                      ),
+>>>>>>> 110dcc2f7cbb89114f0ded3c8ef2bc0c26862c15
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.04),
+            SizedBox(height: verticalSpacingXLarge),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,

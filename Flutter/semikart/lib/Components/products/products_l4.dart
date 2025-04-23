@@ -98,7 +98,7 @@ class ProductListScreenExample extends StatelessWidget {
             onViewDetails: (product) {
               // Handle the "View Details" button press
               // e.g., navigate to a detail screen
-              print('View Details pressed for: ${product.productName}');
+              Navigator.of(context).pushNamed('product_details');
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product)));
             },
           ),

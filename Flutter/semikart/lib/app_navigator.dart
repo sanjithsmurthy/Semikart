@@ -8,6 +8,8 @@ import 'Components/rfq_bom/rfq_full.dart';
 import 'Components/products/products_l1.dart';
 import 'Components/products/products_l2.dart';
 import 'Components/products/products_l3.dart';
+import 'Components/products/products_l4.dart'; // Import products_l4.dart
+import 'Components/products/product_details_page.dart';
 
 // Cart
 import 'Components/cart/cart_page.dart';
@@ -84,6 +86,11 @@ class AppNavigator {
               return MaterialPageRoute(builder: (_) => const ProductsL2Page());
             case 'l3':
               return MaterialPageRoute(builder: (_) => const ProductsL3Page());
+            case 'l4':
+              // Link ProductListScreenExample from products_l4.dart
+              return MaterialPageRoute(builder: (_) => ProductListScreenExample());
+            case 'product_details':
+              return MaterialPageRoute(builder: (_) => ProductDetailsContent());
             case 'l1':
             default:
               return MaterialPageRoute(builder: (_) => const ProductsL1Page());

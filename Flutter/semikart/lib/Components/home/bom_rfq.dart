@@ -111,7 +111,7 @@ class BomRfqCard extends StatelessWidget {
                     label: "RFQ",
                     onPressed: () {
                       Navigator.of(context).pushNamed('rfq');
-
+                      
                     },
                     width: buttonWidth,
                     height: buttonHeight,

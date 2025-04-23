@@ -142,9 +142,8 @@ class HomePageContent extends StatelessWidget {
                 ),
                 SizedBox(height: screenHeight * 0.03),
 
-                PopularCategoriesGrid(
-  
-),
+                PopularCategoriesGrid(),
+                
 
 
 
