@@ -13,8 +13,7 @@ class RedBorderBox extends StatelessWidget {
     this.widthFactor = 0.9, // Default width is 90% of screen width
     this.borderColor = const Color(0xFFA51414), // Default border color
     this.textStyle,
-    this.padding =
-        const EdgeInsets.symmetric(horizontal: 16.0), // Default padding
+    this.padding, // Allow custom padding, otherwise calculate dynamically
   });
 
   @override
@@ -22,26 +21,32 @@ class RedBorderBox extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Dynamic scaling based on reference size (412x917)
+    final double dynamicHeight = screenHeight * 0.08; // 8% of screen height
+    final double dynamicBorderRadius = screenWidth * (10 / 412); // Approx 10 on 412px width
+    final double dynamicBorderWidth = screenWidth * (1.5 / 412); // Approx 1.5 on 412px width
+    final double dynamicFontSize = screenHeight * (16 / 917); // Approx 16 on 917px height
+    final EdgeInsetsGeometry dynamicPadding = padding ?? EdgeInsets.symmetric(horizontal: screenWidth * (16 / 412)); // Approx 16 on 412px width
+
     return Center(
       child: Container(
         width: screenWidth * widthFactor, // Responsive width
-        height: screenHeight * 0.08, // Responsive height (8% of screen height)
-        padding: padding, // Apply padding
+        height: dynamicHeight, // Responsive height
+        padding: dynamicPadding, // Apply dynamic or custom padding
         decoration: BoxDecoration(
           border: Border.all(
-              color: borderColor, width: 1.5), // Border with color and width
+              color: borderColor, width: dynamicBorderWidth), // Dynamic border width
           borderRadius:
-              BorderRadius.circular(10), // Rounded corners with radius 10
+              BorderRadius.circular(dynamicBorderRadius), // Dynamic rounded corners
         ),
         child: Center(
           child: Text(
             text,
             style: textStyle ??
-                const TextStyle(
-                  fontSize: 16,
+                TextStyle( // Use dynamic font size if no custom style is provided
+                  fontSize: dynamicFontSize,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
-                  
                 ),
             textAlign: TextAlign.center,
           ),
@@ -49,17 +54,4 @@ class RedBorderBox extends StatelessWidget {
       ),
     );
   }
-}
-
-// Example usage of RedBorderBox
-void main() {
-  runApp(const MaterialApp(
-    home: Scaffold(
-      body: SafeArea(
-        child: RedBorderBox(
-          text: 'Din Rail Mounting Enclosures/Accessories', // Text to display
-        ),
-      ),
-    ),
-  ));
 }

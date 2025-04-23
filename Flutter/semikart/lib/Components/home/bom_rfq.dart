@@ -1,7 +1,5 @@
-import 'package:Semikart/base_scaffold.dart';
 import 'package:flutter/material.dart';
-import '../common/red_button.dart'; // Import your RedButton
-import '../rfq_bom/rfq_full.dart'; // Import the RFQFullPage
+import '../common/red_button.dart'; // Import your RedButton// Import the RFQFullPage
 
 class BomRfqCard extends StatelessWidget {
   const BomRfqCard({Key? key}) : super(key: key);
@@ -15,18 +13,19 @@ class BomRfqCard extends StatelessWidget {
     // --- Define Base Multipliers ---
     const double cardWidthMultiplier = 0.95;
     const double cardHeightMultiplier = 0.25; // Adjusted for half height
-    const double heightReduction = 50; // Height reduction in pixels
+    // Reduced heightReduction by 1 to effectively increase card height slightly
+    const double heightReduction = 49; // Height reduction in pixels 
 
     // --- Calculate Final Dimensions ---
     final cardWidth = screenWidth * cardWidthMultiplier;
-    final cardHeight = (screenHeight * cardHeightMultiplier) - heightReduction;
+    // The height calculation remains the same, but uses the adjusted heightReduction
+    final cardHeight = (screenHeight * cardHeightMultiplier) - (screenHeight * 0.04); // Scalable reduction (~10px on 800px height)
 
     // --- Other dimensions based on screen size ---
     final generalPadding = cardWidth * 0.04;
     final imageSize = 80.0; // Set fixed image size to 80.0
     final horizontalSpacing = cardWidth * 0.03;
     final verticalSpacingSmall = cardHeight * 0.004;
-    final verticalSpacingMedium = cardHeight * 0.009;
     final titleFontSize = cardWidth * 0.04;
     final bodyFontSize = cardWidth * 0.03;
     final buttonWidth = screenWidth * 0.22; // Use screenWidth for buttonWidth
@@ -37,7 +36,7 @@ class BomRfqCard extends StatelessWidget {
     return Center(
       child: SizedBox(
         width: cardWidth,
-        height: cardHeight,
+        height: cardHeight, // Use the calculated cardHeight
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
@@ -70,8 +69,7 @@ class BomRfqCard extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(
                             left: screenWidth * 0.025,
-                            bottom: screenHeight * 0.01 +
-                                2), // Added 2 pixels padding
+                            bottom: screenHeight * 0.01), // Added 2 pixels padding
                         child: Image.asset(
                           'public/assets/images/RFQ.png',
                           width: imageSize,
@@ -106,20 +104,14 @@ class BomRfqCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: verticalSpacingMedium),
+                SizedBox(height: verticalSpacingSmall),
                 Align(
                   alignment: Alignment.centerRight,
                   child: RedButton(
                     label: "RFQ",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BaseScaffold(
-                            body: RFQFullPage(), // Navigate to RFQFullPage
-                          ),
-                        ),
-                      );
+                      Navigator.of(context).pushNamed('rfq');
+                      
                     },
                     width: buttonWidth,
                     height: buttonHeight,

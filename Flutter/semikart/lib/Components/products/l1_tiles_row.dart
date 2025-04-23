@@ -1,115 +1,89 @@
 import 'package:flutter/material.dart';
+import 'l1_tile.dart'; // Import the L1Tile widget
 
 class Productsonerow extends StatelessWidget {
-  const Productsonerow({super.key});
+  final Map<String, String> category1;
+  final Map<String, String>? category2; // Make category2 optional
+
+  const Productsonerow({
+    super.key,
+    required this.category1,
+    this.category2, // Add category2 to constructor
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // List of categories with their icons and names
-    final List<Map<String, String>> categories = [
-      {"icon": "public/assets/icon/circuit_protection.png", "name": "Circuit Protection"},
-      {"icon": "public/assets/icon/connectors.png", "name": "Connectors"},
-    ];
+    // Dynamic scaling for dividers based on reference size (412x917)
+    const double refWidth = 412.0;
+    const double refHeight = 917.0;
+    // const double refVerticalDividerHeight = 113.0; // Match tile container height estimate - Might not be needed if using IntrinsicHeight
+    const double refHorizontalDividerHeight = 1.0; // Thickness
+    const double refVerticalDividerWidth = 1.0; // Thickness
 
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      _buildCategoryItem(
-                        iconPath: categories[0]["icon"]!,
-                        name: categories[0]["name"]!,
-                        iconSize: screenWidth * 0.1,
-                      ),
-                      _buildVerticalDivider(screenHeight: screenHeight),
-                      _buildCategoryItem(
-                        iconPath: categories[1]["icon"]!,
-                        name: categories[1]["name"]!,
-                        iconSize: screenWidth * 0.1,
-                      ),
-                    ],
-                  ),
-                  _buildHorizontalDivider(screenWidth: screenWidth),
-                ],
+    // final double dynamicVerticalDividerHeight = screenHeight * (refVerticalDividerHeight / refHeight);
+    final double dynamicHorizontalDividerThickness = screenHeight * (refHorizontalDividerHeight / refHeight); // Scale thickness slightly
+    final double dynamicVerticalDividerThickness = screenWidth * (refVerticalDividerWidth / refWidth); // Scale thickness slightly
+
+    const Color dividerColor = Color(0xFFA51414); // Red color
+
+    return Column(
+      mainAxisSize: MainAxisSize.min, // Take minimum vertical space
+      children: [
+        // Top Horizontal Divider (Only needed if it's not the very first row, handle in parent ListView)
+        // Divider(
+        //   color: dividerColor,
+        //   thickness: dynamicHorizontalDividerThickness,
+        //   height: dynamicHorizontalDividerThickness, // Ensure divider takes minimal space
+        // ),
+
+        // Row containing the tiles and vertical divider
+        IntrinsicHeight( // Ensure Row children have the same height
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch children vertically
+            children: [
+              // First L1 Tile
+              Expanded(
+                child: L1Tile(
+                  iconPath: category1["icon"]!,
+                  text: category1["name"]!,
+                ),
               ),
-            ),
+              // Vertical Divider (Only show if category2 exists)
+              if (category2 != null)
+                Container(
+                  // Use Container to control height if VerticalDivider alone isn't sufficient
+                  // height: dynamicVerticalDividerHeight, // Set height explicitly if needed
+                  child: VerticalDivider(
+                    color: dividerColor,
+                    thickness: dynamicVerticalDividerThickness,
+                    width: dynamicVerticalDividerThickness, // Ensure divider takes minimal space
+                    // indent: screenHeight * 0.01, // Optional dynamic indent
+                    // endIndent: screenHeight * 0.01, // Optional dynamic endIndent
+                  ),
+                ),
+              // Second L1 Tile (Only show if category2 exists)
+              if (category2 != null)
+                Expanded(
+                  child: L1Tile(
+                    iconPath: category2!["icon"]!,
+                    text: category2!["name"]!,
+                  ),
+                )
+              else
+                const Expanded(child: SizedBox()), // Placeholder if no second category
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  // Widget for a single category item
-  Widget _buildCategoryItem({
-    required String iconPath,
-    required String name,
-    required double iconSize,
-  }) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Use Image.network to load the image
-          Image.asset(
-            iconPath,
-            width: iconSize,
-            height: iconSize,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              // Fallback widget in case the image fails to load
-              return Icon(
-                Icons.broken_image,
-                size: iconSize,
-                color: Colors.grey,
-              );
-            },
-          ),
-          const SizedBox(height: 8), // Spacing between icon and text
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget for a vertical divider
-  Widget _buildVerticalDivider({required double screenHeight}) {
-    return Container(
-      width: 30, // Space between items
-      height: screenHeight * 0.1, // Length of the vertical line
-      alignment: Alignment.center,
-      child: const VerticalDivider(
-        color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Thickness of the line
-      ),
-    );
-  }
-
-  // Widget for a horizontal divider
-  Widget _buildHorizontalDivider({required double screenWidth}) {
-    return Container(
-      height: 30, // Space between rows
-      width: screenWidth * 0.9, // Length of the horizontal line
-      alignment: Alignment.center,
-      child: const Divider(
-        color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Thickness of the line
-      ),
+        ),
+        // Bottom Horizontal Divider (Always add this one below the row)
+        Divider(
+          color: dividerColor,
+          thickness: dynamicHorizontalDividerThickness,
+          height: dynamicHorizontalDividerThickness, // Ensure divider takes minimal space
+        ),
+      ],
     );
   }
 }

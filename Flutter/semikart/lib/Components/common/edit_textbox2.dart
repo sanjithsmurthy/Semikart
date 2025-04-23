@@ -92,13 +92,23 @@ class _EditTextBox2State extends State<EditTextBox2> {
     widget.onAddressSelected?.call(index);
   }
 
+  void _deleteAddress(int index) {
+    setState(() {
+      _addresses.removeAt(index);
+      if (_selectedIndex == index) {
+        _selectedIndex = _addresses.isNotEmpty ? 0 : -1;
+      }
+    });
+    _notifyChanges();
+  }
+
   void _notifyChanges() {
     widget.onAddressesChanged?.call(_addresses);
   }
 
   Widget _buildAddressItem(Map<String, String> address, int index) {
     final addressText = '${address['address1'] ?? ''}${address['address1']?.isNotEmpty == true && address['address2']?.isNotEmpty == true ? ', ' : ''}${address['address2'] ?? ''}';
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -125,6 +135,10 @@ class _EditTextBox2State extends State<EditTextBox2> {
             icon: const Icon(Icons.edit, color: Color(0xFFA51414)),
             onPressed: () => _editAddress(index),
           ),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.grey),
+            onPressed: () => _deleteAddress(index),
+          ),
         ],
       ),
     );
@@ -142,13 +156,13 @@ class _EditTextBox2State extends State<EditTextBox2> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -163,7 +177,7 @@ class _EditTextBox2State extends State<EditTextBox2> {
               Text(
                 widget.title ?? 'Shipping Address',
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -187,12 +201,12 @@ class _EditTextBox2State extends State<EditTextBox2> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 5),
           if (_addresses.isEmpty)
             Text(
               'No ${widget.title?.toLowerCase()?.replaceAll(' address', '') ?? 'shipping'} addresses added',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 11,
                 color: Colors.black,
               ),
             )

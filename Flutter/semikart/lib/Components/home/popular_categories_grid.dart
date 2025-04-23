@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import '../../app_navigator.dart';
 import 'capsule.dart';
 import '../common/red_button.dart';
 
 class PopularCategoriesGrid extends StatelessWidget {
-  final VoidCallback onViewAll;
-
+  // Removed onViewAll as navigation is handled internally now
   const PopularCategoriesGrid({
     super.key,
-    required this.onViewAll,
+    // required this.onViewAll, // Removed
   });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final crossAxisCount = screenWidth > 600 ? 4 : 2; // Adjust grid columns based on screen size
-    final crossAxisSpacing = screenWidth * 0.04; // Spacing between columns
-    final mainAxisSpacing = screenWidth * 0.04; // Spacing between rows
+    final crossAxisCount = screenWidth > 600 ? 4 : 2;
+    final crossAxisSpacing = screenWidth * 0.04;
+    final mainAxisSpacing = screenWidth * 0.04;
 
-    // Define the popular categories data here
     final categories = [
       {'label': 'Connectors', 'imagePath': 'public/assets/icon/connectors.ico'},
       {'label': 'Optoelectronics', 'imagePath': 'public/assets/icon/optoelectronics.ico'},
@@ -36,15 +35,15 @@ class PopularCategoriesGrid extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // 15px dynamically scalable padding
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
           child: GridView.builder(
-            shrinkWrap: true, // Ensure the grid takes only the required space
-            physics: const NeverScrollableScrollPhysics(), // Disable scrolling for the grid
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
               crossAxisSpacing: crossAxisSpacing,
               mainAxisSpacing: mainAxisSpacing,
-              childAspectRatio: 2.5, // Aspect ratio for capsules
+              childAspectRatio: 2.5,
             ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
@@ -53,21 +52,22 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                  // Handle capsule tap
-                  print('Tapped on ${category['label']}');
+                  AppNavigator.openProductsRootPage(); // Assuming this method exists
                 },
               );
             },
           ),
         ),
-        SizedBox(height: screenWidth * 0.1), // Spacing before the "View All" button
+        SizedBox(height: screenWidth * 0.1),
         RedButton(
           label: 'View All',
-          onPressed: onViewAll,
+          onPressed: () {
+            AppNavigator.openProductsRootPage(); // Assuming this method exists
+          },
           isWhiteButton: true,
-          width: screenWidth * 0.23, // Dynamically scalable width (~86px for typical screen widths)
-          height: screenWidth * 0.11, // Dynamically scalable height (~41px for typical screen widths)
-          fontSize: screenWidth * 0.035, // Dynamically scalable font size (~14px for typical screen widths)
+          width: screenWidth * 0.23,
+          height: screenWidth * 0.11,
+          fontSize: screenWidth * 0.035,
         ),
       ],
     );

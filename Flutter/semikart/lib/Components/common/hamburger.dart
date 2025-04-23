@@ -1,208 +1,206 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
+import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager provider
 import 'red_button.dart'; // Import your custom RedButton
 import 'popup.dart'; // Import your CustomPopup widget
-import '../login_signup/login_password.dart';
+// Removed LoginPassword import as AuthWrapper handles navigation
+// import '../login_signup/login_password.dart';
+import '../login_signup/login_password.dart'; // Import the screen
 import '../profile/profile_screen.dart';
-import '../../base_scaffold.dart'; // Import BaseScaffold
+import '../../base_scaffold.dart';
 import '../home/order_history.dart';
+import '../../providers/profile_image_provider.dart';
+import '../../providers/user_profile_provider.dart'; // NEW: import user profile data
 
-// Helper function for creating a Fade Transition Page Route
-Route _createFadeRoute(Widget page, {int? initialIndex}) {
-  final Widget targetPage = (page is BaseScaffold && initialIndex != null)
-      ? BaseScaffold(key: ValueKey('BaseScaffold_$initialIndex'), initialIndex: initialIndex)
-      : page;
-
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => targetPage,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      // Use FadeTransition for a smooth fade effect
-      return FadeTransition(
-        opacity: animation,
-        child: child,
-      );
-    },
-    // Faster transition duration
-    transitionDuration: const Duration(milliseconds: 200), // Reduced from 300ms
-  );
-}
-
-class HamburgerMenu extends StatelessWidget {
+class HamburgerMenu extends ConsumerWidget {
   const HamburgerMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Reference screen dimensions
+    const double refWidth = 412.0;
+    const double refHeight = 917.0;
+
+    // Calculate scaling factors
+    final double widthScale = screenWidth / refWidth;
+    final double heightScale = screenHeight / refHeight;
+    // Use widthScale for font sizes and icon sizes for consistency
+    final double scale = widthScale;
+
+    // Scaled dimensions
+    final double leftPadding = 25.0 * widthScale;
+    final double topPadding = 40.0 * heightScale;
+    final double iconSize = 25.0 * scale;
+    final double logoHeight = 23.0 * heightScale;
+    final double horizontalSpacing = 8.0 * widthScale;
+    final double verticalSpacingSmall = 4.0 * heightScale;
+    final double verticalSpacingMedium = 8.0 * heightScale;
+    final double verticalSpacingLarge = 16.0 * heightScale;
+    final double verticalSpacingXLarge = 36.0 * heightScale;
+    final double avatarRadius = 50.0 * scale;
+    final double nameFontSize = 16.0 * scale;
+    final double emailFontSize = 14.0 * scale;
+    final double buttonWidth = 120.0 * widthScale;
+    final double buttonHeight = 40.0 * heightScale;
+    final double buttonFontSize = 14.0 * scale;
+
+    final profileImage = ref.watch(profileImageProvider);
+    final user = ref.watch(userProfileProvider); // NEW: get name + email
+
     return Drawer(
-      width: screenWidth * 0.75, // Occupy 75% of the screen width
+      width: screenWidth * 0.75,
       child: Container(
-        color: Colors.white, // Set the background color to white
+        color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Section with Back Icon and Logo
             Padding(
               padding: EdgeInsets.only(
-                left: screenWidth * 0.05 + (screenWidth * 0.01), // Move 10 pixels right dynamically
-                top: screenHeight * 0.043, // Keep the top padding as is
+                left: leftPadding,
+                top: topPadding,
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Back Icon
-                  Transform.translate(
-                    offset: Offset(screenWidth * 0.01, 0), // Move 10 pixels right dynamically
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Color(0xFFA51414), // Red color for the back icon
-                      ),
-                      iconSize: screenWidth * 0.06, // Dynamically scale the icon size
-                      onPressed: () {
-                        Navigator.pop(context); // Close the drawer
-                      },
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)),
+                    iconSize: iconSize,
+                    onPressed: () => Navigator.pop(context),
                   ),
-                  SizedBox(width: screenWidth * 0.02), // Add spacing between the icon and the logo
-
-                  // Semikart Logo
-                  Transform.translate(
-                    offset: Offset(screenWidth * 0.01, 0), // Move 10 pixels right dynamically
-                    child: Image.asset(
-                      'public/assets/images/semikart_logo_medium.png', // Path to the Semikart logo
-                      height: screenHeight * 0.025, // Dynamically scale height
-                      fit: BoxFit.contain,
-                    ),
+                  SizedBox(width: horizontalSpacing),
+                  Image.asset(
+                    'public/assets/images/semikart_logo_medium.png',
+                    height: logoHeight,
+                    fit: BoxFit.contain,
                   ),
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.04),
-
-            // Profile Section
+            SizedBox(height: verticalSpacingXLarge),
             Center(
               child: Column(
                 children: [
-                  // Profile Picture
                   CircleAvatar(
-                    radius: screenWidth * 0.12, // Dynamically scale the profile picture size
-                    backgroundImage: const AssetImage('public/assets/images/profile_picture.png'), // Replace with actual profile picture path
+                    radius: avatarRadius,
+                    backgroundImage: profileImage != null
+                        ? FileImage(profileImage)
+                        : const AssetImage('public/assets/images/profile_picture.png')
+                            as ImageProvider,
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: verticalSpacingMedium),
 
-                  // Username and Email
-                  const Text(
-                    'Username',
-                    style: TextStyle(
-                      fontSize: 16, // Set font size to 16
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  // ✅ Dynamic Full Name
+                  Text(
+                    user.fullName.isNotEmpty ? user.fullName : 'Username',
+                    style: TextStyle(fontSize: nameFontSize, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'username@gmail.com',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
 
-                  // Edit Profile and Logout Buttons
+                  SizedBox(height: verticalSpacingSmall),
+
+                  // ✅ Dynamic Email
+                  Text(
+                    user.email.isNotEmpty ? user.email : 'username@gmail.com',
+                    style: TextStyle(fontSize: emailFontSize, color: Colors.grey),
+                  ),
+
+                  SizedBox(height: verticalSpacingLarge),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Edit Profile Button
                       RedButton(
                         label: 'Edit Profile',
                         onPressed: () {
-                          Navigator.pop(context); // Close drawer first
-                          // Navigate using the faster Fade Transition
+                          Navigator.pop(context);
                           Navigator.pushReplacement(
                             context,
-                            _createFadeRoute(const BaseScaffold(), initialIndex: 4), // Index 4 for Profile
+                            _createFadeRoute(const BaseScaffold(), initialIndex: 4),
                           );
                         },
-                        width: screenWidth * 0.3,
-                        height: 40,
-                        isWhiteButton: true,
+                        width: buttonWidth,
+                        height: buttonHeight,
+                        fontSize: buttonFontSize,
                       ),
                       const SizedBox(width: 16),
-
-                      // Logout Button - Keep using pushAndRemoveUntil
                       RedButton(
                         label: 'Logout',
-                        onPressed: () {
-                          CustomPopup.show(
+                        onPressed: () async { // Make async
+                          // Close the drawer first
+                          Navigator.pop(context);
+                          // Show confirmation popup
+                          final confirmed = await CustomPopup.show( // Wait for popup result
                             context: context,
                             title: 'Logout',
                             message: 'Are you sure you want to logout?',
                             buttonText: 'Confirm',
+                            cancelButtonText: 'Cancel', // Add a cancel button
                             imagePath: 'public/assets/images/Alert.png',
-                          ).then((_) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => const LoginPasswordNewScreen()),
-                              (Route<dynamic> route) => false,
-                            );
-                          });
+                          ); // Get the boolean result from pop
+
+                          // --- Check if confirmed (popup returns true) ---
+                          if (confirmed == true) {
+                            // Call the logout method from AuthManager
+                            // AuthWrapper will handle navigation based on state change
+                            await ref.read(authManagerProvider.notifier).logout();
+                          }
+                          // --- Removed explicit navigation ---
+                          // .then((_) {
+                          //   Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                          //     (route) => false,
+                          //   );
+                          // });
                         },
-                        width: screenWidth * 0.3,
-                        height: 40,
-                        isWhiteButton: true,
+                        width: buttonWidth,
+                        height: buttonHeight,
+                        fontSize: buttonFontSize,
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.04),
-
-            // Menu Items
+            SizedBox(height: verticalSpacingXLarge),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.zero, // Remove default ListView padding
+                padding: EdgeInsets.zero,
                 children: [
                   _buildMenuItem(
                     context,
                     icon: Icons.shopping_bag,
                     text: 'Products',
                     onTap: () {
-                      Navigator.pop(context); // Close drawer first
-                      // Navigate using the faster Fade Transition
+                      Navigator.pop(context);
                       Navigator.pushReplacement(
                         context,
-                        _createFadeRoute(const BaseScaffold(), initialIndex: 1), // Index 1 for Products
+                        _createFadeRoute(const BaseScaffold(), initialIndex: 1),
                       );
                     },
                   ),
-                  const SizedBox(height: 16), // Add spacing between menu items
+                  const SizedBox(height: 16),
                   _buildMenuItem(
                     context,
                     icon: Icons.history,
                     text: 'Order History',
                     onTap: () {
-                      Navigator.pop(context); // Close drawer first
-                      // Navigate to Order History page using MaterialPageRoute to fix date picker issue
+                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => OrderHistory()),
                       );
                     },
                   ),
-                  const SizedBox(height: 16), // Add spacing between menu items
+                  const SizedBox(height: 16),
                   _buildMenuItem(
                     context,
                     icon: Icons.contact_support,
                     text: 'Contact Us',
                     onTap: () {
-                      Navigator.pop(context); // Close drawer first
-                      // TODO: Replace with actual navigation using _createFadeRoute if needed
-                      // Example: Navigator.push(context, _createFadeRoute(const ContactUsPage()));
-                       print("Navigate to Contact Us"); // Placeholder
+                      Navigator.pop(context);
+                      print("Navigate to Contact Us");
                     },
                   ),
                 ],
@@ -214,33 +212,29 @@ class HamburgerMenu extends StatelessWidget {
     );
   }
 
-  // Helper method to build menu items
-  Widget _buildMenuItem(BuildContext context, {required IconData icon, required String text, required VoidCallback onTap}) {
-    final screenWidth = MediaQuery.of(context).size.width;
+  Route _createFadeRoute(Widget page, {int? initialIndex}) {
+    final Widget targetPage = (page is BaseScaffold && initialIndex != null)
+        ? BaseScaffold(key: ValueKey('BaseScaffold_$initialIndex'), initialIndex: initialIndex)
+        : page;
 
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => targetPage,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+          FadeTransition(opacity: animation, child: child),
+      transitionDuration: const Duration(milliseconds: 200),
+    );
+  }
+
+  Widget _buildMenuItem(BuildContext context,
+      {required IconData icon, required String text, required VoidCallback onTap}) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Align icons with buttons
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: const Color(0xFFA51414), // Red icon
-          size: 24, // Increased icon size
-        ),
-        title: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 14, // Set font size to 14
-            fontWeight: FontWeight.normal, // Remove bold styling
-            color: Colors.black,
-          ),
-        ),
-        trailing: const Icon( // Added const
-          Icons.arrow_forward_ios,
-          color: Color(0xFFA51414), // Red right arrow icon
-          size: 24, // Match size with left icon
-        ),
-        onTap: onTap, // Use the provided onTap callback
-        // Add visual feedback
+        leading: Icon(icon, color: const Color(0xFFA51414), size: 24),
+        title: Text(text, style: const TextStyle(fontSize: 14, color: Colors.black)),
+        trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xFFA51414), size: 24),
+        onTap: onTap,
         hoverColor: Colors.grey.shade100,
         splashColor: Colors.red.shade100,
       ),
