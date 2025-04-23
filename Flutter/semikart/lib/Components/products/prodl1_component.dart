@@ -20,11 +20,19 @@ class CustomSquareBox extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get screen size
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-    // Set fixed aspect ratio for the component
-    final boxWidth = screenWidth * 0.4; // 40% of screen width
-    final boxHeight = boxWidth * 0.75; // Maintain a 4:3 aspect ratio
-    final imageSize = boxWidth * 0.3; // 30% of box width
+    // Define multipliers for dynamic sizing
+    final boxWidthMultiplier = 0.4; // 40% of screen width
+    final aspectRatio = 0.75; // Maintain a 4:3 aspect ratio
+    final imageSizeMultiplier = 0.3; // 30% of box width
+    final fontSizeMultiplier = 0.1; // 10% of box width
+
+    // Calculate dynamic dimensions
+    final boxWidth = screenWidth * boxWidthMultiplier;
+    final boxHeight = boxWidth * aspectRatio;
+    final imageSize = boxWidth * imageSizeMultiplier;
+    final fontSize = boxWidth * fontSizeMultiplier;
 
     return Container(
       width: boxWidth,
@@ -51,13 +59,13 @@ class CustomSquareBox extends StatelessWidget {
             height: imageSize, // Dynamically set the height
             fit: BoxFit.contain,
           ),
-          const SizedBox(height: 8), // Distance between image and text
+          SizedBox(height: boxHeight * 0.03), // Dynamic spacing
           // Text below the image
           Text(
             text,
             style: textStyle ??
                 TextStyle(
-                  fontSize: boxWidth * 0.1, // Responsive font size
+                  fontSize: fontSize, // Responsive font size
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),

@@ -247,15 +247,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       labelStyle: const TextStyle(color: Color(0xFF757575)),
                       floatingLabelStyle: const TextStyle(color: Color(0xFFA51414)),
                       border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 2.0),
+                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 1.0),
                       borderRadius: BorderRadius.circular(responsiveBorderRadius),
                       ),
                       enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 2.0),
+                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 1.0),
                       borderRadius: BorderRadius.circular(responsiveBorderRadius),
                       ),
                       focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFA51414), width: 2.0),
+                      borderSide: const BorderSide(color: Color(0xFFA51414), width: 1.0),
                       borderRadius: BorderRadius.circular(responsiveBorderRadius),
                       ),
                       contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),

@@ -47,76 +47,79 @@ class CustomTextField extends StatelessWidget {
 
     // Define the border style - same for all states to prevent visual changes
     var borderStyle = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(20),
-      borderSide: BorderSide(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(
         color: Color(0xFFA51414), // Keep the red border color consistent
-        width: 2.0, // Consistent border width
+        width: 1.0, // Consistent border width
       ),
     );
 
-    // Use TextFormField (can still use external validator if needed for other fields)
-    final formField = Padding(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 0), // Default padding to 0 if null
-      child: SizedBox(
-        width: calculatedWidth, // Use the consistent 90% screen width
-        height: height, // Use the provided height (can be null)
-        child: TextFormField(
-          controller: controller,
-          focusNode: focusNode, // Attach the FocusNode
-          obscureText: isPassword, // Toggle password visibility if it's a password field
-          readOnly: readOnly, // Use the readOnly property
-          // --- Modified onChanged ---
-          onChanged: (value) {
-            // 1. Perform email validation using the package if applicable
-            if (isEmailField && onValidationChanged != null) {
-              // Use EmailValidator.validate()
-              bool isValid = EmailValidator.validate(value);
-              onValidationChanged!(isValid); // Report status to parent
-            }
-            // 2. Call the user-provided onChanged callback if it exists
-            if (onChanged != null) {
-              onChanged!(value);
-            }
-          },
-          onTap: onTap, // Attach the onTap callback
-          validator: validator, // Use external validator if provided
-          // autovalidateMode can be adjusted based on external validator needs
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          cursorHeight: (height ?? 72) * 0.5, // Adjust cursor height based on potential height
-          cursorWidth: 1.5, // Make the cursor slightly thinner
-          cursorColor: Colors.black, // Set the cursor color to black
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(
-              color: Color(0xFF757575), // Grey color for placeholder
-              fontSize: 16,
+    return TextSelectionTheme(
+      data: TextSelectionThemeData(
+        selectionColor: const Color(0xFFA51414), // Highlight color for selected text
+        selectionHandleColor: const Color(0xFFA51414), // Color for the drop icon
+      ),
+      child: Padding(
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 0), // Default padding to 0 if null
+        child: SizedBox(
+          width: calculatedWidth, // Use the consistent 90% screen width
+          height: height, // Use the provided height (can be null)
+          child: TextFormField(
+            controller: controller,
+            focusNode: focusNode, // Attach the FocusNode
+            obscureText: isPassword, // Toggle password visibility if it's a password field
+            readOnly: readOnly, // Use the readOnly property
+            // --- Modified onChanged ---
+            onChanged: (value) {
+              // 1. Perform email validation using the package if applicable
+              if (isEmailField && onValidationChanged != null) {
+                // Use EmailValidator.validate()
+                bool isValid = EmailValidator.validate(value);
+                onValidationChanged!(isValid); // Report status to parent
+              }
+              // 2. Call the user-provided onChanged callback if it exists
+              if (onChanged != null) {
+                onChanged!(value);
+              }
+            },
+            onTap: onTap, // Attach the onTap callback
+            validator: validator, // Use external validator if provided
+            // autovalidateMode can be adjusted based on external validator needs
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            cursorHeight: (height ?? 60) * 0.5, // Adjust cursor height based on potential height
+            cursorWidth: 1, // Make the cursor slightly thinner
+            cursorColor: const Color(0xFFA51414), // Set the cursor color to black
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: const TextStyle(
+                color: Color(0xFF757575), // Grey color for placeholder
+                fontSize: 16,
+                height: 1.2, // Adjust height for better vertical alignment
+              ),
+              floatingLabelStyle: const TextStyle(
+                color: Color(0xFFA51414), // Red color when focused (matches border)
+                fontSize: 16,
+              ),
+              floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
+              contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // Center text vertically
+              // Use the same border style for ALL states
+              border: borderStyle,
+              enabledBorder: borderStyle,
+              focusedBorder: borderStyle,
+              errorBorder: borderStyle, // Use the same style even for error state
+              focusedErrorBorder: borderStyle, // Use the same style even for focused error state
+              errorStyle: const TextStyle(height: 0, fontSize: 0), // Hide error text completely
+              suffixIcon: suffixIcon, // Add the optional suffix icon
+            ),
+            style: const TextStyle(
+              fontSize: 16, // Adjust font size for input text
               height: 1.2, // Adjust height for better vertical alignment
             ),
-            floatingLabelStyle: const TextStyle(
-              color: Color(0xFFA51414), // Red color when focused (matches border)
-              fontSize: 16,
-            ),
-            floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
-            contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // Center text vertically
-            // Use the same border style for ALL states
-            border: borderStyle,
-            enabledBorder: borderStyle,
-            focusedBorder: borderStyle,
-            errorBorder: borderStyle, // Use the same style even for error state
-            focusedErrorBorder: borderStyle, // Use the same style even for focused error state
-            errorStyle: const TextStyle(height: 0, fontSize: 0), // Hide error text completely
-            suffixIcon: suffixIcon, // Add the optional suffix icon
+            textAlignVertical: TextAlignVertical.center, // Vertically center the text
           ),
-          style: const TextStyle(
-            fontSize: 16, // Adjust font size for input text
-            height: 1.2, // Adjust height for better vertical alignment
-          ),
-          textAlignVertical: TextAlignVertical.center, // Vertically center the text
         ),
       ),
     );
-
-    return formField;
   }
 }
 

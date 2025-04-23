@@ -36,6 +36,9 @@ class _EditTextBox2State extends State<EditTextBox2> {
   late List<Map<String, String>> _addresses;
   late int _selectedIndex;
 
+  // New boolean to control display of simple radio button container
+  bool _showSimpleRadioButton = false;
+
   @override
   void initState() {
     super.initState();
@@ -217,6 +220,33 @@ class _EditTextBox2State extends State<EditTextBox2> {
                       (entry) => _buildAddressItem(entry.value, entry.key),
                     ),
               ],
+            ),
+          // Add simple radio button container if _showSimpleRadioButton is true
+          if (_showSimpleRadioButton)
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Radio<bool>(
+                    value: true,
+                    groupValue: false,
+                    onChanged: (value) {
+                      // No action needed as this is a simple static radio button
+                    },
+                    activeColor: const Color(0xFFA51414),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Adress1, adress2',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
             ),
         ],
       ),
