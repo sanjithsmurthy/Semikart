@@ -209,6 +209,8 @@ class HamburgerMenu extends ConsumerWidget {
     );
   }
 
+  
+
   Route _createFadeRoute(Widget page, {int? initialIndex}) {
     final Widget targetPage = (page is BaseScaffold && initialIndex != null)
         ? BaseScaffold(key: ValueKey('BaseScaffold_$initialIndex'), initialIndex: initialIndex)
