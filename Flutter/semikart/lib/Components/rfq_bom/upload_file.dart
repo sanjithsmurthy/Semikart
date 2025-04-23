@@ -4,7 +4,9 @@ import '../common/red_button.dart';
 import 'dart:io';
 
 class CustomSquare extends StatefulWidget {
-  const CustomSquare({Key? key}) : super(key: key);
+  final Function(bool) onFileUploaded;
+  const CustomSquare({Key? key, required this.onFileUploaded})
+      : super(key: key);
 
   @override
   State<CustomSquare> createState() => _CustomSquareState();
@@ -14,6 +16,7 @@ class _CustomSquareState extends State<CustomSquare> {
   String? _fileName;
   String? _fileExtension;
   File? _selectedFile;
+  bool _isFileUploaded = false;
 
   Future<void> _pickFile() async {
     final XTypeGroup typeGroup = XTypeGroup(
@@ -28,8 +31,11 @@ class _CustomSquareState extends State<CustomSquare> {
         _fileName = file.path.split('/').last;
         _fileExtension = file.path.split('.').last;
         _selectedFile = file;
+        _isFileUploaded = true;
       });
       print('File selected: ${file.path}');
+      widget.onFileUploaded(
+          _isFileUploaded); // Notify parent that file is uploaded
     } else {
       print('File selection canceled.');
     }
