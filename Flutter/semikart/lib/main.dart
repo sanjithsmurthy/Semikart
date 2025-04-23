@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
-import 'package:Semikart/Components/login_signup/login_password.dart'; // Import your login screen
+import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
-import 'base_scaffold.dart'; // Import BaseScaffold for the main app structure
-import 'managers/auth_manager.dart'; // Import the AuthManager provider
+import 'base_scaffold.dart';
+import 'managers/auth_manager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +15,6 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  // ✅ System UI Overlay Style (Ensure flutter/services.dart is imported)
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.white,
     statusBarIconBrightness: Brightness.dark,
@@ -36,74 +35,54 @@ void _setupLogging() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
-    // Optional: Add more details like time, error, stacktrace
-    // if (record.error != null) {
-    //   debugPrint('Error: ${record.error}');
-    // }
-    // if (record.stackTrace != null) {
-    //   debugPrint('StackTrace: ${record.stackTrace}');
-    // }
   });
 }
 
-class MyApp extends ConsumerWidget { // Changed to ConsumerWidget to use WidgetRef
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) { // Now correctly overrides ConsumerWidget.build
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Semikart',
       theme: ThemeData(
-        // Define your app's theme
-        primaryColor: const Color(0xFFA51414), // Example primary color
-        scaffoldBackgroundColor: Colors.white, // Example background color
-        // Add other theme properties like primarySwatch, textTheme, etc.
+        primaryColor: const Color(0xFFA51414),
+        scaffoldBackgroundColor: Colors.white,
       ),
-      // *** Use AuthWrapper as the home widget ***
-      // AuthWrapper will decide whether to show LoginPasswordNewScreen or BaseScaffold
-      home: const AuthWrapper(),
+      home: const AuthWrapper(), // ⬅️ Important: AuthWrapper is the home widget
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-/// This widget acts as a gatekeeper, showing the appropriate UI
-/// based on the user's authentication status.
 class AuthWrapper extends ConsumerWidget {
   const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listen to the authentication state provided by AuthManager
     final authState = ref.watch(authManagerProvider);
 
-    // Handle the initial state while checking authentication status
+    print("🔁 AuthWrapper: Status is ${authState.status}"); // Debug print
+
     if (authState.status == AuthStatus.unknown) {
-      print("AuthWrapper: State is Unknown. Showing Loading Indicator.");
-      // Show a loading indicator while checking auth status
       return const Scaffold(
-        backgroundColor: Colors.white, // Match app background
+        backgroundColor: Colors.white,
         body: Center(
           child: CircularProgressIndicator(
-            color: Color(0xFFA51414), // Use app's primary color
+            color: Color(0xFFA51414),
           ),
         ),
       );
     }
 
-    // Determine which screen to show based on the authentication status
     if (authState.status == AuthStatus.authenticated) {
-      // User is logged in - Show the main application structure (BaseScaffold)
-      // BaseScaffold internally shows HomePageContent as the first tab (index 0)
-      print("AuthWrapper: State is Authenticated. Showing BaseScaffold.");
       return BaseScaffold(
-        key: BaseScaffold.navigatorKey, // Assign the static key
-        initialIndex: 0, // Start on the home tab (which contains HomePageContent)
+        key: BaseScaffold.navigatorKey,
+        initialIndex: 0,
       );
-    } else {
-      // User is not logged in (AuthStatus.unauthenticated) - Show the Login Screen
-      print("AuthWrapper: State is Unauthenticated. Showing LoginPasswordScreen.");
-      return const LoginPasswordNewScreen(); // Your designated login screen widget
     }
+
+    // If unauthenticated or fallback
+    return const LoginPasswordNewScreen();
   }
 }

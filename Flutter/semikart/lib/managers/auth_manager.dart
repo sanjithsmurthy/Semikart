@@ -136,25 +136,21 @@ class AuthManager extends StateNotifier<AuthState> {
 
   /// Logs the user out by clearing the stored token and updating the state.
   Future<void> logout() async {
-    print("AuthManager: Attempting logout...");
-    try {
-      await _storage.delete(key: _tokenKey);
-      print("AuthManager: Token deleted from storage.");
-      // Ensure state is updated *after* successful deletion
-      if (mounted) {
-        state = const AuthState.unauthenticated();
-        print("AuthManager: State set to unauthenticated."); // Confirm state change
-      } else {
-        print("AuthManager: AuthManager is not mounted after logout. State not updated immediately.");
-      }
-    } catch (e) {
-      print("AuthManager: Error deleting token during logout: $e");
-      // Even on error, attempt to set state to unauthenticated
-      if (mounted) {
-        state = const AuthState.unauthenticated();
-        print("AuthManager: State set to unauthenticated despite error during token deletion."); // Confirm state change
-      }
+     print("AuthManager: Attempting logout...");
+  try {
+    await _storage.delete(key: _tokenKey);
+    print("AuthManager: Token deleted from storage.");
+
+    if (mounted) {
+      state = const AuthState.unauthenticated();
+      print("AuthManager: State set to unauthenticated."); // <--- THIS MUST PRINT
     }
+  } catch (e) {
+    print("Logout failed: $e");
+    if (mounted) {
+      state = const AuthState.unauthenticated(); // <--- This too
+    }
+  }
   }
 }
 

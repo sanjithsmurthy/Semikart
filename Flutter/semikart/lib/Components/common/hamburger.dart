@@ -12,6 +12,7 @@ import '../../base_scaffold.dart';
 import '../home/order_history.dart';
 import '../../providers/profile_image_provider.dart';
 import '../../providers/user_profile_provider.dart'; // NEW: import user profile data
+// Import AuthManager provider
 
 class HamburgerMenu extends ConsumerWidget {
   const HamburgerMenu({super.key});
@@ -97,39 +98,32 @@ class HamburgerMenu extends ConsumerWidget {
                       ),
                       const SizedBox(width: 16),
                       RedButton(
-                        label: 'Logout',
-                        onPressed: () async { // Make async
-                          // Close the drawer first
-                          Navigator.pop(context);
-                          // Show confirmation popup
-                          final confirmed = await CustomPopup.show( // Wait for popup result
-                            context: context,
-                            title: 'Logout',
-                            message: 'Are you sure you want to logout?',
-                            buttonText: 'Confirm',
-                            cancelButtonText: 'Cancel', // Add a cancel button
-                            imagePath: 'public/assets/images/Alert.png',
-                          ); // Get the boolean result from pop
+  label: 'Logout',
+  onPressed: () async {
+  Navigator.pop(context);
+  final confirmed = await CustomPopup.show(
+    context: context,
+    title: 'Logout',
+    message: 'Are you sure you want to logout?',
+    buttonText: 'Confirm',
+    cancelButtonText: 'Cancel',
+    imagePath: 'public/assets/images/Alert.png',
+  );
 
-                          // --- Check if confirmed (popup returns true) ---
-                          if (confirmed == true) {
-                            // Call the logout method from AuthManager
-                            // AuthWrapper will handle navigation based on state change
-                            await ref.read(authManagerProvider.notifier).logout();
-                          }
-                          // --- Removed explicit navigation ---
-                          // .then((_) {
-                          //   Navigator.pushAndRemoveUntil(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
-                          //     (route) => false,
-                          //   );
-                          // });
-                        },
-                        width: screenWidth * 0.3,
-                        height: 40,
-                        isWhiteButton: true,
-                      ),
+  if (confirmed == true) {
+  await ref.read(authManagerProvider.notifier).logout();
+
+  // Fallback navigation to root (triggers AuthWrapper logic)
+  Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+}
+
+},
+
+  width: screenWidth * 0.3,
+  height: 40,
+  isWhiteButton: true,
+),
+
                     ],
                   ),
                 ],
