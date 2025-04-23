@@ -168,10 +168,8 @@ class AppNavigator {
 
   /// Switches to the Products tab (index 1) and pops its navigator to the first route ('l1').
   static void openProductsRootPage() {
-
     goTo(1);
   }
-
   /// Switches to the Home tab (index 0) and navigates to the RFQ page.
   static void openHomeRFQPage() {
     goTo(0, routeName: 'rfq'); // Switch to Home tab and push 'rfq' route

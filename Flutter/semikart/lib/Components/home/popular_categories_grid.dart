@@ -52,7 +52,7 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                  AppNavigator.openProductsRootPage(); // Assuming this method exists
+                  AppNavigator.pushProductsL2(arguments: {'category': category['label']!});
                 },
               );
             },
