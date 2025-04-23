@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class L1Tile extends StatelessWidget {
   final String iconPath;
   final String text;
+  final VoidCallback onTap; // Add onTap callback
 
   const L1Tile({
     super.key,
     required this.iconPath,
     required this.text,
+    required this.onTap, // Make onTap required
   });
 
   @override
@@ -16,7 +18,6 @@ class L1Tile extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Dynamic scaling based on reference size (412x917) and image proportions (approx 146x113)
-    // Calculate scaling factors
     const double refWidth = 412.0;
     const double refHeight = 917.0;
     const double refIconContainerWidth = 146.0;
@@ -27,45 +28,44 @@ class L1Tile extends StatelessWidget {
 
     // Calculate dynamic sizes
     final double dynamicIconContainerWidth = screenWidth * (refIconContainerWidth / refWidth);
-    // Maintain aspect ratio for height or scale independently? Let's scale height too for consistency
     final double dynamicIconContainerHeight = screenHeight * (refIconContainerHeight / refHeight);
     final double dynamicIconSize = screenWidth * (refIconSize / refWidth); // Scale icon with width
     final double dynamicFontSize = screenHeight * (refFontSize / refHeight); // Scale font with height
     final double dynamicSpacing = screenHeight * (refSpacing / refHeight); // Scale spacing with height
 
-    return SizedBox(
-      // Use SizedBox to constrain the overall size if needed, or let Column size itself
-      // width: dynamicIconContainerWidth, // Optional: Constrain width
-      // height: dynamicIconContainerHeight, // Optional: Constrain height
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // Center items vertically
-        mainAxisSize: MainAxisSize.min, // Take minimum space needed
-        children: [
-          Image.asset(
-            iconPath,
-            width: dynamicIconSize,
-            height: dynamicIconSize,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              // Fallback widget in case the image fails to load
-              return Icon(
-                Icons.broken_image,
-                size: dynamicIconSize,
-                color: Colors.grey,
-              );
-            },
-          ),
-          SizedBox(height: dynamicSpacing), // Dynamic spacing
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: dynamicFontSize, // Dynamic font size
-              fontWeight: FontWeight.w500, // Match image weight (medium)
-              color: Colors.black, // Match image color
+    return GestureDetector(
+      onTap: onTap, // Handle tap event
+      child: SizedBox(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Center items vertically
+          mainAxisSize: MainAxisSize.min, // Take minimum space needed
+          children: [
+            Image.asset(
+              iconPath,
+              width: dynamicIconSize,
+              height: dynamicIconSize,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback widget in case the image fails to load
+                return Icon(
+                  Icons.broken_image,
+                  size: dynamicIconSize,
+                  color: Colors.grey,
+                );
+              },
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            SizedBox(height: dynamicSpacing), // Dynamic spacing
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: dynamicFontSize, // Dynamic font size
+                fontWeight: FontWeight.w500, // Match image weight (medium)
+                color: Colors.black, // Match image color
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
