@@ -237,43 +237,51 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // IntlPhoneField for Mobile Number
                 Center(
                   child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final screenWidth = MediaQuery.of(context).size.width;
-                    final double responsiveBorderRadius = screenWidth * 0.06;
+                    builder: (context, constraints) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      final double responsiveBorderRadius = screenWidth * 0.028;
 
-                    return IntlPhoneField(
-                    decoration: InputDecoration(
-                      labelText: 'Mobile Number',
-                      labelStyle: const TextStyle(color: Color(0xFF757575)),
-                      floatingLabelStyle: const TextStyle(color: Color(0xFFA51414)),
-                      border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 2.0),
-                      borderRadius: BorderRadius.circular(responsiveBorderRadius),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFA51414),width: 2.0),
-                      borderRadius: BorderRadius.circular(responsiveBorderRadius),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFA51414), width: 2.0),
-                      borderRadius: BorderRadius.circular(responsiveBorderRadius),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-                      counterText: '',
-                    ),
-                    initialCountryCode: 'IN',
-                    keyboardType: TextInputType.phone, // Set keyboard type
-                    onChanged: (phone) {
-                      mobileNumberController.text = phone.completeNumber;
-                       _checkAllFieldsFilled();
-                      print(phone.completeNumber);
+                      return TextSelectionTheme(
+                        data: const TextSelectionThemeData(
+                          selectionColor: Color(0xFFA51414), // Highlight color for selected text
+                          selectionHandleColor: Color(0xFFA51414), // Color for the drop icon
+                        ),
+                        child: IntlPhoneField(
+                          cursorColor: const Color(0xFFA51414),
+                          cursorWidth: 1, // Set the cursor color to red
+                          decoration: InputDecoration(
+                            labelText: 'Mobile Number',
+                            labelStyle: const TextStyle(color: Color(0xFF757575)),
+                            floatingLabelStyle: const TextStyle(color: Color(0xFFA51414)),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Color(0xFFA51414), width: 1.0),
+                              borderRadius: BorderRadius.circular(responsiveBorderRadius),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Color(0xFFA51414), width: 1.0),
+                              borderRadius: BorderRadius.circular(responsiveBorderRadius),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Color(0xFFA51414), width: 1.0),
+                              borderRadius: BorderRadius.circular(responsiveBorderRadius),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+                            counterText: '',
+                          ),
+                          initialCountryCode: 'IN',
+                          keyboardType: TextInputType.phone, // Set keyboard type
+                          onChanged: (phone) {
+                            mobileNumberController.text = phone.completeNumber;
+                            _checkAllFieldsFilled();
+                            print(phone.completeNumber);
+                          },
+                          onCountryChanged: (country) {
+                            print('Country changed to: ' + country.name);
+                          },
+                          dropdownIcon: const Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)), // Set dropdown icon color
+                        ),
+                      );
                     },
-                    onCountryChanged: (country) {
-                      print('Country changed to: ' + country.name);
-                    },
-                    dropdownIcon: const Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)),
-                    );
-                  }
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.025), // Add spacing

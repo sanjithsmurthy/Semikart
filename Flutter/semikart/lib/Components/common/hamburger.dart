@@ -128,25 +128,28 @@ class HamburgerMenu extends ConsumerWidget {
                       RedButton(
   label: 'Logout',
   onPressed: () async {
-  Navigator.pop(context);
-  final confirmed = await CustomPopup.show(
-    context: context,
-    title: 'Logout',
-    message: 'Are you sure you want to logout?',
-    buttonText: 'Confirm',
-    cancelButtonText: 'Cancel',
-    imagePath: 'public/assets/images/Alert.png',
-  );
+    Navigator.pop(context); // Close the drawer
+    final confirmed = await CustomPopup.show(
+      context: context,
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+      imagePath: 'public/assets/images/Alert.png',
+    );
 
-  if (confirmed == true) {
-  await ref.read(authManagerProvider.notifier).logout();
+    if (confirmed == true) {
+      // Perform logout logic
+      await ref.read(authManagerProvider.notifier).logout();
 
-  // Fallback navigation to root (triggers AuthWrapper logic)
-  Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-}
-
-},
-
+      // Navigate to LoginPassword page
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login_password',
+        (route) => false,
+      );
+    }
+  },
   width: screenWidth * 0.3,
   height: 40,
   isWhiteButton: true,
