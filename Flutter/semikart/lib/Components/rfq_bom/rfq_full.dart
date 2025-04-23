@@ -1,45 +1,60 @@
 import 'package:flutter/material.dart';
-import '../../app_navigator.dart'; // Import AppNavigator
-import 'upload_file.dart'; // Import the CustomSquare component
-import 'rfq_text_component.dart'; // Import the RFQTextComponent
-import 'rfq_adress_details.dart'; // Import the RFQAddressDetails component
+import '../../app_navigator.dart';
+import 'upload_file.dart';
+import 'rfq_text_component.dart';
+import 'rfq_adress_details.dart';
+import '../common/popup.dart';
+import '../home/home_page.dart';
 
-class RFQFullPage extends StatelessWidget {
-  const RFQFullPage({super.key});
+class RFQFullPage extends StatefulWidget {
+  const RFQFullPage({Key? key}) : super(key: key);
+
+  @override
+  State<RFQFullPage> createState() => _RFQFullPageState();
+}
+
+class _RFQFullPageState extends State<RFQFullPage> {
+  bool isFileUploaded = false;
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Use context to navigate back to the Products RFQ section
-        Navigator.of(context).pop(); // Navigate back using context
-        AppNavigator.openProductsRFQPage(); // Navigate to Products RFQ section
-        return false; // Prevent default back behavior
+        Navigator.of(context).pop();
+        AppNavigator.openProductsRFQPage();
+        return false;
       },
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0), // Add padding inside the component
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Add the CustomSquare component
-              CustomSquare(),
-
-              const SizedBox(height: 40), // Increased height by 4 pixels (20 + 4)
-
-              // Add the RFQTextComponent
-              RFQTextComponent(),
-
-              const SizedBox(height: 20),
-
-              // Add the RFQAddressDetails component
-              RFQAddressDetails(
-                onSubmit: () {
-                  // Define what happens when the submit button is pressed
-                  print('Submit button pressed!');
+              CustomSquare(
+                onFileUploaded: (bool uploaded) {
+                  setState(() {
+                    isFileUploaded = uploaded;
+                  });
                 },
               ),
-
+              const SizedBox(height: 40),
+              if (!isFileUploaded) RFQTextComponent(),
+              const SizedBox(height: 20),
+              RFQAddressDetails(
+                onSubmit: () {
+                  CustomPopup.show(
+                    context: context,
+                    message: "RFQ submitted successfully.",
+                    buttonText: "OK",
+                  ).then((_) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePageContent()),
+                    );
+                  });
+                },
+              ),
               const SizedBox(height: 20),
             ],
           ),

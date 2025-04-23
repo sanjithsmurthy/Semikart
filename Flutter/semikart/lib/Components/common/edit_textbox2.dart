@@ -37,7 +37,7 @@ class _EditTextBox2State extends State<EditTextBox2> {
   late int _selectedIndex;
 
   // New boolean to control display of simple radio button container
-  bool _showSimpleRadioButton = false;
+  bool _showSimpleRadioButton = true;
 
   @override
   void initState() {
