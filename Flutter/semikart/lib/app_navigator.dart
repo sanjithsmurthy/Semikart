@@ -10,6 +10,7 @@ import 'Components/products/products_l2.dart';
 import 'Components/products/products_l3.dart';
 import 'Components/products/products_l4.dart'; // Import products_l4.dart
 import 'Components/products/product_details_page.dart';
+import 'Components/products/l1_tiles_row.dart'; // Import L1TilesRow
 
 // Cart
 import 'Components/cart/cart_page.dart';
@@ -93,7 +94,12 @@ class AppNavigator {
               return MaterialPageRoute(builder: (_) => ProductDetailsContent());
             case 'l1':
             default:
-              return MaterialPageRoute(builder: (_) => const ProductsL1Page());
+              return MaterialPageRoute(
+                builder: (_) => Productsonerow(
+                  category1: {"icon": "assets/icons/category1.png", "name": "L1 Category 1"},
+                  category2: {"icon": "assets/icons/category2.png", "name": "L1 Category 2"},
+                ),
+              );
           }
         },
       );

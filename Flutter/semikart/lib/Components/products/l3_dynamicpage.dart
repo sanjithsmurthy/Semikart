@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'l2tile.dart';
 
-class L3DynamicPage extends StatelessWidget {
+class L3DynamicComponent extends StatelessWidget {
   final String l2Category;
 
-  const L3DynamicPage({super.key, required this.l2Category});
+  const L3DynamicComponent({super.key, required this.l2Category});
 
   @override
   Widget build(BuildContext context) {
@@ -19,31 +19,25 @@ class L3DynamicPage extends StatelessWidget {
       '$l2Category - Subcategory 4',
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('$l2Category - L3 Page'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.025), // 10px padding dynamically scaled
-        child: ListView.builder(
-          itemCount: l3Items.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Vertical spacing dynamically scaled (~5px)
-              child: Center(
-                child: l2tile(
-                  label: l3Items[index],
-                  width: screenWidth * 0.85, // Dynamically scale width (~85% of screen width)
-                  onTap: () {
-                    // Handle L3 tile tap (e.g., navigate to product details or another page)
-                    print('${l3Items[index]} tapped');
-                  },
-                ),
+    return Padding(
+      padding: EdgeInsets.all(screenWidth * 0.025), // 10px padding dynamically scaled
+      child: ListView.builder(
+        itemCount: l3Items.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005), // Vertical spacing dynamically scaled (~5px)
+            child: Center(
+              child: l2tile(
+                label: l3Items[index],
+                width: screenWidth * 0.85, // Dynamically scale width (~85% of screen width)
+                onTap: () {
+                  // Handle L3 tile tap (e.g., navigate to product details or another page)
+                  print('${l3Items[index]} tapped');
+                },
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

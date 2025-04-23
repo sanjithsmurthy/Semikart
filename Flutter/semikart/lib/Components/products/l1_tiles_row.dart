@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'l1_tile.dart'; // Import the L1Tile widget
-import 'l2_dynamicpage.dart'; // Import the L2DynamicPage
+import 'l2_dynamicpage.dart'; // Import the L2DynamicComponent
 
 class Productsonerow extends StatelessWidget {
   final Map<String, String> category1;
@@ -38,11 +38,11 @@ class Productsonerow extends StatelessWidget {
                   iconPath: category1["icon"]!,
                   text: category1["name"]!,
                   onTap: () {
-                    // Navigate to L2DynamicPage for the first category
+                    // Navigate to L2DynamicComponent for the first category
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => L2DynamicPage(
+                        builder: (context) => L2DynamicComponent(
                           items: l2Categories[category1["name"]] ?? [], // Pass L2 items for category1
                         ),
                       ),
@@ -66,11 +66,11 @@ class Productsonerow extends StatelessWidget {
                     iconPath: category2!["icon"]!,
                     text: category2!["name"]!,
                     onTap: () {
-                      // Navigate to L2DynamicPage for the second category
+                      // Navigate to L2DynamicComponent for the second category
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => L2DynamicPage(
+                          builder: (context) => L2DynamicComponent(
                             items: l2Categories[category2!["name"]] ?? [], // Pass L2 items for category2
                           ),
                         ),
