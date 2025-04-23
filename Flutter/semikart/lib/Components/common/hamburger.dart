@@ -152,28 +152,6 @@ class HamburgerMenu extends ConsumerWidget {
   isWhiteButton: true,
 ),
 
-<<<<<<< HEAD
-=======
-                          // --- Check if confirmed (popup returns true) ---
-                          if (confirmed == true) {
-                            // Call the logout method from AuthManager
-                            // AuthWrapper will handle navigation based on state change
-                            await ref.read(authManagerProvider.notifier).logout();
-                          }
-                          // --- Removed explicit navigation ---
-                          // .then((_) {
-                          //   Navigator.pushAndRemoveUntil(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
-                          //     (route) => false,
-                          //   );
-                          // });
-                        },
-                        width: buttonWidth,
-                        height: buttonHeight,
-                        fontSize: buttonFontSize,
-                      ),
->>>>>>> 110dcc2f7cbb89114f0ded3c8ef2bc0c26862c15
                     ],
                   ),
                 ],
