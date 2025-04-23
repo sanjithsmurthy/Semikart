@@ -40,22 +40,20 @@ class AuthState {
 /// status using secure storage for persistence.
 class AuthManager extends StateNotifier<AuthState> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  final String _tokenKey = 'auth_token'; // Key for storing the token
+  final String _tokenKey = 'auth_token';
   final Dio _dio = Dio();
   PersistCookieJar? _persistentCookies;
   final String url = "https://www.xxxx.in/rest/user/login.json";
 
-  /// Initializes the AuthManager and checks the initial authentication state.
   AuthManager() : super(const AuthState.unknown()) {
     Future.microtask(() => _checkInitialAuthState());
     initializeDio();
   }
 
-  /// Initializes Dio and persistent cookies.
   Future<void> initializeDio() async {
     final Directory dir = await _localCookieDirectory;
     final cookiePath = dir.path;
-    _persistentCookies = PersistCookieJar(storage: FileStorage(cookiePath)); // Fixed FileStorage usage
+    _persistentCookies = PersistCookieJar(storage: FileStorage(cookiePath));
     _dio.interceptors.add(CookieManager(_persistentCookies!));
     _dio.options = BaseOptions(
       baseUrl: url,
@@ -80,7 +78,6 @@ class AuthManager extends StateNotifier<AuthState> {
     return directory.path;
   }
 
-  /// Fetches CSRF token from the server.
   Future<String?> getCsrftoken() async {
     try {
       String? csrfTokenValue;
@@ -104,39 +101,19 @@ class AuthManager extends StateNotifier<AuthState> {
     }
   }
 
-  /// Checks secure storage for an existing token on app startup.
   Future<void> _checkInitialAuthState() async {
-    print("AuthManager: Checking initial authentication state...");
-    try {
-      final token = await _storage.read(key: _tokenKey);
-
-      if (!mounted) return;
-
-      if (token != null && token.isNotEmpty) {
-        state = AuthState(status: AuthStatus.authenticated, userToken: token);
-        print("AuthManager: User is authenticated from storage (Token found).");
-      } else {
-        state = const AuthState.unauthenticated();
-        print("AuthManager: User is unauthenticated (No token found or token is empty).");
-      }
-    } catch (e) {
-      print("AuthManager: Error checking initial auth state: $e");
-      if (mounted) {
-        state = const AuthState.unauthenticated();
-        print("AuthManager: Setting state to unauthenticated due to error.");
-      }
+    final token = await _storage.read(key: _tokenKey);
+    if (token != null && token.isNotEmpty) {
+      state = AuthState(status: AuthStatus.authenticated, userToken: token);
+    } else {
+      state = const AuthState.unauthenticated();
     }
   }
 
-  /// Handles login with CSRF token validation.
   Future<bool> login(String email, String password) async {
-    print("AuthManager: Attempting login for $email...");
     try {
       final csrf = await getCsrftoken();
-      if (csrf == null) {
-        print("AuthManager: Failed to fetch CSRF token.");
-        return false;
-      }
+      if (csrf == null) return false;
 
       FormData formData = FormData.fromMap({
         "username": email,
@@ -146,35 +123,48 @@ class AuthManager extends StateNotifier<AuthState> {
 
       Response response = await _dio.post(url, data: formData);
       if (response.statusCode == 200) {
-        const fakeToken = "fake_jwt_token_12345"; // Simulate receiving a token
+        const fakeToken = "fake_jwt_token_12345";
         await _storage.write(key: _tokenKey, value: fakeToken);
-
-        if (mounted) {
-          state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
-        }
+        state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
         return true;
       }
-
       return false;
     } catch (e) {
-      print("AuthManager: Login error: $e");
+      print("Login error: $e");
       return false;
     }
   }
 
-  /// Simulates a logout process.
-  Future<void> logout() async {
-    print("AuthManager: Logging out...");
+  Future<bool> signUp(String email, String password, String fullName) async {
+    print("AuthManager: Attempting sign-up for $email...");
     try {
-      await _storage.delete(key: _tokenKey);
-      _persistentCookies?.deleteAll();
+      // Replace this URL with your actual sign-up endpoint
+      final signUpUrl = "https://www.xxxx.in/rest/user/signup.json";
 
-      if (mounted) {
-        state = const AuthState.unauthenticated();
+      FormData formData = FormData.fromMap({
+        "email": email,
+        "password": password,
+        "full_name": fullName,
+      });
+
+      Response response = await _dio.post(signUpUrl, data: formData);
+      if (response.statusCode == 201) {
+        print("AuthManager: Sign-up successful for $email.");
+        return true;
+      } else {
+        print("AuthManager: Sign-up failed with status code ${response.statusCode}.");
+        return false;
       }
     } catch (e) {
-      print("AuthManager: Logout error: $e");
+      print("AuthManager: Sign-up error: $e");
+      return false;
     }
+  }
+
+  Future<void> logout() async {
+    await _storage.delete(key: _tokenKey);
+    _persistentCookies?.deleteAll();
+    state = const AuthState.unauthenticated();
   }
 }
 
