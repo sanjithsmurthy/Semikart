@@ -4,11 +4,7 @@ import 'capsule.dart';
 import '../common/red_button.dart';
 
 class PopularCategoriesGrid extends StatelessWidget {
-  // Removed onViewAll as navigation is handled internally now
-  const PopularCategoriesGrid({
-    super.key,
-    // required this.onViewAll, // Removed
-  });
+  const PopularCategoriesGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +48,8 @@ class PopularCategoriesGrid extends StatelessWidget {
                 label: category['label']!,
                 imagePath: category['imagePath']!,
                 onTap: () {
-                  AppNavigator.openProductsRootPage(); // Assuming this method exists
+                  // Navigate to the Products L2 page and switch to the Products tab
+                  AppNavigator.goTo(1, routeName: 'l2');
                 },
               );
             },
@@ -62,7 +59,7 @@ class PopularCategoriesGrid extends StatelessWidget {
         RedButton(
           label: 'View All',
           onPressed: () {
-            AppNavigator.openProductsRootPage(); // Assuming this method exists
+            AppNavigator.openProductsRootPage(); // Navigate to the Products tab root
           },
           isWhiteButton: true,
           width: screenWidth * 0.23,
