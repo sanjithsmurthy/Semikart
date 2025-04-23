@@ -95,10 +95,11 @@ class AppNavigator {
             case 'l1':
             default:
               return MaterialPageRoute(
-                builder: (_) => Productsonerow(
-                  category1: {"icon": "assets/icons/category1.png", "name": "L1 Category 1"},
-                  category2: {"icon": "assets/icons/category2.png", "name": "L1 Category 2"},
-                ),
+                // builder: (_) => Productsonerow(
+                //   category1: {"icon": "assets/icons/category1.png", "name": "L1 Category 1"},
+                //   category2: {"icon": "assets/icons/category2.png", "name": "L1 Category 2"},
+                // ),
+                builder: (_) => const ProductsL1Page(),
               );
           }
         },

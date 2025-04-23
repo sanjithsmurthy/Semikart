@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for TextInputType
+import 'package:flutter/services.dart';
 import '../common/red_button.dart';
 import '../common/grey_text_box.dart';
 
@@ -7,39 +7,51 @@ class RFQAddressDetails extends StatefulWidget {
   final String title;
   final String submitButtonText;
   final VoidCallback onSubmit;
+  final String? initialAddress1;
+  final String? initialAddress2;
+  final VoidCallback? onTextFieldFocused; // Add this line
 
   const RFQAddressDetails({
-    super.key,
+    Key? key,
     this.title = 'Address Details',
     this.submitButtonText = 'Submit',
     required this.onSubmit,
-  });
+    this.initialAddress1,
+    this.initialAddress2,
+    this.onTextFieldFocused, // Add this line
+  }) : super(key: key);
 
   @override
   State<RFQAddressDetails> createState() => _RFQAddressDetailsState();
 }
 
 class _RFQAddressDetailsState extends State<RFQAddressDetails> {
-  // Controllers for each text field
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController companyController = TextEditingController();
   final TextEditingController gstNoController = TextEditingController();
-  final TextEditingController address1Controller = TextEditingController();
-  final TextEditingController address2Controller = TextEditingController();
+  late final TextEditingController address1Controller;
+  late final TextEditingController address2Controller;
   final TextEditingController landmarkController = TextEditingController();
   final TextEditingController zipCodeController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
 
-  // Form key for validation
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    address1Controller =
+        TextEditingController(text: widget.initialAddress1 ?? '');
+    address2Controller =
+        TextEditingController(text: widget.initialAddress2 ?? '');
+  }
+
+  @override
   void dispose() {
-    // Dispose all controllers
     firstNameController.dispose();
     emailController.dispose();
     mobileController.dispose();
@@ -55,30 +67,71 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     super.dispose();
   }
 
+  void _submitForm() {
+    // Validate all required fields
+    if (firstNameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        mobileController.text.isEmpty ||
+        address1Controller.text.isEmpty ||
+        address2Controller.text.isEmpty ||
+        landmarkController.text.isEmpty ||
+        zipCodeController.text.isEmpty ||
+        stateController.text.isEmpty ||
+        cityController.text.isEmpty ||
+        countryController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all requirement fields'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    // Validate mobile number is numeric
+    if (!RegExp(r'^[0-9]+$').hasMatch(mobileController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Mobile number must contain only numbers'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    // Validate zip code is numeric
+    if (!RegExp(r'^[0-9]+$').hasMatch(zipCodeController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Zip code must contain only numbers'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    widget.onSubmit();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    final screenHeight =
-        MediaQuery.of(context).size.height; // Get screen height
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-    // Dynamic dimensions based on screen width
-    final double titleFontSize = screenWidth * 0.05; // 5% of screen width
-    final double sectionSpacing = screenWidth * 0.04; // 4% of screen width
-    final double textBoxSpacing = screenWidth * 0.025; // 2.5% of screen width
-    final double rowSpacing = screenWidth * 0.025; // 2.5% of screen width
-    final double textBoxWidth = screenWidth * 0.9; // 90% of screen width
-    final double reCaptchaHeight = screenHeight * 0.06; // 6% of screen height
-    final double reCaptchaFontSize =
-        screenWidth * 0.035; // 3.5% of screen width
-    final double submitButtonSpacing = screenWidth * 0.05; // 5% of screen width
-    final double textBoxLabelFontSize =
-        screenWidth * 0.0325; // 3.25% of screen width
-    final double textBoxHeight = screenHeight * 0.05; // 5% of screen height
-    final double rowHorizontalSpacing =
-        screenWidth * 0.075; // 7.5% of screen width
+    final double titleFontSize = screenWidth * 0.05;
+    final double sectionSpacing = screenWidth * 0.04;
+    final double textBoxSpacing = screenWidth * 0.025;
+    final double rowSpacing = screenWidth * 0.025;
+    final double textBoxWidth = screenWidth * 0.9;
+    final double reCaptchaHeight = screenHeight * 0.06;
+    final double reCaptchaFontSize = screenWidth * 0.035;
+    final double submitButtonSpacing = screenWidth * 0.05;
+    final double textBoxLabelFontSize = screenWidth * 0.0325;
+    final double textBoxHeight = screenHeight * 0.05;
+    final double rowHorizontalSpacing = screenWidth * 0.075;
 
     return Container(
-      color: Colors.white, // Set the background color to white
+      color: Colors.white,
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(sectionSpacing),
@@ -87,18 +140,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
                 Text(
                   widget.title,
                   style: TextStyle(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black, // Changed to black
+                    color: Colors.black,
                   ),
                 ),
-                SizedBox(height: sectionSpacing), // Space below the title
-
-                // First Name
+                SizedBox(height: sectionSpacing),
                 GreyTextBox(
                   nameController: firstNameController,
                   text: 'First name*',
@@ -107,15 +157,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your first name';
+                      return 'First name is required';
                     }
                     return null;
                   },
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Email
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: emailController,
                   text: 'Email*',
@@ -125,18 +173,16 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Email is required';
                     }
                     if (!value.contains('@')) {
                       return 'Please enter a valid email';
                     }
                     return null;
                   },
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Mobile
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: mobileController,
                   text: 'Mobile number*',
@@ -147,29 +193,25 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your mobile number';
+                      return 'Mobile number is required';
                     }
                     if (value.length < 10) {
                       return 'Please enter a valid mobile number';
                     }
                     return null;
                   },
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Company
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: companyController,
                   text: 'Company name',
                   backgroundColor: Color(0xFFE4E8EC),
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // GST No
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: gstNoController,
                   text: 'GST number',
@@ -178,11 +220,9 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Address 1
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: address1Controller,
                   text: 'Address line 1*',
@@ -191,15 +231,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your address line 1';
+                      return 'Address line 1 is required';
                     }
                     return null;
                   },
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Address 2
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: address2Controller,
                   text: 'Address line 2*',
@@ -208,15 +246,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your address line 2';
+                      return 'Address line 2 is required';
                     }
                     return null;
                   },
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Landmark
+                SizedBox(height: textBoxSpacing),
                 GreyTextBox(
                   nameController: landmarkController,
                   text: 'Landmark*',
@@ -225,18 +261,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your landmark';
+                      return 'Landmark is required';
                     }
                     return null;
                   },
+                  onTap: widget.onTextFieldFocused, // Add this line
                 ),
-
-                SizedBox(height: textBoxSpacing), // Space between fields
-
-                // Zip Code and State
+                SizedBox(height: textBoxSpacing),
                 Row(
                   children: [
-                    // Zip Code
                     Expanded(
                       flex: 1,
                       child: GreyTextBox(
@@ -251,19 +284,17 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your zip code';
+                            return 'Zip code is required';
                           }
                           if (value.length < 6) {
                             return 'Please enter a valid zip code';
                           }
                           return null;
                         },
+                        onTap: widget.onTextFieldFocused, // Add this line
                       ),
                     ),
-                    SizedBox(
-                        width:
-                            rowHorizontalSpacing), // Match the spacing between Quantity and Price
-                    // State
+                    SizedBox(width: rowHorizontalSpacing),
                     Expanded(
                       flex: 1,
                       child: GreyTextBox(
@@ -274,21 +305,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         textBoxHeight: textBoxHeight,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your state';
+                            return 'State is required';
                           }
                           return null;
                         },
+                        onTap: widget.onTextFieldFocused, // Add this line
                       ),
                     ),
                   ],
                 ),
-
-                SizedBox(height: rowSpacing), // Space between rows
-
-                // City and Country
+                SizedBox(height: rowSpacing),
                 Row(
                   children: [
-                    // City
                     Expanded(
                       flex: 1,
                       child: GreyTextBox(
@@ -299,16 +327,14 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         textBoxHeight: textBoxHeight,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your city';
+                            return 'City is required';
                           }
                           return null;
                         },
+                        onTap: widget.onTextFieldFocused, // Add this line
                       ),
                     ),
-                    SizedBox(
-                        width:
-                            rowHorizontalSpacing), // Match the spacing between Quantity and Price
-                    // Country
+                    SizedBox(width: rowHorizontalSpacing),
                     Expanded(
                       flex: 1,
                       child: GreyTextBox(
@@ -319,18 +345,16 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         textBoxHeight: textBoxHeight,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your country';
+                            return 'Country is required';
                           }
                           return null;
                         },
+                        onTap: widget.onTextFieldFocused, // Add this line
                       ),
                     ),
                   ],
                 ),
-
-                SizedBox(height: sectionSpacing), // Space before reCAPTCHA
-
-                // reCAPTCHA Placeholder
+                SizedBox(height: sectionSpacing),
                 Container(
                   height: reCaptchaHeight,
                   decoration: BoxDecoration(
@@ -347,19 +371,11 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     ),
                   ),
                 ),
-
-                SizedBox(
-                    height: submitButtonSpacing), // Space before Submit button
-
-                // Submit Button
+                SizedBox(height: submitButtonSpacing),
                 Center(
                   child: RedButton(
                     label: widget.submitButtonText,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        widget.onSubmit();
-                      }
-                    },
+                    onPressed: _submitForm,
                   ),
                 ),
               ],
@@ -373,66 +389,67 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
 
 class GreyTextBox extends StatelessWidget {
   final TextEditingController nameController;
-  final String text; // Single parameter for both label and hint text
-  final double? width; // Optional width parameter
-  final Color backgroundColor; // Background color parameter
-  final double labelFontSize; // Font size for the label
-  final double textBoxHeight; // Height for the text box
+  final String text;
+  final double? width;
+  final Color backgroundColor;
+  final double labelFontSize;
+  final double textBoxHeight;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
+  final VoidCallback? onTap; // Add this line
 
-  GreyTextBox({
+  const GreyTextBox({
     Key? key,
     required this.nameController,
-    this.text = 'Name', // Default value for label and hint text
-    this.width, // Optional width
-    this.backgroundColor =
-        const Color(0xFFE4E8EC), // Default grey background color
-    required this.labelFontSize, // Font size for the label
-    required this.textBoxHeight, // Height for the text box
+    this.text = 'Name',
+    this.width,
+    this.backgroundColor = const Color(0xFFE4E8EC),
+    required this.labelFontSize,
+    required this.textBoxHeight,
     this.keyboardType,
     this.inputFormatters,
     this.validator,
+    this.onTap, // Add this line
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Get screen width for responsiveness
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          text, // Use the single parameter for label text
+          text,
           style: TextStyle(
             fontSize: labelFontSize,
-            color: Color(0xFFA51414), // Adjust the color as needed
+            color: Color(0xFFA51414),
           ),
         ),
         const SizedBox(height: 2),
         Container(
-          width: width ??
-              screenWidth *
-                  0.9, // Default to 90% of screen width if width is not provided
+          width: width ?? screenWidth * 0.9,
           height: textBoxHeight,
           decoration: BoxDecoration(
-            color: backgroundColor, // Use the customizable background color
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(9),
           ),
           child: TextFormField(
-            cursorColor: Colors.black, // Set the cursor color to black
+            cursorColor: Colors.black,
             controller: nameController,
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
             decoration: InputDecoration(
-              hintText: text, // Use the same parameter for hint text
+              hintText: text,
               border: InputBorder.none,
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              errorStyle:
+                  TextStyle(height: 0), // Hide the error message in the field
             ),
             validator: validator,
+            onTap: onTap, // Add this line
           ),
         ),
       ],
