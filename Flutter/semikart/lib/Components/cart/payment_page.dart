@@ -252,7 +252,7 @@ class _EditPageState extends State<EditPage> {
               activeColor: Color(0xFFA51414),
               contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 1),
             Padding(
               padding: const EdgeInsets.only(bottom: 10), // Add 16px bottom padding
               child: EditTextBox2(
