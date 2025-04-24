@@ -37,7 +37,27 @@ class _EditTextBox2State extends State<EditTextBox2> {
   late int _selectedIndex;
 
   // New boolean to control display of simple radio button container
-  bool _showSimpleRadioButton = true;
+  bool _showSimpleRadioButton = false;
+  String _simpleRadioButtonText = 'Adress1, adress2';
+  bool _simpleRadioButtonSelected = false;
+
+  void setSimpleRadioButton(bool show, String text) {
+    setState(() {
+      _showSimpleRadioButton = show;
+      _simpleRadioButtonText = text;
+      _simpleRadioButtonSelected = show;
+      if (show) {
+        _selectedIndex = -1; // Deselect other radio buttons
+      }
+    });
+  }
+
+  void _selectSimpleRadioButton() {
+    setState(() {
+      _simpleRadioButtonSelected = true;
+      _selectedIndex = -1;
+    });
+  }
 
   @override
   void initState() {
@@ -62,7 +82,11 @@ class _EditTextBox2State extends State<EditTextBox2> {
     if (result != null && result is Map<String, String>) {
       setState(() {
         _addresses.add(result);
-        _selectedIndex = _addresses.length - 1;
+        if (_simpleRadioButtonSelected) {
+          _selectedIndex = -1; // Do not select newly added address if simple radio button is selected
+        } else {
+          _selectedIndex = _addresses.length - 1;
+        }
       });
       _notifyChanges();
     }
@@ -90,9 +114,13 @@ class _EditTextBox2State extends State<EditTextBox2> {
 
   void _selectAddress(int index) {
     setState(() {
-      _selectedIndex = index;
+      if (_selectedIndex == index) {
+        _selectedIndex = -1; // Deselect if already selected
+      } else {
+        _selectedIndex = index;
+      }
     });
-    widget.onAddressSelected?.call(index);
+    widget.onAddressSelected?.call(_selectedIndex);
   }
 
   void _deleteAddress(int index) {
@@ -234,16 +262,16 @@ class _EditTextBox2State extends State<EditTextBox2> {
                 children: [
                   Radio<bool>(
                     value: true,
-                    groupValue: false,
+                    groupValue: _simpleRadioButtonSelected,
                     onChanged: (value) {
-                      // No action needed as this is a simple static radio button
+                      _selectSimpleRadioButton();
                     },
                     activeColor: const Color(0xFFA51414),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Adress1, adress2',
-                    style: TextStyle(fontSize: 14),
+                  Text(
+                    _simpleRadioButtonText,
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ],
               ),
