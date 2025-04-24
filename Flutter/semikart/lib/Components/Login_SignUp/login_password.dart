@@ -13,6 +13,9 @@ import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 import '../../base_scaffold.dart';
 import '../../managers/auth_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:Semikart/services/google_auth_service.dart';
 // Removed import for BaseScaffold as navigation is handled by AuthWrapper
 
 // --- Changed to ConsumerStatefulWidget ---
@@ -109,11 +112,18 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
                 SizedBox(height: screenHeight * 0.02),
                 Center(
                   child: SignInWithGoogleButton(
-                    onPressed: () {
-                      print('Google Sign-In button pressed');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google Sign-In not implemented yet.')),
-                      );
+                    onPressed: () async {
+                      final googleAuthService = GoogleAuthService();
+                      final user = await googleAuthService.signInWithGoogle();
+
+                      if (user != null) {
+                        print("Google Sign-In successful: ${user.email}");
+                        // Navigate to the home page or handle successful login
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Google Sign-In failed.')),
+                        );
+                      }
                     },
                     isLoading: false,
                   ),

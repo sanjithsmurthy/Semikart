@@ -9,7 +9,8 @@ class RFQAddressDetails extends StatefulWidget {
   final VoidCallback onSubmit;
   final String? initialAddress1;
   final String? initialAddress2;
-  final VoidCallback? onTextFieldFocused; // Add this line
+  final Function(bool) onValidationChanged;
+  final bool canSubmit;
 
   const RFQAddressDetails({
     Key? key,
@@ -18,7 +19,8 @@ class RFQAddressDetails extends StatefulWidget {
     required this.onSubmit,
     this.initialAddress1,
     this.initialAddress2,
-    this.onTextFieldFocused, // Add this line
+    required this.onValidationChanged,
+    required this.canSubmit,
   }) : super(key: key);
 
   @override
@@ -39,7 +41,22 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
 
+  final FocusNode firstNameFocus = FocusNode();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode mobileFocus = FocusNode();
+  final FocusNode companyFocus = FocusNode();
+  final FocusNode gstNoFocus = FocusNode();
+  final FocusNode address1Focus = FocusNode();
+  final FocusNode address2Focus = FocusNode();
+  final FocusNode landmarkFocus = FocusNode();
+  final FocusNode zipCodeFocus = FocusNode();
+  final FocusNode stateFocus = FocusNode();
+  final FocusNode cityFocus = FocusNode();
+  final FocusNode countryFocus = FocusNode();
+
   final _formKey = GlobalKey<FormState>();
+  bool _isValid = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -48,6 +65,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
         TextEditingController(text: widget.initialAddress1 ?? '');
     address2Controller =
         TextEditingController(text: widget.initialAddress2 ?? '');
+    _validateFields();
   }
 
   @override
@@ -64,53 +82,101 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     stateController.dispose();
     cityController.dispose();
     countryController.dispose();
+
+    firstNameFocus.dispose();
+    emailFocus.dispose();
+    mobileFocus.dispose();
+    companyFocus.dispose();
+    gstNoFocus.dispose();
+    address1Focus.dispose();
+    address2Focus.dispose();
+    landmarkFocus.dispose();
+    zipCodeFocus.dispose();
+    stateFocus.dispose();
+    cityFocus.dispose();
+    countryFocus.dispose();
+
     super.dispose();
   }
 
+  void _validateFields() {
+    String? errorMessage;
+
+    if (firstNameController.text.isEmpty) {
+      errorMessage = 'First name is required';
+    } else if (emailController.text.isEmpty) {
+      errorMessage = 'Email is required';
+    } else if (!emailController.text.contains('@')) {
+      errorMessage = 'Please enter a valid email';
+    } else if (mobileController.text.isEmpty) {
+      errorMessage = 'Mobile number is required';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(mobileController.text)) {
+      errorMessage = 'Mobile number must contain only numbers';
+    } else if (mobileController.text.length < 10) {
+      errorMessage = 'Please enter a valid mobile number';
+    } else if (address1Controller.text.isEmpty) {
+      errorMessage = 'Address line 1 is required';
+    } else if (address2Controller.text.isEmpty) {
+      errorMessage = 'Address line 2 is required';
+    } else if (landmarkController.text.isEmpty) {
+      errorMessage = 'Landmark is required';
+    } else if (zipCodeController.text.isEmpty) {
+      errorMessage = 'Zip code is required';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(zipCodeController.text)) {
+      errorMessage = 'Zip code must contain only numbers';
+    } else if (zipCodeController.text.length < 6) {
+      errorMessage = 'Please enter a valid zip code';
+    } else if (stateController.text.isEmpty) {
+      errorMessage = 'State is required';
+    } else if (cityController.text.isEmpty) {
+      errorMessage = 'City is required';
+    } else if (countryController.text.isEmpty) {
+      errorMessage = 'Country is required';
+    }
+
+    bool isValid = errorMessage == null;
+
+    setState(() {
+      _errorMessage = errorMessage;
+      _isValid = isValid;
+    });
+
+    widget.onValidationChanged(isValid);
+  }
+
   void _submitForm() {
-    // Validate all required fields
-    if (firstNameController.text.isEmpty ||
-        emailController.text.isEmpty ||
-        mobileController.text.isEmpty ||
-        address1Controller.text.isEmpty ||
-        address2Controller.text.isEmpty ||
-        landmarkController.text.isEmpty ||
-        zipCodeController.text.isEmpty ||
-        stateController.text.isEmpty ||
-        cityController.text.isEmpty ||
-        countryController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill all requirement fields'),
-          duration: Duration(seconds: 2),
-        ),
+    if (_isValid) {
+      widget.onSubmit();
+    } else {
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: const Color(0xFFA51414),
+        builder: (BuildContext context) {
+          return Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  _errorMessage ?? 'Please fill all required fields correctly',
+                  style: const TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFA51414),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('OK'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          );
+        },
       );
-      return;
     }
-
-    // Validate mobile number is numeric
-    if (!RegExp(r'^[0-9]+$').hasMatch(mobileController.text)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Mobile number must contain only numbers'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
-    }
-
-    // Validate zip code is numeric
-    if (!RegExp(r'^[0-9]+$').hasMatch(zipCodeController.text)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Zip code must contain only numbers'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
-    }
-
-    widget.onSubmit();
   }
 
   @override
@@ -155,13 +221,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   backgroundColor: Color(0xFFE4E8EC),
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
+                  focusNode: firstNameFocus,
+                  nextFocus: emailFocus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'First name is required';
                     }
                     return null;
                   },
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -171,6 +242,11 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
                   keyboardType: TextInputType.emailAddress,
+                  focusNode: emailFocus,
+                  nextFocus: mobileFocus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Email is required';
@@ -180,7 +256,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     }
                     return null;
                   },
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -191,6 +267,11 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  focusNode: mobileFocus,
+                  nextFocus: companyFocus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Mobile number is required';
@@ -200,7 +281,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     }
                     return null;
                   },
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -209,7 +290,12 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   backgroundColor: Color(0xFFE4E8EC),
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  focusNode: companyFocus,
+                  nextFocus: gstNoFocus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -220,7 +306,12 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   textBoxHeight: textBoxHeight,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  focusNode: gstNoFocus,
+                  nextFocus: address1Focus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -229,13 +320,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   backgroundColor: Color(0xFFE4E8EC),
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
+                  focusNode: address1Focus,
+                  nextFocus: address2Focus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Address line 1 is required';
                     }
                     return null;
                   },
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -244,13 +340,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   backgroundColor: Color(0xFFE4E8EC),
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
+                  focusNode: address2Focus,
+                  nextFocus: landmarkFocus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Address line 2 is required';
                     }
                     return null;
                   },
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 GreyTextBox(
@@ -259,13 +360,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   backgroundColor: Color(0xFFE4E8EC),
                   labelFontSize: textBoxLabelFontSize,
                   textBoxHeight: textBoxHeight,
+                  focusNode: landmarkFocus,
+                  nextFocus: zipCodeFocus,
+                  cursorColor: const Color(0xFFA51414),
+                  cursorWidth: 1.0,
+                  selectionColor: const Color(0xFFA51414),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Landmark is required';
                     }
                     return null;
                   },
-                  onTap: widget.onTextFieldFocused, // Add this line
+                  onChanged: (_) => _validateFields(),
                 ),
                 SizedBox(height: textBoxSpacing),
                 Row(
@@ -282,6 +388,11 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
+                        focusNode: zipCodeFocus,
+                        nextFocus: stateFocus,
+                        cursorColor: const Color(0xFFA51414),
+                        cursorWidth: 1.0,
+                        selectionColor: const Color(0xFFA51414),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Zip code is required';
@@ -291,7 +402,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           }
                           return null;
                         },
-                        onTap: widget.onTextFieldFocused, // Add this line
+                        onChanged: (_) => _validateFields(),
                       ),
                     ),
                     SizedBox(width: rowHorizontalSpacing),
@@ -303,13 +414,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         backgroundColor: Color(0xFFE4E8EC),
                         labelFontSize: textBoxLabelFontSize,
                         textBoxHeight: textBoxHeight,
+                        focusNode: stateFocus,
+                        nextFocus: cityFocus,
+                        cursorColor: const Color(0xFFA51414),
+                        cursorWidth: 1.0,
+                        selectionColor: const Color(0xFFA51414),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'State is required';
                           }
                           return null;
                         },
-                        onTap: widget.onTextFieldFocused, // Add this line
+                        onChanged: (_) => _validateFields(),
                       ),
                     ),
                   ],
@@ -325,13 +441,18 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         backgroundColor: Color(0xFFE4E8EC),
                         labelFontSize: textBoxLabelFontSize,
                         textBoxHeight: textBoxHeight,
+                        focusNode: cityFocus,
+                        nextFocus: countryFocus,
+                        cursorColor: const Color(0xFFA51414),
+                        cursorWidth: 1.0,
+                        selectionColor: const Color(0xFFA51414),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'City is required';
                           }
                           return null;
                         },
-                        onTap: widget.onTextFieldFocused, // Add this line
+                        onChanged: (_) => _validateFields(),
                       ),
                     ),
                     SizedBox(width: rowHorizontalSpacing),
@@ -343,13 +464,17 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         backgroundColor: Color(0xFFE4E8EC),
                         labelFontSize: textBoxLabelFontSize,
                         textBoxHeight: textBoxHeight,
+                        focusNode: countryFocus,
+                        cursorColor: const Color(0xFFA51414),
+                        cursorWidth: 1.0,
+                        selectionColor: const Color(0xFFA51414),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Country is required';
                           }
                           return null;
                         },
-                        onTap: widget.onTextFieldFocused, // Add this line
+                        onChanged: (_) => _validateFields(),
                       ),
                     ),
                   ],
@@ -375,7 +500,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                 Center(
                   child: RedButton(
                     label: widget.submitButtonText,
-                    onPressed: _submitForm,
+                    onPressed: widget.canSubmit ? _submitForm : () {},
                   ),
                 ),
               ],
@@ -397,7 +522,12 @@ class GreyTextBox extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
-  final VoidCallback? onTap; // Add this line
+  final FocusNode? focusNode;
+  final FocusNode? nextFocus;
+  final Function(String)? onChanged;
+  final Color? cursorColor;
+  final double? cursorWidth;
+  final Color? selectionColor;
 
   const GreyTextBox({
     Key? key,
@@ -410,7 +540,12 @@ class GreyTextBox extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.validator,
-    this.onTap, // Add this line
+    this.focusNode,
+    this.nextFocus,
+    this.onChanged,
+    this.cursorColor,
+    this.cursorWidth,
+    this.selectionColor,
   }) : super(key: key);
 
   @override
@@ -436,7 +571,8 @@ class GreyTextBox extends StatelessWidget {
             borderRadius: BorderRadius.circular(9),
           ),
           child: TextFormField(
-            cursorColor: Colors.black,
+            cursorColor: cursorColor ?? Colors.black,
+            cursorWidth: cursorWidth ?? 1.0,
             controller: nameController,
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
@@ -449,7 +585,15 @@ class GreyTextBox extends StatelessWidget {
                   TextStyle(height: 0), // Hide the error message in the field
             ),
             validator: validator,
-            onTap: onTap, // Add this line
+            focusNode: focusNode,
+            onChanged: onChanged,
+            onEditingComplete: () {
+              if (nextFocus != null) {
+                FocusScope.of(context).requestFocus(nextFocus);
+              } else {
+                FocusScope.of(context).unfocus();
+              }
+            },
           ),
         ),
       ],

@@ -78,10 +78,6 @@ class ProductsL1Page extends StatelessWidget {
                               Expanded( // Keep Expanded to ensure items take equal width
                                 child: secondIndex < categories.length
                                     ? GestureDetector(
-                                        onTap: () {
-                                          // Navigate directly to ProductsL2Page for any category tap
-                                          Navigator.of(context).pushNamed('l2');
-                                        },
                                         child: L1Tile(
                                           iconPath: categories[secondIndex]["icon"]!,
                                           text: categories[secondIndex]["name"]!,

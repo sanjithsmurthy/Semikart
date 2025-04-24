@@ -3,11 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
+import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core
 import 'base_scaffold.dart';
 import 'managers/auth_manager.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
 
   // Lock Orientation
   SystemChrome.setPreferredOrientations([
@@ -69,7 +73,7 @@ class AuthWrapper extends ConsumerWidget {
 
     // Handle unknown state (initial check)
     if (authState.status == AuthStatus.unknown) {
-       print(" -> AuthStatus is Unknown. Showing loading indicator.");
+      print(" -> AuthStatus is Unknown. Showing loading indicator.");
       return const Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -82,13 +86,10 @@ class AuthWrapper extends ConsumerWidget {
 
     // Handle authenticated state
     if (authState.status == AuthStatus.authenticated) {
-       print(" -> AuthStatus is Authenticated. Showing BaseScaffold.");
+      print(" -> AuthStatus is Authenticated. Showing BaseScaffold.");
       // It's crucial that BaseScaffold uses its own Navigator keys
       // for internal navigation, separate from the root navigator.
       return BaseScaffold(
-        // Using a ValueKey might help ensure it rebuilds cleanly if needed,
-        // though not strictly necessary here based on the logic.
-        // key: ValueKey('BaseScaffold_${authState.userToken ?? 'logged_in'}'),
         key: BaseScaffold.navigatorKey, // Continue using the static key if required by AppNavigator
         initialIndex: 0,
       );
