@@ -3,7 +3,7 @@ import '../common/red_button.dart'; // Import the RedButton widget
 import '../common/grey_text_box.dart'; // Import the GreyTextBox widget
 
 class RFQTextComponent extends StatefulWidget {
-  const RFQTextComponent({Key? key}) : super(key: key);
+  const RFQTextComponent({Key? key, required Null Function(bool isValid) onValidationChanged}) : super(key: key);
 
   @override
   State<RFQTextComponent> createState() => _RFQTextComponentState();

@@ -67,6 +67,10 @@ class ProductsL1Page extends StatelessWidget {
                                   child: L1Tile(
                                     iconPath: categories[firstIndex]["icon"]!,
                                     text: categories[firstIndex]["name"]!,
+                                    onTap: () {
+                                      // Navigate directly to ProductsL2Page for any category tap
+                                      Navigator.of(context).pushNamed('l2');
+                                    },
                                   ),
                                 ),
                               ),
@@ -74,13 +78,13 @@ class ProductsL1Page extends StatelessWidget {
                               Expanded( // Keep Expanded to ensure items take equal width
                                 child: secondIndex < categories.length
                                     ? GestureDetector(
-                                        onTap: () {
-                                          // Navigate directly to ProductsL2Page for any category tap
-                                          Navigator.of(context).pushNamed('l2');
-                                        },
                                         child: L1Tile(
                                           iconPath: categories[secondIndex]["icon"]!,
                                           text: categories[secondIndex]["name"]!,
+                                          onTap: () {
+                                            // Navigate directly to ProductsL2Page for any category tap
+                                            Navigator.of(context).pushNamed('l2');
+                                          },
                                         ),
                                       )
                                     : const SizedBox.shrink(), // Use SizedBox.shrink() for empty space

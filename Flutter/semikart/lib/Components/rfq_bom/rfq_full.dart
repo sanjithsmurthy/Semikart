@@ -38,9 +38,17 @@ class _RFQFullPageState extends State<RFQFullPage> {
                 },
               ),
               const SizedBox(height: 40),
-              if (!isFileUploaded) RFQTextComponent(),
+              if (!isFileUploaded) RFQTextComponent(
+                onValidationChanged: (bool isValid) {
+                  // Handle validation change logic here
+                },
+              ),
               const SizedBox(height: 20),
               RFQAddressDetails(
+                onValidationChanged: (bool isValid) {
+                  // Handle validation change logic here
+                },
+                canSubmit: isFileUploaded,
                 onSubmit: () {
                   CustomPopup.show(
                     context: context,
@@ -49,8 +57,7 @@ class _RFQFullPageState extends State<RFQFullPage> {
                   ).then((_) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePageContent()),
+                      MaterialPageRoute(builder: (context) => HomePageContent()),
                     );
                   });
                 },
