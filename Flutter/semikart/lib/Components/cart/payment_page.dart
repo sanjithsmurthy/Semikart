@@ -5,7 +5,7 @@ import '../common/edit_textbox2.dart';
 import 'items_dropdown.dart';
 import '../common/red_button.dart';
 import '../common/ship_bill.dart';
-
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -15,6 +15,69 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
+  late Razorpay _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear(); // Clear all event listeners
+    super.dispose();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Handle successful payment
+    print("Payment Successful: ${response.paymentId}");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Payment Successful')),
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Handle payment failure
+    print("Payment Failed: ${response.code} | ${response.message}");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Payment Failed')),
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Handle external wallet selection
+    print("External Wallet Selected: ${response.walletName}");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('External Wallet Selected')),
+    );
+  }
+
+  void _openRazorpayCheckout() {
+    var options = {
+      'key': 'YOUR_RAZORPAY_KEY', // Replace with your Razorpay API key
+      'amount': (calculateGrandTotal() * 100).toInt(), // Amount in paise
+      'name': 'Semikart',
+      'description': 'Order Payment',
+      'prefill': {
+        'contact': '1234567890', // Replace with user's contact number
+        'email': 'user@example.com', // Replace with user's email
+      },
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   bool isChecked = false;
   // Billing Address Fields
   String? name;
@@ -417,8 +480,8 @@ class _EditPageState extends State<EditPage> {
                   builder: (context) => PaymentConfirmationDialog(
                     amount: calculateGrandTotal(),
                     onConfirm: () {
-                      Navigator.pop(context);
-                      // Add actual payment processing logic here
+                      Navigator.pop(context); // Close the dialog
+                      _openRazorpayCheckout(); // Trigger Razorpay payment
                     },
                   ),
                 );

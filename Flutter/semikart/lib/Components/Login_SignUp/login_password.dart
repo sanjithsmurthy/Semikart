@@ -1,3 +1,4 @@
+import 'package:Semikart/Components/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,11 @@ import '../common/forgot_password.dart';
 import '../common/red_button.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
+import '../../base_scaffold.dart';
+import '../../managers/auth_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:Semikart/services/google_auth_service.dart';
 // Removed import for BaseScaffold as navigation is handled by AuthWrapper
 
 // --- Changed to ConsumerStatefulWidget ---
@@ -60,11 +66,11 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
     // --- Navigation is handled by AuthWrapper based on AuthState ---
     // No explicit Navigator.pushReplacement needed here anymore.
 
-    if (!success) {
+   if(!success) {
       // Show error message if login failed
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Login failed. Please check your credentials.'), // More generic message
+          content: Text('Login failed. Please check your credentials.'),
           backgroundColor: Color(0xFFA51414), // Red color for error
           duration: Duration(seconds: 3),
         ),
@@ -106,11 +112,18 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
                 SizedBox(height: screenHeight * 0.02),
                 Center(
                   child: SignInWithGoogleButton(
-                    onPressed: () {
-                      print('Google Sign-In button pressed');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google Sign-In not implemented yet.')),
-                      );
+                    onPressed: () async {
+                      final googleAuthService = GoogleAuthService();
+                      final user = await googleAuthService.signInWithGoogle();
+
+                      if (user != null) {
+                        print("Google Sign-In successful: ${user.email}");
+                        // Navigate to the home page or handle successful login
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Google Sign-In failed.')),
+                        );
+                      }
                     },
                     isLoading: false,
                   ),
