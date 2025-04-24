@@ -213,47 +213,50 @@ class _EditTextBox2State extends State<EditTextBox2> {
                   color: Colors.black,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFA51414),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: GestureDetector(
-                  onTap: _addNewAddress,
-                  child: const Text(
-                    'Add new',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
+              if (!_showSimpleRadioButton)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFA51414),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: GestureDetector(
+                    onTap: _addNewAddress,
+                    child: const Text(
+                      'Add new',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
           const SizedBox(height: 5),
-          if (_addresses.isEmpty)
-            Text(
-              'No ${widget.title?.toLowerCase()?.replaceAll(' address', '') ?? 'shipping'} addresses added',
-              style: const TextStyle(
-                fontSize: 11,
-                color: Colors.black,
-              ),
-            )
-          else
-            Column(
-              children: [
-                ..._addresses.asMap().entries.map(
-                      (entry) => _buildAddressItem(entry.value, entry.key),
-                    ),
-              ],
-            ),
+          if (!_showSimpleRadioButton) ...[
+            if (_addresses.isEmpty)
+              Text(
+                'No ${widget.title?.toLowerCase()?.replaceAll(' address', '') ?? 'shipping'} addresses added',
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Colors.black,
+                ),
+              )
+            else
+              Column(
+                children: [
+                  ..._addresses.asMap().entries.map(
+                        (entry) => _buildAddressItem(entry.value, entry.key),
+                      ),
+                ],
+              )
+          ],
           // Add simple radio button container if _showSimpleRadioButton is true
           if (_showSimpleRadioButton)
             Container(
               margin: const EdgeInsets.only(top: 12),
-              padding: const EdgeInsets.all(12),
+              // padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade300),
                 borderRadius: BorderRadius.circular(8),
