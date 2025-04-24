@@ -109,6 +109,8 @@ class _EditPageState extends State<EditPage> {
   String? shippingCompany;
   String? shippingGstn;
 
+  final GlobalKey _editTextBox2Key = GlobalKey();
+
   final List<Map<String, dynamic>> items = [
     {
       'serialNo': 1,
@@ -222,6 +224,12 @@ class _EditPageState extends State<EditPage> {
                     shippingCompany = company;
                     shippingGstn = gstn;
                   });
+
+                  // Call setSimpleRadioButton on EditTextBox2
+                  (_editTextBox2Key.currentState as dynamic)?.setSimpleRadioButton(
+                    true,
+                    '${address1 ?? ''}${address2 != null && address2!.isNotEmpty ? ', $address2' : ''}',
+                  );
                 } else {
                   // Clear all shipping address fields when unchecked
                   setState(() {
@@ -237,6 +245,9 @@ class _EditPageState extends State<EditPage> {
                     shippingCompany = null;
                     shippingGstn = null;
                   });
+
+                  // Call setSimpleRadioButton to hide
+                  (_editTextBox2Key.currentState as dynamic)?.setSimpleRadioButton(false, '');
                 }
               },
               title: const Text(
@@ -247,10 +258,11 @@ class _EditPageState extends State<EditPage> {
               activeColor: Color(0xFFA51414),
               contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 1),
             Padding(
               padding: const EdgeInsets.only(bottom: 10), // Add 16px bottom padding
               child: EditTextBox2(
+                key: _editTextBox2Key,
                 title: 'Shipping Address',
                 address1: shippingAddress1,
                 address2: shippingAddress2,
