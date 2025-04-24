@@ -30,29 +30,29 @@ class PaymentFailedDialog {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
-              Text(
-                "Please, change your payment method or try again",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              // const SizedBox(height: 16),
+              // Text(
+              //   "Please try again after some time or contact our support team.",
+              //   style: TextStyle(
+              //     fontSize: 14,
+              //     color: Colors.black,
+              //   ),
+              //   textAlign: TextAlign.center,
+              // ),
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RedButton(
-                    label: 'Try Again',
+                    label: 'Ok',
                     width: popupWidth * 0.35,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
-                  RedButton(
-                    label: 'Change',
-                    width: popupWidth * 0.35,
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
+                  // RedButton(
+                  //   label: 'Change',
+                  //   width: popupWidth * 0.35,
+                  //   onPressed: () => Navigator.of(context).pop(),
+                  // ),
                 ],
               ),
             ],

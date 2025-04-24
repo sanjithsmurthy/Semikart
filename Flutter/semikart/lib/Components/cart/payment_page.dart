@@ -6,7 +6,8 @@ import 'items_dropdown.dart';
 import '../common/red_button.dart';
 import '../common/ship_bill.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-
+import 'payment_failed.dart';
+import '../common/congratulations.dart';
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
 
@@ -35,17 +36,22 @@ class _EditPageState extends State<EditPage> {
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     // Handle successful payment
     print("Payment Successful: ${response.paymentId}");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Payment Successful')),
+
+    // Navigate to the CongratulationsScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CongratulationsScreen(),
+      ),
     );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     // Handle payment failure
     print("Payment Failed: ${response.code} | ${response.message}");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Payment Failed')),
-    );
+
+    // Show the PaymentFailedDialog instead of a SnackBar
+    PaymentFailedDialog.show(context: context);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -58,7 +64,7 @@ class _EditPageState extends State<EditPage> {
 
   void _openRazorpayCheckout() {
     var options = {
-      'key': 'YOUR_RAZORPAY_KEY', // Replace with your Razorpay API key
+      'key': 'rzp_test_x7twCUt5gfsSV8', // Replace with your Razorpay API key
       'amount': (calculateGrandTotal() * 100).toInt(), // Amount in paise
       'name': 'Semikart',
       'description': 'Order Payment',
@@ -123,10 +129,10 @@ class _EditPageState extends State<EditPage> {
   ];
 
   double calculateGrandTotal() {
-    double total = 0;
-    for (var item in items) {
-      total += (item['finalUnitPrice'] * item['quantity'] * 1.18) + 250;
-    }
+    double total = 1;
+    // for (var item in items) {
+    //   total += (item['finalUnitPrice'] * item['quantity'] * 1.18) + 250;
+    // }
     return total;
   }
 
