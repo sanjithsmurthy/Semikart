@@ -12,6 +12,7 @@ import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
 import 'login_password.dart'; // Import the LoginScreen component
 import '../common/forgot_password.dart';
 import 'package:intl_phone_field/intl_phone_field.dart'; // Import the IntlPhoneField package
+import 'package:flutter/services.dart'; // <-- Ensure this import is present
 
 // --- Changed to ConsumerStatefulWidget ---
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -248,7 +249,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         ),
                         child: IntlPhoneField(
                           cursorColor: const Color(0xFFA51414),
-                          cursorWidth: 1, // Set the cursor color to red
+                          cursorWidth: 1,
+                          // --- Apply input formatters ---
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly, // Allow only digits
+                            LengthLimitingTextInputFormatter(10), // Limit length to 10 digits
+                          ],
                           decoration: InputDecoration(
                             labelText: 'Mobile Number',
                             labelStyle: const TextStyle(color: Color(0xFF757575)),
@@ -266,19 +272,27 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               borderRadius: BorderRadius.circular(responsiveBorderRadius),
                             ),
                             contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-                            counterText: '',
+                            counterText: '', // Hide the default counter
                           ),
                           initialCountryCode: 'IN',
-                          keyboardType: TextInputType.phone, // Set keyboard type
+                          keyboardType: TextInputType.phone, // Keep for keyboard type suggestion
                           onChanged: (phone) {
-                            mobileNumberController.text = phone.completeNumber;
+                            // phone.completeNumber includes the selected country code + the digits entered.
+                            // phone.number includes ONLY the digits entered.
+                            // The inputFormatter ensures phone.number contains only digits.
+                            mobileNumberController.text = phone.completeNumber; // Store the full number with country code
                             _checkAllFieldsFilled();
-                            print(phone.completeNumber);
+                            print('Complete Number stored: ${phone.completeNumber}');
                           },
                           onCountryChanged: (country) {
                             print('Country changed to: ' + country.name);
+                            // --- Apply the changes ---
+                            // Clear the input field when country changes
+                            mobileNumberController.clear();
+                            // Re-check if all fields are filled as mobile number is now empty
+                            _checkAllFieldsFilled();
                           },
-                          dropdownIcon: const Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)), // Set dropdown icon color
+                          dropdownIcon: const Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)),
                         ),
                       );
                     },
