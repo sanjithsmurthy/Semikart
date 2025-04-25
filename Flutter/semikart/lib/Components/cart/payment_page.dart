@@ -200,10 +200,13 @@ class _EditPageState extends State<EditPage> {
                         title: const Text('Missing Information'),
                         content: const Text('Please fill all mandatory billing address fields'),
                         actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('OK'),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            'OK',
+                            style: TextStyle(color: Color(0xFFA51414)),
                           ),
+                        ),
                         ],
                       ),
                     );
@@ -505,12 +508,16 @@ class _EditPageState extends State<EditPage> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
+                      backgroundColor: Colors.white,
                       title: const Text('Incomplete Address'),
                       content: const Text('The billing address or shipping address is not filled completely'),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text('OK'),
+                          child: const Text(
+                            'OK',
+                            style: TextStyle(color: Color(0xFFA51414)),
+                          ),
                         ),
                       ],
                     ),
