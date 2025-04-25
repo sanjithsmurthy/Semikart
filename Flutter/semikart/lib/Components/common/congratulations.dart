@@ -7,120 +7,145 @@ class CongratulationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
+    // Get current screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Base dimensions for scaling
+    // Base dimensions (your reference design size)
     const baseHeight = 917.0;
     const baseWidth = 412.0;
 
-    // Scaling factors
+    // Calculate scaling factors based on the current screen size vs the base size
     final heightScale = screenHeight / baseHeight;
     final widthScale = screenWidth / baseWidth;
 
+    // Helper function to scale font sizes (using width scale for better aspect ratio)
+    double scaleFont(double fontSize) => fontSize * widthScale;
+
+    // Helper function to scale heights
+    double scaleHeight(double height) => height * heightScale;
+
+    // Helper function to scale widths
+    double scaleWidth(double width) => width * widthScale;
+
+
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
-      body: Center(
+      body: Center( // This outer Center helps horizontally
         child: SizedBox(
-          width: screenWidth,
-          height: screenHeight,
+          width: screenWidth, // Use full screen width
+          height: screenHeight, // Use full screen height
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // 5% horizontal padding
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: 176 * heightScale), // Distance from the top (scaled)
-
-                // Two layers with the success icon
-                Container(
-                  width: 164 * widthScale, // Dynamically scaled width
-                  height: 164 * widthScale, // Dynamically scaled height
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFB8B8), // Light red background
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Container(
-                      width: 102.5 * widthScale, // Dynamically scaled inner circle width
-                      height: 102.5 * widthScale, // Dynamically scaled inner circle height
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFA51414), // Dark red background
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.check, // Success check icon
-                        color: Colors.white,
-                        size: 50 * widthScale, // Dynamically scaled icon size
+            // Use percentage-based padding for responsiveness
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            // Wrap the Column with Transform.translate to shift it up
+            child: Transform.translate(
+              // Changed offset from -10.0 to -20.0
+              offset: const Offset(0, -20.0), // Move content up by 20 logical pixels
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Keep vertical centering logic
+                // crossAxisAlignment defaults to center, which is good here
+                children: [
+                  // Icon container scaled using widthScale to maintain aspect ratio
+                  Container(
+                    width: scaleWidth(164), // Dynamically scaled width
+                    height: scaleWidth(164), // Dynamically scaled height (using width scale for circle)
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFB8B8), // Light red background
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Container(
+                        // Inner icon container scaled using widthScale
+                        width: scaleWidth(102.5), // Dynamically scaled inner circle width
+                        height: scaleWidth(102.5), // Dynamically scaled inner circle height
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFA51414), // Dark red background
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.check, // Success check icon
+                          color: Colors.white,
+                          // Icon size scaled using widthScale
+                          size: scaleWidth(50), // Dynamically scaled icon size
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: 56 * heightScale), // Distance between icon and "Congratulations!!!" text (scaled)
+                  // Scaled vertical spacing
+                  SizedBox(height: scaleHeight(56)),
 
-                // "Congratulations!!!" Text
-                Text(
-                  "Congratulations!!!",
-                  style: TextStyle(
-                    fontSize: 24 * widthScale, // Dynamically scaled font size
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  // "Congratulations!!!" Text with scaled font size
+                  Text(
+                    "Congratulations!!!",
+                    textAlign: TextAlign.center, // Ensure text itself is centered if it wraps
+                    style: TextStyle(
+                      fontSize: scaleFont(24), // Dynamically scaled font size
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 10 * heightScale), // Small spacing (scaled)
+                  // Scaled vertical spacing
+                  SizedBox(height: scaleHeight(10)),
 
-                // Description Text
-                Text(
-                  "Your order has been taken\nand is being attended to",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18 * widthScale, // Dynamically scaled font size
-                    color: Colors.grey,
+                  // Description Text with scaled font size
+                  Text(
+                    "Your order has been taken and is \nbeing attended to",
+                    textAlign: TextAlign.center, // Already centered
+                    style: TextStyle(
+                      fontSize: scaleFont(18), // Dynamically scaled font size
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 56 * heightScale), // Distance between description and "Track order" button (scaled)
+                  // Scaled vertical spacing
+                  SizedBox(height: scaleHeight(56)),
 
-                // "Track Order" Button
-                SizedBox(
-                  width: 141 * widthScale, // Dynamically scaled width
-                  height: 56 * heightScale, // Dynamically scaled height
-                  child: RedButton(
-                    label: "Track order",
-                    fontSize: 16 * widthScale, // Dynamically scaled font size
-                    onPressed: () {
-                      // Navigate to TrackOrder widget
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TrackOrder(
-                            steps: OrderStep.getDefaultSteps(), // Pass default steps
-                            currentStep: 3, // Example: Current step is "In Transit"
+                  // "Track Order" Button container with scaled dimensions
+                  SizedBox(
+                    width: scaleWidth(141), // Dynamically scaled width
+                    height: scaleHeight(56), // Dynamically scaled height
+                    child: RedButton(
+                      label: "Track order",
+                      // Font size within the button scaled
+                      fontSize: scaleFont(16), // Dynamically scaled font size
+                      onPressed: () {
+                        // Navigate to TrackOrder widget
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TrackOrder(
+                              steps: OrderStep.getDefaultSteps(), // Pass default steps
+                              currentStep: 3, // Example: Current step is "In Transit"
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                SizedBox(height: 25 * heightScale), // Distance between "Track order" and "Continue shopping" button (scaled)
+                  // Scaled vertical spacing
+                  SizedBox(height: scaleHeight(25)),
 
-                // "Continue Shopping" Button (White Variant)
-                SizedBox(
-                  width: 193 * widthScale, // Dynamically scaled width
-                  height: 56 * heightScale, // Dynamically scaled height
-                  child: RedButton(
-                    label: "Continue shopping",
-                    fontSize: 16 * widthScale, // Dynamically scaled font size
-                    isWhiteButton: true, // White button variant
-                    onPressed: () {
-                      Navigator.pop(context); // Navigate back to the previous screen
-                    },
+                  // "Continue Shopping" Button container with scaled dimensions
+                  SizedBox(
+                    width: scaleWidth(193), // Dynamically scaled width
+                    height: scaleHeight(56), // Dynamically scaled height
+                    child: RedButton(
+                      label: "Continue shopping",
+                      // Font size within the button scaled
+                      fontSize: scaleFont(16), // Dynamically scaled font size
+                      isWhiteButton: true, // White button variant
+                      onPressed: () {
+                        // Navigate back to the previous screen
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
