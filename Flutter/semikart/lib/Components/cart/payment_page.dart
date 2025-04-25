@@ -621,7 +621,11 @@ class PaymentConfirmationDialog extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Cancel Payment'),
+                          backgroundColor: Colors.white,
+                          title: const Text(
+                            'Cancel Payment',
+                            style: TextStyle(color: Color(0xFFA51414)),
+                          ),
                           content: const Text(
                             'Are you sure you want to cancel this order? '
                             'If you wish to complete the payment later you can do this '
@@ -630,6 +634,9 @@ class PaymentConfirmationDialog extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
+                              style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFFA51414),
+                              ),
                               child: const Text('Cancel'),
                             ),
                             TextButton(
@@ -637,6 +644,9 @@ class PaymentConfirmationDialog extends StatelessWidget {
                                 Navigator.pop(context); // Close confirmation
                                 Navigator.pop(context); // Close payment dialog
                               },
+                              style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFFA51414),
+                              ),
                               child: const Text('OK'),
                             ),
                           ],
