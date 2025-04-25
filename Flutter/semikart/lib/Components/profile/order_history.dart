@@ -306,3 +306,20 @@ class _OrderHistoryState extends State<OrderHistory> {
     );
   }
 }
+
+void main() {
+  runApp(
+    MaterialApp(
+      title: 'Semikart',
+      theme: ThemeData(
+        primaryColor: const Color(0xFFA51414),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFFA51414), // Cursor color
+          selectionColor: Color(0xFFA51414), // Highlight color for selected text
+          selectionHandleColor: Color(0xFFA51414), // Handle color for text selection
+        ),
+      ),
+      home: const OrderHistory(),
+    ),
+  );
+}
