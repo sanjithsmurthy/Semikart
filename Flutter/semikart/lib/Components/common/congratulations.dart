@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'red_button.dart'; // Import RedButton
 import 'track_order.dart'; // Import TrackOrder
+import '../../app_navigator.dart'; // Import AppNavigator for navigation
 
 class CongratulationsScreen extends StatelessWidget {
   const CongratulationsScreen({super.key});
@@ -28,37 +29,31 @@ class CongratulationsScreen extends StatelessWidget {
     // Helper function to scale widths
     double scaleWidth(double width) => width * widthScale;
 
-
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
-      body: Center( // This outer Center helps horizontally
+      body: Center(
         child: SizedBox(
           width: screenWidth, // Use full screen width
           height: screenHeight, // Use full screen height
           child: Padding(
-            // Use percentage-based padding for responsiveness
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-            // Wrap the Column with Transform.translate to shift it up
             child: Transform.translate(
-              // Changed offset from -10.0 to -20.0
               offset: const Offset(0, -20.0), // Move content up by 20 logical pixels
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // Keep vertical centering logic
-                // crossAxisAlignment defaults to center, which is good here
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Icon container scaled using widthScale to maintain aspect ratio
+                  // Icon container
                   Container(
-                    width: scaleWidth(164), // Dynamically scaled width
-                    height: scaleWidth(164), // Dynamically scaled height (using width scale for circle)
+                    width: scaleWidth(164),
+                    height: scaleWidth(164),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFB8B8), // Light red background
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: Container(
-                        // Inner icon container scaled using widthScale
-                        width: scaleWidth(102.5), // Dynamically scaled inner circle width
-                        height: scaleWidth(102.5), // Dynamically scaled inner circle height
+                        width: scaleWidth(102.5),
+                        height: scaleWidth(102.5),
                         decoration: const BoxDecoration(
                           color: Color(0xFFA51414), // Dark red background
                           shape: BoxShape.circle,
@@ -66,59 +61,53 @@ class CongratulationsScreen extends StatelessWidget {
                         child: Icon(
                           Icons.check, // Success check icon
                           color: Colors.white,
-                          // Icon size scaled using widthScale
-                          size: scaleWidth(50), // Dynamically scaled icon size
+                          size: scaleWidth(50),
                         ),
                       ),
                     ),
                   ),
 
-                  // Scaled vertical spacing
                   SizedBox(height: scaleHeight(56)),
 
-                  // "Congratulations!!!" Text with scaled font size
+                  // "Congratulations!!!" Text
                   Text(
                     "Congratulations!!!",
-                    textAlign: TextAlign.center, // Ensure text itself is centered if it wraps
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: scaleFont(24), // Dynamically scaled font size
+                      fontSize: scaleFont(24),
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
 
-                  // Scaled vertical spacing
                   SizedBox(height: scaleHeight(10)),
 
-                  // Description Text with scaled font size
+                  // Description Text
                   Text(
                     "Your order has been taken and is \nbeing attended to",
-                    textAlign: TextAlign.center, // Already centered
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: scaleFont(18), // Dynamically scaled font size
+                      fontSize: scaleFont(18),
                       color: Colors.grey,
                     ),
                   ),
 
-                  // Scaled vertical spacing
                   SizedBox(height: scaleHeight(56)),
 
-                  // "Track Order" Button container with scaled dimensions
+                  // "Track Order" Button
                   SizedBox(
-                    width: scaleWidth(141), // Dynamically scaled width
-                    height: scaleHeight(56), // Dynamically scaled height
+                    width: scaleWidth(141),
+                    height: scaleHeight(56),
                     child: RedButton(
                       label: "Track order",
-                      // Font size within the button scaled
-                      fontSize: scaleFont(16), // Dynamically scaled font size
+                      fontSize: scaleFont(16),
                       onPressed: () {
-                        // Navigate to TrackOrder widget
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => TrackOrder(
-                              steps: OrderStep.getDefaultSteps(), // Pass default steps
-                              currentStep: 3, // Example: Current step is "In Transit"
+                              steps: OrderStep.getDefaultSteps(),
+                              currentStep: 3,
                             ),
                           ),
                         );
@@ -126,21 +115,19 @@ class CongratulationsScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Scaled vertical spacing
                   SizedBox(height: scaleHeight(25)),
 
-                  // "Continue Shopping" Button container with scaled dimensions
+                  // "Continue Shopping" Button
                   SizedBox(
-                    width: scaleWidth(193), // Dynamically scaled width
-                    height: scaleHeight(56), // Dynamically scaled height
+                    width: scaleWidth(193),
+                    height: scaleHeight(56),
                     child: RedButton(
                       label: "Continue shopping",
-                      // Font size within the button scaled
-                      fontSize: scaleFont(16), // Dynamically scaled font size
-                      isWhiteButton: true, // White button variant
+                      fontSize: scaleFont(16),
+                      isWhiteButton: true,
                       onPressed: () {
-                        // Navigate back to the previous screen
-                        Navigator.pop(context);
+                        // Navigate to Products L1 Page in the Products tab
+                        AppNavigator.openProductsRootPage();
                       },
                     ),
                   ),
