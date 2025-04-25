@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../common/red_button.dart';
-import 'order_history_item.dart';
+import '../home/order_history_item.dart';
 
 class OrderHistory extends StatefulWidget {
   const OrderHistory({Key? key}) : super(key: key);
@@ -24,7 +24,21 @@ class _OrderHistoryState extends State<OrderHistory> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2050), // Updated lastDate
+      lastDate: DateTime(2050),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0xFFA51414), // Header background color
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFFA51414), // Circle and selected date color
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary, // Button text color
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (pickedDate != null) {
       setState(() {
@@ -67,10 +81,29 @@ class _OrderHistoryState extends State<OrderHistory> {
               Text('Search', style: TextStyle(fontSize: fontSize)),
               SizedBox(height: screenHeight * 0.005),
               TextFormField(
+                cursorColor: const Color(0xFFA51414), // Set the cursor color to #A51414
                 decoration: InputDecoration(
                   hintText: 'Enter search term',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFA51414), // Set the border color to #A51414
+                      width: 1.0, // Reduced border thickness
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFA51414), // Set the focused border color to #A51414
+                      width: 1.0, // Reduced border thickness
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFA51414), // Set the enabled border color to #A51414
+                      width: 1.0, // Reduced border thickness
+                    ),
                   ),
                 ),
               ),

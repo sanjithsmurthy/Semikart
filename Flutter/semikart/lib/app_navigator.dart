@@ -21,6 +21,7 @@ import 'Components/search/product_search.dart';
 
 // Profile
 import 'Components/profile/profile_screen.dart';
+import 'Components/profile/order_history.dart';
 
 import 'base_scaffold.dart';
 
@@ -62,6 +63,10 @@ class AppNavigator {
   static void pushCartPayment({Object? arguments}) {
     // Use null-aware access ?.
     cartNavKey.currentState?.pushNamed('payment', arguments: arguments);
+  }
+
+  static void pushOrderHistory() {
+    profileNavKey.currentState?.pushNamed('order_history');
   }
 
   static Widget homeNavigator() => Navigator(
@@ -136,6 +141,8 @@ class AppNavigator {
         initialRoute: 'profile',
         onGenerateRoute: (settings) {
           switch (settings.name) {
+            case 'order_history':
+              return MaterialPageRoute(builder: (_) => const OrderHistory());
             case 'profile':
             default:
               return MaterialPageRoute(builder: (_) => const ProfileScreen());
