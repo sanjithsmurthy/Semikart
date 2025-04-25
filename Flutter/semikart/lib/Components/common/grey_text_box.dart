@@ -7,6 +7,8 @@ class GreyTextBox extends StatelessWidget {
   final Color backgroundColor; // Background color parameter
   final FocusNode? focusNode; // Optional FocusNode parameter
   final VoidCallback? onTap; // Optional onTap callback
+  final TextInputAction? textInputAction; // Optional text input action
+  final VoidCallback? onEditingComplete; // Optional editing complete callback
 
   GreyTextBox({
     Key? key,
@@ -17,6 +19,8 @@ class GreyTextBox extends StatelessWidget {
         const Color(0xFFE4E8EC), // Default grey background color
     this.focusNode, // Optional FocusNode
     this.onTap, // Optional onTap callback
+    this.textInputAction, // Optional text input action
+    this.onEditingComplete, // Optional editing complete callback
   }) : super(key: key);
 
   @override
@@ -49,6 +53,8 @@ class GreyTextBox extends StatelessWidget {
             controller: nameController,
             focusNode: focusNode, // Attach the FocusNode
             onTap: onTap, // Attach the onTap callback
+            textInputAction: textInputAction, // Attach the text input action
+            onEditingComplete: onEditingComplete, // Attach editing complete callback
             decoration: InputDecoration(
               hintText: text, // Use the same parameter for hint text
               border: InputBorder.none,
