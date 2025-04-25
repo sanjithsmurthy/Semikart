@@ -493,6 +493,31 @@ class _EditPageState extends State<EditPage> {
             RedButton(
               label: 'Continue to payment',
               onPressed: () {
+                // Validation for billing and shipping address
+                if (address1 == null || address1!.isEmpty ||
+                    address2 == null || address2!.isEmpty ||
+                    shippingAddress1 == null || shippingAddress1!.isEmpty ||
+                    shippingAddress2 == null || shippingAddress2!.isEmpty ||
+                    (address1 != null && address1!.contains('Your billing address')) ||
+                    (address2 != null && address2!.contains('Your billing address')) ||
+                    (shippingAddress1 != null && shippingAddress1!.contains('No shipping addresses added')) ||
+                    (shippingAddress2 != null && shippingAddress2!.contains('No shipping addresses added'))) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Incomplete Address'),
+                      content: const Text('The billing address or shipping address is not filled completely'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                  return;
+                }
+                // Proceed with existing payment confirmation dialog
                 showDialog(
                   context: context,
                   builder: (context) => PaymentConfirmationDialog(
