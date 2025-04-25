@@ -23,13 +23,6 @@ class _ShipBillFormState extends State<ShipBillForm> {
   late final TextEditingController address1Controller;
   late final TextEditingController address2Controller;
 
-  @override
-  void initState() {
-    super.initState();
-    address1Controller = TextEditingController(text: widget.initialAddress1);
-    address2Controller = TextEditingController(text: widget.initialAddress2);
-  }
-
   final TextEditingController landmarkController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
@@ -37,7 +30,68 @@ class _ShipBillFormState extends State<ShipBillForm> {
   final TextEditingController companyController = TextEditingController();
   final TextEditingController gstnController = TextEditingController();
 
+  late final FocusNode nameFocusNode;
+  late final FocusNode pincodeFocusNode;
+  late final FocusNode address1FocusNode;
+  late final FocusNode address2FocusNode;
+  late final FocusNode landmarkFocusNode;
+  late final FocusNode cityFocusNode;
+  late final FocusNode stateFocusNode;
+  late final FocusNode phoneFocusNode;
+  late final FocusNode companyFocusNode;
+  late final FocusNode gstnFocusNode;
+
   bool hasGSTN = false; // State for the GSTN radio button
+
+  @override
+  void initState() {
+    super.initState();
+    address1Controller = TextEditingController(text: widget.initialAddress1);
+    address2Controller = TextEditingController(text: widget.initialAddress2);
+
+    nameFocusNode = FocusNode();
+    pincodeFocusNode = FocusNode();
+    address1FocusNode = FocusNode();
+    address2FocusNode = FocusNode();
+    landmarkFocusNode = FocusNode();
+    cityFocusNode = FocusNode();
+    stateFocusNode = FocusNode();
+    phoneFocusNode = FocusNode();
+    companyFocusNode = FocusNode();
+    gstnFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    nameFocusNode.dispose();
+    pincodeFocusNode.dispose();
+    address1FocusNode.dispose();
+    address2FocusNode.dispose();
+    landmarkFocusNode.dispose();
+    cityFocusNode.dispose();
+    stateFocusNode.dispose();
+    phoneFocusNode.dispose();
+    companyFocusNode.dispose();
+    gstnFocusNode.dispose();
+
+    nameController.dispose();
+    pincodeController.dispose();
+    address1Controller.dispose();
+    address2Controller.dispose();
+    landmarkController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    phoneController.dispose();
+    companyController.dispose();
+    gstnController.dispose();
+
+    super.dispose();
+  }
+
+  void _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
 
   void _saveAddress() {
     // Validate all required fields
@@ -122,21 +176,45 @@ class _ShipBillFormState extends State<ShipBillForm> {
             GreyTextBox(
               nameController: nameController,
               text: "Name*",
+              focusNode: nameFocusNode,
+              onTap: () {},
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () {
+                _fieldFocusChange(context, nameFocusNode, pincodeFocusNode);
+              },
             ),
             const SizedBox(height: 16),
             GreyTextBox(
               nameController: pincodeController,
               text: "Pincode*",
+              focusNode: pincodeFocusNode,
+              onTap: () {},
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () {
+                _fieldFocusChange(context, pincodeFocusNode, address1FocusNode);
+              },
             ),
             const SizedBox(height: 16),
             GreyTextBox(
               nameController: address1Controller,
               text: "Address 1*",
+              focusNode: address1FocusNode,
+              onTap: () {},
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () {
+                _fieldFocusChange(context, address1FocusNode, address2FocusNode);
+              },
             ),
             const SizedBox(height: 16),
             GreyTextBox(
               nameController: address2Controller,
               text: "Address 2",
+              focusNode: address2FocusNode,
+              onTap: () {},
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () {
+                _fieldFocusChange(context, address2FocusNode, landmarkFocusNode);
+              },
             ),
             const SizedBox(height: 16),
             Row(
@@ -145,6 +223,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
                   child: GreyTextBox(
                     nameController: landmarkController,
                     text: "Landmark",
+                    focusNode: landmarkFocusNode,
+                    onTap: () {},
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      _fieldFocusChange(context, landmarkFocusNode, cityFocusNode);
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -152,6 +236,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
                   child: GreyTextBox(
                     nameController: cityController,
                     text: "City*",
+                    focusNode: cityFocusNode,
+                    onTap: () {},
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      _fieldFocusChange(context, cityFocusNode, stateFocusNode);
+                    },
                   ),
                 ),
               ],
@@ -163,6 +253,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
                   child: GreyTextBox(
                     nameController: stateController,
                     text: "State*",
+                    focusNode: stateFocusNode,
+                    onTap: () {},
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      _fieldFocusChange(context, stateFocusNode, phoneFocusNode);
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -170,6 +266,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
                   child: GreyTextBox(
                     nameController: phoneController,
                     text: "Phone Number*",
+                    focusNode: phoneFocusNode,
+                    onTap: () {},
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () {
+                      _fieldFocusChange(context, phoneFocusNode, companyFocusNode);
+                    },
                   ),
                 ),
               ],
@@ -178,6 +280,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
             GreyTextBox(
               nameController: companyController,
               text: "Company Name (Optional)",
+              focusNode: companyFocusNode,
+              onTap: () {},
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () {
+                _fieldFocusChange(context, companyFocusNode, gstnFocusNode);
+              },
             ),
             const SizedBox(height: 16),
             const Text(
@@ -228,6 +336,8 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 child: GreyTextBox(
                   nameController: gstnController,
                   text: "GSTN (Optional)",
+                  focusNode: gstnFocusNode,
+                  onTap: () {},
                 ),
               ),
             ),
