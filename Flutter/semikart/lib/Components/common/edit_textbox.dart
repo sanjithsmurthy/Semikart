@@ -52,7 +52,7 @@ class EditTextBox extends StatelessWidget {
                 Text(
                   (address1?.isNotEmpty == true || address2?.isNotEmpty == true)
                       ? '${address1 ?? ''}${address1?.isNotEmpty == true && address2?.isNotEmpty == true ? ', ' : ''}${address2 ?? ''}'
-                      : 'Your ${title?.toLowerCase() ?? 'billing'} address',
+                      : 'Your ${title?.toLowerCase() ?? 'billing'} address is not found',
                   style: const TextStyle(
                     fontSize: 11,
                     color: Colors.black,
