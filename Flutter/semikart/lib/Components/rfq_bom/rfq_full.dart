@@ -24,39 +24,52 @@ class _RFQFullPageState extends State<RFQFullPage> {
         AppNavigator.openProductsRFQPage();
         return false;
       },
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomSquare(
-                onFileUploaded: (bool uploaded) {
-                  setState(() {
-                    isFileUploaded = uploaded;
-                  });
-                },
-              ),
-              const SizedBox(height: 40),
-              if (!isFileUploaded) RFQTextComponent(),
-              const SizedBox(height: 20),
-              RFQAddressDetails(
-                onSubmit: () {
-                  CustomPopup.show(
-                    context: context,
-                    message: "RFQ submitted successfully.",
-                    buttonText: "OK",
-                  ).then((_) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePageContent()),
-                    );
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-            ],
+      child: Container(
+        color: Colors.white, // Set the background color to white
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50, bottom: 50, left: 16, right: 16), // Adjusted padding
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomSquare(
+                  onFileUploaded: (bool uploaded) {
+                    setState(() {
+                      isFileUploaded = uploaded;
+                    });
+                  },
+                ),
+                const SizedBox(height: 40),
+                if (!isFileUploaded)
+                  RFQTextComponent(
+                    onValidationChanged: (bool isValid) {
+                      // Handle validation change logic here
+                    },
+                  ),
+                const SizedBox(height: 20),
+                RFQAddressDetails(
+                  onValidationChanged: (bool isValid) {
+                    // Handle validation change logic here
+                  },
+                  canSubmit: isFileUploaded,
+                  onSubmit: () {
+                    CustomPopup.show(
+                      context: context,
+                      message: "RFQ submitted successfully.",
+                      buttonText: "OK",
+                    ).then((_) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePageContent(),
+                        ),
+                      );
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

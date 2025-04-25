@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager
+import 'package:Semikart/services/google_auth_service.dart'; // Import GoogleAuthService
+import '../../base_scaffold.dart';
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
 import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
@@ -11,6 +13,7 @@ import 'login_password.dart'; // Import the LoginScreen component
 import '../common/forgot_password.dart';
 import 'package:intl_phone_field/intl_phone_field.dart'; // Import the IntlPhoneField package
 import 'package:flutter/services.dart'; // <-- Ensure this import is present
+
 
 // --- Changed to ConsumerStatefulWidget ---
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -166,11 +169,18 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // Google Sign-In Button
                 Center(
                   child: SignInWithGoogleButton(
-                    onPressed: () {
-                      print('Google Sign-In button pressed');
-                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google Sign-Up not implemented yet.')),
-                      );
+                    onPressed: () async {
+                      final googleAuthService = GoogleAuthService();
+                      final user = await googleAuthService.signInWithGoogle();
+
+                      if (user != null) {
+                        print("Google Sign-In successful: ${user.email}");
+                        // Navigate to the home page or handle successful login
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Google Sign-In failed.')),
+                        );
+                      }
                     },
                     isLoading: false,
                   ),
