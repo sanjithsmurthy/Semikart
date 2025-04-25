@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../common/red_button.dart';
 import '../common/grey_text_box.dart';
+import '../common/popup.dart'; // Import the CustomPopup
 
 class RFQAddressDetails extends StatefulWidget {
   final String title;
@@ -144,37 +145,16 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     widget.onValidationChanged(isValid);
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_isValid) {
       widget.onSubmit();
     } else {
-      showModalBottomSheet(
+      // Use CustomPopup for error message
+      await CustomPopup.show(
         context: context,
-        backgroundColor: const Color(0xFFA51414),
-        builder: (BuildContext context) {
-          return Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  _errorMessage ?? 'Please fill all required fields correctly',
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFA51414),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text('OK'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          );
-        },
+        title: 'Error',
+        message: _errorMessage ?? 'Please fill all required fields correctly',
+        buttonText: 'OK',
       );
     }
   }
@@ -396,6 +376,9 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Zip code is required';
+                          }
+                          if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                            return 'Zip code must contain only numbers';
                           }
                           if (value.length < 6) {
                             return 'Please enter a valid zip code';
