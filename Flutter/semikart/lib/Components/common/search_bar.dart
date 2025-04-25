@@ -156,7 +156,6 @@ class _SearchBarState extends State<SearchBar> {
         if (_showSuggestions)
           Container(
             width: screenWidth * 0.9, // Keep relative width
-            // Use Stack/Overlay for better positioning relative to TextField if needed
             margin: EdgeInsets.only(top: scaleH(8.0)), // Reduced and scaled top margin
             padding: EdgeInsets.all(scaleW(8.0)), // Scaled padding
             constraints: BoxConstraints(
@@ -176,9 +175,11 @@ class _SearchBarState extends State<SearchBar> {
             child: _filteredManufacturerResults.isEmpty &&
                     _filteredCategoryResults.isEmpty &&
                     _filteredPartNumberResults.isEmpty
-                ? Padding(
-                    padding: EdgeInsets.only(top: scaleH(16.0)), // Scaled top padding
-                    child: const SearchFailed(), // Show SearchFailed if no results
+                ? SingleChildScrollView( // Wrap SearchFailed in a scrollable container
+                    child: Padding(
+                      padding: EdgeInsets.only(top: scaleH(16.0)), // Scaled top padding
+                      child: const SearchFailed(), // Show SearchFailed if no results
+                    ),
                   )
                 : ListView( // Use ListView for scrollability if content exceeds maxHeight
                     padding: EdgeInsets.zero, // Remove default ListView padding
@@ -261,4 +262,34 @@ class _SearchBarState extends State<SearchBar> {
       ],
     );
   }
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomInset: false, // Prevent layout adjustment when keyboard appears
+        appBar: AppBar(
+          title: const Text('Search Example'), // Persistent header
+        ),
+        body: Stack(
+          children: [
+            // Background or other content
+            Positioned.fill(
+              child: Container(
+                color: Colors.white, // Background color
+              ),
+            ),
+            // Search Bar
+            Positioned(
+              top: 16, // Fixed position for the search bar
+              left: 16,
+              right: 16,
+              child: const SearchBar(),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

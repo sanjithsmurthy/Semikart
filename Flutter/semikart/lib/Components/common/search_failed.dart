@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../base_scaffold.dart'; // Import BaseScaffold
 import '../common/red_button.dart'; // Import the RedButton component
+import '../../app_navigator.dart';
 
 class SearchFailed extends StatelessWidget {
   const SearchFailed({super.key});
@@ -10,8 +11,8 @@ class SearchFailed extends StatelessWidget {
     return Center(
       child: Container(
         width: 342, // Fixed width for the component
-        height: 396, // Fixed height for the component
-        padding: const EdgeInsets.all(16.0), // Padding around the content
+        height: 250, // Fixed height for the component
+        // padding: const EdgeInsets.all(.0), // Padding around the content
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -19,7 +20,7 @@ class SearchFailed extends StatelessWidget {
             Image.asset(
               'public/assets/images/search_failed.png', // Replace with your image path
               width: 150, // Adjust the width of the image
-              height: 150, // Adjust the height of the image
+              height: 80, // Adjust the height of the image
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 20), // Spacing between the image and text
@@ -39,12 +40,7 @@ class SearchFailed extends StatelessWidget {
               label: "Explore Categories", // Button text
               onPressed: () {
                 // Navigate to BaseScaffold with initial index 1
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BaseScaffold(initialIndex: 1),
-                  ),
-                );
+                AppNavigator.openProductsRootPage();
               },
               width: 200, // Optional: Set a custom width for the button
             ),
