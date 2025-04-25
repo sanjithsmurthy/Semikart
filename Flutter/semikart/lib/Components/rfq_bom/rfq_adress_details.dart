@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../common/red_button.dart';
-// Removed duplicate GreyTextBox import as it's defined below
-// import '../common/grey_text_box.dart';
 import '../common/popup.dart'; // Import the CustomPopup
 
 class RFQAddressDetails extends StatefulWidget {
@@ -72,6 +70,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
 
   @override
   void dispose() {
+    // Dispose controllers
     firstNameController.dispose();
     emailController.dispose();
     mobileController.dispose();
@@ -85,6 +84,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     cityController.dispose();
     countryController.dispose();
 
+    // Dispose focus nodes
     firstNameFocus.dispose();
     emailFocus.dispose();
     mobileFocus.dispose();
@@ -104,41 +104,45 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   void _validateFields() {
     String? errorMessage;
 
-    if (firstNameController.text.isEmpty) {
+    // --- Validation Logic (unchanged) ---
+    if (firstNameController.text.trim().isEmpty) {
       errorMessage = 'First name is required';
-    } else if (emailController.text.isEmpty) {
+    } else if (emailController.text.trim().isEmpty) {
       errorMessage = 'Email is required';
-    } else if (!emailController.text.contains('@')) {
+    } else if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(emailController.text.trim())) {
       errorMessage = 'Please enter a valid email';
-    } else if (mobileController.text.isEmpty) {
+    } else if (mobileController.text.trim().isEmpty) {
       errorMessage = 'Mobile number is required';
-    } else if (!RegExp(r'^[0-9]+$').hasMatch(mobileController.text)) {
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(mobileController.text.trim())) {
+      // This check might be redundant with input formatter but good for safety
       errorMessage = 'Mobile number must contain only numbers';
-    } else if (mobileController.text.length < 10) {
+    } else if (mobileController.text.trim().length < 10) {
       errorMessage = 'Please enter a valid mobile number';
-    } else if (address1Controller.text.isEmpty) {
+    } else if (address1Controller.text.trim().isEmpty) {
       errorMessage = 'Address line 1 is required';
-    } else if (address2Controller.text.isEmpty) {
+    } else if (address2Controller.text.trim().isEmpty) {
       errorMessage = 'Address line 2 is required';
-    } else if (landmarkController.text.isEmpty) {
+    } else if (landmarkController.text.trim().isEmpty) {
       errorMessage = 'Landmark is required';
-    } else if (zipCodeController.text.isEmpty) {
+    } else if (zipCodeController.text.trim().isEmpty) {
       errorMessage = 'Zip code is required';
-    } else if (!RegExp(r'^[0-9]+$').hasMatch(zipCodeController.text)) {
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(zipCodeController.text.trim())) {
+      // Redundant with input formatter
       errorMessage = 'Zip code must contain only numbers';
-    } else if (zipCodeController.text.length < 6) {
+    } else if (zipCodeController.text.trim().length < 6) {
       errorMessage = 'Please enter a valid zip code';
-    } else if (stateController.text.isEmpty) {
+    } else if (stateController.text.trim().isEmpty) {
       errorMessage = 'State is required';
-    } else if (cityController.text.isEmpty) {
+    } else if (cityController.text.trim().isEmpty) {
       errorMessage = 'City is required';
-    } else if (countryController.text.isEmpty) {
+    } else if (countryController.text.trim().isEmpty) {
       errorMessage = 'Country is required';
     }
+    // --- End Validation Logic ---
+
 
     bool isValid = errorMessage == null;
 
-    // Check if mounted before calling setState to avoid errors after dispose
     if (mounted) {
       setState(() {
         _errorMessage = errorMessage;
@@ -150,14 +154,11 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   }
 
   void _submitForm() async {
-    // Re-validate before attempting submission
-    _validateFields();
+    _validateFields(); // Re-validate before submission
 
-    if (_isValid) {
+    if (_isValid && widget.canSubmit) { // Check canSubmit flag as well
       widget.onSubmit();
-    } else {
-      // Use CustomPopup for error message
-      // Check if mounted before showing the popup
+    } else if (!_isValid) { // Only show error popup if validation failed
       if (!mounted) return;
       await CustomPopup.show(
         context: context,
@@ -166,357 +167,365 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
         buttonText: 'OK',
       );
     }
+    // If !_isValid is false but widget.canSubmit is false, do nothing (button is likely disabled)
   }
 
   @override
   Widget build(BuildContext context) {
+    // --- Responsive Scaling Setup ---
+    const double referenceWidth = 412.0;
+    const double referenceHeight = 917.0; // Keep reference height if needed for specific elements
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // --- Sizing based on original context ---
-    final double titleFontSize = screenWidth * 0.05;
-    final double sectionSpacing = screenWidth * 0.04;
-    final double textBoxSpacing = screenWidth * 0.025;
-    final double rowSpacing = screenWidth * 0.025;
-    // final double textBoxWidth = screenWidth * 0.9; // Not used directly, GreyTextBox handles width
-    final double reCaptchaHeight = screenHeight * 0.06;
-    final double reCaptchaFontSize = screenWidth * 0.035;
-    final double submitButtonSpacing = screenWidth * 0.05;
-    final double textBoxLabelFontSize = screenWidth * 0.0325;
-    final double textBoxHeight = screenHeight * 0.05;
-    final double rowHorizontalSpacing = screenWidth * 0.075;
+    // Calculate scale factors (primarily use width scale)
+    final double scaleWidth = screenWidth / referenceWidth;
+    // final double scaleHeight = screenHeight / referenceHeight; // Use if height scaling is needed
 
-    // Define the primary color for reuse
+    // Use scaleWidth for most elements to maintain horizontal proportions
+    final double scale = scaleWidth;
+    // --- End Responsive Scaling Setup ---
+
+    // --- Scaled Dimensions ---
+    // Base values are chosen relative to the reference width (412px)
+    final double titleFontSize = 20.0 * scale; // e.g., 20px on reference width
+    final double sectionSpacing = 16.0 * scale; // e.g., 16px
+    final double textBoxSpacing = 10.0 * scale; // e.g., 10px
+    final double rowSpacing = 10.0 * scale; // e.g., 10px
+    // GreyTextBox width will be handled internally, but pass scaled height/font
+    final double reCaptchaHeight = 50.0 * scale; // e.g., 50px height
+    final double reCaptchaFontSize = 14.0 * scale; // e.g., 14px font
+    final double submitButtonSpacing = 20.0 * scale; // e.g., 20px
+    final double textBoxLabelFontSize = 13.5 * scale; // e.g., 13.5px font
+    // Scale height based on reference height or a fixed aspect ratio * scaleWidth
+    final double textBoxHeight = 45.0 * scale; // e.g., 45px height, scales with width
+    final double rowHorizontalSpacing = 16.0 * scale; // e.g., 16px horizontal space in rows
+    // --- End Scaled Dimensions ---
+
     const Color primaryColor = Color(0xFFA51414);
     const Color textBoxBackgroundColor = Color(0xFFE4E8EC);
 
     return Container(
       color: Colors.white,
-      // Use SafeArea to avoid overlaps with system UI
       child: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            // Use symmetric padding for consistency
-            padding: EdgeInsets.symmetric(horizontal: sectionSpacing, vertical: sectionSpacing),
-            child: Form(
-              key: _formKey,
-              // Consider adding autovalidateMode for instant feedback
-              // autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      fontSize: titleFontSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+          // Use scaled padding
+          padding: EdgeInsets.symmetric(horizontal: sectionSpacing, vertical: sectionSpacing),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: titleFontSize, // Scaled
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: sectionSpacing), // Scaled
+
+                // --- Form Fields ---
+                GreyTextBox(
+                  nameController: firstNameController,
+                  text: 'First name*',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  focusNode: firstNameFocus,
+                  nextFocus: emailFocus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'First name is required';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: emailController,
+                  text: 'Email*',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  keyboardType: TextInputType.emailAddress,
+                  focusNode: emailFocus,
+                  nextFocus: mobileFocus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Email is required';
+                    }
+                    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim())) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: mobileController,
+                  text: 'Mobile number*',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)], // Limit length
+                  focusNode: mobileFocus,
+                  nextFocus: companyFocus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Mobile number is required';
+                    }
+                    if (value.trim().length < 10) {
+                      return 'Please enter a valid mobile number';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: companyController,
+                  text: 'Company name',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  focusNode: companyFocus,
+                  nextFocus: gstNoFocus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: gstNoController,
+                  text: 'GST number',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  focusNode: gstNoFocus,
+                  nextFocus: address1Focus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: address1Controller,
+                  text: 'Address line 1*',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  focusNode: address1Focus,
+                  nextFocus: address2Focus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Address line 1 is required';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: address2Controller,
+                  text: 'Address line 2*',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  focusNode: address2Focus,
+                  nextFocus: landmarkFocus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Address line 2 is required';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: textBoxSpacing), // Scaled
+                GreyTextBox(
+                  nameController: landmarkController,
+                  text: 'Landmark*',
+                  backgroundColor: textBoxBackgroundColor,
+                  labelFontSize: textBoxLabelFontSize, // Scaled
+                  textBoxHeight: textBoxHeight, // Scaled
+                  focusNode: landmarkFocus,
+                  nextFocus: zipCodeFocus,
+                  cursorColor: primaryColor,
+                  selectionHandleColor: primaryColor,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Landmark is required';
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _validateFields(),
+                  scaleFactor: scale, // Pass scale factor
+                ),
+                SizedBox(height: rowSpacing), // Scaled
+
+                // --- Row for Zip Code and State ---
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: GreyTextBox(
+                        nameController: zipCodeController,
+                        text: 'Zip code*',
+                        backgroundColor: textBoxBackgroundColor,
+                        labelFontSize: textBoxLabelFontSize, // Scaled
+                        textBoxHeight: textBoxHeight, // Scaled
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(6),
+                        ],
+                        focusNode: zipCodeFocus,
+                        nextFocus: stateFocus,
+                        cursorColor: primaryColor,
+                        selectionHandleColor: primaryColor,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Zip code is required';
+                          }
+                          if (value.trim().length < 6) {
+                            return 'Please enter a valid zip code';
+                          }
+                          return null;
+                        },
+                        onChanged: (_) => _validateFields(),
+                        scaleFactor: scale, // Pass scale factor
+                      ),
                     ),
-                  ),
-                  SizedBox(height: sectionSpacing),
-
-                  // --- Form Fields ---
-                  // Pass the primary color for cursor and selection handles
-                  GreyTextBox(
-                    nameController: firstNameController,
-                    text: 'First name*',
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    focusNode: firstNameFocus,
-                    nextFocus: emailFocus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor, // Pass handle color
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'First name is required';
-                      }
-                      return null;
-                    },
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: emailController,
-                    text: 'Email*',
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    keyboardType: TextInputType.emailAddress,
-                    focusNode: emailFocus,
-                    nextFocus: mobileFocus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Email is required';
-                      }
-                      // Improved email validation regex
-                      if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value.trim())) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    },
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: mobileController,
-                    text: 'Mobile number*',
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    keyboardType: TextInputType.phone, // Use phone type
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    focusNode: mobileFocus,
-                    nextFocus: companyFocus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Mobile number is required';
-                      }
-                      if (value.trim().length < 10) {
-                        return 'Please enter a valid mobile number';
-                      }
-                      // Regex check is redundant due to inputFormatter
-                      return null;
-                    },
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: companyController,
-                    text: 'Company name', // Optional
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    focusNode: companyFocus,
-                    nextFocus: gstNoFocus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    onChanged: (_) => _validateFields(), // Still validate optional fields
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: gstNoController,
-                    text: 'GST number', // Optional
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    // Consider TextInputType.text and formatters for GST
-                    // keyboardType: TextInputType.text,
-                    // inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))],
-                    focusNode: gstNoFocus,
-                    nextFocus: address1Focus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: address1Controller,
-                    text: 'Address line 1*',
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    focusNode: address1Focus,
-                    nextFocus: address2Focus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Address line 1 is required';
-                      }
-                      return null;
-                    },
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: address2Controller,
-                    text: 'Address line 2*',
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    focusNode: address2Focus,
-                    nextFocus: landmarkFocus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Address line 2 is required';
-                      }
-                      return null;
-                    },
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: textBoxSpacing),
-                  GreyTextBox(
-                    nameController: landmarkController,
-                    text: 'Landmark*',
-                    backgroundColor: textBoxBackgroundColor,
-                    labelFontSize: textBoxLabelFontSize,
-                    textBoxHeight: textBoxHeight,
-                    focusNode: landmarkFocus,
-                    nextFocus: zipCodeFocus,
-                    cursorColor: primaryColor,
-                    selectionHandleColor: primaryColor,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Landmark is required';
-                      }
-                      return null;
-                    },
-                    onChanged: (_) => _validateFields(),
-                  ),
-                  SizedBox(height: rowSpacing), // Use rowSpacing before Row
-
-                  // --- Row for Zip Code and State ---
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Align tops
-                    children: [
-                      Expanded(
-                        // flex: 1, // Default flex is 1
-                        child: GreyTextBox(
-                          nameController: zipCodeController,
-                          text: 'Zip code*',
-                          backgroundColor: textBoxBackgroundColor,
-                          labelFontSize: textBoxLabelFontSize,
-                          textBoxHeight: textBoxHeight,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(6), // Limit length
-                          ],
-                          focusNode: zipCodeFocus,
-                          nextFocus: stateFocus,
-                          cursorColor: primaryColor,
-                          selectionHandleColor: primaryColor,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Zip code is required';
-                            }
-                            // Regex check redundant due to formatter
-                            if (value.trim().length < 6) {
-                              return 'Please enter a valid zip code';
-                            }
-                            return null;
-                          },
-                          onChanged: (_) => _validateFields(),
-                        ),
+                    SizedBox(width: rowHorizontalSpacing), // Scaled
+                    Expanded(
+                      child: GreyTextBox(
+                        nameController: stateController,
+                        text: 'State*',
+                        backgroundColor: textBoxBackgroundColor,
+                        labelFontSize: textBoxLabelFontSize, // Scaled
+                        textBoxHeight: textBoxHeight, // Scaled
+                        focusNode: stateFocus,
+                        nextFocus: cityFocus,
+                        cursorColor: primaryColor,
+                        selectionHandleColor: primaryColor,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'State is required';
+                          }
+                          return null;
+                        },
+                        onChanged: (_) => _validateFields(),
+                        scaleFactor: scale, // Pass scale factor
                       ),
-                      SizedBox(width: rowHorizontalSpacing),
-                      Expanded(
-                        // flex: 1,
-                        child: GreyTextBox(
-                          nameController: stateController,
-                          text: 'State*',
-                          backgroundColor: textBoxBackgroundColor,
-                          labelFontSize: textBoxLabelFontSize,
-                          textBoxHeight: textBoxHeight,
-                          focusNode: stateFocus,
-                          nextFocus: cityFocus,
-                          cursorColor: primaryColor,
-                          selectionHandleColor: primaryColor,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'State is required';
-                            }
-                            return null;
-                          },
-                          onChanged: (_) => _validateFields(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: rowSpacing),
-
-                  // --- Row for City and Country ---
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        // flex: 1,
-                        child: GreyTextBox(
-                          nameController: cityController,
-                          text: 'City*',
-                          backgroundColor: textBoxBackgroundColor,
-                          labelFontSize: textBoxLabelFontSize,
-                          textBoxHeight: textBoxHeight,
-                          focusNode: cityFocus,
-                          nextFocus: countryFocus,
-                          cursorColor: primaryColor,
-                          selectionHandleColor: primaryColor,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'City is required';
-                            }
-                            return null;
-                          },
-                          onChanged: (_) => _validateFields(),
-                        ),
-                      ),
-                      SizedBox(width: rowHorizontalSpacing),
-                      Expanded(
-                        // flex: 1,
-                        child: GreyTextBox(
-                          nameController: countryController,
-                          text: 'Country*',
-                          backgroundColor: textBoxBackgroundColor,
-                          labelFontSize: textBoxLabelFontSize,
-                          textBoxHeight: textBoxHeight,
-                          focusNode: countryFocus,
-                          // No next focus, unfocus on complete
-                          cursorColor: primaryColor,
-                          selectionHandleColor: primaryColor,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Country is required';
-                            }
-                            return null;
-                          },
-                          onChanged: (_) => _validateFields(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: sectionSpacing),
-
-                  // --- Placeholder for reCAPTCHA ---
-                  // Consider implementing a real reCAPTCHA solution if needed
-                  Container(
-                    height: reCaptchaHeight,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400), // Lighter border
-                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(
-                      child: Text(
-                        "I'm not a robot (Placeholder)", // Indicate it's a placeholder
-                        style: TextStyle(
-                          fontSize: reCaptchaFontSize,
-                          color: Colors.grey.shade600, // Slightly darker grey
-                        ),
+                  ],
+                ),
+                SizedBox(height: rowSpacing), // Scaled
+
+                // --- Row for City and Country ---
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: GreyTextBox(
+                        nameController: cityController,
+                        text: 'City*',
+                        backgroundColor: textBoxBackgroundColor,
+                        labelFontSize: textBoxLabelFontSize, // Scaled
+                        textBoxHeight: textBoxHeight, // Scaled
+                        focusNode: cityFocus,
+                        nextFocus: countryFocus,
+                        cursorColor: primaryColor,
+                        selectionHandleColor: primaryColor,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'City is required';
+                          }
+                          return null;
+                        },
+                        onChanged: (_) => _validateFields(),
+                        scaleFactor: scale, // Pass scale factor
+                      ),
+                    ),
+                    SizedBox(width: rowHorizontalSpacing), // Scaled
+                    Expanded(
+                      child: GreyTextBox(
+                        nameController: countryController,
+                        text: 'Country*',
+                        backgroundColor: textBoxBackgroundColor,
+                        labelFontSize: textBoxLabelFontSize, // Scaled
+                        textBoxHeight: textBoxHeight, // Scaled
+                        focusNode: countryFocus,
+                        cursorColor: primaryColor,
+                        selectionHandleColor: primaryColor,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Country is required';
+                          }
+                          return null;
+                        },
+                        onChanged: (_) => _validateFields(),
+                        scaleFactor: scale, // Pass scale factor
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: sectionSpacing), // Scaled
+
+                // --- Placeholder for reCAPTCHA ---
+                Container(
+                  height: reCaptchaHeight, // Scaled
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(5 * scale), // Scaled radius
+                  ),
+                  child: Center(
+                    child: Text(
+                      "I'm not a robot (Placeholder)",
+                      style: TextStyle(
+                        fontSize: reCaptchaFontSize, // Scaled
+                        color: Colors.grey.shade600,
                       ),
                     ),
                   ),
-                  SizedBox(height: submitButtonSpacing),
+                ),
+                SizedBox(height: submitButtonSpacing), // Scaled
 
-                  // --- Submit Button ---
-                  Center(
-                    child: RedButton(
-                      label: widget.submitButtonText,
-                      // Disable button visually if not valid or cannot submit
-                      // Use _isValid state which is updated by _validateFields
-                      onPressed: widget.canSubmit ? _submitForm : () {},
-                      // Optionally change button style when disabled
-                      // backgroundColor: _isValid && widget.canSubmit ? primaryColor : Colors.grey,
-                    ),
+                // --- Submit Button ---
+                Center(
+                  child: RedButton(
+                    label: widget.submitButtonText,
+                    onPressed: widget.canSubmit ? _submitForm : () {}, // Keep existing logic
+                    // Pass scaled font size to RedButton if it supports it
+                    // Assuming RedButton scales internally or accepts fontSize
+                    // fontSize: 16.0 * scale, // Example if RedButton needs it
                   ),
-                  SizedBox(height: sectionSpacing), // Add some padding at the bottom
-                ],
-              ),
+                ),
+                SizedBox(height: sectionSpacing), // Scaled bottom padding
+              ],
             ),
           ),
         ),
@@ -526,14 +535,14 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
 }
 
 
-// --- GreyTextBox Widget (Modified for Selection Handle Color) ---
+// --- GreyTextBox Widget (Modified for Scaling) ---
 class GreyTextBox extends StatelessWidget {
   final TextEditingController nameController;
-  final String text; // Acts as both label and hint
-  final double? width;
+  final String text;
+  final double? width; // Keep optional width override
   final Color backgroundColor;
-  final double labelFontSize;
-  final double textBoxHeight;
+  final double labelFontSize; // Now receives scaled value
+  final double textBoxHeight; // Now receives scaled value
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
@@ -542,107 +551,115 @@ class GreyTextBox extends StatelessWidget {
   final Function(String)? onChanged;
   final Color? cursorColor;
   final double? cursorWidth;
-  final Color? selectionColor; // Background color of selected text
-  final Color? selectionHandleColor; // Color of the selection handles (bubbles)
+  final Color? selectionColor;
+  final Color? selectionHandleColor;
+  final double scaleFactor; // Receive the scale factor
 
   const GreyTextBox({
     Key? key,
     required this.nameController,
-    required this.text, // Make text required
+    required this.text,
     this.width,
     this.backgroundColor = const Color(0xFFE4E8EC),
-    required this.labelFontSize,
-    required this.textBoxHeight,
+    required this.labelFontSize, // Expect scaled value
+    required this.textBoxHeight, // Expect scaled value
     this.keyboardType,
     this.inputFormatters,
     this.validator,
     this.focusNode,
     this.nextFocus,
     this.onChanged,
-    this.cursorColor, // Default set below
-    this.cursorWidth = 1.5, // Slightly thicker cursor
-    this.selectionColor, // Default set below
-    this.selectionHandleColor, // Default set below
+    this.cursorColor,
+    this.cursorWidth = 1.5, // Base cursor width (could also scale if desired)
+    this.selectionColor,
+    this.selectionHandleColor,
+    required this.scaleFactor, // Require scale factor
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     // Define the default theme color
     const Color defaultThemeColor = Color(0xFFA51414);
+    const double referenceWidth = 412.0; // Reference width for default calculation
 
     // Determine effective colors
     final Color effectiveHandleColor = selectionHandleColor ?? defaultThemeColor;
     final Color effectiveCursorColor = cursorColor ?? defaultThemeColor;
     final Color effectiveSelectionColor = selectionColor ?? effectiveHandleColor.withOpacity(0.4);
 
+    // Calculate default width based on reference and scale factor if not overridden
+    final double effectiveWidth = width ?? (referenceWidth * 0.9 * scaleFactor);
+    // Scaled internal padding/radius
+    final double internalHPadding = 10.0 * scaleFactor;
+    final double borderRadius = 8.0 * scaleFactor;
+    final double labelSpacing = 4.0 * scaleFactor;
+
+    // Calculate font size for input text relative to label font size
+    final double inputTextFontSize = labelFontSize * 1.1;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min, // Take minimum vertical space
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // Label Text
+        // Label Text (uses scaled labelFontSize)
         Text(
           text,
           style: TextStyle(
             fontSize: labelFontSize,
-            color: defaultThemeColor, // Use the theme color for label
-            fontWeight: FontWeight.w500, // Slightly bolder label
+            color: defaultThemeColor,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 4), // Consistent small spacing
+        SizedBox(height: labelSpacing), // Scaled spacing
 
         // Text Field Container
         Container(
-          width: width ?? screenWidth * 0.9, // Use provided width or default
-          height: textBoxHeight,
+          width: effectiveWidth, // Use calculated width
+          height: textBoxHeight, // Use scaled height from parent
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(8), // Slightly smaller radius
+            borderRadius: BorderRadius.circular(borderRadius), // Scaled radius
           ),
-          // Apply TextSelectionTheme for handle color
           child: TextSelectionTheme(
             data: TextSelectionTheme.of(context).copyWith(
               selectionColor: effectiveSelectionColor,
-              selectionHandleColor: effectiveHandleColor, // *** Set the handle color ***
-              cursorColor: effectiveCursorColor, // Ensure cursor color matches theme
+              selectionHandleColor: effectiveHandleColor,
+              cursorColor: effectiveCursorColor,
             ),
             child: TextFormField(
               controller: nameController,
               focusNode: focusNode,
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
-              cursorColor: effectiveCursorColor, // Use themed cursor color
-              cursorWidth: cursorWidth!,
-              style: TextStyle(fontSize: labelFontSize * 1.1), // Slightly larger input text
-              textAlignVertical: TextAlignVertical.center, // Center text vertically
+              cursorColor: effectiveCursorColor,
+              cursorWidth: cursorWidth!, // Use base width or scale: cursorWidth! * scaleFactor
+              style: TextStyle(fontSize: inputTextFontSize), // Scaled input text
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
-                // Use label text also as hint text (remove asterisk)
                 hintText: text.endsWith('*') ? text.substring(0, text.length - 1) : text,
                 hintStyle: TextStyle(
-                  fontSize: labelFontSize * 1.05,
+                  fontSize: labelFontSize * 1.05, // Scale hint relative to label
                   color: Colors.grey.shade500,
                 ),
-                // Remove default border and use container's border/background
                 border: InputBorder.none,
-                // Adjust content padding for vertical centering
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                  // Calculate vertical padding dynamically
-                  vertical: (textBoxHeight - (labelFontSize * 1.1 * 1.4)) / 2,
+                  horizontal: internalHPadding, // Scaled horizontal padding
+                  // Dynamic vertical padding to center text based on scaled height and font size
+                  vertical: (textBoxHeight - (inputTextFontSize * 1.4)) / 2 > 0
+                           ? (textBoxHeight - (inputTextFontSize * 1.4)) / 2
+                           : 0, // Ensure non-negative padding
                 ),
-                // Hide default error text space
                 errorStyle: const TextStyle(height: 0.01, fontSize: 0.01, color: Colors.transparent),
-                isDense: true, // Reduces intrinsic padding
+                isDense: true,
               ),
               validator: validator,
               onChanged: onChanged,
-              // Handle focus transition on editing complete
               onEditingComplete: () {
                 if (focusNode != null && focusNode!.hasFocus) {
                   if (nextFocus != null) {
                     FocusScope.of(context).requestFocus(nextFocus);
                   } else {
-                    focusNode!.unfocus(); // Unfocus if it's the last field
+                    focusNode!.unfocus();
                   }
                 }
               },

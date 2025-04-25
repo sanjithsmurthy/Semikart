@@ -27,8 +27,10 @@ class _CustomSquareState extends State<CustomSquare> {
     final File? file = xFile != null ? File(xFile.path) : null;
 
     if (file != null) {
+      // Check if the widget is still mounted before calling setState
+      if (!mounted) return;
       setState(() {
-        _fileName = file.path.split('/').last;
+        _fileName = file.path.split(Platform.pathSeparator).last; // Use platform-specific separator
         _fileExtension = file.path.split('.').last;
         _selectedFile = file;
         _isFileUploaded = true;
@@ -38,70 +40,101 @@ class _CustomSquareState extends State<CustomSquare> {
           _isFileUploaded); // Notify parent that file is uploaded
     } else {
       print('File selection canceled.');
+      // Optionally notify parent if selection is cancelled and file was previously uploaded
+      // if (_isFileUploaded) {
+      //   setState(() {
+      //     _isFileUploaded = false;
+      //     _fileName = null;
+      //     _fileExtension = null;
+      //     _selectedFile = null;
+      //   });
+      //   widget.onFileUploaded(false);
+      // }
     }
   }
 
-  Widget _getFileIcon(double screenWidth) {
-    double iconSize = screenWidth * 0.125; // 12.5% of screen width
+  // Updated to accept scale factor for consistent scaling
+  Widget _getFileIcon(double scale) {
+    // Base icon size relative to reference width (e.g., 50px on 412px width)
+    double baseIconSize = 50.0;
+    double iconSize = baseIconSize * scale;
+
+    // Use a default icon if extension is null or unknown
+    IconData defaultIconData = Icons.insert_drive_file;
+    Color defaultIconColor = Colors.grey;
 
     if (_fileExtension == null) {
+      // Keep the cloud icon asset if preferred for the initial state
       return Image.asset(
-        'public/assets/images/cloud_icon.png',
+        'public/assets/images/cloud_icon.png', // Ensure this path is correct
         fit: BoxFit.contain,
+        // Optionally scale the Image widget itself if needed
+        // width: iconSize,
+        // height: iconSize,
       );
     }
 
-    if (_fileExtension!.toLowerCase() == 'pdf') {
+    String lowerCaseExtension = _fileExtension!.toLowerCase();
+
+    if (lowerCaseExtension == 'pdf') {
       return Icon(Icons.picture_as_pdf, size: iconSize, color: Colors.red);
-    } else if (['xlsx', 'xls'].contains(_fileExtension!.toLowerCase())) {
+    } else if (['xlsx', 'xls'].contains(lowerCaseExtension)) {
       return Icon(Icons.table_chart, size: iconSize, color: Colors.green);
     }
 
-    return Icon(Icons.insert_drive_file, size: iconSize, color: Colors.grey);
+    // Fallback icon for other/unknown types
+    return Icon(defaultIconData, size: iconSize, color: defaultIconColor);
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    // --- Responsive Scaling Setup ---
+    const double referenceWidth = 412.0;
+    // const double referenceHeight = 917.0; // Not directly used but good practice
 
-    // Dynamic dimensions based on screen width
-    final double containerHorizontalPadding =
-        screenWidth * 0.04; // 4% of screen width
-    final double innerContainerPadding =
-        screenWidth * 0.04; // 4% of screen width
-    final double borderRadius = screenWidth * 0.05; // 5% of screen width
-    final double shadowSpreadRadius =
-        screenWidth * 0.0125; // 1.25% of screen width
-    final double shadowBlurRadius = screenWidth * 0.025; // 2.5% of screen width
-    final double iconWidth = screenWidth * 0.25; // 25% of screen width
-    final double iconHeight = screenWidth *
-        0.25; // 25% of screen width (to maintain square aspect ratio)
-    final double fileNameFontSize = screenWidth * 0.035; // 3.5% of screen width
-    final double uploadTextFontSize = screenWidth * 0.04; // 4% of screen width
-    final double supportedFormatsFontSize =
-        screenWidth * 0.03; // 3% of screen width
-    final double sizedBoxHeightSmall =
-        screenWidth * 0.025; // 2.5% of screen width
-    final double sizedBoxHeightMedium =
-        screenWidth * 0.0375; // 3.75% of screen width
-    final double buttonWidth = screenWidth * 0.3; // 30% of screen width
-    final double buttonHeight = screenWidth * 0.1; // 10% of screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+    // final screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate scale factor based on width
+    final double scale = screenWidth / referenceWidth;
+    // --- End Responsive Scaling Setup ---
+
+    // --- Scaled Dimensions ---
+    // Base values chosen relative to reference width (412px)
+    final double containerHorizontalPadding = 16.0 * scale; // Base: 16px
+    final double innerContainerPadding = 16.0 * scale; // Base: 16px
+    final double borderRadius = 20.0 * scale; // Base: 20px
+    final double shadowSpreadRadius = 5.0 * scale; // Base: 5px
+    final double shadowBlurRadius = 10.0 * scale; // Base: 10px
+    final double shadowOffsetY = 3.0 * scale; // Base: 3px
+    // Icon container size (adjust base value as needed)
+    final double iconContainerSize = 100.0 * scale; // Base: 100px square
+    final double fileNameFontSize = 14.0 * scale; // Base: 14px
+    final double uploadTextFontSize = 16.0 * scale; // Base: 16px
+    final double supportedFormatsFontSize = 12.0 * scale; // Base: 12px
+    final double sizedBoxHeightSmall = 10.0 * scale; // Base: 10px
+    final double sizedBoxHeightMedium = 15.0 * scale; // Base: 15px
+    // Button dimensions (adjust base values as needed)
+    final double buttonWidth = 120.0 * scale; // Base: 120px
+    final double buttonHeight = 40.0 * scale; // Base: 40px
+    final double buttonFontSize = 14.0 * scale; // Base: 14px (assuming RedButton uses it)
+    // --- End Scaled Dimensions ---
 
     return Container(
-      color: Colors.white,
-      width: screenWidth,
-      padding: EdgeInsets.symmetric(horizontal: containerHorizontalPadding),
+      color: Colors.white, // Keep original background
+      // No fixed width needed, let parent handle width constraints
+      padding: EdgeInsets.symmetric(horizontal: containerHorizontalPadding), // Scaled
       child: Container(
-        padding: EdgeInsets.all(innerContainerPadding),
+        padding: EdgeInsets.all(innerContainerPadding), // Scaled
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(borderRadius),
+          color: Colors.white, // Keep original color
+          borderRadius: BorderRadius.circular(borderRadius), // Scaled
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: shadowSpreadRadius,
-              blurRadius: shadowBlurRadius,
-              offset: const Offset(0, 3),
+              color: Colors.grey.withOpacity(0.5), // Keep original shadow color/opacity
+              spreadRadius: shadowSpreadRadius, // Scaled
+              blurRadius: shadowBlurRadius, // Scaled
+              offset: Offset(0, shadowOffsetY), // Use scaled Y offset
             ),
           ],
         ),
@@ -113,56 +146,62 @@ class _CustomSquareState extends State<CustomSquare> {
               onTap: _pickFile,
               child: Column(
                 children: [
-                  SizedBox(
-                    width: iconWidth,
-                    height: iconHeight,
-                    child: _getFileIcon(screenWidth),
+                  // Container to hold the icon/image with fixed scaled size
+                  Container(
+                    width: iconContainerSize, // Scaled
+                    height: iconContainerSize, // Scaled
+                    alignment: Alignment.center, // Center the icon/image
+                    child: _getFileIcon(scale), // Pass scale factor
                   ),
+                  // Display file name if selected
                   if (_fileName != null)
                     Padding(
-                      padding: EdgeInsets.only(top: sizedBoxHeightSmall),
+                      padding: EdgeInsets.only(top: sizedBoxHeightSmall), // Scaled
                       child: Text(
                         _fileName!,
                         style: TextStyle(
-                          fontSize: fileNameFontSize,
-                          color: Colors.black,
+                          fontSize: fileNameFontSize, // Scaled
+                          color: Colors.black, // Keep original color
                         ),
                         textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.ellipsis, // Prevent long names breaking layout
                         maxLines: 1,
                       ),
                     ),
                 ],
               ),
             ),
+            // Display upload instructions if no file is selected
             if (_fileName == null) ...[
-              SizedBox(height: sizedBoxHeightSmall),
+              SizedBox(height: sizedBoxHeightSmall), // Scaled
               Text(
                 'Upload Parts List',
                 style: TextStyle(
-                  fontSize: uploadTextFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF000000),
+                  fontSize: uploadTextFontSize, // Scaled
+                  fontWeight: FontWeight.bold, // Keep original weight
+                  color: const Color(0xFF000000), // Keep original color
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: sizedBoxHeightSmall),
+              SizedBox(height: sizedBoxHeightSmall), // Scaled
               Text(
                 'Supported formats: Excel (XLS, XLSX), PDF.',
                 style: TextStyle(
-                  fontSize: supportedFormatsFontSize,
-                  color: const Color(0xFF757575),
+                  fontSize: supportedFormatsFontSize, // Scaled
+                  color: const Color(0xFF757575), // Keep original color
                 ),
                 textAlign: TextAlign.center,
               ),
             ],
-            SizedBox(height: sizedBoxHeightMedium),
+            SizedBox(height: sizedBoxHeightMedium), // Scaled spacing before button
+            // Browse/Replace Button
             Center(
               child: RedButton(
                 label: _fileName == null ? "Browse" : "Replace File",
                 onPressed: _pickFile,
-                width: buttonWidth,
-                height: buttonHeight,
+                width: buttonWidth, // Use scaled width
+                height: buttonHeight, // Use scaled height
+                fontSize: buttonFontSize, // Pass scaled font size (ensure RedButton uses it)
               ),
             ),
           ],
