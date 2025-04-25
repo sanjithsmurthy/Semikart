@@ -317,29 +317,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.015), // Add spacing
 
-                // --- Use PasswordTextField directly ---
-                PasswordTextField(
-                  controller: _passwordController,
-                  label: "Password",
-                  height: screenHeight * 0.06, // Match height if needed
-                  onChanged: (_) => _checkAllFieldsFilled(), // Check fields on change
-                ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
-                PasswordTextField(
-                  controller: _confirmPasswordController,
-                  label: "Confirm Password",
-                  height: screenHeight * 0.06, // Match height if needed
-                  onChanged: (_) => _checkAllFieldsFilled(), // Check fields on change
-                ),
-                // Display error if passwords don't match and confirm field is touched
-                 if (_confirmPasswordController.text.isNotEmpty && !passwordsMatch)
-                   Padding(
-                     padding: const EdgeInsets.only(top: 8.0, left: 12.0), // Adjust padding
-                     child: Text(
-                       'Passwords do not match',
-                       style: TextStyle(color: Colors.red.shade700, fontSize: 12),
-                     ),
-                   ),
+// Confirm Password Component
+                ConfirmPasswordScreen(
+                  onPasswordsMatch: (match) {
+                    if (passwordsMatch != match) {
+                      setState(() {
+                        passwordsMatch = match; // Update the passwordsMatch state
+                      });
+                      _checkAllFieldsFilled();
+                    }
+                  },
+                ), // <-- Added comma here
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
 
@@ -366,7 +354,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                 // Checkbox for Terms and Conditions
                 Align(
-                  alignment: Alignment.centerRight, // Align the entire row to the right
+                  alignment: Alignment.center, // Align the entire row to the right
                   child: Row(
                     mainAxisSize: MainAxisSize.min, // Minimize the row's width
                     children: [
@@ -396,7 +384,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               fontSize: screenWidth * 0.035, // Specify font size
                               color: Colors.black,
                             ),
-                            textAlign: TextAlign.right, // Align text to the right
+                            textAlign: TextAlign.center, // Align text to the right
                           ),
                         ),
                       ),
