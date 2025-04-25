@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager provider
+// Import AuthManager provider
 import 'red_button.dart'; // Import your custom RedButton
-import 'popup.dart'; // Import your CustomPopup widget
+
 // Removed LoginPassword import as AuthWrapper handles navigation
 // import '../login_signup/login_password.dart';
-import '../login_signup/login_password.dart'; // Import the screen
-import '../profile/profile_screen.dart';
+// Import the screen
 import '../../base_scaffold.dart';
-import '../home/order_history.dart';
 import '../../providers/profile_image_provider.dart';
 import '../../providers/user_profile_provider.dart'; // NEW: import user profile data
+import '../../app_navigator.dart'; // Import AppNavigator for navigation
 // Import AuthManager provider
-
 class HamburgerMenu extends ConsumerWidget {
   const HamburgerMenu({super.key});
 
@@ -183,11 +181,9 @@ class HamburgerMenu extends ConsumerWidget {
                     icon: Icons.history,
                     text: 'Order History',
                     onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => OrderHistory()),
-                      );
+                      Navigator.pop(context); // Close the drawer
+                      AppNavigator.toProfile(); // Switch to the Profile tab
+                      AppNavigator.pushOrderHistory(); // Push the Order History page within the Profile tab
                     },
                   ),
                   const SizedBox(height: 16),
