@@ -200,10 +200,13 @@ class _EditPageState extends State<EditPage> {
                         title: const Text('Missing Information'),
                         content: const Text('Please fill all mandatory billing address fields'),
                         actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('OK'),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            'OK',
+                            style: TextStyle(color: Color(0xFFA51414)),
                           ),
+                        ),
                         ],
                       ),
                     );
@@ -505,12 +508,16 @@ class _EditPageState extends State<EditPage> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
+                      backgroundColor: Colors.white,
                       title: const Text('Incomplete Address'),
                       content: const Text('The billing address or shipping address is not filled completely'),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text('OK'),
+                          child: const Text(
+                            'OK',
+                            style: TextStyle(color: Color(0xFFA51414)),
+                          ),
                         ),
                       ],
                     ),
@@ -550,6 +557,7 @@ class PaymentConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -613,7 +621,11 @@ class PaymentConfirmationDialog extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Cancel Payment'),
+                          backgroundColor: Colors.white,
+                          title: const Text(
+                            'Cancel Payment',
+                            style: TextStyle(color: Color(0xFFA51414)),
+                          ),
                           content: const Text(
                             'Are you sure you want to cancel this order? '
                             'If you wish to complete the payment later you can do this '
@@ -622,6 +634,9 @@ class PaymentConfirmationDialog extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
+                              style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFFA51414),
+                              ),
                               child: const Text('Cancel'),
                             ),
                             TextButton(
@@ -629,6 +644,9 @@ class PaymentConfirmationDialog extends StatelessWidget {
                                 Navigator.pop(context); // Close confirmation
                                 Navigator.pop(context); // Close payment dialog
                               },
+                              style: TextButton.styleFrom(
+                                foregroundColor: const Color(0xFFA51414),
+                              ),
                               child: const Text('OK'),
                             ),
                           ],
