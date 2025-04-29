@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
-import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core
+import 'package:firebase_core/firebase_core.dart';
+import 'package:Semikart/firebase_options.dart'; // Import Firebase Core
 import 'base_scaffold.dart';
 import 'managers/auth_manager.dart';
 
@@ -11,7 +12,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Lock Orientation
   SystemChrome.setPreferredOrientations([
