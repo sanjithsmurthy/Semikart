@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "569542511770",
-    "project_id": "semikart-b48d4",
-    "storage_bucket": "semikart-b48d4.firebasestorage.app"
+    "project_number": "535599389776",
+    "project_id": "semikart-7efa9",
+    "storage_bucket": "semikart-7efa9.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:569542511770:android:b23b14143e479833702323",
+        "mobilesdk_app_id": "1:535599389776:android:e91171df47afb357908555",
         "android_client_info": {
           "package_name": "com.example.semikart"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAwXj1GlVkqwkE3NlLjWk7ZmZsd7GZwvN0"
+          "current_key": "AIzaSyAxO6C6DNlTDikRUHBSDv6CACfxosEqeNc"
         }
       ],
       "services": {

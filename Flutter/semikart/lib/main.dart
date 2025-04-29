@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp(); // Firebase initialization
+  await Firebase.initializeApp();
 
   // Lock Orientation
   SystemChrome.setPreferredOrientations([
