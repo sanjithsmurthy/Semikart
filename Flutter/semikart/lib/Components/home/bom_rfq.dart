@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../common/red_button.dart'; 
+import '../common/red_button.dart';
 import '../rfq_bom/rfq_full.dart'; // Import the RFQFullPage widget
 
 class BomRfqCard extends StatefulWidget {
@@ -10,51 +10,121 @@ class BomRfqCard extends StatefulWidget {
 }
 
 class _BomRfqCardState extends State<BomRfqCard> {
+  // --- Reference Screen Dimensions ---
+  // These remain static as they define the baseline for scaling
+  static const double _refScreenWidth = 412.0;
+  static const double _refScreenHeight = 917.0;
+
+  // --- Helper function to scale width ---
+  double scaleWidth(BuildContext context, double baseWidth) {
+    // Calculates the ratio of the base width to the reference screen width
+    final double widthRatio = baseWidth / _refScreenWidth;
+    // Applies that ratio to the current screen width
+    return MediaQuery.of(context).size.width * widthRatio;
+  }
+
+  // --- Helper function to scale height ---
+  double scaleHeight(BuildContext context, double baseHeight) {
+    // Calculates the ratio of the base height to the reference screen height
+    // Using height scaling for vertical dimensions
+    final double heightRatio = baseHeight / _refScreenHeight;
+    // Applies that ratio to the current screen height
+    return MediaQuery.of(context).size.height * heightRatio;
+
+    // --- Alternative: Scale height based on width ratio (maintains aspect ratio better for some elements) ---
+    // final double widthRatio = baseHeight / _refScreenWidth; // Note: using _refScreenWidth here
+    // return MediaQuery.of(context).size.width * widthRatio;
+  }
+
+  // --- Helper function to scale font size (usually based on width) ---
+  double scaleFontSize(BuildContext context, double baseFontSize) {
+    // Calculates the ratio of the base font size to the reference screen width
+    final double fontRatio = baseFontSize / _refScreenWidth;
+    // Applies that ratio to the current screen width
+    // Add a minimum font size clamp if desired to prevent text becoming too small
+    // return (MediaQuery.of(context).size.width * fontRatio).clamp(10.0, double.infinity);
+    return MediaQuery.of(context).size.width * fontRatio;
+  }
+
   void _showRFQOverlay(BuildContext context) {
+    // --- Base Dialog Dimensions (Relative to Reference Screen) ---
+    const double baseDialogWidthFraction = 0.9; // 90% of screen width
+    const double baseDialogHeightFraction = 0.7; // 70% of screen height
+    const double baseDialogBorderRadius =
+        12.0; // Base radius for reference screen
+    const double baseDialogVerticalPadding =
+        8.0; // Base padding for reference screen
+    const double baseDialogTopPadding =
+        3.0; // Base padding for reference screen
+    const double baseCloseIconSize = 32.0; // Base size for reference screen
+    const double baseCloseIconPadding =
+        10.0; // Base padding for reference screen
+
+    // --- Calculate Scaled Dialog Dimensions ---
+    // Note: Using scaleWidth for horizontal dimensions/padding/radius and scaleHeight for vertical ones
+    final double dialogMaxWidth =
+        scaleWidth(context, _refScreenWidth * baseDialogWidthFraction);
+    final double dialogMaxHeight =
+        scaleHeight(context, _refScreenHeight * baseDialogHeightFraction);
+    final double dialogBorderRadius =
+        scaleWidth(context, baseDialogBorderRadius);
+    final double dialogVerticalPadding =
+        scaleHeight(context, baseDialogVerticalPadding);
+    final double dialogTopPadding = scaleHeight(context, baseDialogTopPadding);
+    final double closeIconSize = scaleWidth(context, baseCloseIconSize);
+    final double closeIconPadding = scaleWidth(
+        context, baseCloseIconPadding); // Scale padding based on width
+
     showGeneralDialog(
       context: context,
-      barrierDismissible: true, // Allow dismissing by tapping outside
+      barrierDismissible: true,
       barrierLabel: "Dismiss",
-      barrierColor: Colors.black.withOpacity(0.5), // Semi-transparent background
+      barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return Material( // Wrap the dialog content in a Material widget
+        return Material(
           type: MaterialType.transparency,
           child: Center(
             child: Container(
               constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.7, // 70% of screen height
-                maxWidth: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+                maxHeight: dialogMaxHeight,
+                maxWidth: dialogMaxWidth,
               ),
-              padding: const EdgeInsets.only(
-                top: 3,
-                bottom: 8,
-                left: 0,
-                right: 0,
-              ),
+              padding: EdgeInsets.symmetric(
+                vertical: dialogVerticalPadding,
+                horizontal: 0, // No horizontal padding needed here
+              ).copyWith(top: dialogTopPadding), // Specific top padding
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(
+                    dialogBorderRadius), // Use scaled radius
               ),
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10, right: 10), // Reduced top padding
+                      // Use scaled padding values
+                      padding: EdgeInsets.only(
+                        top: closeIconPadding, // Use scaled padding
+                        right: closeIconPadding, // Use scaled padding
+                      ),
                       child: IconButton(
-                        icon: const Icon(
+                        // Add constraints for better touch target sizing if needed
+                        // constraints: BoxConstraints(),
+                        // padding: EdgeInsets.zero,
+                        icon: Icon(
                           Icons.close,
                           color: Colors.black,
-                          size: 32,
+                          size: closeIconSize, // Use scaled icon size
                         ),
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the overlay
+                          Navigator.of(context).pop();
                         },
                       ),
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     child: RFQFullPage(), // Display RFQFullPage content
                   ),
                 ],
@@ -68,28 +138,74 @@ class _BomRfqCardState extends State<BomRfqCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    // --- Define Base Dimensions RELATIVE to Reference Screen ---
+    // These fractions determine the size/spacing on the reference screen.
+    // Adjust these fractions to match your desired layout on the 412x917 screen.
 
-    // --- Define Base Multipliers ---
-    const double cardWidthMultiplier = 0.95;
-    const double cardHeightMultiplier = 0.25;
+    // Card Dimensions
+    const double baseCardWidthFraction = 0.95; // 95% of ref width
+    const double baseCardHeightFraction = 0.25 -
+        0.0109; // Target height as fraction of ref height (~219px on ref)
 
-    // --- Calculate Final Dimensions ---
-    final cardWidth = screenWidth * cardWidthMultiplier;
-    final cardHeight = screenHeight * cardHeightMultiplier;
+    // Padding & Spacing (as fractions of reference dimensions)
+    const double baseGeneralPaddingFraction =
+        baseCardWidthFraction * 0.04; // Padding relative to card width fraction
+    const double baseHorizontalSpacingFraction =
+        baseCardWidthFraction * 0.03; // Spacing relative to card width fraction
+    const double baseVerticalSpacingSmallFraction = baseCardHeightFraction *
+        0.025; // Spacing relative to card height fraction
+    const double baseImageLeftPaddingFraction = 0.025; // 2.5% of ref width
+    const double baseImageBottomPaddingFraction = 0.01; // 1% of ref height
 
-    // --- Other dimensions based on screen size ---
-    final generalPadding = cardWidth * 0.04;
-    final imageSize = 80.0;
-    final horizontalSpacing = cardWidth * 0.03;
-    final verticalSpacingSmall = cardHeight * 0.004;
-    final titleFontSize = cardWidth * 0.04;
-    final bodyFontSize = cardWidth * 0.03;
-    final buttonWidth = screenWidth * 0.22;
-    final buttonHeight = screenHeight * 0.04;
-    final buttonFontSize = cardWidth * 0.025;
+    // Element Sizes (as fractions of reference dimensions)
+    const double baseImageSizeFraction = 0.195; // Target ~80px / 412px
+    const double baseBorderRadiusFraction = 0.025; // Target ~10px / 412px
+
+    // Font Sizes (as fractions of reference screen width)
+    const double baseTitleFontSizeFraction = 0.044; // Target ~18px / 412px
+    const double baseBodyFontSizeFraction = 0.032; // Target ~13px / 412px
+    const double baseButtonFontSizeFraction = 0.029; // Target ~12px / 412px
+
+    // Button Dimensions (as fractions of reference dimensions)
+    const double baseButtonWidthFraction = 0.22; // 22% of ref width
+    const double baseButtonHeightFraction = 0.04; // 4% of ref height
+
+    // --- Calculate Scaled Dimensions for Current Screen ---
+    // Use helper functions to scale the base fractions relative to the *actual* screen size
+
+    // Scale dimensions based on width
+    final cardWidth =
+        scaleWidth(context, _refScreenWidth * baseCardWidthFraction);
+    final generalPadding =
+        scaleWidth(context, _refScreenWidth * baseGeneralPaddingFraction);
+    final horizontalSpacing =
+        scaleWidth(context, _refScreenWidth * baseHorizontalSpacingFraction);
+    final imageSize =
+        scaleWidth(context, _refScreenWidth * baseImageSizeFraction);
+    final borderRadius =
+        scaleWidth(context, _refScreenWidth * baseBorderRadiusFraction);
+    final imageLeftPadding =
+        scaleWidth(context, _refScreenWidth * baseImageLeftPaddingFraction);
+    final buttonWidth =
+        scaleWidth(context, _refScreenWidth * baseButtonWidthFraction);
+
+    // Scale dimensions based on height (or width, depending on preference - see scaleHeight function)
+    final cardHeight =
+        scaleHeight(context, _refScreenHeight * baseCardHeightFraction);
+    final verticalSpacingSmall = scaleHeight(
+        context, _refScreenHeight * baseVerticalSpacingSmallFraction);
+    final imageBottomPadding =
+        scaleHeight(context, _refScreenHeight * baseImageBottomPaddingFraction);
+    final buttonHeight =
+        scaleHeight(context, _refScreenHeight * baseButtonHeightFraction);
+
+    // Scale font sizes based on width
+    final titleFontSize =
+        scaleFontSize(context, _refScreenWidth * baseTitleFontSizeFraction);
+    final bodyFontSize =
+        scaleFontSize(context, _refScreenWidth * baseBodyFontSizeFraction);
+    final buttonFontSize =
+        scaleFontSize(context, _refScreenWidth * baseButtonFontSizeFraction);
 
     return Center(
       child: SizedBox(
@@ -98,10 +214,13 @@ class _BomRfqCardState extends State<BomRfqCard> {
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(screenWidth * 0.025),
+            borderRadius:
+                BorderRadius.circular(borderRadius), // Use scaled radius
           ),
           margin: EdgeInsets.zero,
-          color: Colors.transparent,
+          color: Colors.transparent, // Gradient is in the Container
+          clipBehavior:
+              Clip.antiAlias, // Ensures gradient respects border radius
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -112,12 +231,9 @@ class _BomRfqCardState extends State<BomRfqCard> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
-              borderRadius: BorderRadius.circular(screenWidth * 0.025),
             ),
-            padding: EdgeInsets.all(generalPadding),
+            padding: EdgeInsets.all(generalPadding), // Use scaled padding
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.max,
               children: [
                 // RFQ Section
                 Expanded(
@@ -126,36 +242,47 @@ class _BomRfqCardState extends State<BomRfqCard> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          left: screenWidth * 0.025,
-                          bottom: screenHeight * 0.01,
+                          left: imageLeftPadding, // Use scaled padding
+                          bottom: imageBottomPadding, // Use scaled padding
                         ),
                         child: Image.asset(
                           'public/assets/images/RFQ.png',
-                          width: imageSize,
-                          height: imageSize,
-                          fit: BoxFit.cover,
+                          width: imageSize, // Use scaled size
+                          height: imageSize, // Use scaled size
+                          fit: BoxFit.contain,
                         ),
                       ),
-                      SizedBox(width: horizontalSpacing),
+                      SizedBox(width: horizontalSpacing), // Use scaled spacing
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Center text vertically
                           children: [
                             Text(
                               "Request For Quote",
                               style: TextStyle(
-                                fontSize: titleFontSize,
+                                fontSize: titleFontSize, // Use scaled font size
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow
+                                  .ellipsis, // Prevent title wrapping
                             ),
-                            SizedBox(height: verticalSpacingSmall),
+                            SizedBox(
+                                height:
+                                    verticalSpacingSmall), // Use scaled spacing
                             Text(
                               "Looking for the best price?\nNeed a larger quantity?\nOr do you have a target price that none of our competitors can match?",
                               style: TextStyle(
-                                fontSize: bodyFontSize,
+                                fontSize: bodyFontSize, // Use scaled font size
                                 color: Colors.white,
                               ),
+                              maxLines:
+                                  3, // Adjust max lines based on available space
+                              overflow:
+                                  TextOverflow.ellipsis, // Handle overflow
                             ),
                           ],
                         ),
@@ -163,16 +290,16 @@ class _BomRfqCardState extends State<BomRfqCard> {
                     ],
                   ),
                 ),
-                SizedBox(height: verticalSpacingSmall),
+                // Button Section
                 Align(
                   alignment: Alignment.centerRight,
                   child: RedButton(
                     label: "RFQ",
-                    onPressed: () => _showRFQOverlay(context), // Show the full-screen overlay
-                    width: buttonWidth,
-                    height: buttonHeight,
+                    onPressed: () => _showRFQOverlay(context),
+                    width: buttonWidth, // Use scaled width
+                    height: buttonHeight, // Use scaled height
                     isWhiteButton: true,
-                    fontSize: buttonFontSize,
+                    fontSize: buttonFontSize, // Use scaled font size
                   ),
                 ),
               ],
