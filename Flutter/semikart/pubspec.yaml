@@ -60,6 +60,7 @@ dependencies:
   flutter_riverpod: ^2.3.6 # If you're using Riverpod for state management
   dio_cookie_manager: ^2.1.4
   razorpay_flutter: ^1.4.0
+  url_launcher: ^6.1.7
 
 
   
