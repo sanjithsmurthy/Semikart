@@ -158,12 +158,28 @@ class _AuthRedirectorState extends State<AuthRedirector> {
   @override
   Widget build(BuildContext context) {
     // Show a minimal loading indicator while redirecting
-    print("🔄 AuthRedirector: Building placeholder...");
+    print("🔄 AuthRedirector: Building processing screen..."); // Updated log
     return const Scaffold(
-      backgroundColor: Colors.amberAccent, // Distinct color for visibility
+      backgroundColor: Colors.white, // Change background to white
       body: Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFFA51414),
+        child: Column( // Center content vertically
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Color(0xFFA51414),
+            ),
+            SizedBox(height: 16), // Add some space
+            Text(
+              "Processing...",
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 16,
+                decoration: TextDecoration.none, // Ensure no underline
+                fontFamily: 'Roboto', // Use a known font
+              ),
+              textDirection: TextDirection.ltr,
+            ),
+          ],
         ),
       ),
     );
