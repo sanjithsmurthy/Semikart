@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:Semikart/managers/auth_manager.dart'; // Use the new AuthManager
-import 'package:Semikart/app_navigator.dart'; // Import AppNavigator
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
-import 'password_text_field.dart'; // Import PasswordTextField
+import 'password_text_field.dart'; // Keep PasswordTextField import
 import '../common/red_button.dart';
 import '../common/inactive_red_button.dart';
 import 'login_password.dart';
 import '../common/forgot_password.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter/services.dart';
+// Removed ConfirmPasswordScreen import
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -20,8 +20,8 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  // Keep local state for form validation and UI
-  bool passwordsMatch = false;
+  // --- Integrated State from ConfirmPasswordScreen ---
+  // bool passwordsMatch = false; // Removed, replaced by _isPasswordMatching()
   bool isTermsAccepted = false;
   bool _areAllFieldsFilled = false;
   bool _isLoading = false; // Local loading state for button feedback
@@ -29,22 +29,33 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
-  final mobileNumberController = TextEditingController(); // Keep if needed for profile
-  final companyNameController = TextEditingController(); // Keep if needed for profile
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final mobileNumberController = TextEditingController();
+  final companyNameController = TextEditingController();
+  final _passwordController = TextEditingController(); // Keep
+  final _confirmPasswordController = TextEditingController(); // Keep
+
+  // Password validation flags (from ConfirmPasswordScreen)
+  bool hasMinLength = false;
+  bool hasUpperCase = false;
+  bool hasNumber = false;
+  bool hasSpecialChar = false;
+  // --- End Integrated State ---
+
 
   @override
   void initState() {
     super.initState();
-    // Add listeners to check field status and password match
+    // Add listeners to check field status and password validation
     firstNameController.addListener(_checkAllFieldsFilled);
     lastNameController.addListener(_checkAllFieldsFilled);
     emailController.addListener(_checkAllFieldsFilled);
-    mobileNumberController.addListener(_checkAllFieldsFilled); // Keep listener if field is kept
-    companyNameController.addListener(_checkAllFieldsFilled); // Keep listener if field is kept
-    _passwordController.addListener(_checkPasswordsAndFields);
-    _confirmPasswordController.addListener(_checkPasswordsAndFields);
+    mobileNumberController.addListener(_checkAllFieldsFilled);
+    companyNameController.addListener(_checkAllFieldsFilled);
+    _passwordController.addListener(_checkAllFieldsFilled); // Check fields when password changes
+    _confirmPasswordController.addListener(() { // Update UI on confirm password change
+      setState(() {});
+      _checkAllFieldsFilled(); // Also re-check overall fields
+    });
   }
 
    @override
@@ -55,8 +66,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     emailController.removeListener(_checkAllFieldsFilled);
     mobileNumberController.removeListener(_checkAllFieldsFilled);
     companyNameController.removeListener(_checkAllFieldsFilled);
-    _passwordController.removeListener(_checkPasswordsAndFields);
-    _confirmPasswordController.removeListener(_checkPasswordsAndFields);
+    _passwordController.removeListener(_checkAllFieldsFilled); // Remove the correct listener
+    _confirmPasswordController.removeListener(() { setState(() {}); _checkAllFieldsFilled(); }); // Match listener removal
 
     // Dispose controllers
     firstNameController.dispose();
@@ -69,27 +80,64 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     super.dispose();
   }
 
-  void _checkPasswordsAndFields() {
-     setState(() {
-        passwordsMatch = _passwordController.text.isNotEmpty &&
-                         _passwordController.text == _confirmPasswordController.text;
-        _checkAllFieldsFilled(); // Also re-check all fields
-     });
-  }
+  // Removed _checkPasswordsAndFields - logic integrated into listeners/getters
 
   void _checkAllFieldsFilled() {
     // Check essential fields for Firebase email/password signup
+    // Also check password requirements and match for button state
     setState(() {
       _areAllFieldsFilled = firstNameController.text.isNotEmpty &&
           lastNameController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
-          _passwordController.text.isNotEmpty &&
-          _confirmPasswordController.text.isNotEmpty;
-          // Removed mobileNumberController and companyNameController checks
-          // as they are not strictly required for Firebase auth,
-          // but can be added back if needed for profile creation later.
+          _passwordController.text.isNotEmpty && // Ensure password is not empty
+          _confirmPasswordController.text.isNotEmpty; // Ensure confirm password is not empty
     });
   }
+
+  // --- Integrated Methods from ConfirmPasswordScreen ---
+  void _validatePassword(String password) {
+    setState(() {
+      hasMinLength = password.length >= 8 && password.length <= 20;
+      hasUpperCase = password.contains(RegExp(r'[A-Z]'));
+      hasNumber = password.contains(RegExp(r'[0-9]'));
+      hasSpecialChar = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+      _checkAllFieldsFilled(); // Re-check overall fields when password changes
+    });
+  }
+
+  bool _isPasswordMatching() {
+    return _passwordController.text == _confirmPasswordController.text;
+  }
+
+  bool _areAllRequirementsSatisfied() {
+    return hasMinLength && hasUpperCase && hasNumber && hasSpecialChar;
+  }
+
+  Widget _buildRequirementItem(String text, bool isSatisfied, double fontSize, double iconSize, double spacing, double leftPadding) {
+    return Padding(
+      padding: EdgeInsets.only(left: leftPadding),
+      child: Row(
+        children: [
+          Icon(
+            Icons.circle,
+            size: iconSize,
+            color: isSatisfied ? Color.fromARGB(255, 25, 107, 27) : Color(0xFF989DA3),
+          ),
+          SizedBox(width: spacing * 2.5),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF989DA3),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  // --- End Integrated Methods ---
+
 
   Future<void> _signUp() async {
     FocusScope.of(context).unfocus();
@@ -112,10 +160,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
    Future<void> _googleSignIn() async {
      FocusScope.of(context).unfocus();
-     if (_isLoading) return; // Prevent multiple clicks if already loading
+     if (_isLoading) return;
 
      setState(() { _isLoading = true; });
-
      final authManager = ref.read(authManagerProvider.notifier);
      await authManager.googleSignIn();
 
@@ -123,14 +170,33 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
      setState(() { _isLoading = false; });
   }
 
-  // Determine if the sign-up button should be active
-  bool get isSignUpButtonActive => _areAllFieldsFilled && passwordsMatch && isTermsAccepted && !_isLoading;
+  // Determine if the sign-up button should be active using integrated logic
+  bool get isSignUpButtonActive =>
+      _areAllFieldsFilled &&
+      _areAllRequirementsSatisfied() && // Check requirements
+      _isPasswordMatching() && // Check match
+      isTermsAccepted &&
+      !_isLoading;
 
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // --- Dynamic sizes from ConfirmPasswordScreen ---
+    final double verticalSpacingSmall = screenHeight * 0.01;
+    final double verticalSpacingMedium = screenHeight * 0.02;
+    final double verticalSpacingLarge = screenHeight * 0.03;
+    final double textFieldHeight = screenHeight * 0.06;
+    final double headingFontSize = screenWidth * 0.04 * 0.75;
+    final double requirementFontSize = screenWidth * 0.035 * 0.75;
+    final double bulletIconSize = screenWidth * 0.03;
+    final double checkIconSize = screenWidth * 0.05;
+    final double alertIconSize = screenWidth * 0.04;
+    final double alertFontSize = screenWidth * 0.03;
+    final double leftPaddingValue = screenWidth * 0.075;
+    // --- End Dynamic sizes ---
 
     return Scaffold(
       body: SafeArea(
@@ -140,6 +206,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ... (Logo, Title, Google Sign In, OR Divider - unchanged) ...
                 SizedBox(height: screenHeight * 0.08), // Space for the logo
 
                 // Semikart Logo
@@ -199,6 +266,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
 
+
                 // CustomTextField for First Name
                 Center(
                   child: CustomTextField(
@@ -222,7 +290,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: CustomTextField(
                     controller: emailController,
                     label: "Email",
-                    // keyboardType: TextInputType.emailAddress, // Parameter not defined
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
@@ -301,37 +368,98 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.015), // Add spacing
 
-                // --- Integrated Password Fields ---
-                // Password Input Field
+
+                // --- Integrated Password Section ---
+                // Password Field
                 PasswordTextField(
                   controller: _passwordController,
                   label: "Password",
-                  // Optional: Add validation or onChanged if needed directly here
+                  height: textFieldHeight,
+                  onChanged: _validatePassword, // Use the integrated validator
                 ),
-                SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // Confirm Password Input Field
-                PasswordTextField(
-                  controller: _confirmPasswordController,
-                  label: "Confirm Password",
-                  // Optional: Add validation or onChanged if needed directly here
+                SizedBox(height: verticalSpacingLarge),
+
+                // Password Requirements Heading and List
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: leftPaddingValue),
+                      child: Text(
+                        "YOUR PASSWORD MUST CONTAIN",
+                        style: TextStyle(
+                          fontSize: headingFontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF989DA3),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: verticalSpacingSmall),
+                    _buildRequirementItem("Between 8 and 20 characters", hasMinLength, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
+                    SizedBox(height: verticalSpacingSmall),
+                    _buildRequirementItem("1 upper case letter", hasUpperCase, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
+                    SizedBox(height: verticalSpacingSmall),
+                    _buildRequirementItem("1 or more numbers", hasNumber, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
+                    SizedBox(height: verticalSpacingSmall),
+                    _buildRequirementItem("1 or more special characters", hasSpecialChar, requirementFontSize, bulletIconSize, verticalSpacingSmall, leftPaddingValue),
+                  ],
                 ),
-                // --- End Integrated Password Fields ---
+
+                SizedBox(height: verticalSpacingLarge),
+
+                // Confirm Password Field (Using PasswordTextField)
+                PasswordTextField( // Use PasswordTextField for consistency
+                  controller: _confirmPasswordController,
+                  height: textFieldHeight, // Assuming PasswordTextField accepts height
+                  label: "Confirm Password",
+                  // obscureText is handled internally by PasswordTextField
+                  // suffixIcon is likely handled internally (visibility toggle), removing custom icon
+                  // Keep onChanged to trigger UI updates and checks
+                  onChanged: (value) {
+                    // Update UI state, e.g., for the mismatch alert below and button state
+                    setState(() {});
+                    _checkAllFieldsFilled(); // Re-check button state
+                  },
+                ),
+
+                // Alert Text for Password Mismatch (Keep this logic, it depends on the controllers)
+                if (!_isPasswordMatching() && _confirmPasswordController.text.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.only(top: verticalSpacingSmall, left: leftPaddingValue),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: Color(0xFFA51414),
+                          size: alertIconSize,
+                        ),
+                        SizedBox(width: screenWidth * 0.02),
+                        Text(
+                          "Passwords do not match",
+                          style: TextStyle(
+                            fontSize: alertFontSize,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFA51414),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                // --- End Integrated Password Section ---
 
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
 
                 // ForgotPasswordButton for "Already have an account?"
                 Align(
-                  alignment: Alignment.centerRight, // Align to the right
+                  alignment: Alignment.centerRight,
                   child: ForgotPasswordButton(
-                    label: "Already have an account?", // Specify label
+                    label: "Already have an account?",
                     onPressed: () {
-                      // Navigate back or to login screen
                       if (Navigator.canPop(context)) {
                         Navigator.pop(context);
                       } else {
-                        // If cannot pop (e.g., deep linked), navigate explicitly
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => const LoginPasswordNewScreen()),
@@ -344,37 +472,51 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                 // Checkbox for Terms and Conditions
                 Align(
-                  alignment: Alignment.center, // Align the entire row to the right
+                  alignment: Alignment.center,
                   child: Row(
-                    mainAxisSize: MainAxisSize.min, // Minimize the row's width
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
                         value: isTermsAccepted,
                         onChanged: (value) {
                           setState(() {
-                            isTermsAccepted = value ?? false; // Update the checkbox state
+                            isTermsAccepted = value ?? false;
                           });
-                          _checkAllFieldsFilled(); // Re-check button state
+                          // No need to call _checkAllFieldsFilled here, getter handles it
                         },
-                        activeColor: const Color(0xFFA51414), // Set checkbox color
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap area
-                        visualDensity: VisualDensity.compact, // Make checkbox smaller
+                        activeColor: const Color(0xFFA51414),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
                       ),
                       Flexible(
-                        child: GestureDetector( // Allow tapping text to toggle checkbox
+                        child: GestureDetector(
                           onTap: () {
-                             setState(() {
-                               isTermsAccepted = !isTermsAccepted;
-                             });
-                             _checkAllFieldsFilled();
+                            setState(() { // Toggle checkbox when text is tapped
+                              isTermsAccepted = !isTermsAccepted;
+                            });
                           },
-                          child: Text(
-                            "I agree to the terms and conditions",
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.035, // Specify font size
-                              color: Colors.black,
+                          child: RichText( // Use RichText for clickable "Terms & Conditions"
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.035, // Adjust font size as needed
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(text: "I agree to the "),
+                                TextSpan(
+                                  text: "Terms & Conditions",
+                                  style: TextStyle(
+                                    color: Color(0xFFA51414), // Make terms link color red
+                                    decoration: TextDecoration.underline, // Underline to indicate link
+                                  ),
+                                  // TODO: Add recognizer to handle tap on "Terms & Conditions"
+                                  // recognizer: TapGestureRecognizer()..onTap = () {
+                                  //   print("Navigate to Terms & Conditions");
+                                  //   // Add navigation logic here
+                                  // },
+                                ),
+                              ],
                             ),
-                            textAlign: TextAlign.center, // Align text to the right
                           ),
                         ),
                       ),
@@ -383,7 +525,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
-                // Sign Up Button
+                // Sign Up Button (uses updated isSignUpButtonActive getter)
                 Center(
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Color(0xFFA51414))
@@ -392,8 +534,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               label: "Sign Up",
                               width: screenWidth * 0.9,
                               height: screenHeight * 0.06,
-                              onPressed: _signUp, // Call the signup function
-                              // --- REMOVED Navigator.pushReplacement ---
+                              onPressed: _signUp,
                             )
                           : InactiveButton(
                               label: "Sign Up",
