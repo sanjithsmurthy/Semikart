@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SignInWithGoogleButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed; // Changed to nullable VoidCallback?
   final bool isLoading;
   final bool isTwoLine; // Determines if the text is displayed in two lines
 
   const SignInWithGoogleButton({
     Key? key,
-    required this.onPressed,
+    required this.onPressed, // Keep required, but type is now nullable
     this.isLoading = false,
     this.isTwoLine = false, // Default to single-line text
   }) : super(key: key);
@@ -30,7 +30,7 @@ class SignInWithGoogleButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(basePadding), // Add dynamic padding on all sides
       child: GestureDetector(
-        onTap: onPressed, // Handle button click
+        onTap: isLoading ? null : onPressed, // Handle button click, disable if loading or onPressed is null
         child: Material(
           color: Colors.transparent, // Transparent material for ripple effect
           borderRadius: BorderRadius.circular(borderRadius),
@@ -58,6 +58,13 @@ class SignInWithGoogleButton extends StatelessWidget {
                   ),
                 ],
               ),
+              // Add opacity if disabled
+              foregroundDecoration: onPressed == null || isLoading
+                  ? BoxDecoration(
+                      color: Colors.white.withOpacity(0.5), // Semi-transparent overlay when disabled
+                      borderRadius: BorderRadius.circular(borderRadius),
+                    )
+                  : null,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,

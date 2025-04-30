@@ -154,9 +154,11 @@ class AppNavigator {
   static void goTo(int tabIndex, {String? routeName, Object? arguments}) {
     // Try accessing state slightly delayed to ensure BaseScaffold might have built
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // final state = BaseScaffold.navigatorKey.currentState;
       final state = BaseScaffold.navigatorKey.currentState;
 
       if (state == null) {
+        print("AppNavigator.goTo: BaseScaffold state not found."); // Restore original log
         return;
       }
 
@@ -186,11 +188,11 @@ class AppNavigator {
   }
   /// Switches to the Home tab (index 0) and navigates to the RFQ page.
   static void openHomeRFQPage() {
-    goTo(0, routeName: 'rfq'); // Switch to Home tab and push 'rfq' route
+    goTo(0, routeName: 'rfq');
   }
 
   /// Switches to the Products tab (index 1) and navigates to the Request for Quote section.
   static void openProductsRFQPage() {
-    goTo(1, routeName: 'rfq_products'); // Switch to Products tab and push 'rfq_products' route
+    goTo(1, routeName: 'rfq_products');
   }
 }
