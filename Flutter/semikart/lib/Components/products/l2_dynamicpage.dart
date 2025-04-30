@@ -5,8 +5,15 @@ import 'l3_dynamicpage.dart'; // Import the L3DynamicComponent
 
 class L2DynamicComponent extends StatelessWidget {
   final String l1CategoryId;
+  final String l1CategoryName;
+  final String l1CategoryIcon;
 
-  const L2DynamicComponent({super.key, required this.l1CategoryId});
+  const L2DynamicComponent({
+    super.key,
+    required this.l1CategoryId,
+    required this.l1CategoryName,
+    required this.l1CategoryIcon,
+  });
 
   @override
   Widget build(BuildContext context) {

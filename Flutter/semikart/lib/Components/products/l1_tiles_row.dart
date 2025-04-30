@@ -43,7 +43,10 @@ class Productsonerow extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => L2DynamicComponent(
-                          items: l2Categories[category1["name"]] ?? [], // Pass L2 items for category1
+                          l1CategoryId: category1["id"]!,
+                          l1CategoryName: category1["name"]!,
+                          l1CategoryIcon: category1["icon"]!,
+                           // Pass L2 items for category1
                         ),
                       ),
                     );
@@ -70,9 +73,12 @@ class Productsonerow extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => L2DynamicComponent(
-                            items: l2Categories[category2!["name"]] ?? [], // Pass L2 items for category2
-                          ),
+                          builder: (context) =>L2DynamicComponent(
+                          l1CategoryId: category1["id"]!,
+                          l1CategoryName: category1["name"]!,
+                          l1CategoryIcon: category1["icon"]!,
+                           // Pass L2 items for category1
+                        ),
                         ),
                       );
                     },
