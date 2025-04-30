@@ -1,188 +1,332 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:dio/dio.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:async'; // Import for Future
-// import 'package:cookie_jar/file_storage.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'dart:io'; // Import for Directory
-import 'package:path/path.dart' as path; // Import for path manipulation
+import 'package:google_sign_in/google_sign_in.dart'; // Import Google Sign-In
 
-// --- State Definition ---
+// --- Authentication Status Enum ---
+enum AuthStatus { unknown, authenticated, unauthenticated }
 
-/// Represents the possible authentication states.
-enum AuthStatus {
-  unknown, // Initial state before checking storage
-  authenticated,
-  unauthenticated,
-}
-
-/// Holds the current authentication state details.
+// --- Authentication State Class ---
 class AuthState {
   final AuthStatus status;
-  final String? userToken; // Example: Store a token upon login
+  final User? user; // Firebase user object
+  final String? errorMessage; // Optional error message
 
-  const AuthState({required this.status, this.userToken});
+  AuthState({
+    this.status = AuthStatus.unknown,
+    this.user,
+    this.errorMessage,
+  });
 
-  /// Initial state before checking persistence.
-  const AuthState.unknown() : status = AuthStatus.unknown, userToken = null;
-
-  /// State when user is not logged in.
-  const AuthState.unauthenticated() : status = AuthStatus.unauthenticated, userToken = null;
-}
-
-// --- State Notifier ---
-
-/// Manages the application's authentication state.
-/// Handles login, logout, signup, and checks initial authentication
-/// status using secure storage for persistence.
-class AuthManager extends StateNotifier<AuthState> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  final String _tokenKey = 'auth_token';
-  final Dio _dio = Dio();
-  PersistCookieJar? _persistentCookies;
-  final String url = "https://www.xxxx.in/rest/user/login.json";
-
-  AuthManager() : super(const AuthState.unknown()) {
-    Future.microtask(() => _checkInitialAuthState());
-    initializeDio();
-  }
-
-  Future<void> initializeDio() async {
-    final Directory dir = await _localCookieDirectory;
-    final cookiePath = dir.path;
-    _persistentCookies = PersistCookieJar(storage: FileStorage(cookiePath));
-    _dio.interceptors.add(CookieManager(_persistentCookies!));
-    _dio.options = BaseOptions(
-      baseUrl: url,
-      contentType: Headers.jsonContentType,
-      responseType: ResponseType.plain,
-      headers: {
-        HttpHeaders.userAgentHeader: "dio",
-        "Connection": "keep-alive",
-      },
+  // Helper method to create a copy with updated values
+  AuthState copyWith({
+    AuthStatus? status,
+    User? user, // Allow setting user to null
+    String? errorMessage,
+    bool clearError = false, // Flag to explicitly clear error
+  }) {
+    return AuthState(
+      status: status ?? this.status,
+      user: user, // Directly assign the new user value
+      errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
     );
   }
-
-  Future<Directory> get _localCookieDirectory async {
-    final path = await _localPath;
-    final Directory dir = Directory('$path/cookies');
-    await dir.create(recursive: true);
-    return dir;
-  }
-
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<String?> getCsrftoken() async {
-    try {
-      String? csrfTokenValue;
-      _dio.interceptors.add(
-        InterceptorsWrapper(
-          onResponse: (Response response, ResponseInterceptorHandler handler) async {
-            List<Cookie> cookies = await _persistentCookies!.loadForRequest(Uri.parse(url));
-            csrfTokenValue = cookies.firstWhere((c) => c.name == 'csrftoken', orElse: () => Cookie('', '')).value;
-            if (csrfTokenValue != null) {
-              _dio.options.headers['X-CSRF-TOKEN'] = csrfTokenValue;
-            }
-            handler.next(response);
-          },
-        ),
-      );
-      await _dio.get(url);
-      return csrfTokenValue;
-    } catch (error) {
-      print("Error fetching CSRF token: $error");
-      return null;
-    }
-  }
-
-  Future<void> _checkInitialAuthState() async {
-    final token = await _storage.read(key: _tokenKey);
-    if (token != null && token.isNotEmpty) {
-      state = AuthState(status: AuthStatus.authenticated, userToken: token);
-    } else {
-      state = const AuthState.unauthenticated();
-    }
-  }
-
-  // Future<bool> login(String email, String password) async {
-  //   try {
-  //     final csrf = await getCsrftoken();
-  //     if (csrf == null) return false;
-
-  //     FormData formData = FormData.fromMap({
-  //       "username": email,
-  //       "password": password,
-  //       "csrfmiddlewaretoken": csrf,
-  //     });
-
-  //     Response response = await _dio.post(url, data: formData);
-  //     if (response.statusCode == 200) {
-  //       const fakeToken = "fake_jwt_token_12345";
-  //       await _storage.write(key: _tokenKey, value: fakeToken);
-  //       state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
-  //       return true;
-  //     }
-  //     return false;
-  //   } catch (e) {
-  //     print("Login error: $e");
-  //     return false;
-  //   }
-  // }
-
-    Future<bool> login(String email, String password) async {
-  // Simulated login logic
-  if (email == "s" && password == "s") {
-    const fakeToken = "fake_jwt_token";
-    await _storage.write(key: _tokenKey, value: fakeToken);
-    state = AuthState(status: AuthStatus.authenticated, userToken: fakeToken);
-    return true;
-  }
-  return false;
 }
 
-  Future<bool> signUp(String email, String password, String fullName) async {
-    print("AuthManager: Attempting sign-up for $email...");
+
+// --- Firebase Authentication Service ---
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(); // Add GoogleSignIn instance
+
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  User? get currentUser => _auth.currentUser;
+
+  Future<User?> createUserWithEmailAndPassword(String email, String password) async {
     try {
-      // Replace this URL with your actual sign-up endpoint
-      final signUpUrl = "https://www.xxxx.in/rest/user/signup.json";
-
-      FormData formData = FormData.fromMap({
-        "email": email,
-        "password": password,
-        "full_name": fullName,
-      });
-
-      Response response = await _dio.post(signUpUrl, data: formData);
-      if (response.statusCode == 201) {
-        print("AuthManager: Sign-up successful for $email.");
-        return true;
-      } else {
-        print("AuthManager: Sign-up failed with status code ${response.statusCode}.");
-        return false;
-      }
+      final cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      log("Firebase signup successful for: ${cred.user?.email}");
+      return cred.user;
+    } on FirebaseAuthException catch (e) {
+      log("Firebase signup error: ${e.code} - ${e.message}");
+      rethrow; // Rethrow to be caught by AuthManager
     } catch (e) {
-      print("AuthManager: Sign-up error: $e");
+      log("An unexpected error occurred during signup: $e");
+      rethrow; // Rethrow generic error
+    }
+  }
+
+  Future<User?> loginUserWithEmailAndPassword(String email, String password) async {
+    try {
+      final cred = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      log("Firebase login successful for: ${cred.user?.email}");
+      return cred.user;
+    } on FirebaseAuthException catch (e) {
+      log("Firebase login error: ${e.code} - ${e.message}");
+      rethrow; // Rethrow to be caught by AuthManager
+    } catch (e) {
+      log("An unexpected error occurred during login: $e");
+      rethrow; // Rethrow generic error
+    }
+  }
+
+  Future<void> signout() async {
+    try {
+      await _googleSignIn.signOut(); // Sign out from Google
+      await _auth.signOut();
+      log("Firebase & Google signout successful.");
+    } catch (e) {
+      log("An error occurred during signout: $e");
+      rethrow; // Rethrow to be caught by AuthManager
+    }
+  }
+
+  // --- Google Sign-In Implementation ---
+  Future<User?> signInWithGoogle() async {
+    log("Attempting Google Sign-In...");
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        log("Google Sign-In cancelled by user.");
+        return null; // User cancelled
+      }
+      log("Google user obtained: ${googleUser.email}");
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      log("Google authentication tokens obtained.");
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      log("Firebase OAuth credential created.");
+
+      final userCredential = await _auth.signInWithCredential(credential);
+      log("Firebase Sign-In with Google credential successful for: ${userCredential.user?.email}");
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+       log("Firebase Google Sign-In error: ${e.code} - ${e.message}");
+       rethrow;
+    } catch (e) {
+      log("Google Sign-In error: $e");
+      rethrow;
+    }
+  }
+
+  // --- Password Reset ---
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      log("Password reset email sent to: $email");
+    } on FirebaseAuthException catch (e) {
+      log("Error sending password reset email: ${e.code} - ${e.message}");
+      rethrow;
+    } catch (e) {
+      log("An unexpected error occurred sending password reset email: $e");
+      rethrow;
+    }
+  }
+
+  // --- Phone Auth (Placeholders - Requires implementation if needed) ---
+  Future<void> verifyPhoneNumber({
+    required String phoneNumber,
+    required Function(PhoneAuthCredential) verificationCompleted,
+    required Function(FirebaseAuthException) verificationFailed,
+    required Function(String, int?) codeSent,
+    required Function(String) codeAutoRetrievalTimeout,
+    Duration timeout = const Duration(seconds: 60),
+  }) async {
+     log("Phone verification not fully implemented in AuthService.");
+     // Add Firebase phone verification logic here if needed
+     try {
+       await _auth.verifyPhoneNumber(
+         phoneNumber: phoneNumber,
+         verificationCompleted: verificationCompleted,
+         verificationFailed: verificationFailed,
+         codeSent: codeSent,
+         codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+         timeout: timeout,
+       );
+     } on FirebaseAuthException catch (e) {
+        log("Error initiating phone verification: ${e.code} - ${e.message}");
+        verificationFailed(e);
+     } catch(e) {
+        log("Unexpected error during phone verification initiation: $e");
+        // Consider calling verificationFailed with a generic exception
+     }
+  }
+
+  Future<User?> signInWithPhoneCredential(PhoneAuthCredential credential) async {
+     log("Phone credential sign-in not fully implemented in AuthService.");
+     // Add Firebase phone sign-in logic here if needed
+     try {
+       final userCredential = await _auth.signInWithCredential(credential);
+       log("Phone credential sign-in successful for: ${userCredential.user?.phoneNumber}");
+       return userCredential.user;
+     } on FirebaseAuthException catch (e) {
+       log("Phone credential sign-in error: ${e.code} - ${e.message}");
+       rethrow;
+     } catch (e) {
+       log("An unexpected error occurred during phone credential sign-in: $e");
+       return null;
+     }
+  }
+}
+
+
+// --- Riverpod Providers ---
+
+final authServiceProvider = Provider<AuthService>((ref) {
+  return AuthService();
+});
+
+// --- Auth Manager (State Notifier) ---
+class AuthManager extends StateNotifier<AuthState> {
+  final AuthService _authService;
+  StreamSubscription<User?>? _authStateSubscription;
+
+  AuthManager(this._authService) : super(AuthState()) {
+    _initialize();
+  }
+
+  void _initialize() {
+    // Immediately check current user state
+    final currentUser = _authService.currentUser;
+    if (currentUser != null) {
+      log("AuthManager Init: User found - ${currentUser.uid}");
+      state = AuthState(status: AuthStatus.authenticated, user: currentUser);
+    } else {
+      log("AuthManager Init: No user found.");
+      state = AuthState(status: AuthStatus.unauthenticated);
+    }
+
+    // Listen to future auth state changes
+    _authStateSubscription = _authService.authStateChanges.listen((user) {
+       log("Auth State Changed Listener: User ${user?.uid}, Status: ${user != null ? 'Authenticated' : 'Unauthenticated'}"); // <-- Add log
+      if (user != null) {
+        state = state.copyWith(status: AuthStatus.authenticated, user: user, clearError: true);
+      } else {
+        state = state.copyWith(status: AuthStatus.unauthenticated, user: null, clearError: true); // Clear user on logout
+      }
+    }, onError: (error) {
+       log("Auth State Stream Error: $error");
+       state = state.copyWith(status: AuthStatus.unauthenticated, user: null, errorMessage: "An error occurred.");
+    });
+  }
+
+  Future<bool> login(String email, String password) async {
+    try {
+      final user = await _authService.loginUserWithEmailAndPassword(email, password);
+      // State update handled by the stream listener
+      return user != null;
+    } catch (e) {
+      log("AuthManager Login Error: $e");
+      state = state.copyWith(errorMessage: _handleAuthError(e), status: AuthStatus.unauthenticated);
+      return false;
+    }
+  }
+
+  Future<bool> signUp(String email, String password, String displayName) async {
+     // Note: Firebase createUser does not directly take displayName.
+     // You might need to update the user profile *after* creation.
+    try {
+      final user = await _authService.createUserWithEmailAndPassword(email, password);
+      if (user != null) {
+        log("AuthManager SignUp: User created successfully (${user.uid}). Waiting for authStateChanges listener."); // <-- Add log
+        // Optionally update display name here if needed
+        // await user.updateDisplayName(displayName);
+        // State update handled by the stream listener
+        return true;
+      }
+      return false;
+    } catch (e) {
+      log("AuthManager SignUp Error: $e");
+      state = state.copyWith(errorMessage: _handleAuthError(e), status: AuthStatus.unauthenticated);
+      return false;
+    }
+  }
+
+   Future<bool> googleSignIn() async {
+    try {
+      final user = await _authService.signInWithGoogle();
+      // State update handled by the stream listener
+      return user != null;
+    } catch (e) {
+      log("AuthManager Google Sign-In Error: $e");
+      state = state.copyWith(errorMessage: _handleAuthError(e), status: AuthStatus.unauthenticated);
       return false;
     }
   }
 
   Future<void> logout() async {
-    await _storage.delete(key: _tokenKey);
-    _persistentCookies?.deleteAll();
-    state = const AuthState.unauthenticated();
+    try {
+      await _authService.signout();
+      // State update handled by the stream listener
+    } catch (e) {
+      log("AuthManager Logout Error: $e");
+      // Optionally set an error message, though usually not needed for logout
+      state = state.copyWith(errorMessage: "Logout failed.", status: AuthStatus.authenticated); // Stay authenticated if logout fails? Or force unauth?
+    }
+  }
+
+   Future<bool> sendPasswordReset(String email) async {
+    try {
+      await _authService.sendPasswordResetEmail(email);
+      return true;
+    } catch (e) {
+      log("AuthManager Password Reset Error: $e");
+      state = state.copyWith(errorMessage: _handleAuthError(e)); // Keep current auth status
+      return false;
+    }
+  }
+
+  // Helper to convert Firebase exceptions to user-friendly messages
+  String _handleAuthError(dynamic error) {
+    if (error is FirebaseAuthException) {
+      switch (error.code) {
+        case 'user-not-found':
+          return 'No user found for that email.';
+        case 'wrong-password':
+          return 'Wrong password provided.';
+        case 'invalid-email':
+          return 'The email address is badly formatted.';
+        case 'email-already-in-use':
+           return 'An account already exists for that email.';
+        case 'weak-password':
+           return 'The password provided is too weak.';
+        case 'network-request-failed':
+           return 'Network error. Please check your connection.';
+        // Add more specific cases as needed
+        default:
+          log("Unhandled FirebaseAuthException code: ${error.code}");
+          return 'An authentication error occurred. Please try again.';
+      }
+    }
+    // Handle Google Sign-In specific errors if necessary (e.g., PlatformException)
+    return 'An unexpected error occurred. Please try again.';
+  }
+
+
+  @override
+  void dispose() {
+    _authStateSubscription?.cancel();
+    super.dispose();
   }
 }
 
+// --- StateNotifierProvider for AuthManager ---
 final authManagerProvider = StateNotifierProvider<AuthManager, AuthState>((ref) {
-  return AuthManager();
+  final authService = ref.watch(authServiceProvider);
+  return AuthManager(authService);
+});
 
-//   final success = await authManager.login(email, password);
-// print("Login success: $success");
+
+// --- Deprecated Provider (kept for reference, should be removed/replaced) ---
+// This StreamProvider is now less useful as AuthManager handles the state.
+// Widgets should watch `authManagerProvider` instead.
+final authStateChangesProvider = StreamProvider<User?>((ref) {
+  final authService = ref.watch(authServiceProvider);
+  return authService.authStateChanges;
 });
 

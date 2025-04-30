@@ -1,83 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
-import 'login_password.dart'; // Import the LoginPasswordScreen
-import 'signup_screen.dart'; // Import the SignUpScreen
-import 'reset_password.dart'; // Import the ResetPasswordScreen
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
+import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager
 import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/red_button.dart'; // Import the RedButton widget
-import '../common/popup.dart'; // Import the CustomPopup widget
 
-class ForgotPasswordScreen extends StatelessWidget {
+// Convert to ConsumerStatefulWidget
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
+  const ForgotPasswordScreen({super.key}); // Add key to constructor
+
+  @override
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final TextEditingController emailController = TextEditingController(); // Controller for email input
+  bool _isLoading = false; // Loading state
 
-  ForgotPasswordScreen({super.key}); // Add key to constructor
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendResetLink() async {
+    FocusScope.of(context).unfocus();
+    if (_isLoading || emailController.text.trim().isEmpty) return;
+
+    setState(() { _isLoading = true; });
+
+    final email = emailController.text.trim();
+    final authManager = ref.read(authManagerProvider.notifier);
+    final success = await authManager.sendPasswordReset(email);
+
+    if (!mounted) return; // Check if widget is still mounted
+
+    setState(() { _isLoading = false; });
+
+    // Show feedback via Snackbar (AuthWrapper also shows errors)
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password reset link sent to $email.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      // Optionally navigate back after a delay or show a success message screen
+      // Navigator.pop(context);
+    } else {
+      // Error message is typically shown by the AuthWrapper listener
+      // but you could show a specific one here if needed.
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Failed to send reset link. Please check the email and try again.'),
+      //     backgroundColor: Colors.redAccent,
+      //   ),
+      // );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    // Set the status bar to have a white background with black content
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // White background for the status bar
-      statusBarIconBrightness: Brightness.dark, // Black content for the status bar
-    ));
-
+    // ... (Keep SystemChrome and screen dimension calculations) ...
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    // Calculate available height excluding status bar and bottom padding (like navigation bar)
-    // Still useful for determining the overall SizedBox height
-    final availableHeight = screenHeight - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
-
-    // Define vertical positions (adjust these percentages as needed)
-    final double iconTop = 0.08;
     final double titleTop = 0.15;
     final double instructionTop = 0.22;
-    final double emailInputTop = 0.32; // Adjusted based on instruction text height
-    final double buttonTop = 0.42; // Adjusted based on email input height
+    final double emailInputTop = 0.32;
+    final double buttonTop = 0.42;
+
+    // Watch auth state to potentially disable elements during other auth operations
+    final authState = ref.watch(authManagerProvider);
+    final isAuthenticating = authState.status == AuthStatus.unknown || _isLoading;
+
 
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
-      // resizeToAvoidBottomInset: true, // This is the default and correct behavior
-      body: SafeArea( // Ensures content avoids system intrusions like notches
-        child: SingleChildScrollView( // *** This makes the ENTIRE child content scrollable ***
-          // Wrap content in a SizedBox to give Stack a defined height for scrolling
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: SizedBox(
-            // Ensure stack has enough height for scrolling content + positioned items
-            // Use a height that accommodates the lowest positioned item + some buffer
-            height: screenHeight * (buttonTop + 0.15), // e.g., button top + button height + buffer
+            height: screenHeight * (buttonTop + 0.15),
             width: screenWidth,
-            child: Stack( // Use Stack for positioning all elements
+            child: Stack(
               children: [
-
-                // --- Positioned Back Button ---
+                // --- Positioned Forgot Password Title ---
                 Positioned(
-                  left: screenWidth * 0.01, // 5% of screen width
-                  top: screenHeight * iconTop,  // Use defined variable
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)),
-                    iconSize: screenWidth * 0.06, // Example: 6% of screen width
-                    onPressed: () {
-                      if (Navigator.canPop(context)) {
-                         Navigator.pop(context);
-                      } else {
-                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
-                         );
-                      }
-                    },
-                  ),
-                ),
-
-                // --- Positioned Forgot Password Title (Below Icon) ---
-                Positioned(
-                  left: screenWidth * 0.05, // 5% of screen width (Same as icon)
-                  top: screenHeight * titleTop,  // Use defined variable
+                  left: screenWidth * 0.05,
+                  top: screenHeight * titleTop,
                   child: Text(
-                    "Forgot Password",
+                    'Forgot Password', // Add text
                     style: TextStyle(
-                      fontSize: screenWidth * 0.055, // Using 7% as per previous request
-                      fontWeight: FontWeight.w600,
+                      fontSize: screenWidth * 0.055,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                     textAlign: TextAlign.left,
@@ -86,75 +101,44 @@ class ForgotPasswordScreen extends StatelessWidget {
 
                 // --- Positioned Instruction Text ---
                 Positioned(
-                  left: screenWidth * 0.05, // Align with title
-                  right: screenWidth * 0.05, // Allow text to wrap within padding
-                  top: screenHeight * instructionTop, // Use defined variable
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.05,
+                  top: screenHeight * instructionTop,
                   child: Text(
-                    "Enter your registered email address. You will receive a link to create a new password via email.",
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.033, // Using 4.5% as per previous request
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFFb6b6b6),
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.left, // Explicitly left align
+                    'Enter the email address associated with your account and we\'ll send you a link to reset your password.', // Add text
+                     style: TextStyle(
+                       fontSize: screenWidth * 0.038,
+                       color: Colors.grey[700],
+                     ),
+                    textAlign: TextAlign.left,
                   ),
                 ),
 
                 // --- Positioned Email Input Field ---
                 Positioned(
-                  left: screenWidth * 0.05, // Align with title
-                  right: screenWidth * 0.05, // Span across padded width
-                  top: screenHeight * emailInputTop, // Use defined variable
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.05,
+                  top: screenHeight * emailInputTop,
                   child: CustomTextField(
-                    controller: emailController,
-                    label: "Email",
-                    // Let CustomTextField determine its height or set explicitly if needed
-                    // height: screenHeight * 0.06,
+                    controller: emailController, // Provide controller
+                    label: "Email", // Provide label
+                    height: screenHeight * 0.06, // Keep height if needed
                   ),
                 ),
 
                 // --- Positioned Send Reset Link Button ---
                 Positioned(
-                  left: screenWidth * 0.05, // Align with title
-                  right: screenWidth * 0.05, // Span across padded width
-                  top: screenHeight * buttonTop, // Use defined variable
-                  child: RedButton(
-                    label: "Send Reset Link",
-                    // Width is handled by left/right constraints
-                    height: screenHeight * 0.06, // 6% of screen height
-                    onPressed: () async {
-                      // Simulate checking the email in the database
-                      String email = emailController.text.trim();
-                      bool emailExists = _checkEmailInDatabase(email);
-
-                      if (!context.mounted) return;
-
-                      if (!emailExists) {
-                        await CustomPopup.show(
-                          context: context,
-                          title: 'Email Not Found',
-                          message: "Don't have an account.",
-                          buttonText: 'SignUp',
-                          imagePath: 'public/assets/images/Alert.png',
-                        ).then((_) {
-                          if (context.mounted) {
-                             Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => SignUpScreen()),
-                             );
-                          }
-                        });
-                      } else {
-                        if (context.mounted) {
-                           Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-                           );
-                        }
-                      }
-                    },
-                  ),
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.05,
+                  top: screenHeight * buttonTop,
+                  child: isAuthenticating
+                      ? Center(child: CircularProgressIndicator(color: Color(0xFFA51414)))
+                      : RedButton(
+                          label: "Send Reset Link",
+                          width: screenWidth * 0.9, // Ensure button spans width
+                          height: screenHeight * 0.06,
+                          onPressed: _sendResetLink, // Call the Firebase reset function
+                        ),
                 ),
               ],
             ),
@@ -162,14 +146,5 @@ class ForgotPasswordScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  // Simulated function to check if the email exists in the database
-  bool _checkEmailInDatabase(String email) {
-    List<String> registeredEmails = ["user1@example.com", "user2@example.com", "user3@example.com", "test@test.com"];
-    print("Checking email: $email");
-    bool exists = registeredEmails.contains(email.toLowerCase());
-    print("Email exists: $exists");
-    return exists;
   }
 }

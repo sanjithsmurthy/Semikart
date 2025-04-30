@@ -1,8 +1,9 @@
-import 'package:Semikart/base_scaffold.dart';
+import 'package:Semikart/Components/Login_SignUp/login_password.dart'; // Import LoginPasswordNewScreen
 import 'package:flutter/material.dart';
-import '../common/red_button.dart'; // Import the RedButton widget
-import '../../base_scaffold.dart'; // Import the HomePage widget
+import '../common/red_button.dart'; // Restore RedButton import
+import 'package:Semikart/base_scaffold.dart'; // <-- Import BaseScaffold
 
+// Revert to StatelessWidget
 class SuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -39,9 +40,9 @@ class SuccessScreen extends StatelessWidget {
 
             SizedBox(height: 50), // Space below "Success!" text
 
-            // "Congratulations!" Text
+            // "Congratulations!" Text - Reverted
             Text(
-              "Congratulations! You have been successfully authenticated",
+              "Successfully signed up, now login", // Keep updated text
               textAlign: TextAlign.center, // Center align the text
               style: TextStyle(
                 fontSize: 18, // Font size
@@ -53,18 +54,18 @@ class SuccessScreen extends StatelessWidget {
 
             SizedBox(height: 50), // Space below the description text
 
-            // Red Button
+            // Restore Red Button
             Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // 5% padding on both sides
               child: RedButton(
-                label: "Continue", // Button label
+                label: "Continue to App", // Updated label
                 width: double.infinity, // Stretch the button horizontally
                 height: 48, // Button height
                 onPressed: () {
-                  // Navigate to HomePage
+                  // Navigate to BaseScaffold
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => BaseScaffold()),
+                    MaterialPageRoute(builder: (context) => const BaseScaffold()), // Navigate to BaseScaffold
                   );
                 },
               ),

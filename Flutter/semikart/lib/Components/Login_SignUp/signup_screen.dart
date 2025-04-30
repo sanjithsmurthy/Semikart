@@ -1,60 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager
-import 'package:Semikart/services/google_auth_service.dart'; // Import GoogleAuthService
-import '../../base_scaffold.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:Semikart/managers/auth_manager.dart'; // Use the new AuthManager
+import 'package:Semikart/app_navigator.dart'; // Import AppNavigator
 import '../common/signinwith_google.dart';
 import 'custom_text_field.dart';
-import 'confirm_password.dart'; // Import the ConfirmPasswordScreen component
-import 'password_text_field.dart'; // Import the PasswordTextField widget
-import '../common/red_button.dart'; // Import the RedButton widget
-import '../common/inactive_red_button.dart'; // Import the InactiveButton widget
-import 'login_password.dart'; // Import the LoginScreen component
+import 'password_text_field.dart'; // Import PasswordTextField
+import '../common/red_button.dart';
+import '../common/inactive_red_button.dart';
+import 'login_password.dart';
 import '../common/forgot_password.dart';
-import 'package:intl_phone_field/intl_phone_field.dart'; // Import the IntlPhoneField package
-import 'package:flutter/services.dart'; // <-- Ensure this import is present
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:flutter/services.dart';
 
-
-// --- Changed to ConsumerStatefulWidget ---
 class SignUpScreen extends ConsumerStatefulWidget {
-  const SignUpScreen({super.key}); // Added super.key
+  const SignUpScreen({super.key});
 
   @override
-  // --- Changed to ConsumerState ---
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-// --- Changed to ConsumerState ---
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  bool passwordsMatch = false; // Track if passwords match
-  bool isTermsAccepted = false; // Track if the checkbox is checked
-  bool _areAllFieldsFilled = false; // Track if all required fields are filled
-  bool _isLoading = false; // Loading indicator state
+  // Keep local state for form validation and UI
+  bool passwordsMatch = false;
+  bool isTermsAccepted = false;
+  bool _areAllFieldsFilled = false;
+  bool _isLoading = false; // Local loading state for button feedback
 
-  // Controllers for text fields
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController mobileNumberController = TextEditingController();
-  final TextEditingController companyNameController = TextEditingController();
-  // Password controllers are managed within ConfirmPasswordScreen, but we need access to the password itself
-  final TextEditingController _passwordController = TextEditingController(); // Add controller for password
-  final TextEditingController _confirmPasswordController = TextEditingController(); // Add controller for confirm password
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final mobileNumberController = TextEditingController(); // Keep if needed for profile
+  final companyNameController = TextEditingController(); // Keep if needed for profile
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Add listeners to all controllers to check field status
+    // Add listeners to check field status and password match
     firstNameController.addListener(_checkAllFieldsFilled);
     lastNameController.addListener(_checkAllFieldsFilled);
     emailController.addListener(_checkAllFieldsFilled);
-    mobileNumberController.addListener(_checkAllFieldsFilled);
-    companyNameController.addListener(_checkAllFieldsFilled);
-    _passwordController.addListener(_checkAllFieldsFilled); // Listen to password
-    _confirmPasswordController.addListener(_checkAllFieldsFilled); // Listen to confirm password
+    mobileNumberController.addListener(_checkAllFieldsFilled); // Keep listener if field is kept
+    companyNameController.addListener(_checkAllFieldsFilled); // Keep listener if field is kept
+    _passwordController.addListener(_checkPasswordsAndFields);
+    _confirmPasswordController.addListener(_checkPasswordsAndFields);
   }
 
-  @override
+   @override
   void dispose() {
     // Remove listeners
     firstNameController.removeListener(_checkAllFieldsFilled);
@@ -62,8 +55,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     emailController.removeListener(_checkAllFieldsFilled);
     mobileNumberController.removeListener(_checkAllFieldsFilled);
     companyNameController.removeListener(_checkAllFieldsFilled);
-    _passwordController.removeListener(_checkAllFieldsFilled);
-    _confirmPasswordController.removeListener(_checkAllFieldsFilled);
+    _passwordController.removeListener(_checkPasswordsAndFields);
+    _confirmPasswordController.removeListener(_checkPasswordsAndFields);
 
     // Dispose controllers
     firstNameController.dispose();
@@ -71,60 +64,63 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     emailController.dispose();
     mobileNumberController.dispose();
     companyNameController.dispose();
-    _passwordController.dispose(); // Dispose password controller
-    _confirmPasswordController.dispose(); // Dispose confirm password controller
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  // Function to check if all required fields are non-empty and passwords match
-  void _checkAllFieldsFilled() {
-    setState(() {
-      passwordsMatch = _passwordController.text.isNotEmpty &&
-                       _passwordController.text == _confirmPasswordController.text;
+  void _checkPasswordsAndFields() {
+     setState(() {
+        passwordsMatch = _passwordController.text.isNotEmpty &&
+                         _passwordController.text == _confirmPasswordController.text;
+        _checkAllFieldsFilled(); // Also re-check all fields
+     });
+  }
 
+  void _checkAllFieldsFilled() {
+    // Check essential fields for Firebase email/password signup
+    setState(() {
       _areAllFieldsFilled = firstNameController.text.isNotEmpty &&
           lastNameController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
-          mobileNumberController.text.isNotEmpty &&
-          companyNameController.text.isNotEmpty &&
-          _passwordController.text.isNotEmpty; // Check password field too
+          _passwordController.text.isNotEmpty &&
+          _confirmPasswordController.text.isNotEmpty;
+          // Removed mobileNumberController and companyNameController checks
+          // as they are not strictly required for Firebase auth,
+          // but can be added back if needed for profile creation later.
     });
   }
 
-  // --- Sign Up Logic ---
   Future<void> _signUp() async {
-    FocusScope.of(context).unfocus(); // Hide keyboard
-
-    if (!isSignUpButtonActive) return; // Should not happen if button is inactive, but good check
+    FocusScope.of(context).unfocus();
+    if (!isSignUpButtonActive || _isLoading) return;
 
     setState(() { _isLoading = true; });
 
     final firstName = firstNameController.text.trim();
     final lastName = lastNameController.text.trim();
     final email = emailController.text.trim();
-    final mobile = mobileNumberController.text.trim(); // Assuming full number is stored
-    final company = companyNameController.text.trim();
-    final password = _passwordController.text.trim(); // Get password from its controller
+    final password = _passwordController.text.trim();
+    final displayName = "$firstName $lastName".trim();
 
-    // Use AuthManager via Riverpod
     final authManager = ref.read(authManagerProvider.notifier);
-    // Pass necessary details (adjust based on your actual signup needs)
-    final success = await authManager.signUp(email, password, "$firstName $lastName"); // Combine names for simulation
+    await authManager.signUp(email, password, displayName);
 
     if (!mounted) return;
-
     setState(() { _isLoading = false; });
+  }
 
-    // AuthWrapper handles navigation on success. Show error if failed.
-    if (!success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sign up failed. Please try again.'),
-          backgroundColor: Color(0xFFA51414),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
+   Future<void> _googleSignIn() async {
+     FocusScope.of(context).unfocus();
+     if (_isLoading) return; // Prevent multiple clicks if already loading
+
+     setState(() { _isLoading = true; });
+
+     final authManager = ref.read(authManagerProvider.notifier);
+     await authManager.googleSignIn();
+
+     if (!mounted) return;
+     setState(() { _isLoading = false; });
   }
 
   // Determine if the sign-up button should be active
@@ -169,20 +165,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 // Google Sign-In Button
                 Center(
                   child: SignInWithGoogleButton(
-                    onPressed: () async {
-                      final googleAuthService = GoogleAuthService();
-                      final user = await googleAuthService.signInWithGoogle();
-
-                      if (user != null) {
-                        print("Google Sign-In successful: ${user.email}");
-                        // Navigate to the home page or handle successful login
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Google Sign-In failed.')),
-                        );
-                      }
-                    },
-                    isLoading: false,
+                    onPressed: _googleSignIn,
+                    isLoading: _isLoading,
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.03), // Add spacing
@@ -238,7 +222,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: CustomTextField(
                     controller: emailController,
                     label: "Email",
-                    // keyboardType: TextInputType.emailAddress, // Set keyboard type - Parameter not defined in CustomTextField
+                    // keyboardType: TextInputType.emailAddress, // Parameter not defined
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02), // Add spacing
@@ -317,17 +301,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 SizedBox(height: screenHeight * 0.015), // Add spacing
 
-// Confirm Password Component
-                ConfirmPasswordScreen(
-                  onPasswordsMatch: (match) {
-                    if (passwordsMatch != match) {
-                      setState(() {
-                        passwordsMatch = match; // Update the passwordsMatch state
-                      });
-                      _checkAllFieldsFilled();
-                    }
-                  },
-                ), // <-- Added comma here
+                // --- Integrated Password Fields ---
+                // Password Input Field
+                PasswordTextField(
+                  controller: _passwordController,
+                  label: "Password",
+                  // Optional: Add validation or onChanged if needed directly here
+                ),
+                SizedBox(height: screenHeight * 0.02), // Add spacing
+
+                // Confirm Password Input Field
+                PasswordTextField(
+                  controller: _confirmPasswordController,
+                  label: "Confirm Password",
+                  // Optional: Add validation or onChanged if needed directly here
+                ),
+                // --- End Integrated Password Fields ---
+
                 SizedBox(height: screenHeight * 0.02), // Add spacing
 
 

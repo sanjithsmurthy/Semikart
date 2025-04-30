@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'Components/rfq_bom/rfq_full.dart'; // Import RFQFullPage
 
@@ -11,10 +12,12 @@ class BaseScaffold extends StatefulWidget {
   final int initialIndex;
   final ValueChanged<int>? onNavigationItemSelected;
 
+  // Restore the static key
   static final GlobalKey<_BaseScaffoldState> navigatorKey = GlobalKey<_BaseScaffoldState>();
 
   const BaseScaffold({
-    super.key,
+    // Use the static key as the default key for the instance
+    super.key /*= navigatorKey*/, // Keep super.key, don't assign static key here by default
     this.initialIndex = 0,
     this.onNavigationItemSelected,
   });
@@ -25,22 +28,24 @@ class BaseScaffold extends StatefulWidget {
 
 class _BaseScaffoldState extends State<BaseScaffold> {
   late int _selectedIndex;
-  bool _showRFQOverlay = false; // State to control overlay visibility
+  bool _showRFQOverlay = false;
   DateTime? _lastPressedAt;
-
-  final List<Widget> _pages = [
-    AppNavigator.homeNavigator(),
-    AppNavigator.productsNavigator(),
-    AppNavigator.searchNavigator(),
-    AppNavigator.cartNavigator(),
-    AppNavigator.profileNavigator(),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
+    // log("🔔 Initializing BaseScaffold State..."); // Remove log
     super.initState();
     _selectedIndex = widget.initialIndex;
     cartItemCountProvider.addListener(_updateCartBadge);
+    _pages = [
+      AppNavigator.homeNavigator(),
+      AppNavigator.productsNavigator(),
+      AppNavigator.searchNavigator(),
+      AppNavigator.cartNavigator(),
+      AppNavigator.profileNavigator(),
+    ];
+    // log("🔔 BaseScaffold State: _pages initialized."); // Remove log
   }
 
   @override
@@ -167,6 +172,9 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    // log("🏗️ Building BaseScaffold..."); // Remove log
+
+    // --- Restore Original Build Method --- 
     final bool canPopNested = getNavigatorKeyForIndex(_selectedIndex)?.currentState?.canPop() ?? false;
     final bool showHeaderBackButton = canPopNested || _selectedIndex != 0;
 
@@ -226,69 +234,70 @@ class _BaseScaffoldState extends State<BaseScaffold> {
               ],
             ),
             floatingActionButton: !_showRFQOverlay
-    ? FloatingActionButton(
-        onPressed: _toggleRFQOverlay,
-        backgroundColor: const Color(0xFFA51414), // Red background
-        child: const Text(
-          "RFQ", // Display "RFQ" instead of an icon
-          style: TextStyle(
-            color: Colors.white, // White text for visibility
-            fontWeight: FontWeight.bold, // Bold text for emphasis
-            fontSize: 16, // Font size for better readability
+                ? FloatingActionButton(
+                    onPressed: _toggleRFQOverlay,
+                    backgroundColor: const Color(0xFFA51414), // Red background
+                    child: const Text(
+                      "RFQ", // Display "RFQ" instead of an icon
+                      style: TextStyle(
+                        color: Colors.white, // White text for visibility
+                        fontWeight: FontWeight.bold, // Bold text for emphasis
+                        fontSize: 16, // Font size for better readability
+                      ),
+                    ),
+                  )
+                : null,
           ),
-        ),
-      )
-    : null,
-          ),
-         if (_showRFQOverlay)
-  Positioned.fill(
-    child: Material(
-      color: Colors.black.withOpacity(0.5), // Semi-transparent black overlay
-      child: Stack(
-        children: [
-          // Close Icon Positioned Slightly Down
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 50, right: 16), // Adjusted top padding to bring the icon down
-              child: IconButton(
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.white, // Set the color to white for visibility
-                  size: 32, // Slightly larger size for better visibility
+          if (_showRFQOverlay)
+            Positioned.fill(
+              child: Material(
+                color: Colors.black.withOpacity(0.5), // Semi-transparent black overlay
+                child: Stack(
+                  children: [
+                    // Close Icon Positioned Slightly Down
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50, right: 16), // Adjusted top padding to bring the icon down
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white, // Set the color to white for visibility
+                            size: 32, // Slightly larger size for better visibility
+                          ),
+                          onPressed: _toggleRFQOverlay, // Close overlay on press
+                        ),
+                      ),
+                    ),
+                    // RFQ Content with Reduced Height, Width, and Adjusted Position
+                    Center(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.7, // Reduce height to 70% of the screen height
+                          maxWidth: MediaQuery.of(context).size.width * 0.9, // Reduce width to 90% of the screen width
+                        ),
+                        padding: const EdgeInsets.all(16), // Add padding for content
+                        decoration: BoxDecoration(
+                          color: Colors.white, // White background for the overlay content
+                          borderRadius: BorderRadius.circular(12), // Rounded corners
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: RFQFullPage(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                onPressed: _toggleRFQOverlay, // Close overlay on press
               ),
-            ),
-          ),
-          // RFQ Content with Reduced Height, Width, and Adjusted Position
-          Center(
-            child: Container(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.7, // Reduce height to 70% of the screen height
-                maxWidth: MediaQuery.of(context).size.width * 0.9, // Reduce width to 90% of the screen width
-              ),
-              padding: const EdgeInsets.all(16), // Add padding for content
-              decoration: BoxDecoration(
-                color: Colors.white, // White background for the overlay content
-                borderRadius: BorderRadius.circular(12), // Rounded corners
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: RFQFullPage(),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  )
+            )
         ],
       ),
     );
+    // --- END Restore --- 
   }
 
   BottomNavigationBarItem _buildNavItem(IconData outlinedIcon, IconData filledIcon, String label, int index) {
@@ -344,8 +353,9 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       label: label,
     );
   }
+
   void openOrderHistory() {
-  switchToTab(4); // Switch to the Profile tab (index 4)
-  AppNavigator.pushOrderHistory(); // Push the OrderHistory page within the Profile tab
-}
+    switchToTab(4); // Switch to the Profile tab (index 4)
+    AppNavigator.pushOrderHistory(); // Push the OrderHistory page within the Profile tab
+  }
 }

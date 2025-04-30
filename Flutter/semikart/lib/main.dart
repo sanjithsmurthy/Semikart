@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:Semikart/firebase_options.dart'; // Import Firebase Core
 import 'base_scaffold.dart';
-import 'managers/auth_manager.dart';
+import 'managers/auth_manager.dart'; // Import the new AuthManager
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ void main() async {
   _setupLogging();
 
   runApp(
-    const ProviderScope(
+    const ProviderScope( // Ensure ProviderScope wraps the app
       child: MyApp(),
     ),
   );
@@ -55,9 +55,21 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFFA51414),
         scaffoldBackgroundColor: Colors.white,
+        // Define text selection theme globally if desired
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFFA51414),
+          selectionColor: Color(0xAAEFA0A0), // Lighter red for selection
+          selectionHandleColor: Color(0xFFA51414),
+        ),
       ),
-      home: const AuthWrapper(), // ⬅️ Important: AuthWrapper is the home widget
+      home: const AuthWrapper(), // AuthWrapper remains the home widget
       debugShowCheckedModeBanner: false,
+      // Define routes if needed for named navigation
+      // routes: {
+      //   '/': (context) => const AuthWrapper(),
+      //   '/login': (context) => const LoginPasswordNewScreen(),
+      //   '/home': (context) => BaseScaffold(initialIndex: 0),
+      // },
     );
   }
 }
@@ -67,40 +79,94 @@ class AuthWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the provider to trigger rebuilds on state changes
+    // Watch the AuthManager's state
     final authState = ref.watch(authManagerProvider);
 
-    // --- Add diagnostic print statement ---
-    // This will print every time AuthWrapper rebuilds, showing the current auth status.
     print("🔁 AuthWrapper: Building with AuthStatus = ${authState.status}");
 
-    // Handle unknown state (initial check)
-    if (authState.status == AuthStatus.unknown) {
-      print(" -> AuthStatus is Unknown. Showing loading indicator.");
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFFA51414),
+    // Listen for error messages from AuthManager and show Snackbars
+    ref.listen<AuthState>(authManagerProvider, (previous, next) {
+      if (next.errorMessage != null && next.errorMessage != previous?.errorMessage) {
+        // Ensure context is still valid before showing Snackbar
+        if (ScaffoldMessenger.maybeOf(context) != null) {
+           ScaffoldMessenger.of(context).showSnackBar(
+             SnackBar(
+               content: Text(next.errorMessage!),
+               backgroundColor: Colors.redAccent,
+               duration: const Duration(seconds: 4),
+             ),
+           );
+           // Optionally clear the error in the state after showing it
+           // ref.read(authManagerProvider.notifier).clearError(); // Add a clearError method if needed
+        } else {
+           print("AuthWrapper: Cannot show Snackbar, ScaffoldMessenger not found.");
+        }
+      }
+    });
+
+
+    switch (authState.status) {
+      case AuthStatus.unknown:
+        print(" -> AuthStatus is Unknown. Showing loading indicator.");
+        return const Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFFA51414),
+            ),
           ),
-        ),
-      );
+        );
+      case AuthStatus.authenticated:
+        print(" -> AuthStatus is Authenticated (User: ${authState.user?.uid}). Showing AuthRedirector.");
+        // Return the redirector instead of BaseScaffold directly
+        return const AuthRedirector();
+      case AuthStatus.unauthenticated:
+        print(" -> AuthStatus is Unauthenticated. Showing LoginPasswordNewScreen.");
+        return const LoginPasswordNewScreen();
     }
-
-    // Handle authenticated state
-    if (authState.status == AuthStatus.authenticated) {
-      print(" -> AuthStatus is Authenticated. Showing BaseScaffold.");
-      // It's crucial that BaseScaffold uses its own Navigator keys
-      // for internal navigation, separate from the root navigator.
-      return BaseScaffold(
-        key: BaseScaffold.navigatorKey, // Continue using the static key if required by AppNavigator
-        initialIndex: 0,
-      );
-    }
-
-    // Handle unauthenticated state (or any other state as fallback)
-    // This block will execute if status is AuthStatus.unauthenticated
-    print(" -> AuthStatus is Unauthenticated (or fallback). Showing LoginPasswordNewScreen.");
-    return const LoginPasswordNewScreen();
   }
 }
+
+// +++ Add AuthRedirector Widget +++
+class AuthRedirector extends StatefulWidget {
+  const AuthRedirector({super.key});
+
+  @override
+  State<AuthRedirector> createState() => _AuthRedirectorState();
+}
+
+class _AuthRedirectorState extends State<AuthRedirector> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) { // Ensure widget is still mounted
+         print("🔄 AuthRedirector: Navigating to BaseScaffold...");
+         // Use pushReplacement to avoid having the redirector in the back stack
+         Navigator.of(context).pushReplacement(
+           MaterialPageRoute(
+             builder: (context) => BaseScaffold(
+               key: BaseScaffold.navigatorKey, // Use the key here
+               initialIndex: 0,
+             ),
+           ),
+         );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Show a minimal loading indicator while redirecting
+    print("🔄 AuthRedirector: Building placeholder...");
+    return const Scaffold(
+      backgroundColor: Colors.amberAccent, // Distinct color for visibility
+      body: Center(
+        child: CircularProgressIndicator(
+          color: Color(0xFFA51414),
+        ),
+      ),
+    );
+  }
+}
+// +++ End AuthRedirector Widget +++
