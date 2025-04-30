@@ -39,7 +39,7 @@ class CartService {
       String productId,
       int quantity,
       {double? finalUnitPrice}) async {
-    final data = {
+    final Map<String, dynamic> data = {
       'quantity': quantity,
     };
     if (finalUnitPrice != null) {
