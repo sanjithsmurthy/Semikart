@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
@@ -139,12 +140,31 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                       IconButton(
                         icon: Image.asset('public/assets/images/whatsapp_icon.png'),
                         iconSize: screenWidth * 0.05, // 5% of screen width
-                        onPressed: () {},
+                        onPressed: () async {
+                          final Uri whatsappUrl = Uri.parse('https://wa.me/919113999367');
+                          if (await canLaunchUrl(whatsappUrl)) {
+                            await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+                          } else {
+                            // Could not launch WhatsApp
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Could not open WhatsApp')),
+                            );
+                          }
+                        },
                       ),
                       IconButton(
                         icon: const Icon(Icons.phone, color: Colors.black),
                         iconSize: screenWidth * 0.07, // 6% of screen width
-                        onPressed: () {},
+                        onPressed: () async {
+                          final Uri phoneUrl = Uri.parse('tel:+919113999367');
+                          if (await canLaunchUrl(phoneUrl)) {
+                            await launchUrl(phoneUrl);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Could not open phone dialer')),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),
