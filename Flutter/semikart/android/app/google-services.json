@@ -12,7 +12,44 @@
           "package_name": "com.example.semikart"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "119679885177-2n9488r5ad5aqnmbcnok9v68bqcv9j6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.semikart",
+            "certificate_hash": "51a5d789edb418814adbec7ad1a5ab01d7474041"
+          }
+        },
+        {
+          "client_id": "119679885177-ar9ng52gap4v37dn728bnkpnog0b0881.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.semikart",
+            "certificate_hash": "d1fb3ba1f52d0c20474df73cb867b2c62ddcbe18"
+          }
+        },
+        {
+          "client_id": "119679885177-cca4rtqrf42akg7cc7svqonfhl4pk92k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.semikart",
+            "certificate_hash": "aa02744cbcec7d95bb5a134952363d596809c1e7"
+          }
+        },
+        {
+          "client_id": "119679885177-s4c76ef9h4k5u87f9bde3nke3md8hav1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.semikart",
+            "certificate_hash": "17dd48fde44ba76dbcd6258e440d0863e377a5ed"
+          }
+        },
+        {
+          "client_id": "119679885177-2vm1vi9sa10huurfpkr7mggkh2fnn916.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBGK7MDOgou5ZifNIlwaT60o_DoaCeAm9w"
@@ -20,7 +57,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119679885177-2vm1vi9sa10huurfpkr7mggkh2fnn916.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "119679885177-plcqbkdsb46nl1djgstvh6n2tm1frm3m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.semikart"
+              }
+            }
+          ]
         }
       }
     }

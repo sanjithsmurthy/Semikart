@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '119679885177',
     projectId: 'semikart-28625',
     storageBucket: 'semikart-28625.firebasestorage.app',
+    androidClientId: '119679885177-2n9488r5ad5aqnmbcnok9v68bqcv9j6r.apps.googleusercontent.com',
+    iosClientId: '119679885177-plcqbkdsb46nl1djgstvh6n2tm1frm3m.apps.googleusercontent.com',
     iosBundleId: 'com.example.semikart',
   );
+
 }
