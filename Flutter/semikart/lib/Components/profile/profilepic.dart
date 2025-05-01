@@ -9,11 +9,13 @@ import '../../providers/profile_image_provider.dart'; // Adjust path if needed
 class ProfilePicture extends ConsumerStatefulWidget {
   final String? imageUrl;
   final Function(File) onImageSelected;
+  final String? initialImageUrl; // Add parameter to accept initial URL
 
   const ProfilePicture({
     Key? key,
     this.imageUrl,
     required this.onImageSelected,
+    this.initialImageUrl, // Add to constructor
   }) : super(key: key);
 
   @override

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -63,6 +54,40 @@ class DefaultFirebaseOptions {
     messagingSenderId: '119679885177',
     projectId: 'semikart-28625',
     storageBucket: 'semikart-28625.firebasestorage.app',
+    androidClientId: '119679885177-2n9488r5ad5aqnmbcnok9v68bqcv9j6r.apps.googleusercontent.com',
+    iosClientId: '119679885177-plcqbkdsb46nl1djgstvh6n2tm1frm3m.apps.googleusercontent.com',
     iosBundleId: 'com.example.semikart',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAu-udRaDZvYNQAT92AWumnqp1UYoqOt2E',
+    appId: '1:119679885177:web:f9d20e58c4b6232b8899a8',
+    messagingSenderId: '119679885177',
+    projectId: 'semikart-28625',
+    authDomain: 'semikart-28625.firebaseapp.com',
+    storageBucket: 'semikart-28625.firebasestorage.app',
+    measurementId: 'G-Y7FS2L3QTH',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCtoVXeWAlt52KtwbrzGmsHdUrsNnGrXZI',
+    appId: '1:119679885177:ios:3dedd8412e8df2948899a8',
+    messagingSenderId: '119679885177',
+    projectId: 'semikart-28625',
+    storageBucket: 'semikart-28625.firebasestorage.app',
+    androidClientId: '119679885177-2n9488r5ad5aqnmbcnok9v68bqcv9j6r.apps.googleusercontent.com',
+    iosClientId: '119679885177-plcqbkdsb46nl1djgstvh6n2tm1frm3m.apps.googleusercontent.com',
+    iosBundleId: 'com.example.semikart',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAu-udRaDZvYNQAT92AWumnqp1UYoqOt2E',
+    appId: '1:119679885177:web:cbc17c1eca0a50778899a8',
+    messagingSenderId: '119679885177',
+    projectId: 'semikart-28625',
+    authDomain: 'semikart-28625.firebaseapp.com',
+    storageBucket: 'semikart-28625.firebasestorage.app',
+    measurementId: 'G-8XN89E6ZQS',
+  );
+
 }

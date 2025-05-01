@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Import Google Sign-In
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore for FieldValue
+import '../services/user_service.dart'; // Import UserService
 
 // --- Authentication Status Enum ---
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -12,11 +14,13 @@ class AuthState {
   final AuthStatus status;
   final User? user; // Firebase user object
   final String? errorMessage; // Optional error message
+  final bool isLoading; // Added loading state
 
   AuthState({
     this.status = AuthStatus.unknown,
     this.user,
     this.errorMessage,
+    this.isLoading = false, // Default to false
   });
 
   // Helper method to create a copy with updated values
@@ -25,11 +29,13 @@ class AuthState {
     User? user, // Allow setting user to null
     String? errorMessage,
     bool clearError = false, // Flag to explicitly clear error
+    bool? isLoading, // Added
   }) {
     return AuthState(
       status: status ?? this.status,
       user: user, // Directly assign the new user value
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
+      isLoading: isLoading ?? this.isLoading, // Added
     );
   }
 }
@@ -249,9 +255,11 @@ final authServiceProvider = Provider<AuthService>((ref) {
 // --- Auth Manager (State Notifier) ---
 class AuthManager extends StateNotifier<AuthState> {
   final AuthService _authService;
+  final UserService _userService; // Inject UserService
   StreamSubscription<User?>? _authStateSubscription;
 
-  AuthManager(this._authService) : super(AuthState()) {
+  // Update constructor to accept UserService
+  AuthManager(this._authService, this._userService) : super(AuthState()) {
     _initialize();
   }
 
@@ -267,9 +275,31 @@ class AuthManager extends StateNotifier<AuthState> {
     }
 
     // Listen to future auth state changes
-    _authStateSubscription = _authService.authStateChanges.listen((user) {
-       log("Auth State Changed Listener: User ${user?.uid}, Status: ${user != null ? 'Authenticated' : 'Unauthenticated'}"); // <-- Add log
+    _authStateSubscription = _authService.authStateChanges.listen((user) async { // Make listener async
+       log("Auth State Changed Listener: User ${user?.uid}, Status: ${user != null ? 'Authenticated' : 'Unauthenticated'}");
       if (user != null) {
+        // --- Check if profile exists and create if not (for pre-existing users) ---
+        try {
+          final profileExists = await _userService.doesUserProfileExist(user.uid);
+          if (!profileExists) {
+            log("Auth State Listener: Profile for ${user.uid} not found. Creating/Upserting...");
+            // Create the basic profile using info from Auth user (email, maybe display name)
+            // This handles users who existed before the 'users' collection was implemented.
+            await _userService.upsertUserProfile(user: user);
+            log("Auth State Listener: Basic profile created for ${user.uid}.");
+          } else {
+            // Profile exists, just update last login time
+            log("Auth State Listener: Profile for ${user.uid} exists. Updating lastLoginAt.");
+            await _userService.updateUserProfile(user.uid, {'lastLoginAt': FieldValue.serverTimestamp()});
+          }
+        } catch (e) {
+          log("Error during profile check/creation/update for ${user.uid} in auth listener: $e");
+          // Decide if this error needs specific handling.
+          // If upsert fails, the user might be stuck without a profile doc, but will retry on next login.
+        }
+        // --- End profile check ---
+
+        // Update the app's auth state
         state = state.copyWith(status: AuthStatus.authenticated, user: user, clearError: true);
       } else {
         state = state.copyWith(status: AuthStatus.unauthenticated, user: null, clearError: true); // Clear user on logout
@@ -283,7 +313,7 @@ class AuthManager extends StateNotifier<AuthState> {
   Future<bool> login(String email, String password) async {
     try {
       final user = await _authService.loginUserWithEmailAndPassword(email, password);
-      // State update handled by the stream listener
+      // State update and lastLogin update handled by the stream listener
       return user != null;
     } catch (e) {
       log("AuthManager Login Error: $e");
@@ -292,15 +322,30 @@ class AuthManager extends StateNotifier<AuthState> {
     }
   }
 
-  Future<bool> signUp(String email, String password, String displayName) async {
-     // Note: Firebase createUser does not directly take displayName.
-     // You might need to update the user profile *after* creation.
+  // Update signUp to accept user details
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String companyName,
+    required String phoneNumber,
+    // Add other fields as needed
+  }) async {
     try {
       final user = await _authService.createUserWithEmailAndPassword(email, password);
       if (user != null) {
-        log("AuthManager SignUp: User created successfully (${user.uid}). Waiting for authStateChanges listener."); // <-- Add log
-        // Optionally update display name here if needed
-        // await user.updateDisplayName(displayName);
+        log("AuthManager SignUp: User created successfully (${user.uid}). Creating profile...");
+        // Create user profile in Firestore after successful auth creation
+        await _userService.upsertUserProfile(
+          user: user,
+          firstName: firstName,
+          lastName: lastName,
+          companyName: companyName,
+          phoneNumber: phoneNumber,
+          // Pass other fields if collected
+        );
+        log("AuthManager SignUp: Profile creation/update initiated for ${user.uid}. Waiting for authStateChanges listener.");
         // State update handled by the stream listener
         return true;
       }
@@ -315,8 +360,16 @@ class AuthManager extends StateNotifier<AuthState> {
    Future<bool> googleSignIn() async {
     try {
       final user = await _authService.signInWithGoogle();
-      // State update handled by the stream listener
-      return user != null;
+      if (user != null) {
+        log("AuthManager Google Sign-In: User signed in successfully (${user.uid}). Upserting profile...");
+        // Create or update user profile in Firestore after successful Google sign-in
+        // Pass only the user object; upsertUserProfile will handle extracting details
+        await _userService.upsertUserProfile(user: user);
+         log("AuthManager Google Sign-In: Profile creation/update initiated for ${user.uid}. Waiting for authStateChanges listener.");
+        // State update handled by the stream listener
+        return true;
+      }
+      return false; // User cancelled Google Sign-In or other issue
     } catch (e) {
       log("AuthManager Google Sign-In Error: $e");
       state = state.copyWith(errorMessage: _handleAuthError(e), status: AuthStatus.unauthenticated);
@@ -381,9 +434,11 @@ class AuthManager extends StateNotifier<AuthState> {
 }
 
 // --- StateNotifierProvider for AuthManager ---
+// Update the provider to inject UserService
 final authManagerProvider = StateNotifierProvider<AuthManager, AuthState>((ref) {
   final authService = ref.watch(authServiceProvider);
-  return AuthManager(authService);
+  final userService = ref.watch(userServiceProvider); // Watch UserService provider
+  return AuthManager(authService, userService); // Pass both services
 });
 
 

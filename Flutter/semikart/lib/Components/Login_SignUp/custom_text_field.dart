@@ -17,6 +17,7 @@ class CustomTextField extends StatelessWidget {
   final FormFieldValidator<String>? validator; // Optional external validator for VISUAL feedback (if needed)
   final void Function(bool isValid)? onValidationChanged; // New callback for validity status
   final bool readOnly; // Add readOnly property
+  final TextInputType? keyboardType; // Added for keyboard type
 
   const CustomTextField({
     super.key,
@@ -33,6 +34,7 @@ class CustomTextField extends StatelessWidget {
     this.validator, // Optional external validator
     this.onValidationChanged, // Add new callback to constructor
     this.readOnly = false, // Default to false
+    this.keyboardType, // Added
   });
 
   @override
@@ -89,6 +91,7 @@ class CustomTextField extends StatelessWidget {
             cursorHeight: (height ?? 60) * 0.5, // Adjust cursor height based on potential height
             cursorWidth: 1, // Make the cursor slightly thinner
             cursorColor: const Color(0xFFA51414), // Set the cursor color to black
+            keyboardType: keyboardType, // Pass the keyboardType
             decoration: InputDecoration(
               labelText: label,
               labelStyle: const TextStyle(

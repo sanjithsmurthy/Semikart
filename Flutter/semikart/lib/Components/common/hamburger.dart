@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-// Import AuthManager provider
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'dart:io'; // For FileImage
+import '../../managers/auth_manager.dart'; // Import AuthManager provider
+import '../../services/user_service.dart'; // Import userDocumentProvider
 import 'red_button.dart'; // Import your custom RedButton
-
-// Removed LoginPassword import as AuthWrapper handles navigation
-// import '../login_signup/login_password.dart';
-// Import the screen
 import '../../base_scaffold.dart';
 import '../../providers/profile_image_provider.dart';
-import '../../providers/user_profile_provider.dart'; // NEW: import user profile data
 import '../../app_navigator.dart'; // Import AppNavigator for navigation
-// Import AuthManager provider
+import 'popup.dart'; // Import CustomPopup
+
 class HamburgerMenu extends ConsumerWidget {
   const HamburgerMenu({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // ... existing scaling calculations ...
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -47,8 +47,10 @@ class HamburgerMenu extends ConsumerWidget {
     final double buttonHeight = 40.0 * heightScale;
     final double buttonFontSize = 14.0 * scale;
 
+
     final profileImage = ref.watch(profileImageProvider);
-    final user = ref.watch(userProfileProvider); // NEW: get name + email
+    // Watch the user document stream provider (now nullable)
+    final userDocAsyncValue = ref.watch(userDocumentProvider);
 
     return Drawer(
       width: screenWidth * 0.75,
@@ -57,7 +59,8 @@ class HamburgerMenu extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            // ... Top bar ...
+             Padding(
               padding: EdgeInsets.only(
                 left: leftPadding,
                 top: topPadding,
@@ -79,91 +82,97 @@ class HamburgerMenu extends ConsumerWidget {
               ),
             ),
             SizedBox(height: verticalSpacingXLarge),
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: avatarRadius,
-                    backgroundImage: profileImage != null
-                        ? FileImage(profileImage)
-                        : const AssetImage('public/assets/images/profile_picture.png')
-                            as ImageProvider,
-                  ),
-                  SizedBox(height: verticalSpacingMedium),
 
-                  // ✅ Dynamic Full Name
-                  Text(
-                    user.fullName.isNotEmpty ? user.fullName : 'Username',
-                    style: TextStyle(fontSize: nameFontSize, fontWeight: FontWeight.bold),
-                  ),
+            // Use AsyncValue.when to handle loading/error/data states
+            userDocAsyncValue.when(
+              loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFA51414))),
+              error: (err, stack) => Center(child: Text('Error: $err')),
+              // userDoc can now be null
+              data: (userDoc) {
+                String firstName = '';
+                String lastName = '';
+                String email = 'Not Logged In';
+                String fullName = '';
+                String? profileImageUrl; // Variable to hold the URL
 
-                  SizedBox(height: verticalSpacingSmall),
+                // Check if userDoc is not null and exists before accessing data
+                if (userDoc != null && userDoc.exists) {
+                  final userData = userDoc.data();
+                  firstName = userData?['firstName'] as String? ?? '';
+                  lastName = userData?['lastName'] as String? ?? '';
+                  email = userData?['email'] as String? ?? 'No Email';
+                  // Read the profile image URL from Firestore data
+                  profileImageUrl = userData?['profileImageUrl'] as String?; // Uncomment and use this
+                }
+                fullName = '${firstName.trim()} ${lastName.trim()}'.trim();
 
-                  // ✅ Dynamic Email
-                  Text(
-                    user.email.isNotEmpty ? user.email : 'username@gmail.com',
-                    style: TextStyle(fontSize: emailFontSize, color: Colors.grey),
-                  ),
+                // Determine background image for CircleAvatar
+                ImageProvider backgroundImage;
+                if (profileImage != null) {
+                  // 1. Priority: Locally selected image
+                  backgroundImage = FileImage(profileImage);
+                } else if (profileImageUrl != null && profileImageUrl.isNotEmpty) {
+                  // 2. Priority: URL from Firestore
+                  backgroundImage = NetworkImage(profileImageUrl);
+                } else {
+                  // 3. Fallback: Default asset
+                  backgroundImage = const AssetImage('public/assets/images/profile_picture.png');
+                }
 
-                  SizedBox(height: verticalSpacingLarge),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                return Center(
+                  child: Column(
                     children: [
-                      RedButton(
-                        label: 'Edit Profile',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            _createFadeRoute(const BaseScaffold(), initialIndex: 4),
-                          );
-                        },
-                        width: buttonWidth,
-                        height: buttonHeight,
-                        fontSize: buttonFontSize,
+                      CircleAvatar(
+                        radius: avatarRadius,
+                        backgroundImage: backgroundImage, // Use the determined image provider
+                         onBackgroundImageError: (exception, stackTrace) {
+                           // Optional: Handle image loading errors
+                           print("Error loading profile image in hamburger: $exception");
+                         },
                       ),
-                      const SizedBox(width: 16),
-//                       RedButton(
-//   label: 'Logout',
-//   onPressed: () async {
-//     Navigator.pop(context); // Close the drawer
-//     final confirmed = await CustomPopup.show(
-//       context: context,
-//       title: 'Logout',
-//       message: 'Are you sure you want to logout?',
-//       buttonText: 'Confirm',
-//       cancelButtonText: 'Cancel',
-//       imagePath: 'public/assets/images/Alert.png',
-//     );
-
-//     if (confirmed == true) {
-//       // Perform logout logic
-//       await ref.read(authManagerProvider.notifier).logout();
-
-//       // Navigate to LoginPassword page
-//       Navigator.pushNamedAndRemoveUntil(
-//         context,
-//         '/login_password',
-//         (route) => false,
-//       );
-//     }
-//   },
-//   width: screenWidth * 0.3,
-//   height: 40,
-//   isWhiteButton: true,
-// ),
-
+                      SizedBox(height: verticalSpacingMedium),
+                      Text(
+                        fullName.isNotEmpty ? fullName : 'Guest', // Display name or 'Guest'
+                        style: TextStyle(fontSize: nameFontSize, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: verticalSpacingSmall),
+                      Text(
+                        email, // Display email or 'Not Logged In'
+                        style: TextStyle(fontSize: emailFontSize, color: Colors.grey),
+                      ),
+                      SizedBox(height: verticalSpacingLarge),
+                      // Only show Edit Profile button if logged in (userDoc is not null)
+                      if (userDoc != null && userDoc.exists)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RedButton(
+                              label: 'Edit Profile',
+                              onPressed: () {
+                                Navigator.pop(context); // Close drawer
+                                Navigator.pushReplacement(
+                                  context,
+                                  _createFadeRoute(const BaseScaffold(), initialIndex: 4),
+                                );
+                              },
+                              width: buttonWidth,
+                              height: buttonHeight,
+                              fontSize: buttonFontSize,
+                            ),
+                          ],
+                        ),
                     ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
             SizedBox(height: verticalSpacingXLarge),
             Expanded(
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  _buildMenuItem(
+                  // ... existing _buildMenuItem calls ...
+                   _buildMenuItem(
                     context,
                     icon: Icons.shopping_bag,
                     text: 'Products',
@@ -205,9 +214,8 @@ class HamburgerMenu extends ConsumerWidget {
     );
   }
 
-  
-
-  Route _createFadeRoute(Widget page, {int? initialIndex}) {
+  // ... existing _createFadeRoute and _buildMenuItem methods ...
+   Route _createFadeRoute(Widget page, {int? initialIndex}) {
     final Widget targetPage = (page is BaseScaffold && initialIndex != null)
         ? BaseScaffold(key: ValueKey('BaseScaffold_$initialIndex'), initialIndex: initialIndex)
         : page;

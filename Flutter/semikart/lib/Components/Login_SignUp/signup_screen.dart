@@ -51,7 +51,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     emailController.addListener(_checkAllFieldsFilled);
     mobileNumberController.addListener(_checkAllFieldsFilled);
     companyNameController.addListener(_checkAllFieldsFilled);
-    _passwordController.addListener(_checkAllFieldsFilled); // Check fields when password changes
+    _passwordController.addListener(() { // Add password validation listener here
+      _validatePassword(_passwordController.text);
+      _checkAllFieldsFilled();
+    });
     _confirmPasswordController.addListener(() { // Update UI on confirm password change
       setState(() {});
       _checkAllFieldsFilled(); // Also re-check overall fields
@@ -66,7 +69,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     emailController.removeListener(_checkAllFieldsFilled);
     mobileNumberController.removeListener(_checkAllFieldsFilled);
     companyNameController.removeListener(_checkAllFieldsFilled);
-    _passwordController.removeListener(_checkAllFieldsFilled); // Remove the correct listener
+    _passwordController.removeListener(() { _validatePassword(_passwordController.text); _checkAllFieldsFilled(); }); // Match listener removal
     _confirmPasswordController.removeListener(() { setState(() {}); _checkAllFieldsFilled(); }); // Match listener removal
 
     // Dispose controllers
@@ -149,10 +152,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final lastName = lastNameController.text.trim();
     final email = emailController.text.trim();
     final password = _passwordController.text.trim();
-    final displayName = "$firstName $lastName".trim();
+    final companyName = companyNameController.text.trim();
+    final phoneNumber = mobileNumberController.text.trim(); // Assuming this holds the complete number
 
     final authManager = ref.read(authManagerProvider.notifier);
-    await authManager.signUp(email, password, displayName);
+    // Call the updated signUp method with all the details
+    await authManager.signUp(
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      companyName: companyName,
+      phoneNumber: phoneNumber,
+    );
 
     if (!mounted) return;
     setState(() { _isLoading = false; });
