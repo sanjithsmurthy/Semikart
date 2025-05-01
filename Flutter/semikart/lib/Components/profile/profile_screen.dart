@@ -21,7 +21,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool isEditing = false;
-  // Removed _isLoading state variable
   bool _isSaving = false;
   String? _profileImageUrl;
   bool _controllersPopulated = false; // Flag to prevent overwriting edits
@@ -42,10 +41,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Data fetching is now handled by the StreamProvider in the build method
   }
-
-  // Removed _fetchUserData method
 
   @override
   void dispose() {
@@ -61,10 +57,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.dispose();
   }
 
-  // _sendResetLink remains the same
   Future<void> _sendResetLink() async {
-    // ...existing code...
-     final email = _emailController.text.trim();
+    final email = _emailController.text.trim();
     if (email.isEmpty) {
       CustomPopup.show(
         context: context,
@@ -105,10 +99,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  // _updateUserProfile remains the same, but add updatedAt timestamp
   Future<void> _updateUserProfile() async {
-    // ...existing code...
-     final user = ref.read(authManagerProvider).user;
+    final user = ref.read(authManagerProvider).user;
     if (user == null) {
       CustomPopup.show(context: context, title: 'Error', message: 'Not logged in.', buttonText: 'OK', imagePath: 'public/assets/images/Alert.png');
       return;
@@ -123,12 +115,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       'lastName': _lastNameController.text.trim(),
       'companyName': _companyNameController.text.trim(),
       'phoneNumber': _phoneController.text.trim(),
-      'altPhoneNumber': _altPhoneController.text.trim(), // Assuming field name
-      'gstin': _gstinController.text.trim(), // Assuming field name
-      'userType': _typeController.text.trim(), // Assuming field name
-      'leadSource': _sourceController.text.trim(), // Assuming field name
+      'altPhoneNumber': _altPhoneController.text.trim(),
+      'gstin': _gstinController.text.trim(),
+      'userType': _typeController.text.trim(),
+      'leadSource': _sourceController.text.trim(),
       'sendOrderEmails': _sendEmails,
-      // Add updatedAt timestamp for client-side updates too
       'updatedAt': FieldValue.serverTimestamp(),
     };
 
@@ -144,8 +135,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       );
       setState(() {
         isEditing = false;
-        _controllersPopulated = true; // Ensure flag is set after successful save
-      }); // Exit editing mode on success
+        _controllersPopulated = true;
+      });
     } catch (e) {
       CustomPopup.show(
         context: context,
@@ -163,15 +154,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  // _handleLogout remains the same
   Future<void> _handleLogout() async {
-    // ...existing code...
-     // --- Get the root navigator state BEFORE showing the dialog ---
-    // We store it early to ensure we have the correct navigator instance.
     final rootNavigator = Navigator.of(context, rootNavigator: true);
 
     final confirmed = await CustomPopup.show(
-      context: context, // Use the current context for the dialog
+      context: context,
       title: 'Logout',
       message: 'Are you sure you want to logout?',
       buttonText: 'Confirm',
@@ -182,128 +169,133 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     if (confirmed == true) {
       await ref.read(authManagerProvider.notifier).logout();
 
-      // --- Use the stored rootNavigator instance ---
-      // Check if the widget is still mounted before navigating
       if (mounted) {
-        // Use the rootNavigator instance we captured earlier
         rootNavigator.pushNamedAndRemoveUntil('/', (route) => false);
       }
     }
   }
 
-  // Helper to populate controllers safely
   void _populateControllers(DocumentSnapshot<Map<String, dynamic>>? userDoc) {
-     final authUser = ref.read(authManagerProvider).user;
-     String? currentUserId = authUser?.uid;
+    final authUser = ref.read(authManagerProvider).user;
+    String? currentUserId = authUser?.uid;
 
-     // Reset population flag if the user ID has changed (login/logout)
-     if (_lastProcessedUserId != currentUserId) {
-        _controllersPopulated = false;
-        _lastProcessedUserId = currentUserId;
-     }
+    if (_lastProcessedUserId != currentUserId) {
+      _controllersPopulated = false;
+      _lastProcessedUserId = currentUserId;
+    }
 
-     // Only populate if controllers haven't been populated for the current user yet
-     if (!_controllersPopulated && currentUserId != null) {
-        String firstName = '';
-        String lastName = '';
-        String companyName = '';
-        String email = authUser?.email ?? ''; // Default to auth email
-        String phone = '';
-        String altPhone = '';
-        String gstin = '';
-        String type = '';
-        String source = '';
-        bool sendEmails = true; // Default
-        String? imageUrl = authUser?.photoURL; // Default to auth photoURL
+    if (!_controllersPopulated && currentUserId != null) {
+      String firstName = '';
+      String lastName = '';
+      String companyName = '';
+      String email = authUser?.email ?? '';
+      String phone = '';
+      String altPhone = '';
+      String gstin = '';
+      String type = '';
+      String source = '';
+      bool sendEmails = true;
+      String? imageUrl = authUser?.photoURL;
 
-        if (userDoc != null && userDoc.exists) {
-           final data = userDoc.data()!;
-           firstName = data['firstName'] ?? '';
-           lastName = data['lastName'] ?? '';
-           companyName = data['companyName'] ?? '';
-           email = data['email'] ?? email; // Prefer Firestore email if available
-           phone = data['phoneNumber'] ?? '';
-           altPhone = data['altPhoneNumber'] ?? '';
-           gstin = data['gstin'] ?? '';
-           type = data['userType'] ?? '';
-           source = data['leadSource'] ?? '';
-           sendEmails = data['sendOrderEmails'] ?? true;
-           imageUrl = data['profileImageUrl'] as String? ?? imageUrl; // Prefer Firestore URL
-        } else if (authUser?.displayName != null) {
-           // Fallback to splitting displayName if Firestore doc doesn't exist yet
-           List<String> nameParts = authUser!.displayName!.split(' ');
-           if (nameParts.isNotEmpty) firstName = nameParts.first;
-           if (nameParts.length > 1) lastName = nameParts.sublist(1).join(' ');
-        }
+      if (userDoc != null && userDoc.exists) {
+        final data = userDoc.data()!;
+        firstName = data['firstName'] ?? '';
+        lastName = data['lastName'] ?? '';
+        companyName = data['companyName'] ?? '';
+        email = data['email'] ?? email;
+        phone = data['phoneNumber'] ?? '';
+        altPhone = data['altPhoneNumber'] ?? '';
+        gstin = data['gstin'] ?? '';
+        type = data['userType'] ?? '';
+        source = data['leadSource'] ?? '';
+        sendEmails = data['sendOrderEmails'] ?? true;
+        imageUrl = data['profileImageUrl'] as String? ?? imageUrl;
+      } else if (authUser?.displayName != null) {
+        List<String> nameParts = authUser!.displayName!.split(' ');
+        if (nameParts.isNotEmpty) firstName = nameParts.first;
+        if (nameParts.length > 1) lastName = nameParts.sublist(1).join(' ');
+      }
 
-        // Update controllers and state
-        _firstNameController.text = firstName;
-        _lastNameController.text = lastName;
-        _companyNameController.text = companyName;
-        _emailController.text = email;
-        _phoneController.text = phone;
-        _altPhoneController.text = altPhone;
-        _gstinController.text = gstin;
-        _typeController.text = type;
-        _sourceController.text = source;
-        _sendEmails = sendEmails;
-        _profileImageUrl = imageUrl;
+      _firstNameController.text = firstName;
+      _lastNameController.text = lastName;
+      _companyNameController.text = companyName;
+      _emailController.text = email;
+      _phoneController.text = phone;
+      _altPhoneController.text = altPhone;
+      _gstinController.text = gstin;
+      _typeController.text = type;
+      _sourceController.text = source;
+      _sendEmails = sendEmails;
+      _profileImageUrl = imageUrl;
 
-        _controllersPopulated = true; // Mark as populated for this user ID
+      _controllersPopulated = true;
 
-        // If doc didn't exist, start in editing mode
-        if (userDoc == null || !userDoc.exists) {
-           isEditing = true;
-        }
-     } else if (currentUserId == null) {
-        // Clear controllers if logged out
-        _firstNameController.clear();
-        _lastNameController.clear();
-        _companyNameController.clear();
-        _emailController.clear();
-        _phoneController.clear();
-        _altPhoneController.clear();
-        _gstinController.clear();
-        _typeController.clear();
-        _sourceController.clear();
-        _sendEmails = true;
-        _profileImageUrl = null;
-        _controllersPopulated = false; // Reset flag
-        _lastProcessedUserId = null;
-     }
+      if (userDoc == null || !userDoc.exists) {
+        isEditing = true;
+      }
+    } else if (currentUserId == null) {
+      _firstNameController.clear();
+      _lastNameController.clear();
+      _companyNameController.clear();
+      _emailController.clear();
+      _phoneController.clear();
+      _altPhoneController.clear();
+      _gstinController.clear();
+      _typeController.clear();
+      _sourceController.clear();
+      _sendEmails = true;
+      _profileImageUrl = null;
+      _controllersPopulated = false;
+      _lastProcessedUserId = null;
+    }
   }
 
+  Future<void> _uploadProfileImage(File image) async {
+    try {
+      final downloadUrl = "https://example.com/path/to/uploaded/image.jpg";
+
+      final user = ref.read(authManagerProvider).user;
+      if (user != null) {
+        await ref.read(userServiceProvider).updateUserProfile(user.uid, {
+          'profileImageUrl': downloadUrl,
+        });
+
+        ref.read(profileImageProvider.notifier).state = image;
+
+        setState(() {
+          _profileImageUrl = downloadUrl;
+        });
+
+        log("Profile image updated successfully.");
+      }
+    } catch (e) {
+      log("Error uploading profile image: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final verticalSpacing = screenWidth * 0.03;
-    final userDocAsyncValue = ref.watch(userDocumentProvider); // Watch the stream
+    final userDocAsyncValue = ref.watch(userDocumentProvider);
 
     return Scaffold(
       body: SafeArea(
-        // Use AsyncValue.when to handle stream states
         child: userDocAsyncValue.when(
           loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFA51414))),
           error: (err, stack) {
-             log("Error loading user document: $err");
-             // Still try to build UI with potential fallback data if controllers were populated before error
-             // Or show a dedicated error UI
-             return Center(child: Text('Error loading profile: $err'));
+            log("Error loading user document: $err");
+            return Center(child: Text('Error loading profile: $err'));
           },
           data: (userDoc) {
-            // Use a post-frame callback to populate controllers AFTER the build phase
-            // This avoids calling setState during build and ensures context is available
             WidgetsBinding.instance.addPostFrameCallback((_) {
-               if (mounted) {
-                  setState(() {
-                     _populateControllers(userDoc);
-                  });
-               }
+              if (mounted) {
+                setState(() {
+                  _populateControllers(userDoc);
+                });
+              }
             });
 
-            // --- Build UI ---
-            // This part uses the controller values which are populated by _populateControllers
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: verticalSpacing),
               child: Column(
@@ -313,14 +305,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     child: ProfilePicture(
                       initialImageUrl: _profileImageUrl,
                       onImageSelected: (File image) {
-                        ref.read(profileImageProvider.notifier).state = image;
-                        log("TODO: Upload image and update profileImageUrl in Firestore");
-                        // Example:
-                        // 1. Upload `image` -> get downloadUrl
-                        // 2. final user = ref.read(authManagerProvider).user;
-                        // 3. if (user != null) {
-                        // 4.   ref.read(userServiceProvider).updateUserProfile(user.uid, {'profileImageUrl': downloadUrl});
-                        // 5. }
+                        _uploadProfileImage(image);
                       },
                     ),
                   ),
@@ -357,36 +342,35 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       _isSaving
                           ? const SizedBox(
-                          width: 48, height: 48,
-                          child: Center(child: CircularProgressIndicator(strokeWidth: 3, color: Color(0xFFA51414)))
-                      )
+                              width: 48,
+                              height: 48,
+                              child: Center(child: CircularProgressIndicator(strokeWidth: 3, color: Color(0xFFA51414))))
                           : IconButton(
-                        icon: Icon(
-                          isEditing ? Icons.check : Icons.edit,
-                          color: const Color(0xFFA51414),
-                          size: screenWidth * 0.07,
-                        ),
-                        onPressed: () {
-                          if (isEditing) {
-                            _updateUserProfile();
-                          } else {
-                            setState(() {
-                              isEditing = true;
-                            });
-                          }
-                        },
-                      ),
+                              icon: Icon(
+                                isEditing ? Icons.check : Icons.edit,
+                                color: const Color(0xFFA51414),
+                                size: screenWidth * 0.07,
+                              ),
+                              onPressed: () {
+                                if (isEditing) {
+                                  _updateUserProfile();
+                                } else {
+                                  setState(() {
+                                    isEditing = true;
+                                  });
+                                }
+                              },
+                            ),
                     ],
                   ),
                   SizedBox(height: verticalSpacing),
-                  // --- Text Fields ---
                   CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.13, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
                   CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.13, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
                   CustomTextField(controller: _companyNameController, label: 'Company Name', height: screenWidth * 0.13, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _emailController, label: 'Your Email', height: screenWidth * 0.13, readOnly: true), // Email always read-only
+                  CustomTextField(controller: _emailController, label: 'Your Email', height: screenWidth * 0.13, readOnly: true),
                   SizedBox(height: verticalSpacing),
                   Row(
                     children: [
@@ -406,7 +390,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ],
                   ),
                   SizedBox(height: verticalSpacing * 1.5),
-                  // --- Radio Buttons ---
                   Row(
                     children: [
                       const Expanded(child: Text("Send Order Update Emails", style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFFA51414)))),
@@ -414,12 +397,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         child: TwoRadioButtons(
                           forceHorizontalLayout: true,
                           options: const ['Yes', 'No'],
-                          // Use a Key based on the value to force rebuild when _sendEmails changes
                           key: ValueKey(_sendEmails),
                           initialSelection: _sendEmails ? 0 : 1,
                           onSelectionChanged: isEditing
-                              ? (value) { setState(() { _sendEmails = (value == 0); }); }
-                              : (value) {}, // Provide an empty function when not editing
+                              ? (value) {
+                                  setState(() {
+                                    _sendEmails = (value == 0);
+                                  });
+                                }
+                              : (value) {},
                         ),
                       ),
                     ],
