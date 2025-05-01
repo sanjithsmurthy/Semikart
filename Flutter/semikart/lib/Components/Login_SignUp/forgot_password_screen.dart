@@ -42,11 +42,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Password reset link sent to $email.'),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFFA51414),
+          duration: Duration(seconds: 3),
         ),
       );
-      // Optionally navigate back after a delay or show a success message screen
-      // Navigator.pop(context);
+      // Navigate back to the login screen after showing the snackbar
+      Navigator.pop(context); 
     } else {
       // Error message is typically shown by the AuthWrapper listener
       // but you could show a specific one here if needed.
@@ -65,81 +66,74 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     // ... (Keep SystemChrome and screen dimension calculations) ...
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final double titleTop = 0.15;
-    final double instructionTop = 0.22;
-    final double emailInputTop = 0.32;
-    final double buttonTop = 0.42;
+    // Removed unused position variables
 
     // Watch auth state to potentially disable elements during other auth operations
     final authState = ref.watch(authManagerProvider);
     final isAuthenticating = authState.status == AuthStatus.unknown || _isLoading;
 
 
-    return Scaffold(
+    return Scaffold( // Wrap with Scaffold
       backgroundColor: Colors.white,
+      appBar: AppBar( // Add AppBar
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFFA51414)), // Back icon
+          onPressed: () => Navigator.of(context).pop(), // Navigate back
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: SizedBox(
-            height: screenHeight * (buttonTop + 0.15),
-            width: screenWidth,
-            child: Stack(
+          child: Padding( // Use Padding instead of SizedBox + Stack
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            child: Column( // Use Column for layout
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- Positioned Forgot Password Title ---
-                Positioned(
-                  left: screenWidth * 0.05,
-                  top: screenHeight * titleTop,
-                  child: Text(
-                    'Forgot Password', // Add text
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.055,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.left,
+                 SizedBox(height: screenHeight * 0.05), // Adjust spacing as needed
+
+                // --- Forgot Password Title ---
+                Text(
+                  'Forgot Password',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.055,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
+                SizedBox(height: screenHeight * 0.02), // Spacing
 
-                // --- Positioned Instruction Text ---
-                Positioned(
-                  left: screenWidth * 0.05,
-                  right: screenWidth * 0.05,
-                  top: screenHeight * instructionTop,
-                  child: Text(
-                    'Enter the email address associated with your account and we\'ll send you a link to reset your password.', // Add text
-                     style: TextStyle(
-                       fontSize: screenWidth * 0.038,
-                       color: Colors.grey[700],
-                     ),
-                    textAlign: TextAlign.left,
-                  ),
+                // --- Instruction Text ---
+                Text(
+                  'Enter the email address associated with your account and we\'ll send you a link to reset your password.',
+                   style: TextStyle(
+                     fontSize: screenWidth * 0.038,
+                     color: Colors.grey[700],
+                   ),
                 ),
+                SizedBox(height: screenHeight * 0.05), // Spacing
 
-                // --- Positioned Email Input Field ---
-                Positioned(
-                  left: screenWidth * 0.05,
-                  right: screenWidth * 0.05,
-                  top: screenHeight * emailInputTop,
-                  child: CustomTextField(
-                    controller: emailController, // Provide controller
-                    label: "Email", // Provide label
-                    height: screenHeight * 0.06, // Keep height if needed
-                  ),
+                // --- Email Input Field ---
+                CustomTextField(
+                  controller: emailController,
+                  label: "Email",
+                  height: screenHeight * 0.06,
+                  keyboardType: TextInputType.emailAddress, // Set keyboard type
                 ),
+                SizedBox(height: screenHeight * 0.05), // Spacing
 
-                // --- Positioned Send Reset Link Button ---
-                Positioned(
-                  left: screenWidth * 0.05,
-                  right: screenWidth * 0.05,
-                  top: screenHeight * buttonTop,
+                // --- Send Reset Link Button ---
+                Center( // Center the button
                   child: isAuthenticating
-                      ? Center(child: CircularProgressIndicator(color: Color(0xFFA51414)))
+                      ? const CircularProgressIndicator(color: Color(0xFFA51414))
                       : RedButton(
                           label: "Send Reset Link",
                           width: screenWidth * 0.9, // Ensure button spans width
                           height: screenHeight * 0.06,
-                          onPressed: _sendResetLink, // Call the Firebase reset function
+                          onPressed: _sendResetLink,
                         ),
                 ),
+                 SizedBox(height: screenHeight * 0.05), // Bottom padding
               ],
             ),
           ),
