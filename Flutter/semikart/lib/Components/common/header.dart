@@ -129,7 +129,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                         onTap: onLogoTap,
                         child: Image.asset(
                           'public/assets/images/semikart_logo_medium.png',
-                          height: screenHeight * 0.025, // 25% of screen height
+                          height: screenHeight * 0.026, // 25% of screen height
                           fit: BoxFit.contain,
                         ),
                       ),
