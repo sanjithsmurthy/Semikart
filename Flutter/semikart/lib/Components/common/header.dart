@@ -129,7 +129,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                         onTap: onLogoTap,
                         child: Image.asset(
                           'public/assets/images/semikart_logo_medium.png',
-                          height: screenHeight * 0.025, // 25% of screen height
+                          height: screenHeight * 0.026, // 25% of screen height
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -140,7 +140,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                     children: [
                       IconButton(
                         icon: FaIcon(FontAwesomeIcons.whatsapp),
-                        iconSize: screenWidth * 0.08, // 5% of screen width
+                        iconSize: screenWidth * 0.077, // 5% of screen width
                         onPressed: () async {
                           final Uri whatsappUrl = Uri.parse('https://wa.me/919113999367');
                           if (await canLaunchUrl(whatsappUrl)) {
