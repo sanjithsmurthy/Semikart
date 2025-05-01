@@ -46,6 +46,59 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.dispose();
   }
 
+  // Removed all duplicate _sendResetLink methods to keep only one correct implementation
+
+  // Removed all duplicate _sendResetLink methods to keep only one correct implementation
+
+  // Removed duplicate _sendResetLink methods to keep only one correct implementation
+
+  // Removed duplicate _sendResetLink methods to keep only one correct implementation
+
+  // Removed duplicate _sendResetLink methods to keep only one correct implementation
+
+
+  Future<void> _sendResetLink() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      CustomPopup.show(
+        context: context,
+        title: 'Error',
+        message: 'Please enter your email address.',
+        buttonText: 'OK',
+        imagePath: 'public/assets/images/Alert.png',
+      );
+      return;
+    }
+    try {
+      final success = await ref.read(authManagerProvider.notifier).sendPasswordReset(email);
+      if (success) {
+        CustomPopup.show(
+          context: context,
+          title: 'Success',
+          message: 'Password reset link sent to $email',
+          buttonText: 'OK',
+          imagePath: 'public/assets/images/checksucccess.png',
+        );
+      } else {
+        CustomPopup.show(
+          context: context,
+          title: 'Error',
+          message: 'Failed to send reset link. Please try again.',
+          buttonText: 'OK',
+          imagePath: 'public/assets/images/Alert.png',
+        );
+      }
+    } catch (e) {
+      CustomPopup.show(
+        context: context,
+        title: 'Error',
+        message: 'Failed to send reset link. Please try again.',
+        buttonText: 'OK',
+        imagePath: 'public/assets/images/Alert.png',
+      );
+    }
+  }
+
   void _updateUserProfileProvider() {
     ref.read(userProfileProvider.notifier).state = UserProfile(
       firstName: _firstNameController.text.trim(),
@@ -106,12 +159,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     child: RedButton(
                       label: 'Change Password',
                       height: screenWidth * 0.12,
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => ResetPasswordScreen()),
-                        );
-                      },
+                      onPressed: _sendResetLink,
                     ),
                   ),
                   SizedBox(width: screenWidth * 0.03),
