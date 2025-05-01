@@ -13,7 +13,7 @@ void main() async {
 
   // Initialize Firebase
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform, // Ensure this is configured correctly
   );
 
   // Lock Orientation
@@ -55,21 +55,14 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFFA51414),
         scaffoldBackgroundColor: Colors.white,
-        // Define text selection theme globally if desired
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Color(0xFFA51414),
           selectionColor: Color(0xAAEFA0A0), // Lighter red for selection
           selectionHandleColor: Color(0xFFA51414),
         ),
       ),
-      home: const AuthWrapper(), // AuthWrapper remains the home widget
+      home: const AuthWrapper(),
       debugShowCheckedModeBanner: false,
-      // Define routes if needed for named navigation
-      // routes: {
-      //   '/': (context) => const AuthWrapper(),
-      //   '/login': (context) => const LoginPasswordNewScreen(),
-      //   '/home': (context) => BaseScaffold(initialIndex: 0),
-      // },
     );
   }
 }
