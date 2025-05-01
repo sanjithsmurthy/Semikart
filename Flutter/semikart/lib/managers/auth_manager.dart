@@ -43,6 +43,25 @@ class AuthService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
 
+  // --- ActionCodeSettings (Configure this carefully!) ---
+  // You MUST configure either Firebase Dynamic Links or Custom URL Schemes
+  // for this to work correctly. Replace placeholders with your actual config.
+  ActionCodeSettings _getActionCodeSettings() {
+    return ActionCodeSettings(
+      // URL you want to redirect back to. The domain (e.g., semikart.page.link)
+      // MUST be whitelisted in the Firebase Console -> Authentication -> Settings -> Authorized domains.
+      url: 'https://semikart.page.link/finishSignUp', // Example using Dynamic Links
+      // This must be true for email link sign-in on mobile apps.
+      handleCodeInApp: true,
+      iOSBundleId: 'com.example.semikart', // Replace with your iOS bundle ID
+      androidPackageName: 'com.example.semikart', // Replace with your Android package name
+      // Install the Android app if it's not already installed?
+      androidInstallApp: true,
+      // Minimum Android version?
+      androidMinimumVersion: '12',
+    );
+  }
+
   Future<User?> createUserWithEmailAndPassword(String email, String password) async {
     try {
       final cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -113,6 +132,52 @@ class AuthService {
       rethrow;
     }
   }
+
+  // --- Email Link Sign-in Methods ---
+  Future<void> sendSignInLinkToEmail(String email) async {
+    var acs = _getActionCodeSettings();
+    try {
+      await _auth.sendSignInLinkToEmail(email: email, actionCodeSettings: acs);
+      log("Sign-in link sent to $email");
+      // IMPORTANT: You need to save the email locally (e.g., using SharedPreferences)
+      // because you'll need it again when the user clicks the link and returns to the app.
+      // Example: await _saveEmailForSignIn(email);
+    } on FirebaseAuthException catch (e) {
+      log("Error sending sign-in link: ${e.code} - ${e.message}");
+      rethrow;
+    } catch (e) {
+      log("An unexpected error occurred sending the sign-in link: $e");
+      rethrow;
+    }
+  }
+
+  // Check if an incoming link is a sign-in link
+  bool isSignInWithEmailLink(String link) {
+    return _auth.isSignInWithEmailLink(link);
+  }
+
+  // Sign in with the email link
+  Future<User?> signInWithEmailLink(String email, String link) async {
+    try {
+      final userCredential = await _auth.signInWithEmailLink(email: email, emailLink: link);
+      log("Successfully signed in with email link for: ${userCredential.user?.email}");
+      // IMPORTANT: Clear the saved email after successful sign-in.
+      // Example: await _clearSavedEmail();
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      log("Error signing in with email link: ${e.code} - ${e.message}");
+      rethrow;
+    } catch (e) {
+      log("An unexpected error occurred signing in with the email link: $e");
+      rethrow;
+    }
+  }
+
+  // --- Placeholder for saving/retrieving email ---
+  // You'll need to implement this using a storage solution like shared_preferences
+  // Future<void> _saveEmailForSignIn(String email) async { /* ... */ }
+  // Future<String?> _getSavedEmail() async { /* ... */ }
+  // Future<void> _clearSavedEmail() async { /* ... */ }
 
   // --- Password Reset ---
   Future<void> sendPasswordResetEmail(String email) async {
