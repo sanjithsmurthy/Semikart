@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
@@ -128,7 +129,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                         onTap: onLogoTap,
                         child: Image.asset(
                           'public/assets/images/semikart_logo_medium.png',
-                          height: screenHeight * 0.025, // 25% of screen height
+                          height: screenHeight * 0.026, // 25% of screen height
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -138,8 +139,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Image.asset('public/assets/images/whatsapp_icon.png'),
-                        iconSize: screenWidth * 0.05, // 5% of screen width
+                        icon: FaIcon(FontAwesomeIcons.whatsapp),
+                        iconSize: screenWidth * 0.077, // 5% of screen width
                         onPressed: () async {
                           final Uri whatsappUrl = Uri.parse('https://wa.me/919113999367');
                           if (await canLaunchUrl(whatsappUrl)) {
