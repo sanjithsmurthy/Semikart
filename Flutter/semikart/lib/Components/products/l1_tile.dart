@@ -40,7 +40,7 @@ class L1Tile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center, // Center items vertically
           mainAxisSize: MainAxisSize.min, // Take minimum space needed
           children: [
-            Image.asset(
+            Image.network(
               iconPath,
               width: dynamicIconSize,
               height: dynamicIconSize,
