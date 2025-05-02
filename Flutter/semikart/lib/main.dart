@@ -5,6 +5,7 @@ import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:Semikart/firebase_options.dart'; // Import Firebase Core
+import 'firebase/firestore_setup.dart'; // Import the FirestoreSetup helper
 import 'base_scaffold.dart';
 import 'managers/auth_manager.dart'; // Import the new AuthManager
 
@@ -15,6 +16,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, // Ensure this is configured correctly
   );
+
+  // Run the setup code once during development
+  // Uncomment the line below, run the app once, then comment it out again
+  // This prevents creating duplicate data on every app launch
+  // await FirestoreSetup().setupDatabase();
 
   // Lock Orientation
   SystemChrome.setPreferredOrientations([

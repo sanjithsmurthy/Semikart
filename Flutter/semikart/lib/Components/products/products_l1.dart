@@ -33,10 +33,20 @@ class ProductsL1Page extends StatelessWidget {
 
               // Map Firestore documents to a list of categories
               final categories = snapshot.data!.docs.map((doc) {
-                final data = doc.data() as Map<String, dynamic>;
+                final data = doc.data() as Map<String, dynamic>?; // Explicitly cast to Map<String, dynamic>
+                if (data == null) {
+                  return {
+                    "id": doc.id,
+                    "name": "Unknown", // Default to "Unknown" if data is null
+                    "icon": "", // Default to an empty string if icon is null
+                    "subcollection": "", // Default to an empty string if subcollection is null
+                  };
+                }
                 return {
-                  "name": data["name"] ?? "",
-                  "icon": data["icon"] ?? "",
+                  "id": doc.id,
+                  "name": data["name"] ?? "Unknown", // Default to "Unknown" if name is null
+                  "icon": data["icon"] ?? "", // Default to an empty string if icon is null
+                  "subcollection": data["subcollection"] ?? "", // Default to an empty string if subcollection is null
                 };
               }).toList();
 
@@ -64,13 +74,25 @@ class ProductsL1Page extends StatelessWidget {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).pushNamed('l2');
+                                        Navigator.of(context).pushNamed(
+                                          'l2',
+                                          arguments: {
+                                            "docId": categories[firstIndex]["id"],
+                                            "subcollection": categories[firstIndex]["subcollection"],
+                                          },
+                                        );
                                       },
                                       child: L1Tile(
                                         iconPath: categories[firstIndex]["icon"]!,
                                         text: categories[firstIndex]["name"]!,
                                         onTap: () {
-                                          Navigator.of(context).pushNamed('l2');
+                                          Navigator.of(context).pushNamed(
+                                            'l2',
+                                            arguments: {
+                                              "docId": categories[firstIndex]["id"],
+                                              "subcollection": categories[firstIndex]["subcollection"],
+                                            },
+                                          );
                                         },
                                       ),
                                     ),
@@ -79,11 +101,26 @@ class ProductsL1Page extends StatelessWidget {
                                   Expanded(
                                     child: secondIndex < categories.length
                                         ? GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pushNamed(
+                                                'l2',
+                                                arguments: {
+                                                  "docId": categories[secondIndex]["id"],
+                                                  "subcollection": categories[secondIndex]["subcollection"],
+                                                },
+                                              );
+                                            },
                                             child: L1Tile(
                                               iconPath: categories[secondIndex]["icon"]!,
                                               text: categories[secondIndex]["name"]!,
                                               onTap: () {
-                                                Navigator.of(context).pushNamed('l2');
+                                                Navigator.of(context).pushNamed(
+                                                  'l2',
+                                                  arguments: {
+                                                    "docId": categories[secondIndex]["id"],
+                                                    "subcollection": categories[secondIndex]["subcollection"],
+                                                  },
+                                                );
                                               },
                                             ),
                                           )

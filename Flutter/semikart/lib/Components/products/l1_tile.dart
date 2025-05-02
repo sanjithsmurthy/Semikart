@@ -41,12 +41,11 @@ class L1Tile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min, // Take minimum space needed
           children: [
             Image.network(
-              iconPath,
+              iconPath.isNotEmpty ? iconPath : 'https://via.placeholder.com/150', // Placeholder image
               width: dynamicIconSize,
               height: dynamicIconSize,
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) {
-                // Fallback widget in case the image fails to load
                 return Icon(
                   Icons.broken_image,
                   size: dynamicIconSize,
