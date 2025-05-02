@@ -10,7 +10,7 @@ import 'Components/products/products_l2.dart';
 import 'Components/products/products_l3.dart';
 import 'Components/products/products_l4.dart'; // Import products_l4.dart
 import 'Components/products/product_details_page.dart';
-import 'Components/products/l1_tiles_row.dart'; // Import L1TilesRow
+import 'Components/products/l1_tiles_row_r.dart'; // Import L1TilesRow
 
 // Cart
 import 'Components/cart/cart_page.dart';
@@ -83,32 +83,59 @@ class AppNavigator {
         },
       );
 
-  static Widget productsNavigator() => Navigator(
-        key: productsNavKey,
-        initialRoute: 'l1',
-        onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case 'l2':
-              return MaterialPageRoute(builder: (_) => const ProductsL2Page());
-            case 'l3':
-              return MaterialPageRoute(builder: (_) => const ProductsL3Page());
-            case 'l4':
-              // Link ProductListScreenExample from products_l4.dart
-              return MaterialPageRoute(builder: (_) => ProductListScreenExample());
-            case 'product_details':
-              return MaterialPageRoute(builder: (_) => ProductDetailsContent());
-            case 'l1':
-            default:
-              return MaterialPageRoute(
-                // builder: (_) => Productsonerow(
-                //   category1: {"icon": "assets/icons/category1.png", "name": "L1 Category 1"},
-                //   category2: {"icon": "assets/icons/category2.png", "name": "L1 Category 2"},
-                // ),
-                builder: (_) => const ProductsL1Page(),
-              );
-          }
-        },
-      );
+  static Widget productsNavigator() {
+    print("[AppNavigator] Building productsNavigator Widget function called"); // Log function call
+    // Wrap in Builder to get context for logging inside build phase
+    return Builder(
+      builder: (context) {
+        // *** Add Logging inside Builder ***
+        print("[AppNavigator] productsNavigator Builder: Creating Navigator widget with key ${productsNavKey} and onGenerateRoute: _generateProductRoutes");
+        return Navigator(
+          key: productsNavKey,
+          initialRoute: '/',
+          onGenerateRoute: _generateProductRoutes,
+        );
+      }
+    );
+  }
+
+  static Route<dynamic>? _generateProductRoutes(RouteSettings settings) {
+    // *** Logging already added here ***
+    print("[AppNavigator] _generateProductRoutes called for route: '${settings.name}'");
+    print("[AppNavigator] Arguments received: ${settings.arguments}");
+
+    Widget page;
+    switch (settings.name) {
+      case '/':
+        print("[AppNavigator] Generating route for '/' -> ProductsL1Page"); // Log route generation
+        page = const ProductsL1Page(); // Assuming this is the L1 page
+        break;
+      case 'l2':
+        print("[AppNavigator] Generating route for 'l2' -> ProductsL2Page"); // Log route generation
+        // Ensure arguments are passed ONLY IF they exist in settings
+        page = const ProductsL2Page();
+        // MaterialPageRoute automatically forwards settings.arguments if settings is passed
+        break;
+      case 'l3':
+        print("[AppNavigator] Generating route for 'l3' -> Placeholder"); // Log route generation
+        // Placeholder for L3 - Add your L3 page here
+        page = Scaffold(
+          appBar: AppBar(title: const Text("L3 Page (Placeholder)")),
+          body: Center(child: Text("L3 Arguments: ${settings.arguments}")),
+        );
+        break;
+      // Add other product-related routes here
+      default:
+       print("[AppNavigator] Generating route for unknown route: ${settings.name}"); // Log route generation
+        page = Scaffold(
+          body: Center(child: Text('Unknown product route: ${settings.name}')),
+        );
+    }
+
+    // Pass settings to MaterialPageRoute to forward arguments
+    print("[AppNavigator] Returning MaterialPageRoute for ${settings.name}"); // Log return
+    return MaterialPageRoute(builder: (_) => page, settings: settings);
+  }
 
   static Widget searchNavigator() => Navigator(
         key: searchNavKey,

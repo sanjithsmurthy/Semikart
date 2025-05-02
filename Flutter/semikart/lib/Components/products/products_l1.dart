@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import '../../app_navigator.dart'; // Import AppNavigator to access the key
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
 import 'l1_tile.dart'; // Import the L1Tile widget
 
@@ -39,14 +40,12 @@ class ProductsL1Page extends StatelessWidget {
                     "id": doc.id,
                     "name": "Unknown", // Default to "Unknown" if data is null
                     "icon": "", // Default to an empty string if icon is null
-                    "subcollection": "", // Default to an empty string if subcollection is null
                   };
                 }
                 return {
                   "id": doc.id,
                   "name": data["name"] ?? "Unknown", // Default to "Unknown" if name is null
                   "icon": data["icon"] ?? "", // Default to an empty string if icon is null
-                  "subcollection": data["subcollection"] ?? "", // Default to an empty string if subcollection is null
                 };
               }).toList();
 
@@ -74,26 +73,25 @@ class ProductsL1Page extends StatelessWidget {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).pushNamed(
-                                          'l2',
-                                          arguments: {
-                                            "docId": categories[firstIndex]["id"],
-                                            "subcollection": categories[firstIndex]["subcollection"],
-                                          },
-                                        );
+                                        // *** Add Logging ***
+                                        print("[ProductsL1Page] Tapped item: ${categories[firstIndex]["name"]}");
+                                        final navigatorState = AppNavigator.productsNavKey.currentState;
+                                        if (navigatorState == null) {
+                                          print("[ProductsL1Page] Error: productsNavKey.currentState is NULL!");
+                                        } else {
+                                          print("[ProductsL1Page] productsNavKey.currentState is available. Pushing 'l2'...");
+                                          navigatorState.pushNamed(
+                                            'l2',
+                                            arguments: {
+                                              "l1DocId": categories[firstIndex]["id"],
+                                              "l1Name": categories[firstIndex]["name"],
+                                            },
+                                          );
+                                        }
                                       },
                                       child: L1Tile(
                                         iconPath: categories[firstIndex]["icon"]!,
                                         text: categories[firstIndex]["name"]!,
-                                        onTap: () {
-                                          Navigator.of(context).pushNamed(
-                                            'l2',
-                                            arguments: {
-                                              "docId": categories[firstIndex]["id"],
-                                              "subcollection": categories[firstIndex]["subcollection"],
-                                            },
-                                          );
-                                        },
                                       ),
                                     ),
                                   ),
@@ -102,26 +100,25 @@ class ProductsL1Page extends StatelessWidget {
                                     child: secondIndex < categories.length
                                         ? GestureDetector(
                                             onTap: () {
-                                              Navigator.of(context).pushNamed(
-                                                'l2',
-                                                arguments: {
-                                                  "docId": categories[secondIndex]["id"],
-                                                  "subcollection": categories[secondIndex]["subcollection"],
-                                                },
-                                              );
+                                              // *** Add Logging ***
+                                              print("[ProductsL1Page] Tapped item: ${categories[secondIndex]["name"]}");
+                                              final navigatorState = AppNavigator.productsNavKey.currentState;
+                                              if (navigatorState == null) {
+                                                print("[ProductsL1Page] Error: productsNavKey.currentState is NULL!");
+                                              } else {
+                                                print("[ProductsL1Page] productsNavKey.currentState is available. Pushing 'l2'...");
+                                                navigatorState.pushNamed(
+                                                  'l2',
+                                                  arguments: {
+                                                    "l1DocId": categories[secondIndex]["id"],
+                                                    "l1Name": categories[secondIndex]["name"],
+                                                  },
+                                                );
+                                              }
                                             },
                                             child: L1Tile(
                                               iconPath: categories[secondIndex]["icon"]!,
                                               text: categories[secondIndex]["name"]!,
-                                              onTap: () {
-                                                Navigator.of(context).pushNamed(
-                                                  'l2',
-                                                  arguments: {
-                                                    "docId": categories[secondIndex]["id"],
-                                                    "subcollection": categories[secondIndex]["subcollection"],
-                                                  },
-                                                );
-                                              },
                                             ),
                                           )
                                         : const SizedBox.shrink(),
