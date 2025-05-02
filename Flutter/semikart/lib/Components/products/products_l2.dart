@@ -1,7 +1,7 @@
 // products_l2.dart - Full working solution
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'l2_page_redbox.dart';
+import 'l2_tile.dart';
 
 class ProductsL2Page extends StatefulWidget {
   const ProductsL2Page({super.key});
