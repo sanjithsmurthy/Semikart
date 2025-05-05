@@ -19,11 +19,12 @@ class _OrderHistoryState extends State<OrderHistory> {
   DateTime? fromDate;
   DateTime? toDate;
 
-  Future<void> _selectDate(BuildContext context, bool isFromDate) async {
+  Future<void> _selectDate(BuildContext context, bool isFromDate, {DateTime? firstDate}) async {
+    final DateTime initialDate = isFromDate ? (fromDate ?? DateTime.now()) : (toDate ?? DateTime.now());
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      initialDate: initialDate,
+      firstDate: firstDate ?? DateTime(2000),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -44,6 +45,9 @@ class _OrderHistoryState extends State<OrderHistory> {
       setState(() {
         if (isFromDate) {
           fromDate = pickedDate;
+          if (toDate != null && toDate!.isBefore(pickedDate)) {
+            toDate = null; // Reset toDate if it is before new fromDate
+          }
         } else {
           toDate = pickedDate;
         }
@@ -146,7 +150,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                       SizedBox(
                         width: containerWidth / 2,
                         child: InkWell(
-                          onTap: () => _selectDate(context, false),
+                          onTap: fromDate == null ? null : () => _selectDate(context, false, firstDate: fromDate),
                           child: InputDecorator(
                             decoration: InputDecoration(
                               hintText: 'DD/MM/YYYY',
