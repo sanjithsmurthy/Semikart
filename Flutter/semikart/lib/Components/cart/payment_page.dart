@@ -194,22 +194,23 @@ class _EditPageState extends State<EditPage> {
                       city == null || city!.isEmpty ||
                       state == null || state!.isEmpty ||
                       phone == null || phone!.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Missing Information'),
-                        content: const Text('Please fill all mandatory billing address fields'),
-                        actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text(
-                            'OK',
-                            style: TextStyle(color: Color(0xFFA51414)),
-                          ),
-                        ),
-                        ],
-                      ),
-                    );
+showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    backgroundColor: Colors.white,
+    title: const Text('Missing Information'),
+    content: const Text('Please fill all mandatory billing address fields'),
+    actions: [
+    TextButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text(
+        'OK',
+        style: TextStyle(color: Color(0xFFA51414)),
+      ),
+    ),
+    ],
+  ),
+);
                     return;
                   }
 
