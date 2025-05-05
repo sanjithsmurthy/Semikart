@@ -19,11 +19,12 @@ class _OrderHistoryState extends State<OrderHistory> {
   DateTime? fromDate;
   DateTime? toDate;
 
-  Future<void> _selectDate(BuildContext context, bool isFromDate) async {
+  Future<void> _selectDate(BuildContext context, bool isFromDate, {DateTime? firstDate}) async {
+    final DateTime initialDate = isFromDate ? (fromDate ?? DateTime.now()) : (toDate ?? DateTime.now());
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      initialDate: initialDate,
+      firstDate: firstDate ?? DateTime(2000),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -44,6 +45,9 @@ class _OrderHistoryState extends State<OrderHistory> {
       setState(() {
         if (isFromDate) {
           fromDate = pickedDate;
+          if (toDate != null && toDate!.isBefore(pickedDate)) {
+            toDate = null; // Reset toDate if it is before new fromDate
+          }
         } else {
           toDate = pickedDate;
         }
@@ -146,7 +150,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                       SizedBox(
                         width: containerWidth / 2,
                         child: InkWell(
-                          onTap: () => _selectDate(context, false),
+                          onTap: fromDate == null ? null : () => _selectDate(context, false, firstDate: fromDate),
                           child: InputDecorator(
                             decoration: InputDecoration(
                               hintText: 'DD/MM/YYYY',
@@ -170,38 +174,66 @@ class _OrderHistoryState extends State<OrderHistory> {
               SizedBox(height: screenHeight * 0.02),
               Text('Order Status', style: TextStyle(fontSize: fontSize)),
               SizedBox(height: screenHeight * 0.005),
-              DropdownButtonFormField<String>(
+              Theme(
+                data: Theme.of(context).copyWith(
+                  primaryColor: const Color(0xFFA51414),
+                  colorScheme: Theme.of(context).colorScheme.copyWith(
+                        primary: const Color(0xFFA51414),
+                      ),
+                ),
+                child: DropdownButtonFormField<String>(
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFA51414),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFA51414),
+                    ),
                   ),
                 ),
-                value: orderStatus,
-                hint: Text('Select', style: TextStyle(fontSize: fontSize)),
-                items: const <String>[
-                  'Select',
-                  'Order Placed',
-                  'Order Accepted',
-                  'Contacted Supplier',
-                  'In Transit',
-                  'Custom Clearance',
-                  'In SemiKart Fulfillment Center',
-                  'Order Shipped',
-                  'Order Partially Shipped',
-                  'Order Delivered',
-                  'Order Partially Delivered',
-                  'Order Cancelled'
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: TextStyle(fontSize: fontSize)),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    orderStatus = newValue;
-                  });
-                },
+                  dropdownColor: Colors.white,
+                  value: orderStatus,
+                  hint: Text('Select', style: TextStyle(fontSize: fontSize)),
+                  items: const <String>[
+                    // 'Select',
+                    'Order Placed',
+                    'Order Accepted',
+                    'Contacted Supplier',
+                    'In Transit',
+                    'Custom Clearance',
+                    'In SemiKart Fulfillment Center',
+                    'Order Shipped',
+                    'Order Partially Shipped',
+                    'Order Delivered',
+                    'Order Partially Delivered',
+                    'Order Cancelled'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value, style: TextStyle(fontSize: fontSize)),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      orderStatus = newValue;
+                    });
+                  },
+                ),
               ),
               SizedBox(height: screenHeight * 0.03),
               RedButton(
