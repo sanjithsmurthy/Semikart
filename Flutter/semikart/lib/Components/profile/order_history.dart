@@ -170,38 +170,66 @@ class _OrderHistoryState extends State<OrderHistory> {
               SizedBox(height: screenHeight * 0.02),
               Text('Order Status', style: TextStyle(fontSize: fontSize)),
               SizedBox(height: screenHeight * 0.005),
-              DropdownButtonFormField<String>(
+              Theme(
+                data: Theme.of(context).copyWith(
+                  primaryColor: const Color(0xFFA51414),
+                  colorScheme: Theme.of(context).colorScheme.copyWith(
+                        primary: const Color(0xFFA51414),
+                      ),
+                ),
+                child: DropdownButtonFormField<String>(
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFA51414),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFA51414),
+                    ),
                   ),
                 ),
-                value: orderStatus,
-                hint: Text('Select', style: TextStyle(fontSize: fontSize)),
-                items: const <String>[
-                  'Select',
-                  'Order Placed',
-                  'Order Accepted',
-                  'Contacted Supplier',
-                  'In Transit',
-                  'Custom Clearance',
-                  'In SemiKart Fulfillment Center',
-                  'Order Shipped',
-                  'Order Partially Shipped',
-                  'Order Delivered',
-                  'Order Partially Delivered',
-                  'Order Cancelled'
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: TextStyle(fontSize: fontSize)),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    orderStatus = newValue;
-                  });
-                },
+                  dropdownColor: Colors.white,
+                  value: orderStatus,
+                  hint: Text('Select', style: TextStyle(fontSize: fontSize)),
+                  items: const <String>[
+                    // 'Select',
+                    'Order Placed',
+                    'Order Accepted',
+                    'Contacted Supplier',
+                    'In Transit',
+                    'Custom Clearance',
+                    'In SemiKart Fulfillment Center',
+                    'Order Shipped',
+                    'Order Partially Shipped',
+                    'Order Delivered',
+                    'Order Partially Delivered',
+                    'Order Cancelled'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value, style: TextStyle(fontSize: fontSize)),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      orderStatus = newValue;
+                    });
+                  },
+                ),
               ),
               SizedBox(height: screenHeight * 0.03),
               RedButton(
