@@ -141,8 +141,8 @@ class _EditTextBox2State extends State<EditTextBox2> {
     final addressText = '${address['address1'] ?? ''}${address['address1']?.isNotEmpty == true && address['address2']?.isNotEmpty == true ? ', ' : ''}${address['address2'] ?? ''}';
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.all(1.5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(8),
