@@ -117,12 +117,9 @@ class AppNavigator {
         // MaterialPageRoute automatically forwards settings.arguments if settings is passed
         break;
       case 'l3':
-        print("[AppNavigator] Generating route for 'l3' -> Placeholder"); // Log route generation
-        // Placeholder for L3 - Add your L3 page here
-        page = Scaffold(
-          appBar: AppBar(title: const Text("L3 Page (Placeholder)")),
-          body: Center(child: Text("L3 Arguments: ${settings.arguments}")),
-        );
+        print("[AppNavigator] Generating route for 'l3' -> ProductsL3Page"); // Log route generation
+        // Replace placeholder with actual L3 page
+        page = const ProductsL3Page();
         break;
       // Add other product-related routes here
       default:

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'l2_tile.dart'; // Import the L2Tile widget (which defines RedBorderBox)
+import 'products_static.dart'; // Import the static header content
 
 // Remove the local RedBorderBox definition as it's now imported from l2_tile.dart
 // class RedBorderBox extends StatelessWidget { ... }
@@ -98,95 +99,105 @@ class _ProductsL2PageState extends State<ProductsL2Page> {
         .collection('l2_products')
         .where('l1id', isEqualTo: l1DocRef);
 
-    // Return the StreamBuilder directly, removing the Scaffold and AppBar
-    return StreamBuilder<QuerySnapshot>(
-      stream: query.snapshots(),
-      builder: (context, l2Snapshot) {
-        if (l2Snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    // Wrap the content in a Column
+    return Column(
+      children: [
+        // Add the fixed header at the top
+        const ProductsHeaderContent(),
 
-        if (l2Snapshot.hasError) {
-          return Center(child: Text(
-            'Error fetching L2 products: ${l2Snapshot.error}',
-            style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
-            textAlign: TextAlign.center,
-          ));
-        }
+        // Use Expanded to make the StreamBuilder take remaining space
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: query.snapshots(),
+            builder: (context, l2Snapshot) {
+              if (l2Snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-        if (!l2Snapshot.hasData || l2Snapshot.data!.docs.isEmpty) {
-          // Display 'No subcategories' message and buttons directly
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                 Padding(
-                   padding: EdgeInsets.all(dynamicPagePadding), // Use dynamic padding
-                   child: Text(
-                     'No subcategories found for "${l1Name ?? 'this category'}".',
-                     style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
-                     textAlign: TextAlign.center,
-                   ),
-                 ),
-                SizedBox(height: dynamicSpacingMedium), // Use dynamic spacing
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(fontSize: dynamicButtonFontSize) // Use dynamic font size
+              if (l2Snapshot.hasError) {
+                return Center(child: Text(
+                  'Error fetching L2 products: ${l2Snapshot.error}',
+                  style: TextStyle(fontSize: dynamicErrorFontSize),
+                  textAlign: TextAlign.center,
+                ));
+              }
+
+              if (!l2Snapshot.hasData || l2Snapshot.data!.docs.isEmpty) {
+                // Display 'No subcategories' message and buttons directly
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                       Padding(
+                         padding: EdgeInsets.all(dynamicPagePadding), // Use dynamic padding
+                         child: Text(
+                           'No subcategories found for "${l1Name ?? 'this category'}".',
+                           style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
+                           textAlign: TextAlign.center,
+                         ),
+                       ),
+                      SizedBox(height: dynamicSpacingMedium), // Use dynamic spacing
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(fontSize: dynamicButtonFontSize) // Use dynamic font size
+                        ),
+                        onPressed: () => _createSampleL2Category(l1DocId),
+                        child: const Text('Create Sample Subcategory'),
+                      ),
+                      SizedBox(height: dynamicSpacingSmall), // Use dynamic spacing
+                       ElevatedButton(
+                         style: ElevatedButton.styleFrom(
+                           textStyle: TextStyle(fontSize: dynamicButtonFontSize) // Use dynamic font size
+                         ),
+                        onPressed: () {
+                           Navigator.of(context).pop();
+                        },
+                        child: const Text('Go Back'),
+                      ),
+                    ],
                   ),
-                  onPressed: () => _createSampleL2Category(l1DocId),
-                  child: const Text('Create Sample Subcategory'),
-                ),
-                SizedBox(height: dynamicSpacingSmall), // Use dynamic spacing
-                 ElevatedButton(
-                   style: ElevatedButton.styleFrom(
-                     textStyle: TextStyle(fontSize: dynamicButtonFontSize) // Use dynamic font size
-                   ),
-                  onPressed: () {
-                     Navigator.of(context).pop();
-                  },
-                  child: const Text('Go Back'),
-                ),
-              ],
-            ),
-          );
-        }
+                );
+              }
 
-        // Process the documents that match the query
-        final l2Categories = l2Snapshot.data!.docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>? ?? {};
-          return {
-            "id": doc.id,
-            "name": data["name"] as String? ?? "Unknown",
-          };
-        }).toList();
+              // Process the documents that match the query
+              final l2Categories = l2Snapshot.data!.docs.map((doc) {
+                final data = doc.data() as Map<String, dynamic>? ?? {};
+                return {
+                  "id": doc.id,
+                  "name": data["name"] as String? ?? "Unknown",
+                };
+              }).toList();
 
-        // Display the list of L2 products using the imported RedBorderBox (conceptually L2Tile)
-        return ListView.builder(
-          padding: EdgeInsets.all(dynamicPagePadding), // Use dynamic padding
-          itemCount: l2Categories.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              // Use dynamic padding for spacing between items
-              padding: EdgeInsets.only(bottom: dynamicItemBottomPadding),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    'l3',
-                    arguments: {
-                      "l2DocId": l2Categories[index]["id"],
-                      "l2Name": l2Categories[index]["name"],
-                      "l1DocId": l1DocId,
-                      "l1Name": l1Name,
-                    },
+              // The ListView is scrollable within the Expanded area
+              return ListView.builder(
+                padding: EdgeInsets.all(dynamicPagePadding), // Use dynamic padding
+                itemCount: l2Categories.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    // Use dynamic padding for spacing between items
+                    padding: EdgeInsets.only(bottom: dynamicItemBottomPadding),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          'l3',
+                          arguments: {
+                            "l2DocId": l2Categories[index]["id"],
+                            "l2Name": l2Categories[index]["name"],
+                            "l1DocId": l1DocId,
+                            "l1Name": l1Name,
+                          },
+                        );
+                      },
+                      // *** Use the imported RedBorderBox widget ***
+                      child: RedBorderBox(text: l2Categories[index]["name"] as String),
+                    ),
                   );
                 },
-                // *** Use the imported RedBorderBox widget ***
-                child: RedBorderBox(text: l2Categories[index]["name"] as String),
-              ),
-            );
-          },
-        );
-      },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

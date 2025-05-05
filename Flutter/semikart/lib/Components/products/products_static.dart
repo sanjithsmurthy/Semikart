@@ -7,6 +7,17 @@ class ProductsHeaderContent extends StatelessWidget {
   const ProductsHeaderContent({super.key});
 
   void _showRFQOverlay(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Define base dimensions for scaling calculations (optional, but can help maintain proportions)
+    // const double baseWidth = 412.0;
+    // const double baseHeight = 917.0;
+
+    // Calculate scale factors (optional)
+    // final double widthScale = screenWidth / baseWidth;
+    // final double heightScale = screenHeight / baseHeight;
+
     showGeneralDialog(
       context: context,
       barrierDismissible: true, // Allow dismissing by tapping outside
@@ -19,30 +30,33 @@ class ProductsHeaderContent extends StatelessWidget {
           child: Center(
             child: Container(
               constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.7, // 70% of screen height
-                maxWidth: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+                maxHeight: screenHeight * 0.7, // 70% of screen height
+                maxWidth: screenWidth * 0.9, // 90% of screen width
               ),
-              padding: const EdgeInsets.only(
-                top: 3,
-                bottom: 8,
+              padding: EdgeInsets.only(
+                top: screenHeight * 0.003, // Relative top padding
+                bottom: screenHeight * 0.009, // Relative bottom padding
                 left: 0,
                 right: 0,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(screenWidth * 0.03), // Relative border radius
               ),
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10, right: 10), // Reduced top padding
+                      padding: EdgeInsets.only(
+                        top: screenHeight * 0.01, // Relative top padding
+                        right: screenWidth * 0.025, // Relative right padding
+                      ),
                       child: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.close,
                           color: Colors.black,
-                          size: 32,
+                          size: screenWidth * 0.078, // Relative icon size (approx 32 on 412 width)
                         ),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the overlay
@@ -67,6 +81,26 @@ class ProductsHeaderContent extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Define base dimensions for scaling calculations (optional, but can help maintain proportions)
+    // const double baseWidth = 412.0;
+    // const double baseHeight = 917.0;
+
+    // Calculate scale factors (optional)
+    // final double widthScale = screenWidth / baseWidth;
+    // final double heightScale = screenHeight / baseHeight;
+
+    // Calculate font size relative to screen height (adjust multiplier as needed)
+    // Example: Aim for ~17.5px on a 917px height screen -> 17.5 / 917 = 0.019
+    final double titleFontSize = screenHeight * 0.019;
+
+    // Calculate button dimensions relative to screen size
+    final double buttonWidth = screenWidth * 0.5; // 50% of screen width
+    final double buttonHeight = screenHeight * 0.05; // 5% of screen height
+
+    // Calculate padding and spacing relative to screen size
+    final double containerPadding = screenWidth * 0.02; // 2% of screen width for padding
+    final double verticalSpacing = screenHeight * 0.01; // 1% of screen height for spacing
+
     return Material(
       color: Colors.white, // Set the background color to white
       child: SingleChildScrollView(
@@ -75,32 +109,32 @@ class ProductsHeaderContent extends StatelessWidget {
           children: [
             // Heading
             Container(
-              padding: EdgeInsets.all(screenWidth * 0.01),
+              padding: EdgeInsets.all(containerPadding),
               child: Text(
                 'Electronic Components Categories Line Card',
                 style: TextStyle(
                   color: const Color(0xFFA51414), // Red color (A51414)
-                  fontSize: screenHeight * 0.019,
-                  fontWeight: FontWeight.bold, // Font size 25px
+                  fontSize: titleFontSize,
+                  fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: screenHeight * 0.008), // Add spacing before the search bar
+            SizedBox(height: verticalSpacing), // Add relative spacing
 
             // Red Button
             Center(
               child: RedButton(
                 label: 'Request for Quote (RFQ)',
-                onPressed: () => _showRFQOverlay(context), // Show the full-screen overlay
-                width: screenWidth * 0.5, // Adjust width as needed
-                height: screenHeight * 0.05, // Adjust height as needed
+                onPressed: () => _showRFQOverlay(context), // Show the overlay
+                width: buttonWidth, // Relative width
+                height: buttonHeight, // Relative height
               ),
             ),
+             SizedBox(height: verticalSpacing), // Add spacing below button if needed
           ],
         ),
       ),
     );
   }
 }
-

@@ -7,15 +7,29 @@ import 'l1_tile.dart'; // Import the L1Tile widget
 class ProductsL1Page extends StatelessWidget {
   const ProductsL1Page({super.key});
 
+  // Reference screen dimensions for scaling calculations
+  static const double _refScreenWidth = 412.0;
+  static const double _refScreenHeight = 917.0;
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Calculate scale factors (optional, can directly use fractions)
+    // final widthScale = screenWidth / _refScreenWidth;
+    // final heightScale = screenHeight / _refScreenHeight;
+
+    // Helper function to scale width based on reference width
+    double scaleWidth(double dimension) => screenWidth * (dimension / _refScreenWidth);
+
+    // Helper function to scale height based on reference height
+    double scaleHeight(double dimension) => screenHeight * (dimension / _refScreenHeight);
+
     return Column(
       children: [
         // Header
-        ProductsHeaderContent(),
+        const ProductsHeaderContent(), // Assuming this is already responsive or doesn't need scaling here
         Expanded(
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('l1_products').snapshots(),
@@ -53,11 +67,13 @@ class ProductsL1Page extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: screenHeight * 0.02), // Add spacing between header and grid
+                    // Use scaled height for spacing
+                    SizedBox(height: scaleHeight(18)), // Approx screenHeight * 0.02 based on 917 ref height
 
                     // Grid-like layout with lines
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                      // Use scaled width for horizontal padding
+                      padding: EdgeInsets.symmetric(horizontal: scaleWidth(16.5)), // Approx screenWidth * 0.04 based on 412 ref width
                       child: ListView.builder(
                         shrinkWrap: true, // Ensures the ListView takes only the required space
                         physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
@@ -89,13 +105,18 @@ class ProductsL1Page extends StatelessWidget {
                                           );
                                         }
                                       },
-                                      child: L1Tile(
+                                      child: L1Tile( // Assuming L1Tile handles its internal scaling
                                         iconPath: categories[firstIndex]["icon"]!,
                                         text: categories[firstIndex]["name"]!,
                                       ),
                                     ),
                                   ),
-                                  _buildVerticalDivider(screenHeight: screenHeight),
+                                  _buildVerticalDivider(
+                                    screenWidth: screenWidth,
+                                    screenHeight: screenHeight,
+                                    scaleWidth: scaleWidth,
+                                    scaleHeight: scaleHeight,
+                                  ),
                                   Expanded(
                                     child: secondIndex < categories.length
                                         ? GestureDetector(
@@ -116,22 +137,28 @@ class ProductsL1Page extends StatelessWidget {
                                                 );
                                               }
                                             },
-                                            child: L1Tile(
+                                            child: L1Tile( // Assuming L1Tile handles its internal scaling
                                               iconPath: categories[secondIndex]["icon"]!,
                                               text: categories[secondIndex]["name"]!,
                                             ),
                                           )
-                                        : const SizedBox.shrink(),
+                                        : const SizedBox.shrink(), // Keep empty space if no second item
                                   ),
                                 ],
                               ),
                               if (index < (categories.length / 2).ceil() - 1)
-                                _buildHorizontalDivider(screenWidth: screenWidth),
+                                _buildHorizontalDivider(
+                                  screenWidth: screenWidth,
+                                  screenHeight: screenHeight,
+                                  scaleWidth: scaleWidth,
+                                  scaleHeight: scaleHeight,
+                                ),
                             ],
                           );
                         },
                       ),
                     ),
+                    SizedBox(height: scaleHeight(20)), // Add some padding at the bottom
                   ],
                 ),
               );
@@ -142,28 +169,48 @@ class ProductsL1Page extends StatelessWidget {
     );
   }
 
-  // Widget for a vertical divider
-  Widget _buildVerticalDivider({required double screenHeight}) {
+  // Widget for a vertical divider, now using scaled dimensions
+  Widget _buildVerticalDivider({
+    required double screenWidth,
+    required double screenHeight,
+    required double Function(double) scaleWidth,
+    required double Function(double) scaleHeight,
+  }) {
+    // Note: L1Tile height influences the required divider height.
+    // Assuming L1Tile height is roughly 10% of screen height for this calculation.
+    final tileHeight = screenHeight * 0.1; // Adjust if L1Tile height is different
+
     return Container(
-      width: 30, // Space between items
-      height: screenHeight * 0.1, // Length of the vertical line
+      // Scale the space between items based on reference width
+      width: scaleWidth(30), // 30 on a 412px wide screen
+      // Scale the height based on an estimated tile height or a fixed scaled value
+      height: tileHeight, // Match the approximate height of the L1Tile
       alignment: Alignment.center,
       child: const VerticalDivider(
         color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Thickness of the line
+        thickness: 1, // Keep thickness fixed or scale slightly if needed
+        // thickness: max(1.0, scaleWidth(1)), // Example of scaled thickness with minimum
       ),
     );
   }
 
-  // Widget for a horizontal divider
-  Widget _buildHorizontalDivider({required double screenWidth}) {
+  // Widget for a horizontal divider, now using scaled dimensions
+  Widget _buildHorizontalDivider({
+    required double screenWidth,
+    required double screenHeight,
+    required double Function(double) scaleWidth,
+    required double Function(double) scaleHeight,
+  }) {
     return Container(
-      height: 30, // Space between rows
-      width: screenWidth * 0.9, // Length of the horizontal line
+      // Scale the space between rows based on reference height
+      height: scaleHeight(30), // 30 on a 917px high screen
+      // Scale the width relative to the screen width (e.g., 90% of screen width)
+      width: screenWidth * 0.9, // Keep relative width
       alignment: Alignment.center,
       child: const Divider(
         color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Thickness of the line
+        thickness: 1, // Keep thickness fixed or scale slightly if needed
+         // thickness: max(1.0, scaleHeight(1)), // Example of scaled thickness with minimum
       ),
     );
   }
