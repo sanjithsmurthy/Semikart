@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class L1Tile extends StatelessWidget {
   final String iconPath;
   final String text;
-  final VoidCallback onTap; // Add onTap callback
 
   const L1Tile({
     super.key,
     required this.iconPath,
     required this.text,
-    required this.onTap, // Make onTap required
   });
 
   @override
@@ -33,38 +31,35 @@ class L1Tile extends StatelessWidget {
     final double dynamicFontSize = screenHeight * (refFontSize / refHeight); // Scale font with height
     final double dynamicSpacing = screenHeight * (refSpacing / refHeight); // Scale spacing with height
 
-    return GestureDetector(
-      onTap: onTap, // Handle tap event
-      child: SizedBox(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Center items vertically
-          mainAxisSize: MainAxisSize.min, // Take minimum space needed
-          children: [
-            Image.network(
-              iconPath.isNotEmpty ? iconPath : 'https://via.placeholder.com/150', // Placeholder image
-              width: dynamicIconSize,
-              height: dynamicIconSize,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return Icon(
-                  Icons.broken_image,
-                  size: dynamicIconSize,
-                  color: Colors.grey,
-                );
-              },
+    return SizedBox(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // Center items vertically
+        mainAxisSize: MainAxisSize.min, // Take minimum space needed
+        children: [
+          Image.network(
+            iconPath.isNotEmpty ? iconPath : 'https://via.placeholder.com/150', // Placeholder image
+            width: dynamicIconSize,
+            height: dynamicIconSize,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(
+                Icons.broken_image,
+                size: dynamicIconSize,
+                color: Colors.grey,
+              );
+            },
+          ),
+          SizedBox(height: dynamicSpacing), // Dynamic spacing
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: dynamicFontSize, // Dynamic font size
+              fontWeight: FontWeight.w500, // Match image weight (medium)
+              color: Colors.black, // Match image color
             ),
-            SizedBox(height: dynamicSpacing), // Dynamic spacing
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: dynamicFontSize, // Dynamic font size
-                fontWeight: FontWeight.w500, // Match image weight (medium)
-                color: Colors.black, // Match image color
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

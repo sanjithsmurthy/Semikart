@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../products/products_static.dart'; // Import the ProductsHeaderContent widget
-import '../products/l2_page_redbox.dart'; // Import the L2PageRedBox widget
+import '../products/l2_tile.dart'; // Import the L2PageRedBox widget
 
 class ProductsL3Page extends StatelessWidget {
   const ProductsL3Page({super.key});

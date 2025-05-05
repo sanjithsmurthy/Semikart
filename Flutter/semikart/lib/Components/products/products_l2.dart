@@ -1,7 +1,10 @@
-// products_l2.dart - Full working solution
+// products_l2.dart - Final working solution receiving L1 ID and querying by DocumentReference
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'l2_page_redbox.dart';
+import 'l2_tile.dart'; // Import the L2Tile widget (which defines RedBorderBox)
+
+// Remove the local RedBorderBox definition as it's now imported from l2_tile.dart
+// class RedBorderBox extends StatelessWidget { ... }
 
 class ProductsL2Page extends StatefulWidget {
   const ProductsL2Page({super.key});
@@ -11,152 +14,179 @@ class ProductsL2Page extends StatefulWidget {
 }
 
 class _ProductsL2PageState extends State<ProductsL2Page> {
-  String? l1CategoryName;
+  // Helper method to create a sample L2 category for testing
+  // This function is fixed to store l1id as a DocumentReference!
+  Future<void> _createSampleL2Category(String l1Id) async {
+    try {
+      // Get a reference to the L1 document using the passed ID
+      final l1DocRef = FirebaseFirestore.instance.collection('l1_products').doc(l1Id);
+
+      await FirebaseFirestore.instance.collection('l2_products').add({
+        'name': 'Sample Subcategory (${DateTime.now().toString().substring(0, 16)})', // Shorter timestamp for display
+        'l1id': l1DocRef, // *** Store the actual DocumentReference here ***
+        // You might want to add other relevant fields here, like description, image, etc.
+      });
+      if (mounted) { // Check if the widget is still mounted before showing SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sample subcategory created!')),
+        );
+      }
+    } catch (e) {
+      print('Error creating sample category: $e');
+      if (mounted) { // Check if the widget is still mounted before showing SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error creating sample subcategory: $e')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Safely retrieve the arguments passed from the L1 page with null checks
+    // --- Add dynamic scaling ---
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    const double refWidth = 412.0;
+    const double refHeight = 917.0;
+
+    // Padding
+    final double dynamicPagePadding = screenWidth * (16 / refWidth); // Approx 16 on ref width
+    final double dynamicItemBottomPadding = screenHeight * (16 / refHeight); // Approx 16 on ref height
+
+    // Font Sizes
+    final double dynamicErrorFontSize = screenHeight * (16 / refHeight); // Approx 16 on ref height
+    final double dynamicButtonFontSize = screenHeight * (14 / refHeight); // Approx 14 on ref height (typical button size)
+
+    // Spacing
+    final double dynamicSpacingMedium = screenHeight * (20 / refHeight); // Approx 20 on ref height
+    final double dynamicSpacingSmall = screenHeight * (10 / refHeight); // Approx 10 on ref height
+    // --- End dynamic scaling ---
+
+    // Safely retrieve the arguments passed from the L1 page
     final Object? routeArgs = ModalRoute.of(context)?.settings.arguments;
 
-    // Handle case where no arguments are passed
-    if (routeArgs == null) {
-      return const Scaffold(
-        body: Center(child: Text('No category information provided')),
-      );
+    // Validate arguments - expect a Map<String, dynamic>
+    if (routeArgs == null || !(routeArgs is Map<String, dynamic>)) {
+      // Return simple error widget, no Scaffold
+      return Center(child: Text(
+        'Navigation Error: No category information provided',
+        style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
+        textAlign: TextAlign.center,
+      ));
     }
 
-    // Safely cast arguments to Map
-    final Map<String, dynamic> args = routeArgs as Map<String, dynamic>;
+    final Map<String, dynamic> args = routeArgs;
+    // Get the L1 document ID and optional name from arguments
+    final String? l1DocId = args["l1DocId"] as String?;
+    final String? l1Name = args["l1Name"] as String?; // Optional: used for display text
 
-    // Safely retrieve docId with null check
-    final String? docId = args["docId"] as String?;
-
-    if (docId == null || docId.isEmpty) {
-      return const Scaffold(
-        body: Center(child: Text('Invalid category ID')),
-      );
+    // Validate L1 document ID
+    if (l1DocId == null || l1DocId.isEmpty) {
+       // Return simple error widget, no Scaffold
+       return Center(child: Text(
+         'Navigation Error: Invalid L1 category ID provided',
+         style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
+         textAlign: TextAlign.center,
+       ));
     }
 
-    // Debug print to verify docId
-    print('L1 Category ID: $docId');
+    // *** Get the DocumentReference for the L1 product using the received ID ***
+    final l1DocRef = FirebaseFirestore.instance.collection('l1_products').doc(l1DocId);
 
-    // Get L1 category name
-    _fetchL1CategoryName(docId);
+    // *** Define the query ***
+    final query = FirebaseFirestore.instance
+        .collection('l2_products')
+        .where('l1id', isEqualTo: l1DocRef);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l1CategoryName ?? 'L2 Categories'),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        // Query the l2_products collection where l1id matches the docId
-        stream: FirebaseFirestore.instance
-            .collection('l2_products')
-            .where('l1id', isEqualTo: '/l1_products/$docId') // Match the l1id field
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    // Return the StreamBuilder directly, removing the Scaffold and AppBar
+    return StreamBuilder<QuerySnapshot>(
+      stream: query.snapshots(),
+      builder: (context, l2Snapshot) {
+        if (l2Snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+        if (l2Snapshot.hasError) {
+          return Center(child: Text(
+            'Error fetching L2 products: ${l2Snapshot.error}',
+            style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
+            textAlign: TextAlign.center,
+          ));
+        }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'No subcategories found for this category.',
-                    style: TextStyle(fontSize: 16),
+        if (!l2Snapshot.hasData || l2Snapshot.data!.docs.isEmpty) {
+          // Display 'No subcategories' message and buttons directly
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                 Padding(
+                   padding: EdgeInsets.all(dynamicPagePadding), // Use dynamic padding
+                   child: Text(
+                     'No subcategories found for "${l1Name ?? 'this category'}".',
+                     style: TextStyle(fontSize: dynamicErrorFontSize), // Use dynamic font size
+                     textAlign: TextAlign.center,
+                   ),
+                 ),
+                SizedBox(height: dynamicSpacingMedium), // Use dynamic spacing
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    textStyle: TextStyle(fontSize: dynamicButtonFontSize) // Use dynamic font size
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () => _createSampleL2Category(docId),
-                    child: const Text('Create Sample Subcategory'),
-                  ),
-                ],
+                  onPressed: () => _createSampleL2Category(l1DocId),
+                  child: const Text('Create Sample Subcategory'),
+                ),
+                SizedBox(height: dynamicSpacingSmall), // Use dynamic spacing
+                 ElevatedButton(
+                   style: ElevatedButton.styleFrom(
+                     textStyle: TextStyle(fontSize: dynamicButtonFontSize) // Use dynamic font size
+                   ),
+                  onPressed: () {
+                     Navigator.of(context).pop();
+                  },
+                  child: const Text('Go Back'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // Process the documents that match the query
+        final l2Categories = l2Snapshot.data!.docs.map((doc) {
+          final data = doc.data() as Map<String, dynamic>? ?? {};
+          return {
+            "id": doc.id,
+            "name": data["name"] as String? ?? "Unknown",
+          };
+        }).toList();
+
+        // Display the list of L2 products using the imported RedBorderBox (conceptually L2Tile)
+        return ListView.builder(
+          padding: EdgeInsets.all(dynamicPagePadding), // Use dynamic padding
+          itemCount: l2Categories.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              // Use dynamic padding for spacing between items
+              padding: EdgeInsets.only(bottom: dynamicItemBottomPadding),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    'l3',
+                    arguments: {
+                      "l2DocId": l2Categories[index]["id"],
+                      "l2Name": l2Categories[index]["name"],
+                      "l1DocId": l1DocId,
+                      "l1Name": l1Name,
+                    },
+                  );
+                },
+                // *** Use the imported RedBorderBox widget ***
+                child: RedBorderBox(text: l2Categories[index]["name"] as String),
               ),
             );
-          }
-
-          // Map Firestore documents to a list of categories with safe casting
-          final l2Categories = snapshot.data!.docs.map((doc) {
-            // Debug print to check each document
-            print('Document ID: ${doc.id}, Data: ${doc.data()}');
-
-            // Safely cast to Map with null check
-            final data = doc.data() as Map<String, dynamic>? ?? {};
-            return {
-              
-              "name": data["name"] as String? ?? "Unknown",
-            };
-          }).toList();
-
-          // Render the categories in a ListView
-          return ListView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemCount: l2Categories.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigate to L3 with the L2 category name
-                    Navigator.of(context).pushNamed(
-                      'l3',
-                      arguments: {
-                        "l1Id": l2Categories[index]["id"],
-                        "l2Name": l2Categories[index]["name"],
-                      },
-                    );
-                  },
-                  child: RedBorderBox(text: l2Categories[index]["name"] as String),
-                ),
-              );
-            },
-          );
-        },
-      ),
+          },
+        );
+      },
     );
-  }
-
-  // Helper method to fetch L1 category name
-  void _fetchL1CategoryName(String docId) {
-    FirebaseFirestore.instance
-        .collection('l1_products')
-        .doc(docId)
-        .get()
-        .then((snapshot) {
-      if (snapshot.exists) {
-        final data = snapshot.data() as Map<String, dynamic>?;
-        if (data != null && data.containsKey('name')) {
-          setState(() {
-            l1CategoryName = data['name'] as String?;
-          });
-        }
-      }
-    }).catchError((error) {
-      print('Error fetching L1 category name: $error');
-    });
-  }
-
-  // Helper method to create a sample L2 category for testing
-  Future<void> _createSampleL2Category(String l1Id) async {
-    try {
-      await FirebaseFirestore.instance.collection('l2_products').add({
-        'name': 'Sample Subcategory (${DateTime.now().toString().substring(0, 19)})',
-        'l1id': '/l1_products/$l1Id',
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sample subcategory created!')),
-      );
-    } catch (e) {
-      print('Error creating sample category: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
   }
 }
