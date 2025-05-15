@@ -11,12 +11,27 @@ import '../../providers/profile_image_provider.dart';
 import '../../app_navigator.dart'; // Import AppNavigator for navigation
 import 'popup.dart'; // Import CustomPopup
 
-class HamburgerMenu extends ConsumerWidget {
+class HamburgerMenu extends ConsumerStatefulWidget {
   const HamburgerMenu({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // ... existing scaling calculations ...
+  ConsumerState<HamburgerMenu> createState() => _HamburgerMenuState();
+}
+
+class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
+  double _avatarOpacity = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Trigger fade-in after build
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) setState(() => _avatarOpacity = 1.0);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -47,7 +62,6 @@ class HamburgerMenu extends ConsumerWidget {
     final double buttonHeight = 40.0 * heightScale;
     final double buttonFontSize = 14.0 * scale;
 
-
     final profileImage = ref.watch(profileImageProvider);
     // Watch the user document stream provider (now nullable)
     final userDocAsyncValue = ref.watch(userDocumentProvider);
@@ -60,7 +74,7 @@ class HamburgerMenu extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ... Top bar ...
-             Padding(
+            Padding(
               padding: EdgeInsets.only(
                 left: leftPadding,
                 top: topPadding,
@@ -122,13 +136,17 @@ class HamburgerMenu extends ConsumerWidget {
                 return Center(
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        radius: avatarRadius,
-                        backgroundImage: backgroundImage, // Use the determined image provider
-                         onBackgroundImageError: (exception, stackTrace) {
-                           // Optional: Handle image loading errors
-                           print("Error loading profile image in hamburger: $exception");
-                         },
+                      AnimatedOpacity(
+                        opacity: _avatarOpacity,
+                        duration: const Duration(milliseconds: 600),
+                        child: CircleAvatar(
+                          radius: avatarRadius,
+                          backgroundImage: backgroundImage, // Use the determined image provider
+                          onBackgroundImageError: (exception, stackTrace) {
+                            // Optional: Handle image loading errors
+                            print("Error loading profile image in hamburger: $exception");
+                          },
+                        ),
                       ),
                       SizedBox(height: verticalSpacingMedium),
                       Text(
@@ -172,7 +190,7 @@ class HamburgerMenu extends ConsumerWidget {
                 padding: EdgeInsets.zero,
                 children: [
                   // ... existing _buildMenuItem calls ...
-                   _buildMenuItem(
+                  _buildMenuItem(
                     context,
                     icon: Icons.shopping_bag,
                     text: 'Products',
@@ -214,8 +232,7 @@ class HamburgerMenu extends ConsumerWidget {
     );
   }
 
-  // ... existing _createFadeRoute and _buildMenuItem methods ...
-   Route _createFadeRoute(Widget page, {int? initialIndex}) {
+  Route _createFadeRoute(Widget page, {int? initialIndex}) {
     final Widget targetPage = (page is BaseScaffold && initialIndex != null)
         ? BaseScaffold(key: ValueKey('BaseScaffold_$initialIndex'), initialIndex: initialIndex)
         : page;
