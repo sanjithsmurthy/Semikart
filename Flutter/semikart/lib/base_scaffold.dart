@@ -233,20 +233,20 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 _buildNavItem(Icons.person_outline, Icons.person, "Profile", 4),
               ],
             ),
-            floatingActionButton: !_showRFQOverlay
-                ? FloatingActionButton(
-                    onPressed: _toggleRFQOverlay,
-                    backgroundColor: const Color(0xFFA51414), // Red background
-                    child: const Text(
-                      "RFQ", // Display "RFQ" instead of an icon
-                      style: TextStyle(
-                        color: Colors.white, // White text for visibility
-                        fontWeight: FontWeight.bold, // Bold text for emphasis
-                        fontSize: 16, // Font size for better readability
-                      ),
-                    ),
-                  )
-                : null,
+            // floatingActionButton: !_showRFQOverlay
+            //     ? FloatingActionButton(
+            //         onPressed: _toggleRFQOverlay,
+            //         backgroundColor: const Color(0xFFA51414), // Red background
+            //         child: const Text(
+            //           "RFQ", // Display "RFQ" instead of an icon
+            //           style: TextStyle(
+            //             color: Colors.white, // White text for visibility
+            //             fontWeight: FontWeight.bold, // Bold text for emphasis
+            //             fontSize: 16, // Font size for better readability
+            //           ),
+            //         ),
+            //       )
+            //     : null,
           ),
           if (_showRFQOverlay)
             Positioned.fill(
