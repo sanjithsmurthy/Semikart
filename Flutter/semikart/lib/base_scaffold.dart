@@ -54,7 +54,14 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     super.dispose();
   }
 
-  void _updateCartBadge() {}
+  void _updateCartBadge() {
+    // This method is called when cartItemCountProvider changes
+    // If we're using the proper CartManager, we don't need to do anything here
+    // Just trigger a rebuild to update the UI
+    setState(() {
+      // This will rebuild the BottomNavigationBar with the updated badge
+    });
+  }
 
   void _toggleRFQOverlay() {
     setState(() {

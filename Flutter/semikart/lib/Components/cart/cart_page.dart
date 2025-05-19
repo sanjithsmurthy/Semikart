@@ -3,9 +3,8 @@ import 'cart_item.dart';
 // import 'share_cart.dart';
 import '../common/red_button.dart'; // Import RedButton
 import '../../app_navigator.dart'; // Import AppNavigator for navigation
-
-// Global ValueNotifier to track cart item count
-ValueNotifier<int> cartItemCount = ValueNotifier<int>(0);
+import '../../base_scaffold.dart'; // Import to use cartItemCountProvider
+import '../../managers/cart_manager.dart'; // Add this import
 
 class CartPage extends StatefulWidget {
   @override
@@ -45,8 +44,15 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    // Update the cart item count based on the number of items
-    cartItemCount.value = cartItems.length;
+    
+    // This assumes you have a CartManager instance
+    final cartManager = CartManager(); // Or get it from your DI system
+    
+    // Update badge from actual cart items
+    cartItemCountProvider.value = cartManager.itemCount;
+    
+    // Or if you're using local cartItems:
+    cartItemCountProvider.value = cartItems.length;
   }
 
   @override
@@ -98,7 +104,7 @@ class _CartPageState extends State<CartPage> {
                       onPressed: () {
                         setState(() {
                           cartItems.clear();
-                          cartItemCount.value = 0;
+                          cartItemCountProvider.value = 0;
                         });
                       },
                     ),
@@ -129,7 +135,7 @@ class _CartPageState extends State<CartPage> {
                         onDelete: () {
                           setState(() {
                             cartItems.removeAt(index);
-                            cartItemCount.value = cartItems.length;
+                            cartItemCountProvider.value = cartItems.length;
                           });
                         },
                       ),

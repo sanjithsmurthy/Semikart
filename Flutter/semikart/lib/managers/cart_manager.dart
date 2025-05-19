@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart'; // Import for firstWhereOrNull
 import '../models/cart_item_model.dart';
+import '../base_scaffold.dart'; // Add this import
 
 class CartManager extends ChangeNotifier {
   final Map<String, CartItemModel> _items = {}; // Use Map for easy access by ID
@@ -50,6 +51,7 @@ class CartManager extends ChangeNotifier {
       _items[newItem.id] = newItem;
     }
     notifyListeners(); // Notify UI about the change
+    cartItemCountProvider.value = _items.length; // Update the badge count
   }
 
   /// Removes an item completely from the cart.
@@ -57,6 +59,7 @@ class CartManager extends ChangeNotifier {
     if (_items.containsKey(itemId)) {
       _items.remove(itemId);
       notifyListeners();
+      cartItemCountProvider.value = _items.length; // Update the badge count
     }
   }
 
@@ -77,6 +80,7 @@ class CartManager extends ChangeNotifier {
         // finalUnitPrice: newFinalUnitPrice,
       );
       notifyListeners();
+      // No need to update cartItemCountProvider here unless item is removed
     } else if (item != null && newQuantity <= 0) {
       // Remove item if quantity becomes zero or less
       removeItem(itemId);
@@ -87,6 +91,7 @@ class CartManager extends ChangeNotifier {
   void clearCart() {
     _items.clear();
     notifyListeners();
+    cartItemCountProvider.value = 0; // Update the badge count
   }
 
   // --- Helper for Price Calculation (Example - Needs Price Slab Data) ---
