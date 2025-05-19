@@ -1,35 +1,55 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'dart:developer';
 
 class DataBaseService {
-  // Collection reference for products
-  final CollectionReference productCollection =
-      FirebaseFirestore.instance.collection('products');
-
-  // Collection reference for L1 products
-  final CollectionReference l1ProductsCollection =
-      FirebaseFirestore.instance.collection('l1_products');
+  final Dio _dio = Dio();
+  final String baseUrl = 'http://172.16.1.154:8080/semikartapi'; // Match your API URL from auth_manager
+  
+  DataBaseService() {
+    _dio.options.connectTimeout = const Duration(seconds: 10);
+    _dio.options.receiveTimeout = const Duration(seconds: 10);
+    
+    // Add logging for debugging
+    _dio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      error: true,
+    ));
+  }
 
   // Method to update user data
-  Future updateUserData(String email, String firstname, String lastname, String phone, String password) async {
-    return await productCollection.add({
-      'first_name': firstname,
-      'last_name': lastname,
-      'phone': phone,
-      'password': password,
-      'email': email,
-    });
+  Future<dynamic> updateUserData(String email, String firstname, String lastname, String phone, String password) async {
+    try {
+      final formData = FormData.fromMap({
+        'email': email,
+        'first_name': firstname,
+        'last_name': lastname,
+        'phone': phone,
+        'password': password,
+      });
+      
+      final response = await _dio.post('$baseUrl/users', data: formData);
+      log('User data updated for $email');
+      return response.data;
+    } catch (e) {
+      log('Error updating user data: $e');
+      rethrow;
+    }
   }
 
   // Method to upload L1 product data
   Future<void> uploadL1ProductData(String name, String iconUrl) async {
     try {
-      await l1ProductsCollection.add({
-        'name': name, // Dynamic product name
-        'icon': iconUrl, // Dynamic Google Drive link
+      final formData = FormData.fromMap({
+        'name': name,
+        'icon': iconUrl,
       });
-      print('L1 product uploaded: $name');
+      
+      await _dio.post('$baseUrl/products/l1', data: formData);
+      log('L1 product uploaded: $name');
     } catch (e) {
-      print('Error uploading L1 product: $e');
+      log('Error uploading L1 product: $e');
+      rethrow;
     }
   }
 
@@ -106,15 +126,153 @@ class DataBaseService {
       },
     ];
 
+    // Option 1: Upload one by one
     for (var product in l1Products) {
       await uploadL1ProductData(product['name']!, product['icon']!);
     }
-    print('All L1 products uploaded successfully!');
+    log('All L1 products uploaded successfully!');
+    
+    // Option 2: Bulk upload (if your API supports it)
+    /*
+    try {
+      await _dio.post('$baseUrl/products/l1/bulk', data: l1Products);
+      log('All L1 products uploaded successfully in bulk!');
+    } catch (e) {
+      log('Error bulk uploading L1 products: $e');
+      rethrow;
+    }
+    */
+  }
+  
+  // Method to get all L1 products
+  Future<List<Map<String, dynamic>>> getL1Products() async {
+    try {
+      final response = await _dio.get('$baseUrl/products/l1');
+      final List<dynamic> data = response.data;
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching L1 products: $e');
+      rethrow;
+    }
+  }
+  
+  // Method to get product details
+  Future<Map<String, dynamic>> getProductDetails(String productId) async {
+    try {
+      final response = await _dio.get('$baseUrl/products/$productId');
+      return response.data;
+    } catch (e) {
+      log('Error fetching product details for $productId: $e');
+      rethrow;
+    }
+  }
+  
+  // Method to add a single L2 category - called from admin_panel.dart
+  Future<void> addL2Category({required String l1Id, required String name}) async {
+    try {
+      final formData = FormData.fromMap({
+        'name': name,
+        'l1id': l1Id,
+      });
+      
+      final response = await _dio.post('$baseUrl/products/l2', data: formData);
+      log('Added L2 category: $name under L1 ID: $l1Id');
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add L2 category: ${response.statusMessage}');
+      }
+    } catch (e) {
+      log('Error adding L2 category: $e');
+      rethrow;
+    }
+  }
+  
+  // Method for bulk adding L2 categories (optional, for efficiency)
+  Future<void> addMultipleL2Categories({required String l1Id, required List<String> names}) async {
+    try {
+      final data = names.map((name) => {
+        'name': name,
+        'l1id': l1Id,
+      }).toList();
+      
+      final response = await _dio.post('$baseUrl/products/l2/bulk', data: data);
+      log('Added ${names.length} L2 categories under L1 ID: $l1Id');
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add L2 categories in bulk: ${response.statusMessage}');
+      }
+    } catch (e) {
+      log('Error adding multiple L2 categories: $e');
+      rethrow;
+    }
+  }
+
+  // Get L2 categories for a specific L1 category
+  Future<List<Map<String, dynamic>>> getL2ProductsByL1Id(String l1Id) async {
+    try {
+      final response = await _dio.get('$baseUrl/products/l2', queryParameters: {'l1id': l1Id});
+      final List<dynamic> data = response.data;
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching L2 products for L1 ID $l1Id: $e');
+      rethrow;
+    }
+  }
+
+  // Add L3 category linked to an L2 category
+  Future<void> addL3Category({required String l2Id, required String name}) async {
+    try {
+      final formData = FormData.fromMap({
+        'name': name,
+        'l2id': l2Id,
+      });
+      
+      final response = await _dio.post('$baseUrl/products/l3', data: formData);
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add L3 category: ${response.statusMessage}');
+      }
+      
+      log('Added L3 category: $name under L2 ID: $l2Id');
+    } catch (e) {
+      log('Error adding L3 category: $e');
+      rethrow;
+    }
+  }
+
+  // Get L3 products for a specific L2 category
+  Future<List<Map<String, dynamic>>> getL3ProductsByL2Id(String l2Id) async {
+    try {
+      final response = await _dio.get('$baseUrl/products/l3', queryParameters: {'l2id': l2Id});
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch L3 products: ${response.statusMessage}');
+      }
+      
+      final List<dynamic> data = response.data;
+      log('Fetched ${data.length} L3 products for L2 ID: $l2Id');
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching L3 products for L2 ID $l2Id: $e');
+      rethrow;
+    }
   }
 }
 
-// Automatically trigger the upload when this file is executed
+// Main function can be used for testing
 void main() async {
   final databaseService = DataBaseService();
-  await databaseService.uploadAllL1Products();
+  // Comment this out in production - only uncomment when you want to upload all products
+  // await databaseService.uploadAllL1Products();
+  
+  // Test fetching products
+  try {
+    final products = await databaseService.getL1Products();
+    log('Fetched ${products.length} L1 products');
+    for (var product in products) {
+      log('Product: ${product['name']}');
+    }
+  } catch (e) {
+    log('Error in main: $e');
+  }
 }

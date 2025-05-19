@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'dart:developer'; // For logging
 import '../products/products_static.dart'; // Import the ProductsHeaderContent widget
 import '../products/l2_tile.dart'; // Import the RedBorderBox widget (used as L3Tile)
+import '../../services/database.dart'; // Import the DataBaseService for API calls
 
-// Convert to StatefulWidget
+// StatefulWidget for L3 products page
 class ProductsL3Page extends StatefulWidget {
   const ProductsL3Page({super.key});
 
@@ -12,33 +13,47 @@ class ProductsL3Page extends StatefulWidget {
 }
 
 class _ProductsL3PageState extends State<ProductsL3Page> {
+  final DataBaseService _databaseService = DataBaseService();
+  bool _isLoading = false;
 
-  // Optional: Helper method to create a sample L3 category for testing
+  // Helper method to create a sample L3 category - now uses API
   Future<void> _createSampleL3Category(String l2Id) async {
+    if (_isLoading) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
+    
     try {
-      final l2DocRef = FirebaseFirestore.instance.collection('l2_products').doc(l2Id);
-      await FirebaseFirestore.instance.collection('l3_products').add({
-        'name': 'Sample L3 Item (${DateTime.now().toString().substring(0, 16)})',
-        'l2id': l2DocRef, // Store the L2 DocumentReference
-      });
+      await _databaseService.addL3Category(
+        l2Id: l2Id,
+        name: 'Sample L3 Item (${DateTime.now().toString().substring(0, 16)})'
+      );
+      
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Sample L3 item created!')),
         );
       }
     } catch (e) {
-      print('Error creating sample L3 item: $e');
+      log('Error creating sample L3 item: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error creating sample L3 item: $e')),
         );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // --- Add dynamic scaling ---
+    // --- Dynamic scaling (unchanged) ---
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     const double refWidth = 412.0;
@@ -90,23 +105,15 @@ class _ProductsL3PageState extends State<ProductsL3Page> {
        );
     }
 
-    // Create DocumentReference for the L2 product
-    final l2DocRef = FirebaseFirestore.instance.collection('l2_products').doc(l2DocId);
-
-    // Define the Firestore query for L3 products
-    final query = FirebaseFirestore.instance
-        .collection('l3_products')
-        .where('l2id', isEqualTo: l2DocRef); // Filter by L2 DocumentReference
-
     return Column(
       children: [
         // Fixed Header
         const ProductsHeaderContent(),
 
-        // Scrollable List Area
+        // Scrollable List Area - Replace StreamBuilder with FutureBuilder
         Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: query.snapshots(),
+          child: FutureBuilder<List<Map<String, dynamic>>>(
+            future: _databaseService.getL3ProductsByL2Id(l2DocId),
             builder: (context, l3Snapshot) {
               if (l3Snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -120,7 +127,9 @@ class _ProductsL3PageState extends State<ProductsL3Page> {
                 ));
               }
 
-              if (!l3Snapshot.hasData || l3Snapshot.data!.docs.isEmpty) {
+              final l3Items = l3Snapshot.data ?? [];
+              
+              if (l3Items.isEmpty) {
                 // Display 'No items' message and buttons
                 return Center(
                   child: Column(
@@ -139,8 +148,16 @@ class _ProductsL3PageState extends State<ProductsL3Page> {
                         style: ElevatedButton.styleFrom(
                           textStyle: TextStyle(fontSize: dynamicButtonFontSize)
                         ),
-                        onPressed: () => _createSampleL3Category(l2DocId), // Use L2 ID
-                        child: const Text('Create Sample L3 Item'),
+                        onPressed: _isLoading 
+                            ? null 
+                            : () => _createSampleL3Category(l2DocId),
+                        child: _isLoading 
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2)
+                              )
+                            : const Text('Create Sample L3 Item'),
                       ),
                       SizedBox(height: dynamicSpacingSmall),
                        ElevatedButton(
@@ -157,20 +174,15 @@ class _ProductsL3PageState extends State<ProductsL3Page> {
                 );
               }
 
-              // Map Firestore documents to a list
-              final l3Items = l3Snapshot.data!.docs.map((doc) {
-                final data = doc.data() as Map<String, dynamic>? ?? {};
-                return {
-                  "id": doc.id, // L3 document ID
-                  "name": data["name"] as String? ?? "Unknown", // L3 item name
-                };
-              }).toList();
-
               // Display the list using ListView.builder and RedBorderBox
               return ListView.builder(
                 padding: EdgeInsets.all(dynamicPagePadding),
                 itemCount: l3Items.length,
                 itemBuilder: (context, index) {
+                  final item = l3Items[index];
+                  final id = item["id"]?.toString() ?? "";
+                  final name = item["name"] as String? ?? "Unknown";
+                  
                   return Padding(
                     padding: EdgeInsets.only(bottom: dynamicItemBottomPadding),
                     child: GestureDetector(
@@ -179,17 +191,17 @@ class _ProductsL3PageState extends State<ProductsL3Page> {
                         Navigator.of(context).pushNamed(
                           'l4',
                           arguments: {
-                            "l3DocId": l3Items[index]["id"],
-                            "l3Name": l3Items[index]["name"],
+                            "l3DocId": id,
+                            "l3Name": name,
                             "l2DocId": l2DocId, // Pass down L2 ID
                             "l2Name": l2Name, // Pass down L2 Name
                             // Pass down L1 info if available and needed
                           },
                         );
-                        print('L3 Item tapped: ${l3Items[index]["name"]}');
+                        log('L3 Item tapped: $name');
                       },
                       // Use RedBorderBox (imported from l2_tile) for display
-                      child: RedBorderBox(text: l3Items[index]["name"] as String),
+                      child: RedBorderBox(text: name),
                     ),
                   );
                 },

@@ -69,7 +69,7 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
      setState(() { _isLoading = true; });
 
      final authManager = ref.read(authManagerProvider.notifier);
-     await authManager.googleSignIn(); // Call Google Sign-In method
+    //  await authManager.googleSignIn(); // Call Google Sign-In method
 
      if (!mounted) return;
      setState(() { _isLoading = false; });

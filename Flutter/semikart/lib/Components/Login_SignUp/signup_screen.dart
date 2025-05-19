@@ -176,7 +176,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
      setState(() { _isLoading = true; });
      final authManager = ref.read(authManagerProvider.notifier);
-     await authManager.googleSignIn();
+    //  await authManager.googleSignIn();
 
      if (!mounted) return;
      setState(() { _isLoading = false; });
