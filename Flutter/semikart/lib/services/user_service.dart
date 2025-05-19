@@ -4,6 +4,8 @@ import 'dart:developer'; // For logging
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import '../managers/auth_manager.dart'; // Import ApiUser from AuthManager
+import '../config/api_config.dart';
+import 'api_client.dart';
 
 // User Profile model to replace Firestore DocumentSnapshot
 class UserProfile {
@@ -76,9 +78,13 @@ class UserProfile {
 }
 
 class UserService {
-  final Dio _dio = Dio();
-  final String baseUrl = 'http://172.16.1.154:8080/semikartapi'; // Match your auth_manager.dart baseUrl
+  // Replace direct Dio with ApiClient
+  final ApiClient _apiClient = ApiClient();
   
+  UserService() {
+    // No need to configure Dio here as it's handled by ApiClient
+  }
+
   // --- Create or Update User Profile ---
   Future<bool> upsertUserProfile({
     required ApiUser user,
@@ -116,11 +122,11 @@ class UserService {
         }
       }
       
-      // Make API call
-      final response = await _dio.post(
-        '$baseUrl/users/${user.id}',
-        data: FormData.fromMap(data),
-      );
+      // Make API call using ApiClient instead of direct Dio
+      final endpoint = Users.profile(user.id);
+      final formData = FormData.fromMap(data);
+      
+      final response = await _apiClient.dio.post(endpoint, data: formData);
       
       if (response.statusCode == 200 || response.statusCode == 201) {
         log("User profile created/updated for ${user.id}");
@@ -138,7 +144,9 @@ class UserService {
   // --- Get User Profile (as Future) ---
   Future<UserProfile?> getUserProfile(String userId) async {
     try {
-      final response = await _dio.get('$baseUrl/users/$userId');
+      final endpoint = Users.profile(userId);
+      
+      final response = await _apiClient.dio.get(endpoint);
       
       if (response.statusCode == 200) {
         return UserProfile.fromJson(response.data);
@@ -149,6 +157,26 @@ class UserService {
     } catch (e) {
       log("Error fetching user profile for ID $userId: $e");
       return null;
+    }
+  }
+
+  // --- Get User Profile Raw Data ---
+  Future<Map<String, dynamic>> getUserProfileData(String userId) async {
+    try {
+      final endpoint = Users.profile(userId);
+      
+      final response = await _apiClient.dio.get(endpoint);
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch user profile: ${response.statusMessage}');
+      }
+      
+      final Map<String, dynamic> userData = response.data;
+      log('Fetched profile for user: $userId');
+      return userData;
+    } catch (e) {
+      log('Error fetching user profile: $e');
+      rethrow;
     }
   }
 
@@ -191,10 +219,9 @@ class UserService {
       // Add a timestamp for the last update
       data['updatedAt'] = DateTime.now().toIso8601String();
       
-      final response = await _dio.patch(
-        '$baseUrl/users/$userId',
-        data: FormData.fromMap(data),
-      );
+      final endpoint = Users.profile(userId);
+      
+      final response = await _apiClient.dio.patch(endpoint, data: data);
       
       if (response.statusCode == 200) {
         log("User profile updated for ID: $userId");
@@ -208,15 +235,105 @@ class UserService {
       return false;
     }
   }
+  
+  // --- Update User Profile With Response Data ---
+  Future<Map<String, dynamic>> updateUserProfileWithResponse(
+      String userId, 
+      Map<String, dynamic> updatedData) async {
+    try {
+      final endpoint = Users.profile(userId);
+      
+      final response = await _apiClient.dio.patch(endpoint, data: updatedData);
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update user profile: ${response.statusMessage}');
+      }
+      
+      final Map<String, dynamic> userData = response.data;
+      log('Updated profile for user: $userId');
+      return userData;
+    } catch (e) {
+      log('Error updating user profile: $e');
+      rethrow;
+    }
+  }
 
   // --- Check if User Profile Exists ---
   Future<bool> doesUserProfileExist(String userId) async {
     try {
-      final response = await _dio.head('$baseUrl/users/$userId');
+      final endpoint = Users.profile(userId);
+      final response = await _apiClient.dio.head(endpoint);
       return response.statusCode == 200;
     } catch (e) {
       log("Error checking user profile existence for ID $userId: $e");
       return false; // Assume not exists on error
+    }
+  }
+  
+  // --- Upload Profile Image ---
+  Future<String> uploadProfileImage(String userId, dynamic imageFile) async {
+    try {
+      final endpoint = Users.updateProfileImage;
+      
+      final formData = FormData.fromMap({
+        'userId': userId,
+        'image': await MultipartFile.fromFile(imageFile.path),
+      });
+      
+      final response = await _apiClient.dio.post(endpoint, data: formData);
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to upload profile image: ${response.statusMessage}');
+      }
+      
+      final String imageUrl = response.data['imageUrl'];
+      log('Uploaded profile image for user: $userId');
+      return imageUrl;
+    } catch (e) {
+      log('Error uploading profile image: $e');
+      rethrow;
+    }
+  }
+  
+  // --- Get Saved Addresses ---
+  Future<List<Map<String, dynamic>>> getSavedAddresses(String userId) async {
+    try {
+      final endpoint = '/users/$userId/addresses';
+      
+      final response = await _apiClient.dio.get(endpoint);
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch addresses: ${response.statusMessage}');
+      }
+      
+      final List<dynamic> addresses = response.data;
+      log('Fetched ${addresses.length} addresses for user: $userId');
+      return addresses.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching saved addresses: $e');
+      rethrow;
+    }
+  }
+  
+  // --- Add New Address ---
+  Future<Map<String, dynamic>> addAddress(
+      String userId, 
+      Map<String, dynamic> addressData) async {
+    try {
+      final endpoint = '/users/$userId/addresses';
+      
+      final response = await _apiClient.dio.post(endpoint, data: addressData);
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add address: ${response.statusMessage}');
+      }
+      
+      final Map<String, dynamic> newAddress = response.data;
+      log('Added new address for user: $userId');
+      return newAddress;
+    } catch (e) {
+      log('Error adding address: $e');
+      rethrow;
     }
   }
 }

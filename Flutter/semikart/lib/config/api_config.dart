@@ -85,9 +85,14 @@ class Categories {
 
 // Product endpoints
 class Products {
+  // Keep your existing endpoints
   static String details(String productId) => '/products/$productId';
   static const String search = '/products'; // Use with ?query=X&category=Y
   static const String featured = '/products/featured';
+  
+  // Add these new endpoints
+  static String related(String productId) => '/products/$productId/related';
+  static String reviews(String productId) => '/products/$productId/reviews';
 }
 
 // Cart endpoints
@@ -104,4 +109,25 @@ class Orders {
   static String userOrders(String userId) => '/orders/$userId';
   static const String createOrder = '/orders';
   static String orderDetails(String orderId) => '/orders/$orderId';
+}
+
+// Notification endpoints
+class Notifications {
+  static String userNotifications(String userId) => '/notifications/$userId';
+  static String markAsRead(String notificationId) => '/notifications/$notificationId/read';
+  static String deleteNotification(String notificationId) => '/notifications/$notificationId';
+  static const String registerDevice = '/notifications/register-device';
+}
+
+// Search endpoints
+class Search {
+  static const String suggestions = '/search/suggestions';
+  static const String history = '/search/history';
+  static String userHistory(String userId) => '/search/history/$userId';
+}
+
+// User address endpoints
+class UserAddresses {
+  static String list(String userId) => '/users/$userId/addresses';
+  static String details(String userId, String addressId) => '/users/$userId/addresses/$addressId';
 }
