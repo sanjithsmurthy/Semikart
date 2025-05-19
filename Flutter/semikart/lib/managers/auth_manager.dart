@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../config/api_config.dart'; // Add this import
+import '../services/api_client.dart'; // Add this import
 
 // --- Authentication Status Enum ---
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -60,6 +62,18 @@ class AuthState {
     this.isLoading = false,
   });
 
+  // Factory methods for common states
+  factory AuthState.unknown() => AuthState(status: AuthStatus.unknown);
+  
+  factory AuthState.authenticated(ApiUser user) => 
+    AuthState(status: AuthStatus.authenticated, user: user);
+    
+  factory AuthState.unauthenticated() => 
+    AuthState(status: AuthStatus.unauthenticated);
+    
+  factory AuthState.error(String message) => 
+    AuthState(status: AuthStatus.unauthenticated, errorMessage: message);
+
   // Helper method to create a copy with updated values
   AuthState copyWith({
     AuthStatus? status,
@@ -77,24 +91,9 @@ class AuthState {
   }
 }
 
-// --- API Service ---
+// --- API Service using ApiClient ---
 class ApiService {
-  final Dio _dio = Dio();
-  final String baseUrl = 'http://172.16.1.154:8080/semikartapi'; // Update with your API URL
-  
-  ApiService() {
-    _dio.options.connectTimeout = const Duration(seconds: 10);
-    _dio.options.receiveTimeout = const Duration(seconds: 10);
-    
-    // Add logging in debug mode
-    if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        error: true,
-      ));
-    }
-  }
+  final ApiClient _apiClient = ApiClient();
   
   // Login method
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -104,8 +103,9 @@ class ApiService {
         'password': password,
       });
       
-      final response = await _dio.post(
-        '$baseUrl/login',
+      // Use ApiConfig for endpoint
+      final response = await _apiClient.dio.post(
+        Auth.login,
         data: formData,
       );
       
@@ -132,9 +132,9 @@ class ApiService {
           errorMessage = e.response!.data as String;
         }
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = 'Connection timeout. Please check your internet connection.';
+        errorMessage = ApiConfig.timeoutError;
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = 'Connection error. Ensure the server is running and accessible.';
+        errorMessage = ApiConfig.connectionError;
       } 
       
       return {
@@ -145,7 +145,7 @@ class ApiService {
     } catch (e) {
       return {
         'success': false,
-        'message': 'An unexpected error occurred',
+        'message': ApiConfig.defaultError,
         'error': e.toString(),
       };
     }
@@ -154,8 +154,8 @@ class ApiService {
   // Log out method
   Future<bool> logout() async {
     try {
-      // If your API has a logout endpoint, call it here
-      // final response = await _dio.post('$baseUrl/logout');
+      // If your API has a logout endpoint, use ApiConfig
+      // final response = await _apiClient.dio.post(ApiConfig.auth.logout);
       // return response.statusCode == 200;
       
       // If no logout endpoint, just return success
@@ -185,8 +185,9 @@ class ApiService {
         'phone': phoneNumber,
       });
       
-      final response = await _dio.post(
-        '$baseUrl/register',
+      // Use ApiConfig for endpoint
+      final response = await _apiClient.dio.post(
+        Auth.register,
         data: formData,
       );
       
@@ -220,7 +221,7 @@ class ApiService {
     } catch (e) {
       return {
         'success': false,
-        'message': 'An unexpected error occurred',
+        'message': ApiConfig.defaultError,
         'error': e.toString(),
       };
     }
@@ -233,8 +234,9 @@ class ApiService {
         'email': email,
       });
       
-      final response = await _dio.post(
-        '$baseUrl/reset-password',
+      // Use ApiConfig for endpoint
+      final response = await _apiClient.dio.post(
+        Auth.resetPassword,
         data: formData,
       );
       
@@ -265,9 +267,23 @@ class ApiService {
     } catch (e) {
       return {
         'success': false,
-        'message': 'An unexpected error occurred',
+        'message': ApiConfig.defaultError,
         'error': e.toString(),
       };
+    }
+  }
+  
+  // Add token refresh if needed
+  Future<bool> refreshToken(String refreshToken) async {
+    try {
+      final response = await _apiClient.dio.post(
+        Auth.refreshToken,
+        data: {'refreshToken': refreshToken}
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      log('Token refresh failed: $e');
+      return false;
     }
   }
 }
@@ -281,7 +297,18 @@ class AuthManager extends StateNotifier<AuthState> {
     _initialize();
   }
   
+  // Alternative constructor that creates ApiService internally
+  AuthManager.withPrefs(this._prefs) : 
+    _apiService = ApiService(), 
+    super(AuthState()) {
+    _initialize();
+  }
+  
   void _initialize() {
+    _checkAuthStatus();
+  }
+  
+  void _checkAuthStatus() {
     // Check for saved user in shared preferences
     final userJson = _prefs.getString('user_data');
     if (userJson != null) {
@@ -441,6 +468,18 @@ class AuthManager extends StateNotifier<AuthState> {
       return false;
     }
   }
+  
+  // Add token refresh capability
+  Future<bool> refreshToken() async {
+    try {
+      final refreshToken = _prefs.getString('refresh_token');
+      if (refreshToken == null) return false;
+      
+      return await _apiService.refreshToken(refreshToken);
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 // --- Providers ---
@@ -456,5 +495,11 @@ final authManagerProvider = StateNotifierProvider<AuthManager, AuthState>((ref) 
   final apiService = ref.watch(apiServiceProvider);
   final prefs = ref.watch(sharedPreferencesProvider);
   return AuthManager(apiService, prefs);
+});
+
+// Alternative provider if you prefer to create ApiService within AuthManager
+final simplifiedAuthManagerProvider = StateNotifierProvider<AuthManager, AuthState>((ref) {
+  final prefs = ref.watch(sharedPreferencesProvider);
+  return AuthManager.withPrefs(prefs);
 });
 
