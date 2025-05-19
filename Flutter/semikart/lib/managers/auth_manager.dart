@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Import Google Sign-In
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore for FieldValue
 import '../services/user_service.dart'; // Import UserService
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 // --- Authentication Status Enum ---
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -257,6 +259,7 @@ class AuthManager extends StateNotifier<AuthState> {
   final AuthService _authService;
   final UserService _userService; // Inject UserService
   StreamSubscription<User?>? _authStateSubscription;
+  final Dio _dio = Dio();
 
   // Update constructor to accept UserService
   AuthManager(this._authService, this._userService) : super(AuthState()) {
@@ -312,12 +315,103 @@ class AuthManager extends StateNotifier<AuthState> {
 
   Future<bool> login(String email, String password) async {
     try {
-      final user = await _authService.loginUserWithEmailAndPassword(email, password);
-      // State update and lastLogin update handled by the stream listener
-      return user != null;
+      state = state.copyWith(status: AuthStatus.unknown, errorMessage: null, clearError: true, isLoading: true); // Set isLoading to true
+      
+      // Use 10.0.2.2 for Android Emulator if your API is on localhost
+      // For iOS simulator or physical device on same Wi-Fi, use your machine's local IP (e.g., http://192.168.1.X:8080)
+      String apiUrl = 'http://172.16.1.154:8080/semikartapi/login'; // Changed for Android Emulator
+      // If using a physical device, replace with your machine's local IP address:
+      // String apiUrl = 'http://YOUR_MACHINE_LOCAL_IP:8080/semikartapi/login';
+
+      // Create FormData
+      final formData = FormData.fromMap({
+        'email': email,
+        'password': password,
+      });
+
+      final response = await _dio.post(
+        apiUrl,
+        data: formData, // Send FormData object
+        options: Options(
+          // Dio will automatically set Content-Type to multipart/form-data
+          // when the data is a FormData object.
+          // You can remove the explicit Content-Type header or ensure it's correct.
+          headers: {
+            // 'Content-Type': 'multipart/form-data', // Dio handles this, but can be explicit
+          },
+        ),
+      );
+      
+      // Check if login was successful (status code 200)
+      if (response.statusCode == 200) {
+        // Extract user data from response if available
+        final userData = response.data;
+        
+        // Create a Firebase User-compatible object or use your API data
+        // Use FirebaseAuth.instance.currentUser or handle custom user model
+        // For now, assuming your API doesn't return a Firebase user directly.
+        // You might want to create a custom User object based on userData
+        // and potentially sign in to Firebase anonymously or with a custom token if needed.
+        // For simplicity, we'll keep the existing Firebase user logic for now,
+        // but this part might need adjustment based on your API's response and auth strategy.
+        final firebaseUser = _authService.currentUser; 
+        
+        // Update auth state to authenticated
+        state = state.copyWith(
+          status: AuthStatus.authenticated,
+          user: firebaseUser, // This might need to be a custom user object from your API
+          errorMessage: null,
+          clearError: true,
+          isLoading: false // Set isLoading to false
+        );
+        return true;
+      } else {
+        // Handle unsuccessful login
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Login failed: ${response.statusMessage} (Status: ${response.statusCode})',
+          isLoading: false // Set isLoading to false
+        );
+        return false;
+      }
+    } on DioException catch (e) {
+      // Handle Dio specific errors
+      String errorMessage = 'Login failed';
+      
+      if (e.response != null) {
+        // The server returned an error response
+        errorMessage = 'Server error: ${e.response?.statusCode} ${e.response?.statusMessage ?? 'Unknown error'}';
+        // You might want to parse e.response.data for a more specific error message from your API
+        if (e.response?.data is Map && e.response!.data.containsKey('message')) {
+          errorMessage = e.response!.data['message'];
+        } else if (e.response?.data is String && (e.response!.data as String).isNotEmpty) {
+          errorMessage = e.response!.data as String;
+        }
+      } else if (e.type == DioExceptionType.connectionTimeout) {
+        errorMessage = 'Connection timeout. Please check your internet connection.';
+      } else if (e.type == DioExceptionType.connectionError) {
+        errorMessage = 'Connection error. Ensure the server is running and accessible.';
+      } else if (e.type == DioExceptionType.sendTimeout) {
+        errorMessage = 'Request send timeout.';
+      } else if (e.type == DioExceptionType.receiveTimeout) {
+        errorMessage = 'Response receive timeout.';
+      } else {
+        errorMessage = 'An unexpected network error occurred: ${e.message}';
+      }
+      
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        errorMessage: errorMessage,
+        isLoading: false // Set isLoading to false
+      );
+      return false;
     } catch (e) {
-      log("AuthManager Login Error: $e");
-      state = state.copyWith(errorMessage: _handleAuthError(e), status: AuthStatus.unauthenticated);
+      // Handle other errors
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        errorMessage: 'Login error: ${e.toString()}',
+        isLoading: false // Set isLoading to false
+      );
       return false;
     }
   }
