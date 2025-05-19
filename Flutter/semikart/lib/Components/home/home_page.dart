@@ -8,150 +8,123 @@ import '../../base_scaffold.dart';
 class HomePageContent extends StatelessWidget {
   const HomePageContent({super.key});
 
-//   void _navigateToProductsL1() {
-//   BaseScaffold.navigateToProductsL1Tab();
-// }
-
-
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFCD5C5C),
+      color: Colors.white, // whole page background to white
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Gradient Header Section
+            Container(
+              width: screenWidth,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                   Color(0xFFCD5C5C),
             Color(0xFFE09999),
             Color(0xFFEFCCCC),
             Color(0xFFF7E6E6),
             Color(0xFFFFFFFF),
           ],
-          stops: [0.18, 0.56, 0.79, 0.85, 1.0],
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: screenHeight - (Scaffold.of(context).appBarMaxHeight ?? kToolbarHeight) - kBottomNavigationBarHeight,
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(bottom: screenHeight * 0.05),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: screenWidth * 0.95,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.05,
-                    vertical: screenHeight * 0.02,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: screenHeight * 0.02,
-                          left: screenWidth * 0.05,
-                          right: screenWidth * 0.05,
-                        ),
-                        child: Text(
-                          'One stop shop for all your electronic components!',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.045,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF4D0102),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      const custom.SearchBar(
-                        hintText: 'Search',
-                        backgroundColor: Colors.white,
-                        iconColor: Color(0xFFA51414),
-                        borderRadius: 20.0,
-                      ),
-                      SizedBox(height: screenHeight * 0.03),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _StatCard(
-                            iconPath: 'public/assets/icon/Banner Icon 1.png',
-                            label: '35+',
-                            description: 'Years Of Sales & Marketing Experience',
-                            screenWidth: screenWidth,
-                          ),
-                          SizedBox(height: screenHeight * 0.02),
-                          _StatCard(
-                            iconPath: 'public/assets/icon/Banner Icon 2.png',
-                            label: '8M+',
-                            description: 'Electronic Components Live Inventory',
-                            screenWidth: screenWidth,
-                          ),
-                          SizedBox(height: screenHeight * 0.02),
-                          _StatCard(
-                            iconPath: 'public/assets/icon/Banner Icon 3.png',
-                            label: '7000+',
-                            description: 'Electronic Manufacturers',
-                            screenWidth: screenWidth,
-                          ),
-                          SizedBox(height: screenHeight * 0.02),
-                          _StatCard(
-                            iconPath: 'public/assets/icon/Banner Icon 4.png',
-                            label: '10+',
-                            description: 'Live Inventory Suppliers',
-                            screenWidth: screenWidth,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+          stops: [0.4, 0.7, 0.8, 0.85, 1.0],
                 ),
-                SizedBox(height: screenHeight * 0.03),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Explore Our Popular Categories',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.045,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: screenHeight * 0.015),
-                      Text(
-                        'Explore a wide selection of connectors, semiconductors, all other electronic parts.',
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.035,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black54,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: screenHeight * 0.03,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'One stop shop for all your electronic components!',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.045,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF4D0102),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                SizedBox(height: screenHeight * 0.03),
-
-                PopularCategoriesGrid(),
-                
-
-
-
-                SizedBox(height: screenHeight * 0.03),
-                const BomRfqCard(),
-              ],
+                  SizedBox(height: screenHeight * 0.02),
+                  const custom.SearchBar(
+                    hintText: 'Search',
+                    backgroundColor: Colors.white,
+                    iconColor: Color(0xFFA51414),
+                    borderRadius: 20.0,
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  _StatCard(
+                    iconPath: 'public/assets/icon/Banner Icon 1.png',
+                    label: '35+',
+                    description: 'Years Of Sales & Marketing Experience',
+                    screenWidth: screenWidth,
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  _StatCard(
+                    iconPath: 'public/assets/icon/Banner Icon 2.png',
+                    label: '8M+',
+                    description: 'Electronic Components Live Inventory',
+                    screenWidth: screenWidth,
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  _StatCard(
+                    iconPath: 'public/assets/icon/Banner Icon 3.png',
+                    label: '7000+',
+                    description: 'Electronic Manufacturers',
+                    screenWidth: screenWidth,
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  _StatCard(
+                    iconPath: 'public/assets/icon/Banner Icon 4.png',
+                    label: '10+',
+                    description: 'Live Inventory Suppliers',
+                    screenWidth: screenWidth,
+                  ),
+                ],
+              ),
             ),
-          ),
+
+            // White Background Content Section
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: screenHeight * 0.03,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Explore Our Popular Categories',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.045,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  Text(
+                    'Explore a wide selection of connectors, semiconductors, all other electronic parts.',
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.035,
+                      color: Colors.black54,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+                  PopularCategoriesGrid(),
+                  SizedBox(height: screenHeight * 0.03),
+                  const BomRfqCard(),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

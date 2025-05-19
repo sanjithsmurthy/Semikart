@@ -17,13 +17,13 @@ class Capsule extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Dynamically calculate the image size (base size is 20x20)
-    final imageSize = screenWidth * 0.05; // 5% of screen width, scalable (~20px)
+    final imageSize = screenWidth * 0.07; // 5% of screen width, scalable (~20px)
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: screenWidth * 0.8, // Dynamically scalable width (~182.5px)
-        height: screenWidth * 0.125, // Decreased height to half (~12px dynamically scalable)
+        width: screenWidth * 0.6, // Dynamically scalable width (~182.5px)
+        height: screenWidth * 0.4, // Decreased height to half (~12px dynamically scalable)
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -40,7 +40,7 @@ class Capsule extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: screenWidth * 0.04), // Add 15px dynamically scalable padding to the left
+              padding: EdgeInsets.only(left: screenWidth * 0.04 ), // Add 15px dynamically scalable padding to the left
               child: Image.asset(
                 imagePath, // Load the image using Image.asset
                 width: imageSize, // Dynamically scalable width (~20px)

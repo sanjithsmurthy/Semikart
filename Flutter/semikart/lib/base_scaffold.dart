@@ -54,7 +54,14 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     super.dispose();
   }
 
-  void _updateCartBadge() {}
+  void _updateCartBadge() {
+    // This method is called when cartItemCountProvider changes
+    // If we're using the proper CartManager, we don't need to do anything here
+    // Just trigger a rebuild to update the UI
+    setState(() {
+      // This will rebuild the BottomNavigationBar with the updated badge
+    });
+  }
 
   void _toggleRFQOverlay() {
     setState(() {
@@ -233,20 +240,20 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 _buildNavItem(Icons.person_outline, Icons.person, "Profile", 4),
               ],
             ),
-            floatingActionButton: !_showRFQOverlay
-                ? FloatingActionButton(
-                    onPressed: _toggleRFQOverlay,
-                    backgroundColor: const Color(0xFFA51414), // Red background
-                    child: const Text(
-                      "RFQ", // Display "RFQ" instead of an icon
-                      style: TextStyle(
-                        color: Colors.white, // White text for visibility
-                        fontWeight: FontWeight.bold, // Bold text for emphasis
-                        fontSize: 16, // Font size for better readability
-                      ),
-                    ),
-                  )
-                : null,
+            // floatingActionButton: !_showRFQOverlay
+            //     ? FloatingActionButton(
+            //         onPressed: _toggleRFQOverlay,
+            //         backgroundColor: const Color(0xFFA51414), // Red background
+            //         child: const Text(
+            //           "RFQ", // Display "RFQ" instead of an icon
+            //           style: TextStyle(
+            //             color: Colors.white, // White text for visibility
+            //             fontWeight: FontWeight.bold, // Bold text for emphasis
+            //             fontSize: 16, // Font size for better readability
+            //           ),
+            //         ),
+            //       )
+            //     : null,
           ),
           if (_showRFQOverlay)
             Positioned.fill(
