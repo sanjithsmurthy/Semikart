@@ -324,7 +324,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             });
 
             return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: verticalSpacing),
+              padding: EdgeInsets.only(
+  left: screenWidth * 0.05,
+  right: screenWidth * 0.05,
+  bottom: verticalSpacing,
+  // top: 0, // removed top padding
+),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -339,13 +344,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: verticalSpacing * 1.5),
+                  SizedBox(height: verticalSpacing * 0.8),
                   Row(
                     children: [
                       Expanded(
                         child: RedButton(
                           label: 'Change Password',
-                          height: screenWidth * 0.12,
+                          height: screenWidth * 0.095,
+                          width: screenWidth * 0.4,
                           onPressed: _sendResetLink,
                         ),
                       ),
@@ -353,27 +359,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Expanded(
                         child: RedButton(
                           label: 'Logout',
-                          height: screenWidth * 0.12,
+                          height: screenWidth * 0.095,
+                          width: screenWidth * 0.4,
                           onPressed: _handleLogout,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing * 1.5),
+                  SizedBox(height: verticalSpacing * 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'User Information',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.05,
+                          fontSize: screenWidth * 0.04,
                           color: Colors.black,
                         ),
                       ),
                       _isSaving
                           ? const SizedBox(
-                              width: 48,
-                              height: 48,
+                              width: 30,
+                              height: 30,
                               child: Center(child: CircularProgressIndicator(strokeWidth: 3, color: Color(0xFFA51414))))
                           : IconButton(
                               icon: Icon(
@@ -393,7 +400,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing),
+                  SizedBox(height: verticalSpacing*0.1),
                   CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.13, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
                   CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.13, readOnly: !isEditing),
