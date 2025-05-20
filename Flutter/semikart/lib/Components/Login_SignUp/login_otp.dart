@@ -84,7 +84,7 @@ class _LoginOTPScreenState extends ConsumerState<LoginOTPScreen> {
      setState(() { _isLoading = true; });
 
      final authManager = ref.read(authManagerProvider.notifier);
-     await authManager.googleSignIn(); // Call AuthManager method
+    //  await authManager.googleSignIn(); // Call AuthManager method
 
      if (!mounted) return;
      setState(() { _isLoading = false; });

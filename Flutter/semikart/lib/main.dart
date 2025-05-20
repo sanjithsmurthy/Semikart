@@ -3,25 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:Semikart/Components/login_signup/login_password.dart';
 import 'package:logging/logging.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:Semikart/firebase_options.dart'; // Import Firebase Core
-import 'utils/firestore_setup.dart'; // Import the FirestoreSetup helper
-import 'utils/firestore_helper.dart'; // Import FirestoreHelper for sample data
+import 'package:shared_preferences/shared_preferences.dart'; // Add this import
 import 'base_scaffold.dart';
-import 'managers/auth_manager.dart'; // Import the new AuthManager
+import 'managers/auth_manager.dart'; // Import the AuthManager with sharedPreferencesProvider
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // Ensure this is configured correctly
-  );
-
-  // Run the setup code once during development
-  // Uncomment the line below, run the app once, then comment it out again
-  // This prevents creating duplicate data on every app launch
-  // await FirestoreHelper.addSampleData();
+  // Initialize SharedPreferences
+  final prefs = await SharedPreferences.getInstance();
 
   // Lock Orientation
   SystemChrome.setPreferredOrientations([
@@ -39,8 +29,12 @@ void main() async {
   _setupLogging();
 
   runApp(
-    const ProviderScope( // Ensure ProviderScope wraps the app
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        // Initialize sharedPreferencesProvider with the actual instance
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MyApp(),
     ),
   );
 }
@@ -117,7 +111,7 @@ class AuthWrapper extends ConsumerWidget {
           ),
         );
       case AuthStatus.authenticated:
-        print(" -> AuthStatus is Authenticated (User: ${authState.user?.uid}). Showing AuthRedirector.");
+        // print(" -> AuthStatus is Authenticated (User: ${authState.user?.uid}). Showing AuthRedirector.");
         // Return the redirector instead of BaseScaffold directly
         return const AuthRedirector();
       case AuthStatus.unauthenticated:

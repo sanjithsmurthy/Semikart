@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+// import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'dart:io'; // For FileImage
 import '../../managers/auth_manager.dart'; // Import AuthManager provider
 import '../../services/user_service.dart'; // Import userDocumentProvider

@@ -39,13 +39,6 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    // --- Debugging: Print request inputs from login_password.dart ---
-    print('--- Login Request Inputs (from login_password.dart) ---');
-    print('Email (to be part of body): $email');
-    print('Password (to be part of body): $password');
-    print('--- Note: The exact URL, final headers, and fully formatted body are constructed and sent by AuthManager. ---');
-    // --- End Debugging ---
-
     // Use AuthManager via Riverpod
     final authManager = ref.read(authManagerProvider.notifier);
     /*final success =*/ await authManager.login(email, password); // Removed unused success variable
@@ -69,7 +62,7 @@ class _LoginPasswordNewScreenState extends ConsumerState<LoginPasswordNewScreen>
      setState(() { _isLoading = true; });
 
      final authManager = ref.read(authManagerProvider.notifier);
-     await authManager.googleSignIn(); // Call Google Sign-In method
+    //  await authManager.googleSignIn(); // Call Google Sign-In method
 
      if (!mounted) return;
      setState(() { _isLoading = false; });

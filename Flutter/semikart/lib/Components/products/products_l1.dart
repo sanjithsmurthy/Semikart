@@ -1,24 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'dart:developer'; // For logging
 import '../../app_navigator.dart'; // Import AppNavigator to access the key
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
 import 'l1_tile.dart'; // Import the L1Tile widget
+import '../../services/database.dart'; // Import the DataBaseService for API calls
 
-class ProductsL1Page extends StatelessWidget {
+class ProductsL1Page extends StatefulWidget {
   const ProductsL1Page({super.key});
 
+  @override
+  State<ProductsL1Page> createState() => _ProductsL1PageState();
+}
+
+class _ProductsL1PageState extends State<ProductsL1Page> {
   // Reference screen dimensions for scaling calculations
   static const double _refScreenWidth = 412.0;
   static const double _refScreenHeight = 917.0;
+  
+  // Create an instance of DataBaseService
+  final DataBaseService _databaseService = DataBaseService();
+  
+  // Future to hold the API call result
+  late Future<List<Map<String, dynamic>>> _l1ProductsFuture;
+  
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the future in initState
+    _l1ProductsFuture = _databaseService.getL1Products();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Calculate scale factors (optional, can directly use fractions)
-    // final widthScale = screenWidth / _refScreenWidth;
-    // final heightScale = screenHeight / _refScreenHeight;
 
     // Helper function to scale width based on reference width
     double scaleWidth(double dimension) => screenWidth * (dimension / _refScreenWidth);
@@ -29,54 +44,47 @@ class ProductsL1Page extends StatelessWidget {
     return Column(
       children: [
         // Header
-        const ProductsHeaderContent(), // Assuming this is already responsive or doesn't need scaling here
+        const ProductsHeaderContent(), 
+        
+        // Replace StreamBuilder with FutureBuilder
         Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('l1_products').snapshots(),
+          child: FutureBuilder<List<Map<String, dynamic>>>(
+            future: _l1ProductsFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(
+                  color: Color(0xFFA51414),
+                ));
               }
 
               if (snapshot.hasError) {
-                return const Center(child: Text('Error fetching products'));
+                log('Error fetching L1 products: ${snapshot.error}');
+                return Center(child: Text(
+                  'Error fetching products: ${snapshot.error}',
+                  textAlign: TextAlign.center,
+                ));
               }
 
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Center(child: Text('No products available'));
               }
 
-              // Map Firestore documents to a list of categories
-              final categories = snapshot.data!.docs.map((doc) {
-                final data = doc.data() as Map<String, dynamic>?; // Explicitly cast to Map<String, dynamic>
-                if (data == null) {
-                  return {
-                    "id": doc.id,
-                    "name": "Unknown", // Default to "Unknown" if data is null
-                    "icon": "", // Default to an empty string if icon is null
-                  };
-                }
-                return {
-                  "id": doc.id,
-                  "name": data["name"] ?? "Unknown", // Default to "Unknown" if name is null
-                  "icon": data["icon"] ?? "", // Default to an empty string if icon is null
-                };
-              }).toList();
+              // Use the data directly from the API response
+              final categories = snapshot.data!;
 
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Use scaled height for spacing
-                    SizedBox(height: scaleHeight(18)), // Approx screenHeight * 0.02 based on 917 ref height
+                    SizedBox(height: scaleHeight(18)),
 
                     // Grid-like layout with lines
                     Padding(
-                      // Use scaled width for horizontal padding
-                      padding: EdgeInsets.symmetric(horizontal: scaleWidth(16.5)), // Approx screenWidth * 0.04 based on 412 ref width
+                      padding: EdgeInsets.symmetric(horizontal: scaleWidth(16.5)),
                       child: ListView.builder(
-                        shrinkWrap: true, // Ensures the ListView takes only the required space
-                        physics: const NeverScrollableScrollPhysics(), // Disable ListView's scrolling
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: (categories.length / 2).ceil(),
                         itemBuilder: (context, index) {
                           final int firstIndex = index * 2;
@@ -89,13 +97,12 @@ class ProductsL1Page extends StatelessWidget {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        // *** Add Logging ***
-                                        print("[ProductsL1Page] Tapped item: ${categories[firstIndex]["name"]}");
+                                        log("[ProductsL1Page] Tapped item: ${categories[firstIndex]["name"]}");
                                         final navigatorState = AppNavigator.productsNavKey.currentState;
                                         if (navigatorState == null) {
-                                          print("[ProductsL1Page] Error: productsNavKey.currentState is NULL!");
+                                          log("[ProductsL1Page] Error: productsNavKey.currentState is NULL!");
                                         } else {
-                                          print("[ProductsL1Page] productsNavKey.currentState is available. Pushing 'l2'...");
+                                          log("[ProductsL1Page] productsNavKey.currentState is available. Pushing 'l2'...");
                                           navigatorState.pushNamed(
                                             'l2',
                                             arguments: {
@@ -105,9 +112,9 @@ class ProductsL1Page extends StatelessWidget {
                                           );
                                         }
                                       },
-                                      child: L1Tile( // Assuming L1Tile handles its internal scaling
-                                        iconPath: categories[firstIndex]["icon"]!,
-                                        text: categories[firstIndex]["name"]!,
+                                      child: L1Tile(
+                                        iconPath: categories[firstIndex]["icon"] ?? "",
+                                        text: categories[firstIndex]["name"] ?? "Unknown",
                                       ),
                                     ),
                                   ),
@@ -121,13 +128,12 @@ class ProductsL1Page extends StatelessWidget {
                                     child: secondIndex < categories.length
                                         ? GestureDetector(
                                             onTap: () {
-                                              // *** Add Logging ***
-                                              print("[ProductsL1Page] Tapped item: ${categories[secondIndex]["name"]}");
+                                              log("[ProductsL1Page] Tapped item: ${categories[secondIndex]["name"]}");
                                               final navigatorState = AppNavigator.productsNavKey.currentState;
                                               if (navigatorState == null) {
-                                                print("[ProductsL1Page] Error: productsNavKey.currentState is NULL!");
+                                                log("[ProductsL1Page] Error: productsNavKey.currentState is NULL!");
                                               } else {
-                                                print("[ProductsL1Page] productsNavKey.currentState is available. Pushing 'l2'...");
+                                                log("[ProductsL1Page] productsNavKey.currentState is available. Pushing 'l2'...");
                                                 navigatorState.pushNamed(
                                                   'l2',
                                                   arguments: {
@@ -137,12 +143,12 @@ class ProductsL1Page extends StatelessWidget {
                                                 );
                                               }
                                             },
-                                            child: L1Tile( // Assuming L1Tile handles its internal scaling
-                                              iconPath: categories[secondIndex]["icon"]!,
-                                              text: categories[secondIndex]["name"]!,
+                                            child: L1Tile(
+                                              iconPath: categories[secondIndex]["icon"] ?? "",
+                                              text: categories[secondIndex]["name"] ?? "Unknown",
                                             ),
                                           )
-                                        : const SizedBox.shrink(), // Keep empty space if no second item
+                                        : const SizedBox.shrink(),
                                   ),
                                 ],
                               ),
@@ -158,7 +164,7 @@ class ProductsL1Page extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(height: scaleHeight(20)), // Add some padding at the bottom
+                    SizedBox(height: scaleHeight(20)),
                   ],
                 ),
               );
@@ -169,32 +175,27 @@ class ProductsL1Page extends StatelessWidget {
     );
   }
 
-  // Widget for a vertical divider, now using scaled dimensions
+  // Widget for a vertical divider
   Widget _buildVerticalDivider({
     required double screenWidth,
     required double screenHeight,
     required double Function(double) scaleWidth,
     required double Function(double) scaleHeight,
   }) {
-    // Note: L1Tile height influences the required divider height.
-    // Assuming L1Tile height is roughly 10% of screen height for this calculation.
-    final tileHeight = screenHeight * 0.1; // Adjust if L1Tile height is different
+    final tileHeight = screenHeight * 0.1;
 
     return Container(
-      // Scale the space between items based on reference width
-      width: scaleWidth(30), // 30 on a 412px wide screen
-      // Scale the height based on an estimated tile height or a fixed scaled value
-      height: tileHeight, // Match the approximate height of the L1Tile
+      width: scaleWidth(30),
+      height: tileHeight,
       alignment: Alignment.center,
       child: const VerticalDivider(
-        color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Keep thickness fixed or scale slightly if needed
-        // thickness: max(1.0, scaleWidth(1)), // Example of scaled thickness with minimum
+        color: Color(0xFFA51414),
+        thickness: 1,
       ),
     );
   }
 
-  // Widget for a horizontal divider, now using scaled dimensions
+  // Widget for a horizontal divider
   Widget _buildHorizontalDivider({
     required double screenWidth,
     required double screenHeight,
@@ -202,15 +203,12 @@ class ProductsL1Page extends StatelessWidget {
     required double Function(double) scaleHeight,
   }) {
     return Container(
-      // Scale the space between rows based on reference height
-      height: scaleHeight(30), // 30 on a 917px high screen
-      // Scale the width relative to the screen width (e.g., 90% of screen width)
-      width: screenWidth * 0.9, // Keep relative width
+      height: scaleHeight(30),
+      width: screenWidth * 0.9,
       alignment: Alignment.center,
       child: const Divider(
-        color: Color(0xFFA51414), // Red color (A51414)
-        thickness: 1, // Keep thickness fixed or scale slightly if needed
-         // thickness: max(1.0, scaleHeight(1)), // Example of scaled thickness with minimum
+        color: Color(0xFFA51414),
+        thickness: 1,
       ),
     );
   }

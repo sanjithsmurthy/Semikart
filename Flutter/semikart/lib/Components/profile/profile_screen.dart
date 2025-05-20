@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../common/popup.dart';
 import '../../managers/auth_manager.dart';
 import '../../services/user_service.dart';
@@ -120,12 +119,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       'userType': _typeController.text.trim(),
       'leadSource': _sourceController.text.trim(),
       'sendOrderEmails': _sendEmails,
-      'updatedAt': FieldValue.serverTimestamp(),
+      'updatedAt': DateTime.now().toIso8601String(), // Replaced FieldValue.serverTimestamp()
     };
 
     try {
       final userService = ref.read(userServiceProvider);
-      await userService.updateUserProfile(user.uid, dataToUpdate);
+      await userService.updateUserProfile(user.id, dataToUpdate); // Changed user.uid to user.id
       CustomPopup.show(
         context: context,
         title: 'Success',
@@ -175,10 +174,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  void _populateControllers(DocumentSnapshot<Map<String, dynamic>>? userDoc) {
+  // Updated to use DocumentData instead of DocumentSnapshot
+  void _populateControllers(DocumentData? userDoc) {
     final authUser = ref.read(authManagerProvider).user;
-    String? currentUserId = authUser?.uid;
-
+    String? currentUserId = authUser?.id; // Changed from uid to id
+    
     if (_lastProcessedUserId != currentUserId) {
       _controllersPopulated = false;
       _lastProcessedUserId = currentUserId;
@@ -198,7 +198,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       String? imageUrl = authUser?.photoURL;
 
       if (userDoc != null && userDoc.exists) {
-        final data = userDoc.data()!;
+        final data = userDoc.data();
         firstName = data['firstName'] ?? '';
         lastName = data['lastName'] ?? '';
         companyName = data['companyName'] ?? '';
@@ -256,7 +256,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
       final user = ref.read(authManagerProvider).user;
       if (user != null) {
-        await ref.read(userServiceProvider).updateUserProfile(user.uid, {
+        await ref.read(userServiceProvider).updateUserProfile(user.id, { // Changed from uid to id
           'profileImageUrl': downloadUrl,
         });
 
