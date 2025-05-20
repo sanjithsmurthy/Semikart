@@ -1,25 +1,22 @@
 import 'package:dio/dio.dart';
 import 'dart:developer';
+import '../config/api_config.dart';  // Add this import
+import 'api_client.dart';  // Add this import
 
 class DataBaseService {
-  final Dio _dio = Dio();
-  final String baseUrl = 'http://172.16.1.154:8080/semikartapi'; // Match your API URL from auth_manager
+  final ApiClient _apiClient = ApiClient();
+  
+  // Keep the baseUrl reference for backward compatibility
+  final String baseUrl = ApiConfig.baseUrl;
   
   DataBaseService() {
-    _dio.options.connectTimeout = const Duration(seconds: 10);
-    _dio.options.receiveTimeout = const Duration(seconds: 10);
-    
-    // Add logging for debugging
-    _dio.interceptors.add(LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      error: true,
-    ));
+    // No need to configure Dio here as it's handled by ApiClient
   }
 
   // Method to update user data
   Future<dynamic> updateUserData(String email, String firstname, String lastname, String phone, String password) async {
     try {
+      final endpoint = Users.profile('update'); // Using Users class directly
       final formData = FormData.fromMap({
         'email': email,
         'first_name': firstname,
@@ -28,7 +25,7 @@ class DataBaseService {
         'password': password,
       });
       
-      final response = await _dio.post('$baseUrl/users', data: formData);
+      final response = await _apiClient.dio.post(endpoint, data: formData);
       log('User data updated for $email');
       return response.data;
     } catch (e) {
@@ -40,12 +37,13 @@ class DataBaseService {
   // Method to upload L1 product data
   Future<void> uploadL1ProductData(String name, String iconUrl) async {
     try {
+      final endpoint = Categories.l1Add; // Using Categories class directly
       final formData = FormData.fromMap({
         'name': name,
         'icon': iconUrl,
       });
       
-      await _dio.post('$baseUrl/products/l1', data: formData);
+      await _apiClient.dio.post(endpoint, data: formData);
       log('L1 product uploaded: $name');
     } catch (e) {
       log('Error uploading L1 product: $e');
@@ -53,7 +51,7 @@ class DataBaseService {
     }
   }
 
-  // Method to upload all 17 L1 products
+  // Method to upload all 17 L1 products (keeping existing functionality)
   Future<void> uploadAllL1Products() async {
     final List<Map<String, String>> l1Products = [
       {
@@ -131,23 +129,14 @@ class DataBaseService {
       await uploadL1ProductData(product['name']!, product['icon']!);
     }
     log('All L1 products uploaded successfully!');
-    
-    // Option 2: Bulk upload (if your API supports it)
-    /*
-    try {
-      await _dio.post('$baseUrl/products/l1/bulk', data: l1Products);
-      log('All L1 products uploaded successfully in bulk!');
-    } catch (e) {
-      log('Error bulk uploading L1 products: $e');
-      rethrow;
-    }
-    */
   }
   
-  // Method to get all L1 products
+  // Method to get all L1 products - updated with ApiClient
   Future<List<Map<String, dynamic>>> getL1Products() async {
     try {
-      final response = await _dio.get('$baseUrl/products/l1');
+      final endpoint = Categories.l1List; // Using Categories class directly
+      final response = await _apiClient.dio.get(endpoint);
+      
       final List<dynamic> data = response.data;
       return data.cast<Map<String, dynamic>>();
     } catch (e) {
@@ -156,10 +145,11 @@ class DataBaseService {
     }
   }
   
-  // Method to get product details
+  // Method to get product details - updated with ApiClient
   Future<Map<String, dynamic>> getProductDetails(String productId) async {
     try {
-      final response = await _dio.get('$baseUrl/products/$productId');
+      final endpoint = Products.details(productId); // Using Products class method directly
+      final response = await _apiClient.dio.get(endpoint);
       return response.data;
     } catch (e) {
       log('Error fetching product details for $productId: $e');
@@ -167,50 +157,60 @@ class DataBaseService {
     }
   }
   
-  // Method to add a single L2 category - called from admin_panel.dart
+  // Method to add a single L2 category - updated with ApiClient
   Future<void> addL2Category({required String l1Id, required String name}) async {
     try {
+      final endpoint = Categories.l2Add; // Using Categories class directly
       final formData = FormData.fromMap({
         'name': name,
         'l1id': l1Id,
       });
       
-      final response = await _dio.post('$baseUrl/products/l2', data: formData);
-      log('Added L2 category: $name under L1 ID: $l1Id');
+      final response = await _apiClient.dio.post(endpoint, data: formData);
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add L2 category: ${response.statusMessage}');
       }
+      
+      log('Added L2 category: $name under L1 ID: $l1Id');
     } catch (e) {
       log('Error adding L2 category: $e');
       rethrow;
     }
   }
   
-  // Method for bulk adding L2 categories (optional, for efficiency)
+  // Method for bulk adding L2 categories - updated with ApiClient
   Future<void> addMultipleL2Categories({required String l1Id, required List<String> names}) async {
     try {
+      // Keep using full URL for endpoints not defined in ApiConfig
+      final endpoint = '$baseUrl/products/l2/bulk';
       final data = names.map((name) => {
         'name': name,
         'l1id': l1Id,
       }).toList();
       
-      final response = await _dio.post('$baseUrl/products/l2/bulk', data: data);
-      log('Added ${names.length} L2 categories under L1 ID: $l1Id');
+      final response = await _apiClient.dio.post(endpoint, data: data);
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add L2 categories in bulk: ${response.statusMessage}');
       }
+      
+      log('Added ${names.length} L2 categories under L1 ID: $l1Id');
     } catch (e) {
       log('Error adding multiple L2 categories: $e');
       rethrow;
     }
   }
 
-  // Get L2 categories for a specific L1 category
+  // Get L2 categories for a specific L1 category - updated with ApiClient
   Future<List<Map<String, dynamic>>> getL2ProductsByL1Id(String l1Id) async {
     try {
-      final response = await _dio.get('$baseUrl/products/l2', queryParameters: {'l1id': l1Id});
+      final endpoint = Categories.l2List; // Using Categories class directly
+      final response = await _apiClient.dio.get(
+        endpoint,
+        queryParameters: {'l1id': l1Id}
+      );
+      
       final List<dynamic> data = response.data;
       return data.cast<Map<String, dynamic>>();
     } catch (e) {
@@ -219,15 +219,16 @@ class DataBaseService {
     }
   }
 
-  // Add L3 category linked to an L2 category
+  // Add L3 category linked to an L2 category - updated with ApiClient
   Future<void> addL3Category({required String l2Id, required String name}) async {
     try {
+      final endpoint = Categories.l3Add; // Using Categories class directly
       final formData = FormData.fromMap({
         'name': name,
         'l2id': l2Id,
       });
       
-      final response = await _dio.post('$baseUrl/products/l3', data: formData);
+      final response = await _apiClient.dio.post(endpoint, data: formData);
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add L3 category: ${response.statusMessage}');
@@ -240,10 +241,14 @@ class DataBaseService {
     }
   }
 
-  // Get L3 products for a specific L2 category
+  // Get L3 products for a specific L2 category - updated with ApiClient
   Future<List<Map<String, dynamic>>> getL3ProductsByL2Id(String l2Id) async {
     try {
-      final response = await _dio.get('$baseUrl/products/l3', queryParameters: {'l2id': l2Id});
+      final endpoint = Categories.l3List; // Using Categories class directly
+      final response = await _apiClient.dio.get(
+        endpoint, 
+        queryParameters: {'l2id': l2Id}
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch L3 products: ${response.statusMessage}');
