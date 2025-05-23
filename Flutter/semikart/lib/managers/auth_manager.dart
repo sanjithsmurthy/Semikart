@@ -437,33 +437,40 @@ class AuthManager extends StateNotifier<AuthState> {
   }) async {
     try {
       state = state.copyWith(isLoading: true);
-      
-      final apiResponse = await _apiService.signUp(
-        email: email,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        companyName: companyName,
-        phoneNumber: phoneNumber,
+      final dio = ApiClient().dio;
+      final response = await dio.post(
+        'http://192.168.1.8:8080/semikartapi/signup',
+        data: {
+          'firstName': firstName,
+          'lastName': lastName,
+          'email': email,
+          'password': password,
+          'companyName': companyName,
+          'mobileNo': phoneNumber,
+        },
       );
-      
-      if (apiResponse['success']) {
-        // You can either automatically log in after signup or require a separate login
-        // For simplicity, we'll log in automatically
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        final data = response.data['data'];
+        final customerId = data['customerId'];
+        if (customerId != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('customerId', customerId);
+        }
+        // Immediately log in after signup
         return await login(email, password);
       } else {
         state = state.copyWith(
           status: AuthStatus.unauthenticated,
-          errorMessage: apiResponse['message'] ?? 'Signup failed',
-          isLoading: false
+          errorMessage: response.data['message'] ?? 'Signup failed',
+          isLoading: false,
         );
         return false;
       }
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
-        errorMessage: 'Signup error: ${e.toString()}',
-        isLoading: false
+        errorMessage: 'Signup error: \\${e.toString()}',
+        isLoading: false,
       );
       return false;
     }
