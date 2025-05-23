@@ -336,6 +336,41 @@ class UserService {
       rethrow;
     }
   }
+
+  // --- Update User Info via Backend API ---
+  Future<bool> updateUserInfo({
+    required int customerId,
+    required String firstName,
+    required String lastName,
+    required String companyName,
+    required String mobileNo,
+    String? googleProfilePic,
+  }) async {
+    try {
+      final response = await Dio().put(
+        'http://192.168.1.8:8080/semikartapi/updateuserinfo',
+        data: {
+          'customerId': customerId,
+          'firstName': firstName,
+          'lastName': lastName,
+          'companyName': companyName,
+          'mobileNo': mobileNo,
+          if (googleProfilePic != null) 'google_profile_pic': googleProfilePic,
+        },
+        options: Options(contentType: 'application/json'),
+      );
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        log('User info updated successfully');
+        return true;
+      } else {
+        log('Failed to update user info: \\${response.data}');
+        return false;
+      }
+    } catch (e) {
+      log('Error updating user info: $e');
+      return false;
+    }
+  }
 }
 
 // --- Riverpod Provider for UserService ---

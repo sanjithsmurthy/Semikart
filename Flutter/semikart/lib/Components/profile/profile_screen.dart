@@ -46,6 +46,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    isEditing = false; // Always start in view mode
     _fetchAndSetApiProfile();
   }
 
@@ -151,9 +152,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _updateUserProfile() async {
-    final user = ref.read(authManagerProvider).user;
-    if (user == null) {
-      CustomPopup.show(context: context, title: 'Error', message: 'Not logged in.', buttonText: 'OK', imagePath: 'public/assets/images/Alert.png');
+    final prefs = await SharedPreferences.getInstance();
+    final customerId = prefs.getInt('customerId');
+    if (customerId == null) {
+      CustomPopup.show(context: context, title: 'Error', message: 'No customer ID found. Please log in again.', buttonText: 'OK', imagePath: 'public/assets/images/Alert.png');
       return;
     }
 
@@ -161,33 +163,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       _isSaving = true;
     });
 
-    final dataToUpdate = {
-      'firstName': _firstNameController.text.trim(),
-      'lastName': _lastNameController.text.trim(),
-      'companyName': _companyNameController.text.trim(),
-      'phoneNumber': _phoneController.text.trim(),
-      'altPhoneNumber': _altPhoneController.text.trim(),
-      'gstin': _gstinController.text.trim(),
-      'userType': _typeController.text.trim(),
-      'leadSource': _sourceController.text.trim(),
-      'sendOrderEmails': _sendEmails,
-      'updatedAt': DateTime.now().toIso8601String(), // Replaced FieldValue.serverTimestamp()
-    };
-
     try {
-      // Remove the unnecessary local variable
-      await ref.read(userServiceProvider).updateUserProfile(user.id, dataToUpdate); // Changed user.uid to user.id
-      CustomPopup.show(
-        context: context,
-        title: 'Success',
-        message: 'Profile updated successfully!',
-        buttonText: 'OK',
-        imagePath: 'public/assets/images/checksucccess.png',
+      final success = await ref.read(userServiceProvider).updateUserInfo(
+        customerId: customerId,
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        companyName: _companyNameController.text.trim(),
+        mobileNo: _phoneController.text.trim(),
+        googleProfilePic: _profileImageUrl,
       );
-      setState(() {
-        isEditing = false;
-        _controllersPopulated = true;
-      });
+      if (success) {
+        await _fetchAndSetApiProfile(); // Refresh profile info after update
+        CustomPopup.show(
+          context: context,
+          title: 'Success',
+          message: 'Profile updated successfully!',
+          buttonText: 'OK',
+          imagePath: 'public/assets/images/checksucccess.png',
+        );
+        setState(() {
+          isEditing = false;
+          _controllersPopulated = true;
+        });
+      } else {
+        CustomPopup.show(
+          context: context,
+          title: 'Error',
+          message: 'Failed to update profile. Please try again.',
+          buttonText: 'OK',
+          imagePath: 'public/assets/images/Alert.png',
+        );
+      }
     } catch (e) {
       CustomPopup.show(
         context: context,
@@ -281,10 +287,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       _profileImageUrl = imageUrl;
 
       _controllersPopulated = true;
-
-      if (userDoc == null || !userDoc.exists) {
-        isEditing = true;
-      }
     } else if (currentUserId == null) {
       _firstNameController.clear();
       _lastNameController.clear();
@@ -304,22 +306,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _uploadProfileImage(File image) async {
     try {
+      // TODO: Upload image to your storage (e.g., Firebase Storage) and get the URL
+      // For now, simulate upload and use a placeholder URL
       final downloadUrl = "https://example.com/path/to/uploaded/image.jpg";
 
-      final user = ref.read(authManagerProvider).user;
-      if (user != null) {
-        await ref.read(userServiceProvider).updateUserProfile(user.id, { // Changed from uid to id
-          'profileImageUrl': downloadUrl,
-        });
+      final prefs = await SharedPreferences.getInstance();
+      final customerId = prefs.getInt('customerId');
+      if (customerId == null) return;
 
-        ref.read(profileImageProvider.notifier).state = image;
+      // Update backend with new profile pic URL
+      await ref.read(userServiceProvider).updateUserInfo(
+        customerId: customerId,
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        companyName: _companyNameController.text.trim(),
+        mobileNo: _phoneController.text.trim(),
+        googleProfilePic: downloadUrl,
+      );
 
-        setState(() {
-          _profileImageUrl = downloadUrl;
-        });
+      ref.read(profileImageProvider.notifier).state = image;
 
-        log("Profile image updated successfully.");
-      }
+      setState(() {
+        _profileImageUrl = downloadUrl;
+      });
+
+      log("Profile image updated successfully.");
     } catch (e) {
       log("Error uploading profile image: $e");
     }
@@ -365,14 +376,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       return Center(child: Text('Error: $_apiProfileError'));
     }
     if (_apiProfile != null) {
-      // Use _apiProfile to populate fields
-      _firstNameController.text = _apiProfile!.firstName;
-      _lastNameController.text = _apiProfile!.lastName;
-      _companyNameController.text = _apiProfile!.companyName;
-      _emailController.text = _apiProfile!.email;
-      _phoneController.text = _apiProfile!.mobileNo;
-      _typeController.text = _apiProfile!.userType;
-      // ...other fields as needed
+      // Use _apiProfile to populate fields ONLY if not editing
+      if (!isEditing) {
+        _firstNameController.text = _apiProfile!.firstName;
+        _lastNameController.text = _apiProfile!.lastName;
+        _companyNameController.text = _apiProfile!.companyName;
+        _emailController.text = _apiProfile!.email;
+        _phoneController.text = _apiProfile!.mobileNo;
+        _typeController.text = _apiProfile!.userType;
+        // ...other fields as needed
+      }
     }
 
     return Scaffold(
@@ -490,7 +503,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   SizedBox(height: verticalSpacing),
                   Row(
                     children: [
-                      Expanded(child: CustomTextField(controller: _typeController, label: 'Type', height: screenWidth * 0.13, readOnly: !isEditing)),
+                      Expanded(child: CustomTextField(controller: _typeController, label: 'Type', height: screenWidth * 0.13, readOnly: true)),
                       SizedBox(width: screenWidth * 0.03),
                       Expanded(child: CustomTextField(controller: _sourceController, label: 'Source', height: screenWidth * 0.13, readOnly: !isEditing)),
                     ],
