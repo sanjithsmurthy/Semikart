@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer'; // For logging
 import '../managers/auth_manager.dart'; // Import AuthManager to get UID
+import 'package:dio/dio.dart';
+import '../models/user_profile.dart';
 
 class UserService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -112,6 +114,23 @@ class UserService {
     } catch (e) {
       log("Error checking user profile existence for UID $uid: $e");
       return false; // Assume not exists on error
+    }
+  }
+
+  // Fetch user info from API
+  Future<UserProfile> fetchUserProfileFromApi(int customerId) async {
+    final dio = Dio();
+    final url = 'http://192.168.1.8:8080/semikartapi/getuserinfo';
+    try {
+      final response = await dio.get(url, queryParameters: {'customerId': customerId});
+      if (response.statusCode == 200 && response.data != null) {
+        return UserProfile.fromJson(response.data);
+      } else {
+        throw Exception('Failed to fetch user info');
+      }
+    } catch (e) {
+      log('Error fetching user info from API: $e');
+      rethrow;
     }
   }
 }

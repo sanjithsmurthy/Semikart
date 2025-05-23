@@ -6,7 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart'; // Import Google Sign-In
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore for FieldValue
 import '../services/user_service.dart'; // Import UserService
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 // --- Authentication Status Enum ---
 enum AuthStatus { unknown, authenticated, unauthenticated }
@@ -17,12 +16,14 @@ class AuthState {
   final User? user; // Firebase user object
   final String? errorMessage; // Optional error message
   final bool isLoading; // Added loading state
+  final int? customerId; // Add customerId to AuthState
 
   AuthState({
     this.status = AuthStatus.unknown,
     this.user,
     this.errorMessage,
-    this.isLoading = false, // Default to false
+    this.isLoading = false,
+    this.customerId,
   });
 
   // Helper method to create a copy with updated values
@@ -32,12 +33,14 @@ class AuthState {
     String? errorMessage,
     bool clearError = false, // Flag to explicitly clear error
     bool? isLoading, // Added
+    int? customerId,
   }) {
     return AuthState(
       status: status ?? this.status,
       user: user, // Directly assign the new user value
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
       isLoading: isLoading ?? this.isLoading, // Added
+      customerId: customerId ?? this.customerId,
     );
   }
 }
@@ -259,7 +262,13 @@ class AuthManager extends StateNotifier<AuthState> {
   final AuthService _authService;
   final UserService _userService; // Inject UserService
   StreamSubscription<User?>? _authStateSubscription;
-  final Dio _dio = Dio();
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      sendTimeout: const Duration(seconds: 10),
+    ),
+  );
 
   // Update constructor to accept UserService
   AuthManager(this._authService, this._userService) : super(AuthState()) {
@@ -319,7 +328,7 @@ class AuthManager extends StateNotifier<AuthState> {
       
       // Use 10.0.2.2 for Android Emulator if your API is on localhost
       // For iOS simulator or physical device on same Wi-Fi, use your machine's local IP (e.g., http://192.168.1.X:8080)
-      String apiUrl = 'http://172.16.1.154:8080/semikartapi/login'; // Changed for Android Emulator
+      String apiUrl = 'http://192.168.1.8:8080/semikartapi/login'; // Changed for Android Emulator
       // If using a physical device, replace with your machine's local IP address:
       // String apiUrl = 'http://YOUR_MACHINE_LOCAL_IP:8080/semikartapi/login';
 
@@ -346,23 +355,39 @@ class AuthManager extends StateNotifier<AuthState> {
       if (response.statusCode == 200) {
         // Extract user data from response if available
         final userData = response.data;
-        
-        // Create a Firebase User-compatible object or use your API data
-        // Use FirebaseAuth.instance.currentUser or handle custom user model
-        // For now, assuming your API doesn't return a Firebase user directly.
-        // You might want to create a custom User object based on userData
-        // and potentially sign in to Firebase anonymously or with a custom token if needed.
-        // For simplicity, we'll keep the existing Firebase user logic for now,
-        // but this part might need adjustment based on your API's response and auth strategy.
-        final firebaseUser = _authService.currentUser; 
-        
-        // Update auth state to authenticated
+        int? customerId;
+        if (userData is Map && userData.containsKey('customerId')) {
+          customerId = userData['customerId'] is int
+              ? userData['customerId']
+              : int.tryParse(userData['customerId'].toString());
+        }
+        final firebaseUser = _authService.currentUser;
+        // --- Sync API user info to Firestore for hamburger menu ---
+        if (customerId != null) {
+          try {
+            final apiProfile = await _userService.fetchUserProfileFromApi(customerId);
+            if (firebaseUser != null) {
+              await _userService.updateUserProfile(firebaseUser.uid, {
+                'firstName': apiProfile.firstName,
+                'lastName': apiProfile.lastName,
+                'companyName': apiProfile.companyName,
+                'phoneNumber': apiProfile.mobileNo,
+                'userType': apiProfile.userType,
+                'email': apiProfile.email,
+                if (apiProfile.profileImageUrl != null) 'profileImageUrl': apiProfile.profileImageUrl,
+              });
+            }
+          } catch (e) {
+            log('Failed to sync API user info to Firestore: $e');
+          }
+        }
         state = state.copyWith(
           status: AuthStatus.authenticated,
-          user: firebaseUser, // This might need to be a custom user object from your API
+          user: firebaseUser,
           errorMessage: null,
           clearError: true,
-          isLoading: false // Set isLoading to false
+          isLoading: false,
+          customerId: customerId,
         );
         return true;
       } else {

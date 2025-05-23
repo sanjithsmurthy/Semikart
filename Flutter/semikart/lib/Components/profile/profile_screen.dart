@@ -10,6 +10,7 @@ import '../common/red_button.dart';
 import '../Login_SignUp/custom_text_field.dart';
 import '../common/two_radios.dart';
 import '../../providers/profile_image_provider.dart';
+import '../../models/user_profile.dart';
 import 'dart:developer'; // For logging
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -37,6 +38,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _sourceController = TextEditingController();
 
   bool _sendEmails = true;
+
+  UserProfile? _apiProfile;
+  bool _apiProfileLoading = false;
+  String? _apiProfileError;
 
   @override
   void initState() {
@@ -273,11 +278,50 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
+  Future<void> _fetchApiProfile(int customerId) async {
+    setState(() { _apiProfileLoading = true; _apiProfileError = null; });
+    try {
+      final userService = ref.read(userServiceProvider);
+      final profile = await userService.fetchUserProfileFromApi(customerId);
+      setState(() { _apiProfile = profile; });
+    } catch (e) {
+      setState(() { _apiProfileError = e.toString(); });
+    } finally {
+      setState(() { _apiProfileLoading = false; });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final customerId = ref.read(authManagerProvider).customerId;
+    if (customerId != null && _apiProfile == null && !_apiProfileLoading) {
+      _fetchApiProfile(customerId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final verticalSpacing = screenWidth * 0.03;
     final userDocAsyncValue = ref.watch(userDocumentProvider);
+
+    if (_apiProfileLoading) {
+      return const Center(child: CircularProgressIndicator(color: Color(0xFFA51414)));
+    }
+    if (_apiProfileError != null) {
+      return Center(child: Text('Error: $_apiProfileError'));
+    }
+    if (_apiProfile != null) {
+      // Use _apiProfile to populate fields
+      _firstNameController.text = _apiProfile!.firstName;
+      _lastNameController.text = _apiProfile!.lastName;
+      _companyNameController.text = _apiProfile!.companyName;
+      _emailController.text = _apiProfile!.email;
+      _phoneController.text = _apiProfile!.mobileNo;
+      _typeController.text = _apiProfile!.userType;
+      // ...other fields as needed
+    }
 
     return Scaffold(
       body: SafeArea(
