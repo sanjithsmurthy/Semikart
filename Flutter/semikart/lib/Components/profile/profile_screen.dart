@@ -11,6 +11,7 @@ import '../common/two_radios.dart';
 import '../../providers/profile_image_provider.dart';
 import '../../models/user_profile.dart';
 import 'dart:developer'; // For logging
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -45,6 +46,52 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _fetchAndSetApiProfile();
+  }
+
+  Future<void> _fetchAndSetApiProfile() async {
+    setState(() {
+      _apiProfileLoading = true;
+      _apiProfileError = null;
+    });
+    try {
+      // Always get customerId from SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final customerId = prefs.getInt('customerId');
+      if (customerId == null) {
+        setState(() {
+          _apiProfileError = 'No customer ID found. Please log in again.';
+          _apiProfileLoading = false;
+        });
+        return;
+      }
+      final apiService = ref.read(apiServiceProvider);
+      final data = await apiService.fetchUserInfo(customerId);
+      if (data != null) {
+        setState(() {
+          _apiProfile = UserProfile(
+            firstName: data['firstName'] ?? '',
+            lastName: data['lastName'] ?? '',
+            companyName: data['companyName'] ?? '',
+            email: data['email'] ?? '',
+            mobileNo: data['mobileNo'] ?? '',
+            userType: data['userType'] ?? '',
+            customerId: data['customerId'] ?? 0,
+          );
+          _apiProfileLoading = false;
+        });
+      } else {
+        setState(() {
+          _apiProfileError = 'Failed to fetch user info.';
+          _apiProfileLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _apiProfileError = 'Error: \\${e.toString()}';
+        _apiProfileLoading = false;
+      });
+    }
   }
 
   @override

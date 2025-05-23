@@ -101,13 +101,14 @@ class ApiService {
         'email': email,
         'password': password,
       });
-      
-      // Use ApiConfig for endpoint
-      final response = await _apiClient.dio.post(
-        Auth.login,
+
+      // Use a direct Dio call with the full URL for login to match the working approach
+      final response = await Dio().post(
+        'http://192.168.1.8:8080/semikartapi/login',
         data: formData,
+        // Do NOT set Content-Type; Dio will handle it for FormData
       );
-      
+
       if (response.statusCode == 200) {
         return {
           'success': true,
@@ -122,9 +123,8 @@ class ApiService {
       }
     } on DioException catch (e) {
       String errorMessage = 'Login failed';
-      
       if (e.response != null) {
-        errorMessage = 'Server error: ${e.response?.statusCode} ${e.response?.statusMessage ?? 'Unknown error'}';
+        errorMessage = 'Server error: \\${e.response?.statusCode} \\${e.response?.statusMessage ?? 'Unknown error'}';
         if (e.response?.data is Map && e.response!.data.containsKey('message')) {
           errorMessage = e.response!.data['message'];
         } else if (e.response?.data is String && (e.response!.data as String).isNotEmpty) {
@@ -134,8 +134,7 @@ class ApiService {
         errorMessage = ApiConfig.timeoutError;
       } else if (e.type == DioExceptionType.connectionError) {
         errorMessage = ApiConfig.connectionError;
-      } 
-      
+      }
       return {
         'success': false,
         'message': errorMessage,
@@ -285,6 +284,23 @@ class ApiService {
       return false;
     }
   }
+  
+  // --- Add: Fetch user info from backend ---
+  Future<Map<String, dynamic>?> fetchUserInfo(int customerId) async {
+    try {
+      final response = await Dio().get(
+        'http://192.168.1.8:8080/semikartapi/getuserinfo',
+        queryParameters: {'customerId': customerId},
+      );
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      log('Error fetching user info: $e');
+      return null;
+    }
+  }
 }
 
 // --- Auth Manager (State Notifier) ---
@@ -337,6 +353,20 @@ class AuthManager extends StateNotifier<AuthState> {
         // Extract user data from response
         final userData = apiResponse['data'];
         
+        // Extract customerId from userData and store in SharedPreferences as int with key 'customerId'
+        final customerIdRaw = userData['customerId'];
+        if (customerIdRaw != null) {
+          int? customerIdInt;
+          if (customerIdRaw is int) {
+            customerIdInt = customerIdRaw;
+          } else if (customerIdRaw is String) {
+            customerIdInt = int.tryParse(customerIdRaw);
+          }
+          if (customerIdInt != null) {
+            await _prefs.setInt('customerId', customerIdInt);
+          }
+        }
+        
         // Create ApiUser from response
         final apiUser = ApiUser.fromJson(userData);
         
@@ -363,7 +393,7 @@ class AuthManager extends StateNotifier<AuthState> {
     } catch (e) {
       state = state.copyWith(
         status: AuthStatus.unauthenticated,
-        errorMessage: 'Login error: ${e.toString()}',
+        errorMessage: 'Login error: \\${e.toString()}',
         isLoading: false
       );
       return false;

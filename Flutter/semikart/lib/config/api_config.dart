@@ -3,7 +3,7 @@ import 'dart:developer';
 /// API Configuration class for Semikart app
 class ApiConfig {
   // Base URL for the API
-  static const String baseUrl = 'http://172.16.1.160:8080/semikartapi';
+  static const String baseUrl = 'http://192.168.1.8:8080/semikartapi';
 
   // Timeouts in seconds
   static const int connectTimeout = 10;
@@ -26,18 +26,22 @@ class ApiConfig {
   static final cart = Cart();
   static final orders = Orders();
 
-  /// Build headers with optional authentication token
-  static Map<String, String> getHeaders({String? authToken}) {
-    final headers = {
-      'Content-Type': 'application/json',
+  /// Build headers with optional authentication token and custom content type
+  ///
+  /// Usage:
+  ///   - For JSON: getHeaders(contentType: 'application/json')
+  ///   - For multipart: getHeaders() (let Dio set Content-Type)
+  ///   - For custom: getHeaders(contentType: '...')
+  static Map<String, String> getHeaders({String? authToken, String? contentType}) {
+    final headers = <String, String>{
       'Accept': 'application/json',
     };
-
-    // Add auth token if available
+    if (contentType != null) {
+      headers['Content-Type'] = contentType;
+    }
     if (authToken != null && authToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $authToken';
     }
-
     return headers;
   }
 
