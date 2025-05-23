@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../common/popup.dart';
 import '../../managers/auth_manager.dart';
 import '../../services/user_service.dart';
@@ -125,12 +124,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       'userType': _typeController.text.trim(),
       'leadSource': _sourceController.text.trim(),
       'sendOrderEmails': _sendEmails,
-      'updatedAt': FieldValue.serverTimestamp(),
+      'updatedAt': DateTime.now().toIso8601String(), // Replaced FieldValue.serverTimestamp()
     };
 
     try {
       final userService = ref.read(userServiceProvider);
-      await userService.updateUserProfile(user.uid, dataToUpdate);
+      await userService.updateUserProfile(user.id, dataToUpdate); // Changed user.uid to user.id
       CustomPopup.show(
         context: context,
         title: 'Success',
@@ -180,10 +179,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  void _populateControllers(DocumentSnapshot<Map<String, dynamic>>? userDoc) {
+  // Updated to use DocumentData instead of DocumentSnapshot
+  void _populateControllers(DocumentData? userDoc) {
     final authUser = ref.read(authManagerProvider).user;
-    String? currentUserId = authUser?.uid;
-
+    String? currentUserId = authUser?.id; // Changed from uid to id
+    
     if (_lastProcessedUserId != currentUserId) {
       _controllersPopulated = false;
       _lastProcessedUserId = currentUserId;
@@ -203,7 +203,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       String? imageUrl = authUser?.photoURL;
 
       if (userDoc != null && userDoc.exists) {
-        final data = userDoc.data()!;
+        final data = userDoc.data();
         firstName = data['firstName'] ?? '';
         lastName = data['lastName'] ?? '';
         companyName = data['companyName'] ?? '';
@@ -261,7 +261,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
       final user = ref.read(authManagerProvider).user;
       if (user != null) {
-        await ref.read(userServiceProvider).updateUserProfile(user.uid, {
+        await ref.read(userServiceProvider).updateUserProfile(user.id, { // Changed from uid to id
           'profileImageUrl': downloadUrl,
         });
 
@@ -278,25 +278,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  Future<void> _fetchApiProfile(int customerId) async {
-    setState(() { _apiProfileLoading = true; _apiProfileError = null; });
+  Future<void> _deleteProfileImage() async {
     try {
-      final userService = ref.read(userServiceProvider);
-      final profile = await userService.fetchUserProfileFromApi(customerId);
-      setState(() { _apiProfile = profile; });
-    } catch (e) {
-      setState(() { _apiProfileError = e.toString(); });
-    } finally {
-      setState(() { _apiProfileLoading = false; });
-    }
-  }
+      final user = ref.read(authManagerProvider).user;
+      if (user != null) {
+        // Update profile with null image URL
+        await ref.read(userServiceProvider).updateUserProfile(user.id, {
+          'profileImageUrl': null,
+        });
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final customerId = ref.read(authManagerProvider).customerId;
-    if (customerId != null && _apiProfile == null && !_apiProfileLoading) {
-      _fetchApiProfile(customerId);
+        setState(() {
+          _profileImageUrl = null;
+        });
+
+        log("Profile image deleted successfully.");
+      }
+    } catch (e) {
+      log("Error deleting profile image: $e");
+      CustomPopup.show(
+        context: context,
+        title: 'Error',
+        message: 'Failed to delete profile image. Please try again.',
+        buttonText: 'OK',
+        imagePath: 'public/assets/images/Alert.png',
+      );
     }
   }
 
@@ -341,7 +346,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             });
 
             return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: verticalSpacing),
+              padding: EdgeInsets.only(
+  left: screenWidth * 0.05,
+  right: screenWidth * 0.05,
+  bottom: verticalSpacing,
+  // top: 0, // removed top padding
+),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -351,15 +361,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       onImageSelected: (File image) {
                         _uploadProfileImage(image);
                       },
+                      onImageDeleted: () {
+                        _deleteProfileImage();
+                      },
                     ),
                   ),
-                  SizedBox(height: verticalSpacing * 1.5),
+                  SizedBox(height: verticalSpacing * 0.8),
                   Row(
                     children: [
                       Expanded(
                         child: RedButton(
                           label: 'Change Password',
-                          height: screenWidth * 0.12,
+                          height: screenWidth * 0.095,
+                          width: screenWidth * 0.4,
                           onPressed: _sendResetLink,
                         ),
                       ),
@@ -367,27 +381,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Expanded(
                         child: RedButton(
                           label: 'Logout',
-                          height: screenWidth * 0.12,
+                          height: screenWidth * 0.095,
+                          width: screenWidth * 0.4,
                           onPressed: _handleLogout,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing * 1.5),
+                  SizedBox(height: verticalSpacing * 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'User Information',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.05,
+                          fontSize: screenWidth * 0.04,
                           color: Colors.black,
                         ),
                       ),
                       _isSaving
                           ? const SizedBox(
-                              width: 48,
-                              height: 48,
+                              width: 30,
+                              height: 30,
                               child: Center(child: CircularProgressIndicator(strokeWidth: 3, color: Color(0xFFA51414))))
                           : IconButton(
                               icon: Icon(
@@ -407,7 +422,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing),
+                  SizedBox(height: verticalSpacing*0.1),
                   CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.13, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
                   CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.13, readOnly: !isEditing),

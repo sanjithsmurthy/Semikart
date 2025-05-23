@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../utils/firestore_helper.dart'; // Import the FirestoreHelper
+import 'package:dio/dio.dart'; // Replace Firebase with Dio for API calls
+import '../services/database.dart'; // Import the DataBaseService instead of FirestoreHelper
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({Key? key}) : super(key: key);
@@ -14,7 +14,8 @@ class _AdminPanelState extends State<AdminPanel> {
   final TextEditingController _l1IdController = TextEditingController();
   final TextEditingController _l2NamesController = TextEditingController();
   bool _isLoading = false;
-  List<DocumentSnapshot> _l1Categories = [];
+  List<Map<String, dynamic>> _l1Categories = []; // Changed from DocumentSnapshot to Map
+  final DataBaseService _databaseService = DataBaseService(); // API service
 
   @override
   void initState() {
@@ -23,10 +24,20 @@ class _AdminPanelState extends State<AdminPanel> {
   }
 
   Future<void> _loadL1Categories() async {
-    final snapshot = await FirebaseFirestore.instance.collection('l1_products').get();
-    setState(() {
-      _l1Categories = snapshot.docs;
-    });
+    try {
+      // Use the database service to get L1 categories instead of Firebase
+      final categories = await _databaseService.getL1Products();
+      setState(() {
+        _l1Categories = categories;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error loading categories: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -65,9 +76,9 @@ class _AdminPanelState extends State<AdminPanel> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: _l1Categories.length,
                             itemBuilder: (context, index) {
-                              final data = _l1Categories[index].data() as Map<String, dynamic>;
+                              final data = _l1Categories[index];
                               final name = data['name'] ?? 'Unknown';
-                              final id = _l1Categories[index].id;
+                              final id = data['id']?.toString() ?? ''; // API response structure
                               return ListTile(
                                 title: Text(name),
                                 subtitle: Text('ID: $id'),
@@ -137,11 +148,8 @@ class _AdminPanelState extends State<AdminPanel> {
                                     .where((e) => e.isNotEmpty)
                                     .toList();
 
-                                // Use FirestoreHelper to add multiple L2 categories
-                                await FirestoreHelper.addMultipleL2Categories(
-                                  l1Id: l1Id,
-                                  names: l2Names,
-                                );
+                                // Add a method to DataBaseService to handle this operation
+                                await _addL2Categories(l1Id, l2Names);
 
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -180,6 +188,18 @@ class _AdminPanelState extends State<AdminPanel> {
         ),
       ),
     );
+  }
+
+  // New method to add L2 categories using the API
+  Future<void> _addL2Categories(String l1Id, List<String> names) async {
+    for (final name in names) {
+      try {
+        await _databaseService.addL2Category(l1Id: l1Id, name: name);
+      } catch (e) {
+        // Continue with other categories if one fails
+        print('Error adding L2 category "$name": $e');
+      }
+    }
   }
 
   @override

@@ -1,39 +1,57 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'dart:developer';
+import '../config/api_config.dart';  // Add this import
+import 'api_client.dart';  // Add this import
 
 class DataBaseService {
-  // Collection reference for products
-  final CollectionReference productCollection =
-      FirebaseFirestore.instance.collection('products');
-
-  // Collection reference for L1 products
-  final CollectionReference l1ProductsCollection =
-      FirebaseFirestore.instance.collection('l1_products');
+  final ApiClient _apiClient = ApiClient();
+  
+  // Keep the baseUrl reference for backward compatibility
+  final String baseUrl = ApiConfig.baseUrl;
+  
+  DataBaseService() {
+    // No need to configure Dio here as it's handled by ApiClient
+  }
 
   // Method to update user data
-  Future updateUserData(String email, String firstname, String lastname, String phone, String password) async {
-    return await productCollection.add({
-      'first_name': firstname,
-      'last_name': lastname,
-      'phone': phone,
-      'password': password,
-      'email': email,
-    });
+  Future<dynamic> updateUserData(String email, String firstname, String lastname, String phone, String password) async {
+    try {
+      final endpoint = Users.profile('update'); // Using Users class directly
+      final formData = FormData.fromMap({
+        'email': email,
+        'first_name': firstname,
+        'last_name': lastname,
+        'phone': phone,
+        'password': password,
+      });
+      
+      final response = await _apiClient.dio.post(endpoint, data: formData);
+      log('User data updated for $email');
+      return response.data;
+    } catch (e) {
+      log('Error updating user data: $e');
+      rethrow;
+    }
   }
 
   // Method to upload L1 product data
   Future<void> uploadL1ProductData(String name, String iconUrl) async {
     try {
-      await l1ProductsCollection.add({
-        'name': name, // Dynamic product name
-        'icon': iconUrl, // Dynamic Google Drive link
+      final endpoint = Categories.l1Add; // Using Categories class directly
+      final formData = FormData.fromMap({
+        'name': name,
+        'icon': iconUrl,
       });
-      print('L1 product uploaded: $name');
+      
+      await _apiClient.dio.post(endpoint, data: formData);
+      log('L1 product uploaded: $name');
     } catch (e) {
-      print('Error uploading L1 product: $e');
+      log('Error uploading L1 product: $e');
+      rethrow;
     }
   }
 
-  // Method to upload all 17 L1 products
+  // Method to upload all 17 L1 products (keeping existing functionality)
   Future<void> uploadAllL1Products() async {
     final List<Map<String, String>> l1Products = [
       {
@@ -106,15 +124,160 @@ class DataBaseService {
       },
     ];
 
+    // Option 1: Upload one by one
     for (var product in l1Products) {
       await uploadL1ProductData(product['name']!, product['icon']!);
     }
-    print('All L1 products uploaded successfully!');
+    log('All L1 products uploaded successfully!');
+  }
+  
+  // Method to get all L1 products - updated with ApiClient
+  Future<List<Map<String, dynamic>>> getL1Products() async {
+    try {
+      final endpoint = Categories.l1List; // Using Categories class directly
+      final response = await _apiClient.dio.get(endpoint);
+      
+      final List<dynamic> data = response.data;
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching L1 products: $e');
+      rethrow;
+    }
+  }
+  
+  // Method to get product details - updated with ApiClient
+  Future<Map<String, dynamic>> getProductDetails(String productId) async {
+    try {
+      final endpoint = Products.details(productId); // Using Products class method directly
+      final response = await _apiClient.dio.get(endpoint);
+      return response.data;
+    } catch (e) {
+      log('Error fetching product details for $productId: $e');
+      rethrow;
+    }
+  }
+  
+  // Method to add a single L2 category - updated with ApiClient
+  Future<void> addL2Category({required String l1Id, required String name}) async {
+    try {
+      final endpoint = Categories.l2Add; // Using Categories class directly
+      final formData = FormData.fromMap({
+        'name': name,
+        'l1id': l1Id,
+      });
+      
+      final response = await _apiClient.dio.post(endpoint, data: formData);
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add L2 category: ${response.statusMessage}');
+      }
+      
+      log('Added L2 category: $name under L1 ID: $l1Id');
+    } catch (e) {
+      log('Error adding L2 category: $e');
+      rethrow;
+    }
+  }
+  
+  // Method for bulk adding L2 categories - updated with ApiClient
+  Future<void> addMultipleL2Categories({required String l1Id, required List<String> names}) async {
+    try {
+      // Keep using full URL for endpoints not defined in ApiConfig
+      final endpoint = '$baseUrl/products/l2/bulk';
+      final data = names.map((name) => {
+        'name': name,
+        'l1id': l1Id,
+      }).toList();
+      
+      final response = await _apiClient.dio.post(endpoint, data: data);
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add L2 categories in bulk: ${response.statusMessage}');
+      }
+      
+      log('Added ${names.length} L2 categories under L1 ID: $l1Id');
+    } catch (e) {
+      log('Error adding multiple L2 categories: $e');
+      rethrow;
+    }
+  }
+
+  // Get L2 categories for a specific L1 category - updated with ApiClient
+  Future<List<Map<String, dynamic>>> getL2ProductsByL1Id(String l1Id) async {
+    try {
+      final endpoint = Categories.l2List; // Using Categories class directly
+      final response = await _apiClient.dio.get(
+        endpoint,
+        queryParameters: {'l1id': l1Id}
+      );
+      
+      final List<dynamic> data = response.data;
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching L2 products for L1 ID $l1Id: $e');
+      rethrow;
+    }
+  }
+
+  // Add L3 category linked to an L2 category - updated with ApiClient
+  Future<void> addL3Category({required String l2Id, required String name}) async {
+    try {
+      final endpoint = Categories.l3Add; // Using Categories class directly
+      final formData = FormData.fromMap({
+        'name': name,
+        'l2id': l2Id,
+      });
+      
+      final response = await _apiClient.dio.post(endpoint, data: formData);
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to add L3 category: ${response.statusMessage}');
+      }
+      
+      log('Added L3 category: $name under L2 ID: $l2Id');
+    } catch (e) {
+      log('Error adding L3 category: $e');
+      rethrow;
+    }
+  }
+
+  // Get L3 products for a specific L2 category - updated with ApiClient
+  Future<List<Map<String, dynamic>>> getL3ProductsByL2Id(String l2Id) async {
+    try {
+      final endpoint = Categories.l3List; // Using Categories class directly
+      final response = await _apiClient.dio.get(
+        endpoint, 
+        queryParameters: {'l2id': l2Id}
+      );
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch L3 products: ${response.statusMessage}');
+      }
+      
+      final List<dynamic> data = response.data;
+      log('Fetched ${data.length} L3 products for L2 ID: $l2Id');
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      log('Error fetching L3 products for L2 ID $l2Id: $e');
+      rethrow;
+    }
   }
 }
 
-// Automatically trigger the upload when this file is executed
+// Main function can be used for testing
 void main() async {
   final databaseService = DataBaseService();
-  await databaseService.uploadAllL1Products();
+  // Comment this out in production - only uncomment when you want to upload all products
+  // await databaseService.uploadAllL1Products();
+  
+  // Test fetching products
+  try {
+    final products = await databaseService.getL1Products();
+    log('Fetched ${products.length} L1 products');
+    for (var product in products) {
+      log('Product: ${product['name']}');
+    }
+  } catch (e) {
+    log('Error in main: $e');
+  }
 }
