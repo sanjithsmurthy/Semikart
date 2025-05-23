@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 // import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
-import 'dart:io'; // For FileImage
-import '../../managers/auth_manager.dart'; // Import AuthManager provider
-import '../../services/user_service.dart'; // Import userDocumentProvider
-import 'red_button.dart'; // Import your custom RedButton
-import '../../base_scaffold.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../models/user_profile.dart' as models;
+import '../../managers/auth_manager.dart';
+import '../../services/user_service.dart' show userDocumentProvider;
 import '../../providers/profile_image_provider.dart';
-import '../../app_navigator.dart'; // Import AppNavigator for navigation
-import 'popup.dart'; // Import CustomPopup
+import 'red_button.dart';
+import '../../base_scaffold.dart';
+import '../../app_navigator.dart';
 
 class HamburgerMenu extends ConsumerStatefulWidget {
   const HamburgerMenu({super.key});
@@ -20,6 +20,7 @@ class HamburgerMenu extends ConsumerStatefulWidget {
 
 class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
   double _avatarOpacity = 0.0;
+  models.UserProfile? _apiProfile;
 
   @override
   void initState() {
@@ -28,6 +29,21 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) setState(() => _avatarOpacity = 1.0);
     });
+    _fetchApiProfileIfNeeded();
+  }
+
+  Future<void> _fetchApiProfileIfNeeded() async {
+    final prefs = await SharedPreferences.getInstance();
+    final customerId = prefs.getInt('customerId');
+    if (customerId != null) {
+      final apiService = ref.read(apiServiceProvider);
+      final data = await apiService.fetchUserInfo(customerId);
+      if (data != null) {
+        setState(() {
+          _apiProfile = models.UserProfile.fromJson(data);
+        });
+      }
+    }
   }
 
   @override
@@ -62,9 +78,9 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
     final double buttonHeight = 40.0 * heightScale;
     final double buttonFontSize = 14.0 * scale;
 
-    final profileImage = ref.watch(profileImageProvider);
     // Watch the user document stream provider (now nullable)
     final userDocAsyncValue = ref.watch(userDocumentProvider);
+    final profileImage = ref.watch(profileImageProvider);
 
     return Drawer(
       width: screenWidth * 0.75,
@@ -101,36 +117,57 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
             userDocAsyncValue.when(
               loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFFA51414))),
               error: (err, stack) => Center(child: Text('Error: $err')),
-              // userDoc can now be null
               data: (userDoc) {
+                // Use backend user info if available, else fallback to userDoc
                 String firstName = '';
                 String lastName = '';
-                String email = 'Not Logged In';
+                String email = '';
                 String fullName = '';
-                String? profileImageUrl; // Variable to hold the URL
+                String? profileImageUrl;
+                bool isLoggedIn = false;
 
-                // Check if userDoc is not null and exists before accessing data
                 if (userDoc != null && userDoc.exists) {
                   final userData = userDoc.data();
-                  firstName = userData?['firstName'] as String? ?? '';
-                  lastName = userData?['lastName'] as String? ?? '';
-                  email = userData?['email'] as String? ?? 'No Email';
-                  // Read the profile image URL from Firestore data
-                  profileImageUrl = userData?['profileImageUrl'] as String?; // Uncomment and use this
+                  // Use backend field names
+                  firstName = userData['firstName'] ?? '';
+                  lastName = userData['lastName'] ?? '';
+                  email = userData['email'] ?? '';
+                  profileImageUrl = userData['profileImageUrl'] as String?;
+                  isLoggedIn = email.isNotEmpty;
+                } else if (_apiProfile != null) {
+                  firstName = _apiProfile!.firstName;
+                  lastName = _apiProfile!.lastName;
+                  email = _apiProfile!.email;
+                  profileImageUrl = _apiProfile!.profileImageUrl;
+                  isLoggedIn = email.isNotEmpty;
                 }
                 fullName = '${firstName.trim()} ${lastName.trim()}'.trim();
 
                 // Determine background image for CircleAvatar
-                ImageProvider backgroundImage;
+                Widget avatarWidget;
                 if (profileImage != null) {
-                  // 1. Priority: Locally selected image
-                  backgroundImage = FileImage(profileImage);
+                  avatarWidget = CircleAvatar(
+                    radius: avatarRadius,
+                    backgroundImage: FileImage(profileImage),
+                  );
                 } else if (profileImageUrl != null && profileImageUrl.isNotEmpty) {
-                  // 2. Priority: URL from Firestore
-                  backgroundImage = NetworkImage(profileImageUrl);
+                  avatarWidget = CircleAvatar(
+                    radius: avatarRadius,
+                    backgroundImage: NetworkImage(profileImageUrl),
+                    onBackgroundImageError: (exception, stackTrace) {
+                      print("Error loading profile image in hamburger: $exception");
+                    },
+                  );
                 } else {
-                  // 3. Fallback: Default asset
-                  backgroundImage = const AssetImage('public/assets/images/profile_picture.png');
+                  avatarWidget = CircleAvatar(
+                    radius: avatarRadius,
+                    backgroundColor: const Color(0xFFE0E0E0),
+                    child: Icon(
+                      Icons.person,
+                      size: avatarRadius,
+                      color: Colors.grey.shade600,
+                    ),
+                  );
                 }
 
                 return Center(
@@ -139,35 +176,27 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
                       AnimatedOpacity(
                         opacity: _avatarOpacity,
                         duration: const Duration(milliseconds: 600),
-                        child: CircleAvatar(
-                          radius: avatarRadius,
-                          backgroundImage: backgroundImage, // Use the determined image provider
-                          onBackgroundImageError: (exception, stackTrace) {
-                            // Optional: Handle image loading errors
-                            print("Error loading profile image in hamburger: $exception");
-                          },
-                        ),
+                        child: avatarWidget,
                       ),
                       SizedBox(height: verticalSpacingMedium),
                       Text(
-                        fullName.isNotEmpty ? fullName : 'Guest', // Display name or 'Guest'
+                        isLoggedIn ? fullName : 'Guest',
                         style: TextStyle(fontSize: nameFontSize, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: verticalSpacingSmall),
                       Text(
-                        email, // Display email or 'Not Logged In'
+                        isLoggedIn ? email : 'Not Logged In',
                         style: TextStyle(fontSize: emailFontSize, color: Colors.grey),
                       ),
                       SizedBox(height: verticalSpacingLarge),
-                      // Only show Edit Profile button if logged in (userDoc is not null)
-                      if (userDoc != null && userDoc.exists)
+                      if (isLoggedIn)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             RedButton(
                               label: 'Edit Profile',
                               onPressed: () {
-                                Navigator.pop(context); // Close drawer
+                                Navigator.pop(context);
                                 Navigator.pushReplacement(
                                   context,
                                   _createFadeRoute(const BaseScaffold(), initialIndex: 4),

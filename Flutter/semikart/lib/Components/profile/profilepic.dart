@@ -106,21 +106,35 @@ class _ProfilePictureState extends ConsumerState<ProfilePicture> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        CircleAvatar(
-          radius: 60, // Size of the profile image
-          backgroundColor: Colors.grey[200],
-          child: _isLoading 
-              ? CircularProgressIndicator(color: Color(0xFFA51414))
-              : null,
-          backgroundImage: !_isLoading 
-              ? (_selectedImage != null
-                  ? FileImage(_selectedImage!)
-                  : profileImage != null
-                      ? FileImage(profileImage)
-                      : widget.initialImageUrl != null
-                          ? NetworkImage(widget.initialImageUrl!)
-                          : const AssetImage('public/assets/images/profile_picture.png') as ImageProvider)
-              : null,
+        Builder(
+          builder: (context) {
+            ImageProvider? bgImage;
+            if (_selectedImage != null) {
+              if (_selectedImage!.path.isNotEmpty) {
+                bgImage = FileImage(_selectedImage!);
+              }
+            } else if (profileImage != null) {
+              if (profileImage.path.isNotEmpty) {
+                bgImage = FileImage(profileImage);
+              }
+            } else if (widget.initialImageUrl != null && widget.initialImageUrl!.isNotEmpty) {
+              bgImage = NetworkImage(widget.initialImageUrl!);
+            }
+            return CircleAvatar(
+              radius: 60,
+              backgroundColor: Colors.grey[200],
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Color(0xFFA51414))
+                  : (bgImage == null
+                      ? Icon(
+                          Icons.person,
+                          size: 60,
+                          color: Colors.grey.shade600,
+                        )
+                      : null),
+              backgroundImage: !_isLoading ? bgImage : null,
+            );
+          },
         ),
         
         // Edit icon - positioned on the LEFT edge - always visible
