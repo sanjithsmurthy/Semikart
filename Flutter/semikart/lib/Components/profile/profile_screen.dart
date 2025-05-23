@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../common/popup.dart';
 import '../../managers/auth_manager.dart';
-import '../../services/user_service.dart';
+import '../../services/user_service.dart' show userServiceProvider, userDocumentProvider, DocumentData;
 import 'profilepic.dart';
 import '../common/red_button.dart';
 import '../Login_SignUp/custom_text_field.dart';
@@ -128,8 +128,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     };
 
     try {
-      final userService = ref.read(userServiceProvider);
-      await userService.updateUserProfile(user.id, dataToUpdate); // Changed user.uid to user.id
+      // Remove the unnecessary local variable
+      await ref.read(userServiceProvider).updateUserProfile(user.id, dataToUpdate); // Changed user.uid to user.id
       CustomPopup.show(
         context: context,
         title: 'Success',

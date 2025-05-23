@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart'; // Add this import
 import '../services/api_client.dart'; // Add this import
@@ -87,8 +86,6 @@ class AuthState {
       user: user, // Allow setting to null
       errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
       isLoading: isLoading ?? this.isLoading,
-      isLoading: isLoading ?? this.isLoading, // Added
-      customerId: customerId ?? this.customerId,
     );
   }
 }
