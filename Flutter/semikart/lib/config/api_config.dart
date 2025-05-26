@@ -3,7 +3,7 @@ import 'dart:developer';
 /// API Configuration class for Semikart app
 class ApiConfig {
   // Base URL for the API
-  static const String baseUrl = 'http://192.168.1.8:8080/semikartapi';
+  static const String baseUrl = 'http://192.168.1.4:8080/semikartapi';
 
   // Timeouts in seconds
   static const int connectTimeout = 10;
