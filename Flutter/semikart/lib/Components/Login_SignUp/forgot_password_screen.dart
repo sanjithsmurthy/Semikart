@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:Semikart/managers/auth_manager.dart'; // Import AuthManager
 import 'custom_text_field.dart'; // Import the CustomTextField widget
 import '../common/red_button.dart'; // Import the RedButton widget
+import 'login_password.dart';
 
 // Convert to ConsumerStatefulWidget
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
@@ -86,17 +87,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding( // Use Padding instead of SizedBox + Stack
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
             child: Column( // Use Column for layout
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 SizedBox(height: screenHeight * 0.05), // Adjust spacing as needed
+                 SizedBox(height: screenHeight * 0.04), // Adjust spacing as needed
 
                 // --- Forgot Password Title ---
                 Text(
                   'Forgot Password',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.055,
+                    fontSize: screenWidth * 0.05,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -107,7 +108,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 Text(
                   'Enter the email address associated with your account and we\'ll send you a link to reset your password.',
                    style: TextStyle(
-                     fontSize: screenWidth * 0.038,
+                     fontSize: screenWidth * 0.035,
                      color: Colors.grey[700],
                    ),
                 ),
@@ -116,7 +117,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 // --- Email Input Field ---
                 CustomTextField(
                   controller: emailController,
-                  label: "Email",
+                  label: "Enter your registered email id",
                   height: screenHeight * 0.06,
                   keyboardType: TextInputType.emailAddress, // Set keyboard type
                 ),
@@ -127,13 +128,33 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   child: isAuthenticating
                       ? const CircularProgressIndicator(color: Color(0xFFA51414))
                       : RedButton(
-                          label: "Send Reset Link",
+                          label: "Submit",
                           width: screenWidth * 0.9, // Ensure button spans width
-                          height: screenHeight * 0.06,
+                          height: screenHeight * 0.05,
                           onPressed: _sendResetLink,
                         ),
                 ),
-                 SizedBox(height: screenHeight * 0.05), // Bottom padding
+                SizedBox(height: screenHeight * 0.03), 
+                
+                // --- Send Reset Link Button ---
+                Center( // Center the button
+                  child: RedButton(
+                    label: "Login",
+                    width: screenWidth * 0.9,
+                    height: screenHeight * 0.05,
+                    isWhiteButton: true, // Keep white button style
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPasswordNewScreen()),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.03), // Reduced spacing before login button
+
+                // --- Back to Login Button ---
+                 // Bottom padding
               ],
             ),
           ),

@@ -87,7 +87,7 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(pagePadding), // Use scaled padding
+          padding: EdgeInsets.only(bottom:pagePadding,top:0,left: pagePadding,right: pagePadding), // Use scaled padding
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -110,7 +110,7 @@ class _CartPageState extends State<CartPage> {
                     ),
                 ],
               ),
-              SizedBox(height: sectionSpacing),
+              SizedBox(height: sectionSpacing*0.3),
               // Cart Items or Empty Message
               if (cartItems.isNotEmpty) ...[
                 ListView.builder(
@@ -120,7 +120,7 @@ class _CartPageState extends State<CartPage> {
                   itemBuilder: (context, index) {
                     final item = cartItems[index];
                     return Padding(
-                      padding: EdgeInsets.only(bottom: itemBottomPadding),
+                      padding: EdgeInsets.only(bottom: itemBottomPadding*0.5),
                       child: CartItem(
                         mfrPartNumber: item["mfrPartNumber"] as String,
                         customerPartNumber: item["customerPartNumber"] as String,
@@ -142,11 +142,11 @@ class _CartPageState extends State<CartPage> {
                     );
                   },
                 ),
-                SizedBox(height: sectionSpacing),
+                SizedBox(height: sectionSpacing*0.01),
                 // Grand Total Section
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(totalSectionPadding),
+                  padding: EdgeInsets.all(totalSectionPadding*0.1),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(borderRadius),
@@ -165,16 +165,16 @@ class _CartPageState extends State<CartPage> {
                       _buildPriceRow(
                         'Grand Total',
                         '₹ ${_calculateGrandTotal(cartItems).toStringAsFixed(2)}',
-                        grandTotalFontSize,
+                        grandTotalFontSize*0.9,
                         isBold: true,
                       ),
-                      SizedBox(height: sectionSpacing),
+                      SizedBox(height: sectionSpacing*0.5),
                       Center(
                         child: RedButton(
                           label: 'Proceed to Checkout',
-                          height: buttonHeight,
-                          width: buttonWidth,
-                          fontSize: buttonFontSize,
+                          height: buttonHeight*0.8,
+                          width: buttonWidth*0.8,
+                          fontSize: buttonFontSize*0.8,
                           onPressed: () {
                             Navigator.of(context).pushNamed('payment');
                           },
@@ -184,7 +184,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
               ] else ...[
-                SizedBox(height: sectionSpacing * 11.5),
+                SizedBox(height: sectionSpacing ),
                 Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

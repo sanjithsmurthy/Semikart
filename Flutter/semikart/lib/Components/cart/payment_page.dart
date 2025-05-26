@@ -570,7 +570,7 @@ class PaymentConfirmationDialog extends StatelessWidget {
             const Text(
               'Confirm Payment',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFFA51414),
               ),
@@ -579,7 +579,7 @@ class PaymentConfirmationDialog extends StatelessWidget {
             Text(
               '₹${amount.toStringAsFixed(2)}',
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -587,15 +587,15 @@ class PaymentConfirmationDialog extends StatelessWidget {
             const Text(
               'Total amount to be paid',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 13,
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             const Text(
               'Transaction Id: T2025040942440',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -607,13 +607,13 @@ class PaymentConfirmationDialog extends StatelessWidget {
                 'If you click on back button the payment for the current transaction id will be pending. '
                 'You can complete the payment within 24 hours using the "Make Payment" option in Order Dashboard (Order History).',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   color: Colors.grey,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Row(
               children: [
                 Expanded(
@@ -625,12 +625,15 @@ class PaymentConfirmationDialog extends StatelessWidget {
                           backgroundColor: Colors.white,
                           title: const Text(
                             'Cancel Payment',
-                            style: TextStyle(color: Color(0xFFA51414)),
+                            
+                            
+                            style: TextStyle(color: Color(0xFFA51414), fontSize: 14),
                           ),
-                          content: const Text(
+                          content: Text(
                             'Are you sure you want to cancel this order? '
                             'If you wish to complete the payment later you can do this '
-                            'from "Make Payment" option in order dashboard.'
+                            'from "Make Payment" option in order dashboard.',
+                            style: TextStyle(fontSize: 9),
                           ),
                           actions: [
                             TextButton(
