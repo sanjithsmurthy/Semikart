@@ -34,16 +34,16 @@ class GreyTextBox extends StatelessWidget {
         Text(
           text, // Use the single parameter for label text
           style: const TextStyle(
-            fontSize: 13,
+            fontSize: 11,
             color: Color(0xFFA51414), // Adjust the color as needed
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 1),
         Container(
           width: width ??
               screenWidth *
                   0.9, // Default to 90% of screen width if width is not provided
-          height: 41.54,
+          height: 35,
           decoration: BoxDecoration(
             color: backgroundColor, // Use the customizable background color
             borderRadius: BorderRadius.circular(9),
