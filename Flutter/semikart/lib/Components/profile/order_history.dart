@@ -60,10 +60,28 @@ class _OrderHistoryState extends State<OrderHistory> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Reference screen dimensions (same as cart_page)
+    const double refWidth = 412.0;
+    const double refHeight = 917.0;
+
+    // Calculate scaling factors
+    final widthScale = screenWidth / refWidth;
+    final heightScale = screenHeight / refHeight;
+    final scale = widthScale < heightScale ? widthScale : heightScale;
+
+    // Scaled text sizes
+    final double headingTextSize = 16.0 * scale;
+    final double normalTextSize = 14.0 * scale;
+    final double smallTextSize = 12.0 * scale;
+    final double labelTextSize = 11.0 * scale;
+
+    // Original variables - replace with scaled versions where needed
     final double containerWidth = screenWidth > 600 ? 500 : screenWidth * 0.8;
-    final double fontSize = screenWidth > 600 ? 16 : 14;
     final double padding = screenWidth > 600 ? 20 : 16;
     final double borderRadius = screenWidth > 600 ? 12 : 8;
+    
+    // Use this instead of the old fontSize variable
+    // final double fontSize = screenWidth > 600 ? 14 : 12;
 
     return Scaffold(
       body: Padding(
@@ -83,51 +101,63 @@ class _OrderHistoryState extends State<OrderHistory> {
                   ],
                 ),
               ),
-              SizedBox(height: screenHeight * 0.02),
-              Text('Search', style: TextStyle(fontSize: fontSize)),
+              SizedBox(height: screenHeight * 0.01),
+              Text('Search', style: TextStyle(fontSize: normalTextSize)),
               SizedBox(height: screenHeight * 0.005),
               TextFormField(
-                cursorColor: const Color(0xFFA51414), // Set the cursor color to #A51414
+                cursorColor: const Color(0xFFA51414),
+                style: TextStyle(fontSize: normalTextSize * 0.9), // Slightly smaller text
                 decoration: InputDecoration(
                   hintText: 'Enter search term',
+                  isDense: true, // Makes the field more compact
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 13, 
+                    vertical: 13, // Reduced vertical padding
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: const BorderSide(
-                      color: Color(0xFFA51414), // Set the border color to #A51414
-                      width: 1.0, // Reduced border thickness
+                      color: Color(0xFFA51414),
+                      width: 0.5,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: const BorderSide(
-                      color: Color(0xFFA51414), // Set the focused border color to #A51414
-                      width: 1.0, // Reduced border thickness
+                      color: Color(0xFFA51414),
+                      width: 1.0,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(borderRadius),
                     borderSide: const BorderSide(
-                      color: Color(0xFFA51414), // Set the enabled border color to #A51414
-                      width: 1.0, // Reduced border thickness
+                      color: Color(0xFFA51414),
+                      width: 1.0,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: screenHeight * 0.02),
+              SizedBox(height: screenHeight * 0.01),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Changed from spaceAround to spaceBetween
                 children: [
+                  // From Date - extreme left
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('From Date', style: TextStyle(fontSize: fontSize)),
-                      SizedBox(height: screenHeight * 0.005),
+                      Text('From Date', style: TextStyle(fontSize: normalTextSize)),
+                      SizedBox(height: screenHeight * 0.003),
                       SizedBox(
-                        width: containerWidth / 2,
+                        width: containerWidth * 0.55, // Adjusted width
                         child: InkWell(
                           onTap: () => _selectDate(context, true),
                           child: InputDecorator(
                             decoration: InputDecoration(
+                              isDense: true, // Makes the field more compact
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, 
+                                vertical: 8, // Reduced vertical padding for smaller height
+                              ),
                               hintText: 'DD/MM/YYYY',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(borderRadius),
@@ -137,24 +167,31 @@ class _OrderHistoryState extends State<OrderHistory> {
                               fromDate != null
                                   ? DateFormat('dd/MM/yyyy').format(fromDate!)
                                   : 'DD/MM/YYYY',
-                              style: TextStyle(fontSize: fontSize),
+                              style: TextStyle(fontSize: normalTextSize),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
+                  
+                  // To Date - extreme right
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('To Date', style: TextStyle(fontSize: fontSize)),
+                      Text('To Date', style: TextStyle(fontSize: normalTextSize)),
                       SizedBox(height: screenHeight * 0.005),
                       SizedBox(
-                        width: containerWidth / 2,
+                        width: containerWidth * 0.55, // Adjusted width
                         child: InkWell(
                           onTap: fromDate == null ? null : () => _selectDate(context, false, firstDate: fromDate),
                           child: InputDecorator(
                             decoration: InputDecoration(
+                              isDense: true, // Makes the field more compact
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10, 
+                                vertical: 8, // Reduced vertical padding for smaller height
+                              ),
                               hintText: 'DD/MM/YYYY',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(borderRadius),
@@ -164,7 +201,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                               toDate != null
                                   ? DateFormat('dd/MM/yyyy').format(toDate!)
                                   : 'DD/MM/YYYY',
-                              style: TextStyle(fontSize: fontSize),
+                              style: TextStyle(fontSize: normalTextSize),
                             ),
                           ),
                         ),
@@ -173,8 +210,8 @@ class _OrderHistoryState extends State<OrderHistory> {
                   ),
                 ],
               ),
-              SizedBox(height: screenHeight * 0.02),
-              Text('Order Status', style: TextStyle(fontSize: fontSize)),
+              SizedBox(height: screenHeight * 0.01),
+              Text('Order Status', style: TextStyle(fontSize: normalTextSize)),
               SizedBox(height: screenHeight * 0.005),
               Theme(
                 data: Theme.of(context).copyWith(
@@ -184,33 +221,43 @@ class _OrderHistoryState extends State<OrderHistory> {
                       ),
                 ),
                 child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                    borderSide: const BorderSide(
-                      width: 1.0,
+                  isExpanded: true,
+                  icon: const Icon(Icons.arrow_drop_down, color: Color(0xFFA51414)),
+                  iconSize: 24,
+                  elevation: 4,
+                  menuMaxHeight: screenHeight * 0.4, // Constrain menu height
+                  decoration: InputDecoration(
+                    isDense: true, // Add this to make it more compact
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8, // Reduced padding to match date fields
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: const BorderSide(
+                        width: 1.0,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: const BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFA51414),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: const BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFA51414),
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                    borderSide: const BorderSide(
-                      width: 1.0,
-                      color: Color(0xFFA51414),
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius),
-                    borderSide: const BorderSide(
-                      width: 1.0,
-                      color: Color(0xFFA51414),
-                    ),
-                  ),
-                ),
                   dropdownColor: Colors.white,
                   value: orderStatus,
-                  hint: Text('Select', style: TextStyle(fontSize: fontSize)),
+                  hint: Text('Select', style: TextStyle(fontSize: normalTextSize)),
                   items: const <String>[
                     // 'Select',
                     'Order Placed',
@@ -227,7 +274,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                   ].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value, style: TextStyle(fontSize: fontSize)),
+                      child: Text(value, style: TextStyle(fontSize: normalTextSize)),
                     );
                   }).toList(),
                   onChanged: (newValue) {
@@ -237,31 +284,44 @@ class _OrderHistoryState extends State<OrderHistory> {
                   },
                 ),
               ),
-              SizedBox(height: screenHeight * 0.03),
-              RedButton(
-                label: 'Search',
-                isWhiteButton: true, // Set the isWhite parameter to true
-                onPressed: () {
-                  // Implement search functionality here
-                  print('Search button pressed');
-                },
+              SizedBox(height: screenHeight * 0.015),
+              // Replace the Center wrapper with a Row to push button to right
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end, // Push to right side
+                children: [
+                  SizedBox(
+                    width: screenWidth * 0.26,  // Keep original width
+                    child: RedButton(
+                      label: 'Search',
+                      height: screenHeight * 0.035,
+                      onPressed: () {
+                        // Implement search functionality here
+                        print('Search button pressed');
+                      },
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: screenHeight * 0.01),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: screenHeight * 0.006, // 2px top padding
-                  bottom: screenHeight * 0.001, // 1px bottom padding
-                ),
-                child: Text(
+
+              // SizedBox(height: screenHeight * 0.01), // Keep original spacing
+
+              // Then the Orders heading below it
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //     // top: screenHeight * 0.001,
+              //     // bottom: screenHeight * 0.001,
+              //   ),
+                // child: 
+                Text(
                   'Orders',
                   style: TextStyle(
-                    fontSize: fontSize * 1.4,
+                    fontSize: headingTextSize,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.001), // 1px space between "Orders" and the first container
+              // ),
+              SizedBox(height: screenHeight * 0.0005), // 1px space between "Orders" and the first container
               OrderHistoryItem(
                 orderId: '1. 50486T2025040942440',
                 orderStatus: 'Order Cancelled',
@@ -276,7 +336,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                   print('Make Payment button pressed');
                 },
               ),
-              SizedBox(height: screenHeight * 0.001), // 1px space between containers
+              SizedBox(height: screenHeight * 0.0005), // 1px space between containers
               OrderHistoryItem(
                 orderId: '2. 50486T2025040948976',
                 orderStatus: 'Order Cancelled',
@@ -300,7 +360,7 @@ class _OrderHistoryState extends State<OrderHistory> {
 
   Widget _buildOrderChip(String label, String value, IconData icon) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),

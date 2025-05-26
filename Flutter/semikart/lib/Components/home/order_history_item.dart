@@ -9,7 +9,11 @@ class OrderHistoryItem extends StatelessWidget {
   final String customerPo;
   final String paymentStatus;
   final String amount;
-  final VoidCallback onMakePayment;
+  final Function onMakePayment;
+  // New parameters for text sizes
+  final double titleFontSize;
+  final double bodyFontSize;
+  final double labelFontSize;
 
   const OrderHistoryItem({
     Key? key,
@@ -22,6 +26,9 @@ class OrderHistoryItem extends StatelessWidget {
     required this.paymentStatus,
     required this.amount,
     required this.onMakePayment,
+    this.titleFontSize = 14.0,  // Default size
+    this.bodyFontSize = 12.0,   // Default size
+    this.labelFontSize = 11.0,  // Default size
   }) : super(key: key);
 
   @override
@@ -29,11 +36,11 @@ class OrderHistoryItem extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final double fontSize = screenWidth > 600 ? 16 : 14;
-    final double padding = screenWidth > 600 ? 20 : 16;
+    final double padding = screenWidth > 600 ? 11 : 9; // Reduced by ~25%
     final double borderRadius = screenWidth > 600 ? 12 : 8;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.004),
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -53,65 +60,68 @@ class OrderHistoryItem extends StatelessWidget {
           Text(
             orderId,
             style: TextStyle(
-              fontSize: fontSize * 1.2,
+              fontSize: titleFontSize * 1,
               fontWeight: FontWeight.bold,
               color: orderId == "A51414" ? Colors.red : Colors.black,
             ),
           ),
-          SizedBox(height: screenHeight * 0.01),
+          SizedBox(height: screenHeight * 0.005),
           Text(
             orderStatus,
             style: TextStyle(
-              fontSize: fontSize,
+              fontSize: titleFontSize*0.7,
               color: Colors.orange,
             ),
           ),
-          SizedBox(height: screenHeight * 0.01),
+          SizedBox(height: screenHeight * 0.005),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildOrderDetail('Transaction #', transactionId, fontSize),
-              _buildOrderDetail('Order date', orderDate, fontSize),
+              _buildOrderDetail('Transaction #', transactionId, titleFontSize*0.8),
+              _buildOrderDetail('Order date', orderDate, titleFontSize*0.8),
             ],
           ),
-          SizedBox(height: screenHeight * 0.01),
+          SizedBox(height: screenHeight * 0.006),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildOrderDetail('PO date', poDate, fontSize),
-              _buildOrderDetail('Customer PO', customerPo, fontSize),
+              _buildOrderDetail('PO date', poDate, titleFontSize*0.8),
+              _buildOrderDetail('Customer PO', customerPo, titleFontSize*0.8),
             ],
           ),
-          SizedBox(height: screenHeight * 0.01),
+          SizedBox(height: screenHeight * 0.005),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildOrderDetail('Payment Status', paymentStatus, fontSize),
-              _buildOrderDetail('Amount', amount, fontSize),
-            ],
-          ),
-          SizedBox(height: screenHeight * 0.02),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: ElevatedButton(
-              onPressed: () {
-                _showPaymentPopup(context, transactionId, amount);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 175, 32, 21),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius),
+              _buildOrderDetail('Payment Status', paymentStatus, titleFontSize*0.9),
+              _buildOrderDetail('Amount', amount, titleFontSize*0.9),
+              ElevatedButton(
+                onPressed: () {
+                  _showPaymentPopup(context, transactionId, amount);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 175, 32, 21),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 15, // Even more reduced padding
+                    vertical: 7,    // Even more reduced padding
+                  ),
+                  minimumSize: Size(10, 10), // Allow the button to be smaller
+                ),
+                child: Text(
+                  'Make Payment',
+                  style: TextStyle(
+                    fontSize: titleFontSize*0.7, // Slightly smaller text
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              child: Text(
-                'Make Payment',
-                style: TextStyle(
-                  fontSize: fontSize,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            ],
           ),
+          SizedBox(height: screenHeight * 0.005),
         ],
       ),
     );
@@ -124,7 +134,7 @@ class OrderHistoryItem extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: fontSize * 0.9,
+            fontSize: labelFontSize,
             color: Colors.grey[600],
           ),
         ),
