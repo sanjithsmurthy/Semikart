@@ -85,7 +85,12 @@ class _OrderHistoryState extends State<OrderHistory> {
 
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(padding),
+        padding: EdgeInsets.only(
+          left: padding, 
+          right: padding, 
+          bottom: padding,
+          // top: 0, // removed top padding
+        ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -101,7 +106,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                   ],
                 ),
               ),
-              SizedBox(height: screenHeight * 0.01),
+              SizedBox(height: screenHeight * 0.005),
               Text('Search', style: TextStyle(fontSize: normalTextSize)),
               SizedBox(height: screenHeight * 0.005),
               TextFormField(
