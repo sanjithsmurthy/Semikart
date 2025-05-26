@@ -72,14 +72,16 @@ class _OrderHistoryState extends State<OrderHistory> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildSummaryCard(
-                      context, 'Total Orders', totalOrders.toString()),
-                  _buildSummaryCard(
-                      context, 'Ongoing Orders', ongoingOrders.toString()),
-                ],
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildOrderChip('Total Orders', totalOrders.toString(), Icons.receipt),
+                    SizedBox(width: screenWidth * 0.05),
+                    _buildOrderChip('Ongoing Orders', ongoingOrders.toString(), Icons.local_shipping),
+                  ],
+                ),
               ),
               SizedBox(height: screenHeight * 0.02),
               Text('Search', style: TextStyle(fontSize: fontSize)),
@@ -296,41 +298,29 @@ class _OrderHistoryState extends State<OrderHistory> {
     );
   }
 
-  Widget _buildSummaryCard(BuildContext context, String title, String value) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final double containerWidth = screenWidth > 600 ? 200 : screenWidth * 0.35;
-    final double fontSize = screenWidth > 600 ? 20 : 18;
-
+  Widget _buildOrderChip(String label, String value, IconData icon) {
     return Container(
-      width: containerWidth,
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Color(0xFFE0E0E0)),
       ),
-      child: Column(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
+          Icon(icon, size: 16, color: Color(0xFFA51414)),
+          SizedBox(width: 6),
+          Text(
+            '$label: ',
+            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+          ),
           Text(
             value,
             style: TextStyle(
-              fontSize: fontSize * 1.2,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: fontSize * 0.8,
-              color: Colors.grey[600],
+              color: Color(0xFFA51414),
             ),
           ),
         ],
