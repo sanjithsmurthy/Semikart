@@ -34,7 +34,7 @@ class GreyTextBox extends StatelessWidget {
         Text(
           text, // Use the single parameter for label text
           style: const TextStyle(
-            fontSize: 11,
+            fontSize: 9,
             color: Color(0xFFA51414), // Adjust the color as needed
           ),
         ),
@@ -43,7 +43,7 @@ class GreyTextBox extends StatelessWidget {
           width: width ??
               screenWidth *
                   0.9, // Default to 90% of screen width if width is not provided
-          height: 35,
+          height: 32,
           decoration: BoxDecoration(
             color: backgroundColor, // Use the customizable background color
             borderRadius: BorderRadius.circular(9),
@@ -57,9 +57,13 @@ class GreyTextBox extends StatelessWidget {
             onEditingComplete: onEditingComplete, // Attach editing complete callback
             decoration: InputDecoration(
               hintText: text, // Use the same parameter for hint text
+              hintStyle: const TextStyle(
+                fontSize: 12, // <-- Reduce this value as needed
+                color: Colors.black, // Optional: set a color for the hint
+              ),
               border: InputBorder.none,
               contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 13), // Center text vertically
             ),
           ),
         ),

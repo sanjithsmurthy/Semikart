@@ -211,7 +211,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
       child: SafeArea(
         child: SingleChildScrollView(
           // Use scaled padding
-          padding: EdgeInsets.symmetric(horizontal: sectionSpacing, vertical: sectionSpacing),
+          padding: EdgeInsets.symmetric(horizontal: sectionSpacing, vertical: sectionSpacing*0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -220,12 +220,12 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                 Text(
                   widget.title,
                   style: TextStyle(
-                    fontSize: titleFontSize, // Scaled
+                    fontSize: titleFontSize*0.7, // Scaled
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: sectionSpacing), // Scaled
+                SizedBox(height: sectionSpacing*0.4), // Scaled
 
                 // --- Form Fields ---
                 GreyTextBox(

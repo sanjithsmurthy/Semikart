@@ -50,7 +50,7 @@ class _DynamicTableState extends State<DynamicTable> {
                 // Table Header
                 Container(
                   color: Colors.grey[200],
-                  padding: EdgeInsets.symmetric(vertical: padding, horizontal: padding * 2),
+                  padding: EdgeInsets.symmetric(vertical: padding*0.8, horizontal: padding * 2),
                   child: Row(
                     children: [
                       Expanded(
@@ -115,7 +115,7 @@ class _DynamicTableState extends State<DynamicTable> {
                             child: TextField(
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
                               ),
                               onChanged: (value) {
                                 rows[index]["manufacturerPartNo"] = value;
@@ -123,7 +123,7 @@ class _DynamicTableState extends State<DynamicTable> {
                               controller: TextEditingController(text: rows[index]["manufacturerPartNo"]),
                             ),
                           ),
-                          SizedBox(width: padding),
+                          SizedBox(width: padding*0.5),
                           // Customer Part No Input
                           Expanded(
                             flex: 3,
