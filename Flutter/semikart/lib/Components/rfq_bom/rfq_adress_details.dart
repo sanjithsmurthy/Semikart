@@ -211,7 +211,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
       child: SafeArea(
         child: SingleChildScrollView(
           // Use scaled padding
-          padding: EdgeInsets.symmetric(horizontal: sectionSpacing, vertical: sectionSpacing*0),
+          padding: EdgeInsets.symmetric(horizontal: sectionSpacing),
           child: Form(
             key: _formKey,
             child: Column(
@@ -220,20 +220,20 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                 Text(
                   widget.title,
                   style: TextStyle(
-                    fontSize: titleFontSize*0.7, // Scaled
+                    fontSize: titleFontSize*0.8, // Scaled
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: sectionSpacing*0.4), // Scaled
+                SizedBox(height: sectionSpacing*0.2), // Scaled
 
                 // --- Form Fields ---
                 GreyTextBox(
                   nameController: firstNameController,
                   text: 'First name*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   focusNode: firstNameFocus,
                   nextFocus: emailFocus,
                   cursorColor: primaryColor,
@@ -252,8 +252,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: emailController,
                   text: 'Email*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   keyboardType: TextInputType.emailAddress,
                   focusNode: emailFocus,
                   nextFocus: mobileFocus,
@@ -276,8 +276,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: mobileController,
                   text: 'Mobile number*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   keyboardType: TextInputType.phone,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)], // Limit length
                   focusNode: mobileFocus,
@@ -301,8 +301,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: companyController,
                   text: 'Company name',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   focusNode: companyFocus,
                   nextFocus: gstNoFocus,
                   cursorColor: primaryColor,
@@ -315,8 +315,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: gstNoController,
                   text: 'GST number',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   focusNode: gstNoFocus,
                   nextFocus: address1Focus,
                   cursorColor: primaryColor,
@@ -329,8 +329,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: address1Controller,
                   text: 'Address line 1*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   focusNode: address1Focus,
                   nextFocus: address2Focus,
                   cursorColor: primaryColor,
@@ -349,8 +349,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: address2Controller,
                   text: 'Address line 2*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   focusNode: address2Focus,
                   nextFocus: landmarkFocus,
                   cursorColor: primaryColor,
@@ -369,8 +369,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                   nameController: landmarkController,
                   text: 'Landmark*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                  textBoxHeight: textBoxHeight*0.7, // Scaled
                   focusNode: landmarkFocus,
                   nextFocus: zipCodeFocus,
                   cursorColor: primaryColor,
@@ -395,8 +395,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         nameController: zipCodeController,
                         text: 'Zip code*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                        textBoxHeight: textBoxHeight*0.7, // Scaled
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -425,8 +425,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         nameController: stateController,
                         text: 'State*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                        textBoxHeight: textBoxHeight*0.7, // Scaled
                         focusNode: stateFocus,
                         nextFocus: cityFocus,
                         cursorColor: primaryColor,
@@ -454,8 +454,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         nameController: cityController,
                         text: 'City*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                        textBoxHeight: textBoxHeight*0.7, // Scaled
                         focusNode: cityFocus,
                         nextFocus: countryFocus,
                         cursorColor: primaryColor,
@@ -476,8 +476,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         nameController: countryController,
                         text: 'Country*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, // Scaled
+                        textBoxHeight: textBoxHeight*0.7, // Scaled
                         focusNode: countryFocus,
                         cursorColor: primaryColor,
                         selectionHandleColor: primaryColor,
@@ -518,13 +518,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                 Center(
                   child: RedButton(
                     label: widget.submitButtonText,
-                    onPressed: widget.canSubmit ? _submitForm : () {}, // Keep existing logic
+                    onPressed: widget.canSubmit ? _submitForm : () {},
+                    width: 110,
+                    height: 40, // Keep existing logic
                     // Pass scaled font size to RedButton if it supports it
                     // Assuming RedButton scales internally or accepts fontSize
                     // fontSize: 16.0 * scale, // Example if RedButton needs it
                   ),
                 ),
-                SizedBox(height: sectionSpacing), // Scaled bottom padding
+                // SizedBox(height: sectionSpacing), // Scaled bottom padding
               ],
             ),
           ),

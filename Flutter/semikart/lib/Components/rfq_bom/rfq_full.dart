@@ -39,14 +39,14 @@ class _RFQFullPageState extends State<RFQFullPage> {
                     });
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 if (!isFileUploaded)
                   RFQTextComponent(
                     onValidationChanged: (bool isValid) {
                       // Handle validation change logic here
                     },
                   ),
-                const SizedBox(height: 20),
+                // const SizedBox(height: ),
                 RFQAddressDetails(
                   onValidationChanged: (bool isValid) {
                     // Handle validation change logic here
@@ -67,7 +67,7 @@ class _RFQFullPageState extends State<RFQFullPage> {
                     });
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
               ],
             ),
           ),

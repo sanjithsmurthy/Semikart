@@ -25,45 +25,52 @@ class GreyTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen width for responsiveness
     final screenWidth = MediaQuery.of(context).size.width;
+
+    final double textBoxHeight = 32.0;
+    final double labelFontSize = 9.0;
+    final double reducedTextBoxHeight = textBoxHeight * 0.9;
+    final double reducedHintFontSize = labelFontSize * 0.85;
+
+    // Dynamically scale vertical padding as a fraction of the box height
+    final double verticalPadding = reducedTextBoxHeight * 0.25; // Adjust this factor as needed
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          text, // Use the single parameter for label text
+          text,
           style: const TextStyle(
             fontSize: 9,
-            color: Color(0xFFA51414), // Adjust the color as needed
+            color: Color(0xFFA51414),
           ),
         ),
         const SizedBox(height: 1),
         Container(
-          width: width ??
-              screenWidth *
-                  0.9, // Default to 90% of screen width if width is not provided
-          height: 32,
+          width: width ?? screenWidth * 0.9,
+          height: reducedTextBoxHeight,
           decoration: BoxDecoration(
-            color: backgroundColor, // Use the customizable background color
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(9),
           ),
           child: TextField(
-            cursorColor: Colors.black, // Set the cursor color to black
+            cursorColor: Colors.black,
             controller: nameController,
-            focusNode: focusNode, // Attach the FocusNode
-            onTap: onTap, // Attach the onTap callback
-            textInputAction: textInputAction, // Attach the text input action
-            onEditingComplete: onEditingComplete, // Attach editing complete callback
+            focusNode: focusNode,
+            onTap: onTap,
+            textInputAction: textInputAction,
+            onEditingComplete: onEditingComplete,
             decoration: InputDecoration(
-              hintText: text, // Use the same parameter for hint text
-              hintStyle: const TextStyle(
-                fontSize: 12, // <-- Reduce this value as needed
-                color: Colors.black, // Optional: set a color for the hint
+              hintText: text,
+              hintStyle: TextStyle(
+                fontSize: reducedHintFontSize*1.3,
+                color: Colors.grey.shade500,
               ),
               border: InputBorder.none,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 13), // Center text vertically
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: verticalPadding*2, // Dynamically scaled
+              ),
             ),
           ),
         ),

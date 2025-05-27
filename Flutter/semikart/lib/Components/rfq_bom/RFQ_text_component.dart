@@ -176,7 +176,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
     return Container(
       color: Colors.white,
       width: screenWidth,
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: horizontalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -199,7 +199,7 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             alignment: Alignment.centerRight,
             child: Padding(
               padding: EdgeInsets.only(
-                top: addRowButtonPaddingTop*0.05 ,
+                top: addRowButtonPaddingTop*0.01 ,
                 right: addRowButtonPaddingRight - 15,
               ),
               child: RedButton(
