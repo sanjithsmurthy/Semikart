@@ -28,7 +28,7 @@ class _RFQFullPageState extends State<RFQFullPage> {
         color: Colors.white, // Set the background color to white
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 50, bottom: 50, left: 16, right: 16), // Adjusted padding
+            padding: const EdgeInsets.only(top: 10, bottom: 50, left: 12, right: 12), // Adjusted padding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,7 +39,7 @@ class _RFQFullPageState extends State<RFQFullPage> {
                     });
                   },
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
                 if (!isFileUploaded)
                   RFQTextComponent(
                     onValidationChanged: (bool isValid) {
