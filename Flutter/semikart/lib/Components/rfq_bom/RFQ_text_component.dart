@@ -36,13 +36,18 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
   }
 
   void _addRFQComponent() {
-    if (_rfqComponents.isNotEmpty &&
-        !_validateFields(_rfqComponents.length - 1)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Please fill all mandatory fields before adding a new row.'),
-          backgroundColor: Color(0xFFA51414),
+    if (_rfqComponents.isNotEmpty && !_validateFields(_rfqComponents.length - 1)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Incomplete Fields'),
+          content: const Text('Please fill all mandatory fields before adding a new row.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK', style: TextStyle(color: Color(0xFFA51414))),
+            ),
+          ],
         ),
       );
       return;
