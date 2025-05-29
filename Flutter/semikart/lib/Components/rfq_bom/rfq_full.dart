@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../app_navigator.dart';
 import 'upload_file.dart';
-import 'rfq_text_component.dart';
+import 'RFQ_text_component.dart';
 import 'rfq_adress_details.dart';
 import '../common/popup.dart';
 import '../home/home_page.dart';
