@@ -34,14 +34,14 @@ class ProductsHeaderContent extends StatelessWidget {
                 maxWidth: screenWidth * 0.9, // 90% of screen width
               ),
               padding: EdgeInsets.only(
-                top: screenHeight * 0.003, // Relative top padding
+                top:0, // Relative top padding
                 bottom: screenHeight * 0.009, // Relative bottom padding
                 left: 0,
                 right: 0,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(screenWidth * 0.03), // Relative border radius
+                borderRadius: BorderRadius.circular(screenWidth * 0.025), // Relative border radius
               ),
               child: Column(
                 children: [
@@ -109,18 +109,18 @@ class ProductsHeaderContent extends StatelessWidget {
           children: [
             // Heading
             Container(
-              padding: EdgeInsets.all(containerPadding),
+              // padding: EdgeInsets.only(containerPadding),
               child: Text(
                 'Electronic Components Categories Line Card',
                 style: TextStyle(
                   color: const Color(0xFFA51414), // Red color (A51414)
-                  fontSize: titleFontSize,
+                  fontSize: titleFontSize*0.95,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: verticalSpacing), // Add relative spacing
+            SizedBox(height: verticalSpacing*0.7), // Add relative spacing
 
             // Red Button
             Center(
@@ -128,7 +128,7 @@ class ProductsHeaderContent extends StatelessWidget {
                 label: 'Request for Quote (RFQ)',
                 onPressed: () => _showRFQOverlay(context), // Show the overlay
                 width: buttonWidth, // Relative width
-                height: buttonHeight, // Relative height
+                height: buttonHeight*0.8, // Relative height
               ),
             ),
              SizedBox(height: verticalSpacing), // Add spacing below button if needed

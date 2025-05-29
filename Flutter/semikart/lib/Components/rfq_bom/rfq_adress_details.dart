@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../common/red_button.dart';
 import '../common/popup.dart'; // Import the CustomPopup
+import 'package:flutter_recaptcha_v2_compat/flutter_recaptcha_v2_compat.dart'; // Import reCAPTCHA package
 
 class RFQAddressDetails extends StatefulWidget {
   final String title;
@@ -58,6 +59,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   bool _isValid = false;
   String? _errorMessage;
 
+  // --- reCAPTCHA State Variables ---
+  final RecaptchaV2Controller _recaptchaV2Controller = RecaptchaV2Controller();
+  bool _captchaVerified = false;
+  // IMPORTANT: Replace with your actual Site Key from Google reCAPTCHA admin console
+  // This key should be for reCAPTCHA v2 ("I'm not a robot" Checkbox).
+  final String _recaptchaSiteKey = "6LeEWI8aAAAAADSIswAT2jceMvnEIFgFGVbG1PNc"; // <<<<<<< REPLACE THIS or ada7daukafsd3lqk8292829fa
+
   @override
   void initState() {
     super.initState();
@@ -97,7 +105,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     stateFocus.dispose();
     cityFocus.dispose();
     countryFocus.dispose();
-
+    // Note: RecaptchaV2Controller from flutter_recaptcha_v2_compat typically does not have a dispose() method.
     super.dispose();
   }
 
@@ -114,7 +122,6 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     } else if (mobileController.text.trim().isEmpty) {
       errorMessage = 'Mobile number is required';
     } else if (!RegExp(r'^[0-9]+$').hasMatch(mobileController.text.trim())) {
-      // This check might be redundant with input formatter but good for safety
       errorMessage = 'Mobile number must contain only numbers';
     } else if (mobileController.text.trim().length < 10) {
       errorMessage = 'Please enter a valid mobile number';
@@ -127,7 +134,6 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     } else if (zipCodeController.text.trim().isEmpty) {
       errorMessage = 'Zip code is required';
     } else if (!RegExp(r'^[0-9]+$').hasMatch(zipCodeController.text.trim())) {
-      // Redundant with input formatter
       errorMessage = 'Zip code must contain only numbers';
     } else if (zipCodeController.text.trim().length < 6) {
       errorMessage = 'Please enter a valid zip code';
@@ -140,7 +146,6 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
     }
     // --- End Validation Logic ---
 
-
     bool isValid = errorMessage == null;
 
     if (mounted) {
@@ -149,16 +154,29 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
         _isValid = isValid;
       });
     }
-
     widget.onValidationChanged(isValid);
   }
 
   void _submitForm() async {
     _validateFields(); // Re-validate before submission
 
-    if (_isValid && widget.canSubmit) { // Check canSubmit flag as well
+    // --- Check reCAPTCHA status ---
+    if (!_captchaVerified) {
+      if (mounted) {
+        await CustomPopup.show(
+          context: context,
+          title: 'Verification Required',
+          message: 'Please complete the reCAPTCHA verification.',
+          buttonText: 'OK',
+        );
+      }
+      return; // Stop submission if reCAPTCHA not verified
+    }
+    // --- End reCAPTCHA check ---
+
+    if (_isValid && widget.canSubmit) {
       widget.onSubmit();
-    } else if (!_isValid) { // Only show error popup if validation failed
+    } else if (!_isValid) {
       if (!mounted) return;
       await CustomPopup.show(
         context: context,
@@ -167,40 +185,27 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
         buttonText: 'OK',
       );
     }
-    // If !_isValid is false but widget.canSubmit is false, do nothing (button is likely disabled)
   }
 
   @override
   Widget build(BuildContext context) {
-    // --- Responsive Scaling Setup ---
+    // --- Responsive Scaling Setup (existing) ---
     const double referenceWidth = 412.0;
-    const double referenceHeight = 917.0; // Keep reference height if needed for specific elements
-
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Calculate scale factors (primarily use width scale)
-    final double scaleWidth = screenWidth / referenceWidth;
-    // final double scaleHeight = screenHeight / referenceHeight; // Use if height scaling is needed
-
-    // Use scaleWidth for most elements to maintain horizontal proportions
-    final double scale = scaleWidth;
+    final double scale = screenWidth / referenceWidth;
     // --- End Responsive Scaling Setup ---
 
-    // --- Scaled Dimensions ---
-    // Base values are chosen relative to the reference width (412px)
-    final double titleFontSize = 20.0 * scale; // e.g., 20px on reference width
-    final double sectionSpacing = 16.0 * scale; // e.g., 16px
-    final double textBoxSpacing = 10.0 * scale; // e.g., 10px
-    final double rowSpacing = 10.0 * scale; // e.g., 10px
-    // GreyTextBox width will be handled internally, but pass scaled height/font
-    final double reCaptchaHeight = 50.0 * scale; // e.g., 50px height
-    final double reCaptchaFontSize = 14.0 * scale; // e.g., 14px font
-    final double submitButtonSpacing = 20.0 * scale; // e.g., 20px
-    final double textBoxLabelFontSize = 13.5 * scale; // e.g., 13.5px font
-    // Scale height based on reference height or a fixed aspect ratio * scaleWidth
-    final double textBoxHeight = 45.0 * scale; // e.g., 45px height, scales with width
-    final double rowHorizontalSpacing = 16.0 * scale; // e.g., 16px horizontal space in rows
+    // --- Scaled Dimensions (existing) ---
+    final double titleFontSize = 20.0 * scale;
+    final double sectionSpacing = 16.0 * scale;
+    final double textBoxSpacing = 10.0 * scale;
+    final double rowSpacing = 10.0 * scale;
+    // final double reCaptchaHeight = 50.0 * scale; // Not strictly needed for RecaptchaV2 widget
+    // final double reCaptchaFontSize = 14.0 * scale; // Not strictly needed for RecaptchaV2 widget
+    final double submitButtonSpacing = 20.0 * scale;
+    final double textBoxLabelFontSize = 13.5 * scale;
+    final double textBoxHeight = 45.0 * scale;
+    final double rowHorizontalSpacing = 16.0 * scale;
     // --- End Scaled Dimensions ---
 
     const Color primaryColor = Color(0xFFA51414);
@@ -210,8 +215,7 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
       color: Colors.white,
       child: SafeArea(
         child: SingleChildScrollView(
-          // Use scaled padding
-          padding: EdgeInsets.symmetric(horizontal: sectionSpacing, vertical: sectionSpacing),
+          padding: EdgeInsets.symmetric(horizontal: sectionSpacing),
           child: Form(
             key: _formKey,
             child: Column(
@@ -220,20 +224,20 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                 Text(
                   widget.title,
                   style: TextStyle(
-                    fontSize: titleFontSize, // Scaled
+                    fontSize: titleFontSize * 0.8,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: sectionSpacing), // Scaled
+                SizedBox(height: sectionSpacing * 0.2),
 
-                // --- Form Fields ---
+                // --- Form Fields (existing GreyTextBox widgets) ---
                 GreyTextBox(
                   nameController: firstNameController,
                   text: 'First name*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   focusNode: firstNameFocus,
                   nextFocus: emailFocus,
                   cursorColor: primaryColor,
@@ -245,15 +249,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     return null;
                   },
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: emailController,
                   text: 'Email*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   keyboardType: TextInputType.emailAddress,
                   focusNode: emailFocus,
                   nextFocus: mobileFocus,
@@ -269,17 +273,17 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     return null;
                   },
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: mobileController,
                   text: 'Mobile number*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   keyboardType: TextInputType.phone,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)], // Limit length
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)], 
                   focusNode: mobileFocus,
                   nextFocus: companyFocus,
                   cursorColor: primaryColor,
@@ -294,43 +298,43 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     return null;
                   },
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: companyController,
                   text: 'Company name',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   focusNode: companyFocus,
                   nextFocus: gstNoFocus,
                   cursorColor: primaryColor,
                   selectionHandleColor: primaryColor,
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: gstNoController,
                   text: 'GST number',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   focusNode: gstNoFocus,
                   nextFocus: address1Focus,
                   cursorColor: primaryColor,
                   selectionHandleColor: primaryColor,
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: address1Controller,
                   text: 'Address line 1*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   focusNode: address1Focus,
                   nextFocus: address2Focus,
                   cursorColor: primaryColor,
@@ -342,15 +346,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     return null;
                   },
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: address2Controller,
                   text: 'Address line 2*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   focusNode: address2Focus,
                   nextFocus: landmarkFocus,
                   cursorColor: primaryColor,
@@ -362,15 +366,15 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     return null;
                   },
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: textBoxSpacing), // Scaled
+                SizedBox(height: textBoxSpacing), 
                 GreyTextBox(
                   nameController: landmarkController,
                   text: 'Landmark*',
                   backgroundColor: textBoxBackgroundColor,
-                  labelFontSize: textBoxLabelFontSize, // Scaled
-                  textBoxHeight: textBoxHeight, // Scaled
+                  labelFontSize: textBoxLabelFontSize*0.8, 
+                  textBoxHeight: textBoxHeight*0.7, 
                   focusNode: landmarkFocus,
                   nextFocus: zipCodeFocus,
                   cursorColor: primaryColor,
@@ -382,11 +386,10 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                     return null;
                   },
                   onChanged: (_) => _validateFields(),
-                  scaleFactor: scale, // Pass scale factor
+                  scaleFactor: scale, 
                 ),
-                SizedBox(height: rowSpacing), // Scaled
+                SizedBox(height: rowSpacing), 
 
-                // --- Row for Zip Code and State ---
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -395,8 +398,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         nameController: zipCodeController,
                         text: 'Zip code*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, 
+                        textBoxHeight: textBoxHeight*0.7, 
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -416,17 +419,17 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           return null;
                         },
                         onChanged: (_) => _validateFields(),
-                        scaleFactor: scale, // Pass scale factor
+                        scaleFactor: scale, 
                       ),
                     ),
-                    SizedBox(width: rowHorizontalSpacing), // Scaled
+                    SizedBox(width: rowHorizontalSpacing), 
                     Expanded(
                       child: GreyTextBox(
                         nameController: stateController,
                         text: 'State*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, 
+                        textBoxHeight: textBoxHeight*0.7, 
                         focusNode: stateFocus,
                         nextFocus: cityFocus,
                         cursorColor: primaryColor,
@@ -438,14 +441,13 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           return null;
                         },
                         onChanged: (_) => _validateFields(),
-                        scaleFactor: scale, // Pass scale factor
+                        scaleFactor: scale, 
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: rowSpacing), // Scaled
+                SizedBox(height: rowSpacing), 
 
-                // --- Row for City and Country ---
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -454,8 +456,8 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                         nameController: cityController,
                         text: 'City*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, 
+                        textBoxHeight: textBoxHeight*0.7, 
                         focusNode: cityFocus,
                         nextFocus: countryFocus,
                         cursorColor: primaryColor,
@@ -467,17 +469,17 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           return null;
                         },
                         onChanged: (_) => _validateFields(),
-                        scaleFactor: scale, // Pass scale factor
+                        scaleFactor: scale, 
                       ),
                     ),
-                    SizedBox(width: rowHorizontalSpacing), // Scaled
+                    SizedBox(width: rowHorizontalSpacing), 
                     Expanded(
                       child: GreyTextBox(
                         nameController: countryController,
                         text: 'Country*',
                         backgroundColor: textBoxBackgroundColor,
-                        labelFontSize: textBoxLabelFontSize, // Scaled
-                        textBoxHeight: textBoxHeight, // Scaled
+                        labelFontSize: textBoxLabelFontSize*0.8, 
+                        textBoxHeight: textBoxHeight*0.7, 
                         focusNode: countryFocus,
                         cursorColor: primaryColor,
                         selectionHandleColor: primaryColor,
@@ -488,40 +490,58 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
                           return null;
                         },
                         onChanged: (_) => _validateFields(),
-                        scaleFactor: scale, // Pass scale factor
+                        scaleFactor: scale, 
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: sectionSpacing), // Scaled
+                SizedBox(height: sectionSpacing),
+                // --- End Form Fields ---
 
-                // --- Placeholder for reCAPTCHA ---
-                Container(
-                  height: reCaptchaHeight, // Scaled
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade400),
-                    borderRadius: BorderRadius.circular(5 * scale), // Scaled radius
-                  ),
-                  child: Center(
-                    child: Text(
-                      "I'm not a robot (Placeholder)",
-                      style: TextStyle(
-                        fontSize: reCaptchaFontSize, // Scaled
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ),
+                // --- Actual reCAPTCHA Widget ---
+                RecaptchaV2(
+                  apiKey: _recaptchaSiteKey, // Your Site Key
+                  apiSecret: "", // Usually empty for v2 checkbox with this package
+                  controller: _recaptchaV2Controller,
+                  onVerifiedSuccessfully: (success) {
+                    if (mounted) {
+                      setState(() {
+                        _captchaVerified = success;
+                      });
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('reCAPTCHA challenge passed.')),
+                        );
+                      } else {
+                        // This case might occur if the challenge is explicitly failed or an issue arises.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('reCAPTCHA challenge not completed.')),
+                        );
+                      }
+                    }
+                  },
+                  onVerifiedError: (err) {
+                    print("reCAPTCHA widget error: $err");
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('reCAPTCHA error: $err. Please try again.')),
+                      );
+                      setState(() {
+                        _captchaVerified = false; // Ensure verification is false on error
+                      });
+                    }
+                  },
                 ),
+                // --- End reCAPTCHA Widget ---
+
                 SizedBox(height: submitButtonSpacing), // Scaled
 
-                // --- Submit Button ---
                 Center(
                   child: RedButton(
                     label: widget.submitButtonText,
-                    onPressed: widget.canSubmit ? _submitForm : () {}, // Keep existing logic
-                    // Pass scaled font size to RedButton if it supports it
-                    // Assuming RedButton scales internally or accepts fontSize
-                    // fontSize: 16.0 * scale, // Example if RedButton needs it
+                    onPressed: widget.canSubmit ? _submitForm : () {},
+                    width: 110 * scale, // Apply scaling
+                    height: 40 * scale, // Apply scaling
                   ),
                 ),
                 SizedBox(height: sectionSpacing), // Scaled bottom padding
@@ -534,15 +554,14 @@ class _RFQAddressDetailsState extends State<RFQAddressDetails> {
   }
 }
 
-
-// --- GreyTextBox Widget (Modified for Scaling) ---
+// --- GreyTextBox Widget (Modified for Scaling - existing) ---
 class GreyTextBox extends StatelessWidget {
   final TextEditingController nameController;
   final String text;
-  final double? width; // Keep optional width override
+  final double? width;
   final Color backgroundColor;
-  final double labelFontSize; // Now receives scaled value
-  final double textBoxHeight; // Now receives scaled value
+  final double labelFontSize;
+  final double textBoxHeight;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
@@ -553,7 +572,7 @@ class GreyTextBox extends StatelessWidget {
   final double? cursorWidth;
   final Color? selectionColor;
   final Color? selectionHandleColor;
-  final double scaleFactor; // Receive the scale factor
+  final double scaleFactor;
 
   const GreyTextBox({
     Key? key,
@@ -561,8 +580,8 @@ class GreyTextBox extends StatelessWidget {
     required this.text,
     this.width,
     this.backgroundColor = const Color(0xFFE4E8EC),
-    required this.labelFontSize, // Expect scaled value
-    required this.textBoxHeight, // Expect scaled value
+    required this.labelFontSize,
+    required this.textBoxHeight,
     this.keyboardType,
     this.inputFormatters,
     this.validator,
@@ -570,31 +589,25 @@ class GreyTextBox extends StatelessWidget {
     this.nextFocus,
     this.onChanged,
     this.cursorColor,
-    this.cursorWidth = 1.5, // Base cursor width (could also scale if desired)
+    this.cursorWidth = 1.5,
     this.selectionColor,
     this.selectionHandleColor,
-    required this.scaleFactor, // Require scale factor
+    required this.scaleFactor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Define the default theme color
     const Color defaultThemeColor = Color(0xFFA51414);
-    const double referenceWidth = 412.0; // Reference width for default calculation
+    const double referenceWidth = 412.0;
 
-    // Determine effective colors
     final Color effectiveHandleColor = selectionHandleColor ?? defaultThemeColor;
     final Color effectiveCursorColor = cursorColor ?? defaultThemeColor;
     final Color effectiveSelectionColor = selectionColor ?? effectiveHandleColor.withOpacity(0.4);
 
-    // Calculate default width based on reference and scale factor if not overridden
     final double effectiveWidth = width ?? (referenceWidth * 0.9 * scaleFactor);
-    // Scaled internal padding/radius
     final double internalHPadding = 10.0 * scaleFactor;
     final double borderRadius = 8.0 * scaleFactor;
     final double labelSpacing = 4.0 * scaleFactor;
-
-    // Calculate font size for input text relative to label font size
     final double inputTextFontSize = labelFontSize * 1.1;
 
     return Column(
@@ -610,15 +623,15 @@ class GreyTextBox extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: labelSpacing), // Scaled spacing
+        SizedBox(height: labelSpacing),
 
         // Text Field Container
         Container(
-          width: effectiveWidth, // Use calculated width
-          height: textBoxHeight, // Use scaled height from parent
+          width: effectiveWidth,
+          height: textBoxHeight,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(borderRadius), // Scaled radius
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: TextSelectionTheme(
             data: TextSelectionTheme.of(context).copyWith(
@@ -632,22 +645,21 @@ class GreyTextBox extends StatelessWidget {
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
               cursorColor: effectiveCursorColor,
-              cursorWidth: cursorWidth!, // Use base width or scale: cursorWidth! * scaleFactor
-              style: TextStyle(fontSize: inputTextFontSize), // Scaled input text
+              cursorWidth: cursorWidth!,
+              style: TextStyle(fontSize: inputTextFontSize),
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: text.endsWith('*') ? text.substring(0, text.length - 1) : text,
                 hintStyle: TextStyle(
-                  fontSize: labelFontSize * 1.05, // Scale hint relative to label
+                  fontSize: labelFontSize * 1.05,
                   color: Colors.grey.shade500,
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: internalHPadding, // Scaled horizontal padding
-                  // Dynamic vertical padding to center text based on scaled height and font size
+                  horizontal: internalHPadding,
                   vertical: (textBoxHeight - (inputTextFontSize * 1.4)) / 2 > 0
                            ? (textBoxHeight - (inputTextFontSize * 1.4)) / 2
-                           : 0, // Ensure non-negative padding
+                           : 0,
                 ),
                 errorStyle: const TextStyle(height: 0.01, fontSize: 0.01, color: Colors.transparent),
                 isDense: true,

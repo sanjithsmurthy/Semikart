@@ -36,13 +36,18 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
   }
 
   void _addRFQComponent() {
-    if (_rfqComponents.isNotEmpty &&
-        !_validateFields(_rfqComponents.length - 1)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Please fill all mandatory fields before adding a new row.'),
-          backgroundColor: Color(0xFFA51414),
+    if (_rfqComponents.isNotEmpty && !_validateFields(_rfqComponents.length - 1)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Incomplete Fields'),
+          content: const Text('Please fill all mandatory fields before adding a new row.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK', style: TextStyle(color: Color(0xFFA51414))),
+            ),
+          ],
         ),
       );
       return;
@@ -106,19 +111,19 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
                   color: const Color(0xFFA51414),
                 ),
               ),
-              SizedBox(height: sizedBoxHeight),
+              SizedBox(height: sizedBoxHeight*0.05),
               GreyTextBox(
                 nameController: controllerMap['partNo']!,
                 text: 'Manufacturers Part No*',
                 backgroundColor: Colors.white,
               ),
-              SizedBox(height: sizedBoxHeight * 2),
+              SizedBox(height: sizedBoxHeight * 1),
               GreyTextBox(
                 nameController: controllerMap['manufacturer']!,
                 text: 'Manufacturer*',
                 backgroundColor: Colors.white,
               ),
-              SizedBox(height: sizedBoxHeight * 2),
+              SizedBox(height: sizedBoxHeight * 1),
               Row(
                 children: [
                   Expanded(
@@ -171,16 +176,16 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
     return Container(
       color: Colors.white,
       width: screenWidth,
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: horizontalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: instructionPaddingBottom),
+            padding: EdgeInsets.only(bottom: instructionPaddingBottom*0.7),
             child: Text(
               "Manually enter each product requirement below.",
               style: TextStyle(
-                fontSize: instructionTextFontSize,
+                fontSize: instructionTextFontSize*0.62,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -194,12 +199,12 @@ class _RFQTextComponentState extends State<RFQTextComponent> {
             alignment: Alignment.centerRight,
             child: Padding(
               padding: EdgeInsets.only(
-                top: addRowButtonPaddingTop ,
+                top: addRowButtonPaddingTop*0.01 ,
                 right: addRowButtonPaddingRight - 15,
               ),
               child: RedButton(
-                width: addRowButtonWidth,
-                height: addRowButtonHeight,
+                width: addRowButtonWidth*0.85,
+                height: addRowButtonHeight*0.85,
                 label: 'Add Row',
                 onPressed: _addRFQComponent,
               ),

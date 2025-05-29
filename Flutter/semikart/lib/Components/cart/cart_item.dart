@@ -74,8 +74,8 @@ class CartItem extends StatelessWidget {
     final grandTotal = totalPrice + gstAmount;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: containerVerticalMargin), // Dynamic margin
-      padding: EdgeInsets.all(containerPadding), // Dynamic padding
+      margin: EdgeInsets.symmetric(vertical: containerVerticalMargin*0.7), // Dynamic margin
+      padding: EdgeInsets.only(bottom:containerPadding, top:0, left:containerPadding, right: containerPadding), // Dynamic padding
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(borderRadius), // Dynamic border radius

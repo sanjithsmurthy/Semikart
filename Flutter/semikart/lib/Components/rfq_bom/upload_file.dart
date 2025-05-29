@@ -56,7 +56,7 @@ class _CustomSquareState extends State<CustomSquare> {
   // Updated to accept scale factor for consistent scaling
   Widget _getFileIcon(double scale) {
     // Base icon size relative to reference width (e.g., 50px on 412px width)
-    double baseIconSize = 50.0;
+    double baseIconSize = 45.0;
     double iconSize = baseIconSize * scale;
 
     // Use a default icon if extension is null or unknown
@@ -123,9 +123,9 @@ class _CustomSquareState extends State<CustomSquare> {
     return Container(
       color: Colors.white, // Keep original background
       // No fixed width needed, let parent handle width constraints
-      padding: EdgeInsets.symmetric(horizontal: containerHorizontalPadding), // Scaled
+      padding: EdgeInsets.symmetric(horizontal: containerHorizontalPadding*0.6), // Scaled
       child: Container(
-        padding: EdgeInsets.all(innerContainerPadding), // Scaled
+        padding: EdgeInsets.all(innerContainerPadding*0.6), // Scaled
         decoration: BoxDecoration(
           color: Colors.white, // Keep original color
           borderRadius: BorderRadius.circular(borderRadius), // Scaled
@@ -156,7 +156,7 @@ class _CustomSquareState extends State<CustomSquare> {
                   // Display file name if selected
                   if (_fileName != null)
                     Padding(
-                      padding: EdgeInsets.only(top: sizedBoxHeightSmall), // Scaled
+                      padding: EdgeInsets.only(top: sizedBoxHeightSmall*0.1), // Scaled
                       child: Text(
                         _fileName!,
                         style: TextStyle(
@@ -173,34 +173,34 @@ class _CustomSquareState extends State<CustomSquare> {
             ),
             // Display upload instructions if no file is selected
             if (_fileName == null) ...[
-              SizedBox(height: sizedBoxHeightSmall), // Scaled
+              // SizedBox(height: sizedBoxHeightSmall*0.2), // Scaled
               Text(
                 'Upload Parts List',
                 style: TextStyle(
-                  fontSize: uploadTextFontSize, // Scaled
+                  fontSize: uploadTextFontSize*0.7, // Scaled
                   fontWeight: FontWeight.bold, // Keep original weight
                   color: const Color(0xFF000000), // Keep original color
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: sizedBoxHeightSmall), // Scaled
+              SizedBox(height: sizedBoxHeightSmall*0.5), // Scaled
               Text(
                 'Supported formats: Excel (XLS, XLSX), PDF.',
                 style: TextStyle(
-                  fontSize: supportedFormatsFontSize, // Scaled
+                  fontSize: supportedFormatsFontSize*0.8, // Scaled
                   color: const Color(0xFF757575), // Keep original color
                 ),
                 textAlign: TextAlign.center,
               ),
             ],
-            SizedBox(height: sizedBoxHeightMedium), // Scaled spacing before button
+            SizedBox(height: sizedBoxHeightMedium*0.5), // Scaled spacing before button
             // Browse/Replace Button
             Center(
               child: RedButton(
                 label: _fileName == null ? "Browse" : "Replace File",
                 onPressed: _pickFile,
-                width: buttonWidth, // Use scaled width
-                height: buttonHeight, // Use scaled height
+                width: buttonWidth*0.8, // Use scaled width
+                height: buttonHeight*0.8, // Use scaled height
                 fontSize: buttonFontSize, // Pass scaled font size (ensure RedButton uses it)
               ),
             ),

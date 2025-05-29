@@ -432,7 +432,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Expanded(
                         child: RedButton(
                           label: 'Change Password',
-                          height: screenWidth * 0.095,
+                          height: screenWidth * 0.09,
                           width: screenWidth * 0.4,
                           onPressed: _sendResetLink,
                         ),
@@ -441,34 +441,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       Expanded(
                         child: RedButton(
                           label: 'Logout',
-                          height: screenWidth * 0.095,
+                          height: screenWidth * 0.09,
                           width: screenWidth * 0.4,
                           onPressed: _handleLogout,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing * 1),
+                  SizedBox(height: verticalSpacing * 0.2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'User Information',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.04,
+                          fontSize: screenWidth * 0.034,
                           color: Colors.black,
                         ),
                       ),
                       _isSaving
                           ? const SizedBox(
-                              width: 30,
-                              height: 30,
+                              width: 20,
+                              height: 20,
                               child: Center(child: CircularProgressIndicator(strokeWidth: 3, color: Color(0xFFA51414))))
                           : IconButton(
                               icon: Icon(
                                 isEditing ? Icons.check : Icons.edit,
                                 color: const Color(0xFFA51414),
-                                size: screenWidth * 0.07,
+                                size: screenWidth * 0.05,
                               ),
                               onPressed: () {
                                 if (isEditing) {
@@ -483,35 +483,35 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ],
                   ),
                   SizedBox(height: verticalSpacing*0.1),
-                  CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.13, readOnly: !isEditing),
+                  CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.11, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.13, readOnly: !isEditing),
+                  CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.11, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _companyNameController, label: 'Company Name', height: screenWidth * 0.13, readOnly: !isEditing),
+                  CustomTextField(controller: _companyNameController, label: 'Company Name', height: screenWidth * 0.11, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _emailController, label: 'Your Email', height: screenWidth * 0.13, readOnly: true),
+                  CustomTextField(controller: _emailController, label: 'Your Email', height: screenWidth * 0.11, readOnly: true),
                   SizedBox(height: verticalSpacing),
                   Row(
                     children: [
-                      Expanded(child: CustomTextField(controller: _phoneController, label: 'Phone Number', height: screenWidth * 0.13, readOnly: !isEditing, keyboardType: TextInputType.phone)),
-                      SizedBox(width: screenWidth * 0.03),
-                      Expanded(child: CustomTextField(controller: _altPhoneController, label: 'Alternate No.', height: screenWidth * 0.13, readOnly: !isEditing, keyboardType: TextInputType.phone)),
+                      Expanded(child: CustomTextField(controller: _phoneController, label: 'Phone Number', height: screenWidth * 0.11, readOnly: !isEditing, keyboardType: TextInputType.phone)),
+                      SizedBox(width: screenWidth * 0.02),
+                      Expanded(child: CustomTextField(controller: _altPhoneController, label: 'Alternate No.', height: screenWidth * 0.11, readOnly: !isEditing, keyboardType: TextInputType.phone)),
                     ],
                   ),
                   SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _gstinController, label: 'GSTIN NO', height: screenWidth * 0.13, readOnly: !isEditing),
+                  CustomTextField(controller: _gstinController, label: 'GSTIN NO', height: screenWidth * 0.11, readOnly: !isEditing),
                   SizedBox(height: verticalSpacing),
                   Row(
                     children: [
-                      Expanded(child: CustomTextField(controller: _typeController, label: 'Type', height: screenWidth * 0.13, readOnly: true)),
-                      SizedBox(width: screenWidth * 0.03),
-                      Expanded(child: CustomTextField(controller: _sourceController, label: 'Source', height: screenWidth * 0.13, readOnly: !isEditing)),
+                      Expanded(child: CustomTextField(controller: _typeController, label: 'Type', height: screenWidth * 0.11, readOnly: true)),
+                      SizedBox(width: screenWidth * 0.02),
+                      Expanded(child: CustomTextField(controller: _sourceController, label: 'Source', height: screenWidth * 0.11, readOnly: !isEditing)),
                     ],
                   ),
                   SizedBox(height: verticalSpacing * 1.5),
                   Row(
                     children: [
-                      const Expanded(child: Text("Send Order Update Emails", style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal, color: Color(0xFFA51414)))),
+                      const Expanded(child: Text("Send Order Update Emails", style: TextStyle(fontSize: 11, fontWeight: FontWeight.normal, color: Color(0xFFA51414)))),
                       Expanded(
                         child: TwoRadioButtons(
                           forceHorizontalLayout: true,
