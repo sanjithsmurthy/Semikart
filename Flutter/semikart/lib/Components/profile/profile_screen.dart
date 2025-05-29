@@ -336,33 +336,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  Future<void> _deleteProfileImage() async {
-    try {
-      final user = ref.read(authManagerProvider).user;
-      if (user != null) {
-        // Update profile with null image URL
-        await ref.read(userServiceProvider).updateUserProfile(user.id, {
-          'profileImageUrl': null,
-        });
-
-        setState(() {
-          _profileImageUrl = null;
-        });
-
-        log("Profile image deleted successfully.");
-      }
-    } catch (e) {
-      log("Error deleting profile image: $e");
-      CustomPopup.show(
-        context: context,
-        title: 'Error',
-        message: 'Failed to delete profile image. Please try again.',
-        buttonText: 'OK',
-        imagePath: 'public/assets/images/Alert.png',
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -420,9 +393,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       initialImageUrl: _profileImageUrl,
                       onImageSelected: (File image) {
                         _uploadProfileImage(image);
-                      },
-                      onImageDeleted: () {
-                        _deleteProfileImage();
                       },
                     ),
                   ),
