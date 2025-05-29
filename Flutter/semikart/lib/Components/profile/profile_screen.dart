@@ -391,9 +391,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   Center(
                     child: ProfilePicture(
                       initialImageUrl: _profileImageUrl,
-                      onImageSelected: (File image) {
-                        _uploadProfileImage(image);
-                      },
                     ),
                   ),
                   SizedBox(height: verticalSpacing * 0.8),
@@ -452,33 +449,33 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing*0.1),
-                  CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.11, readOnly: !isEditing),
-                  SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.11, readOnly: !isEditing),
-                  SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _companyNameController, label: 'Company Name', height: screenWidth * 0.11, readOnly: !isEditing),
-                  SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _emailController, label: 'Your Email', height: screenWidth * 0.11, readOnly: true),
-                  SizedBox(height: verticalSpacing),
+                  SizedBox(height: verticalSpacing*0.0005),
+                  CustomTextField(controller: _firstNameController, label: 'First Name', height: screenWidth * 0.11, readOnly: !isEditing, inputTextFontSize: 14.0),
+                  SizedBox(height: verticalSpacing*0.7),
+                  CustomTextField(controller: _lastNameController, label: 'Last Name', height: screenWidth * 0.11, readOnly: !isEditing, inputTextFontSize: 14.0),
+                  SizedBox(height: verticalSpacing*0.7),
+                  CustomTextField(controller: _companyNameController, label: 'Company Name', height: screenWidth * 0.11, readOnly: !isEditing, inputTextFontSize: 14.0),
+                  SizedBox(height: verticalSpacing*0.7),
+                  CustomTextField(controller: _emailController, label: 'Your Email', height: screenWidth * 0.11, readOnly: true, inputTextFontSize: 14.0),
+                  SizedBox(height: verticalSpacing*0.7),
                   Row(
                     children: [
-                      Expanded(child: CustomTextField(controller: _phoneController, label: 'Phone Number', height: screenWidth * 0.11, readOnly: !isEditing, keyboardType: TextInputType.phone)),
+                      Expanded(child: CustomTextField(controller: _phoneController, label: 'Phone Number', height: screenWidth * 0.11, readOnly: !isEditing, keyboardType: TextInputType.phone, inputTextFontSize: 14.0)),
                       SizedBox(width: screenWidth * 0.02),
-                      Expanded(child: CustomTextField(controller: _altPhoneController, label: 'Alternate No.', height: screenWidth * 0.11, readOnly: !isEditing, keyboardType: TextInputType.phone)),
+                      Expanded(child: CustomTextField(controller: _altPhoneController, label: 'Alternate No.', height: screenWidth * 0.11, readOnly: !isEditing, keyboardType: TextInputType.phone, inputTextFontSize: 14.0)),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing),
-                  CustomTextField(controller: _gstinController, label: 'GSTIN NO', height: screenWidth * 0.11, readOnly: !isEditing),
-                  SizedBox(height: verticalSpacing),
+                  SizedBox(height: verticalSpacing*0.7),
+                  CustomTextField(controller: _gstinController, label: 'GSTIN NO', height: screenWidth * 0.11, readOnly: !isEditing, inputTextFontSize: 14.0),
+                  SizedBox(height: verticalSpacing*0.7),
                   Row(
                     children: [
-                      Expanded(child: CustomTextField(controller: _typeController, label: 'Type', height: screenWidth * 0.11, readOnly: true)),
+                      Expanded(child: CustomTextField(controller: _typeController, label: 'Type', height: screenWidth * 0.11, readOnly: true, inputTextFontSize: 14.0)),
                       SizedBox(width: screenWidth * 0.02),
-                      Expanded(child: CustomTextField(controller: _sourceController, label: 'Source', height: screenWidth * 0.11, readOnly: !isEditing)),
+                      Expanded(child: CustomTextField(controller: _sourceController, label: 'Source', height: screenWidth * 0.11, readOnly: !isEditing, inputTextFontSize: 14.0)),
                     ],
                   ),
-                  SizedBox(height: verticalSpacing * 1.5),
+                  SizedBox(height: verticalSpacing * 0.7),
                   Row(
                     children: [
                       const Expanded(child: Text("Send Order Update Emails", style: TextStyle(fontSize: 11, fontWeight: FontWeight.normal, color: Color(0xFFA51414)))),

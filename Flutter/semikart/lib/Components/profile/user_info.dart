@@ -72,34 +72,38 @@ class UserInfo extends StatelessWidget {
           CustomTextField(
             label: "First Name",
             controller: firstNameController,
-            focusNode: firstNameFocusNode, // Attach focus node
-            onTap: () => scrollToFocusedField(context, firstNameFocusNode), // Scroll when focused
+            focusNode: firstNameFocusNode, 
+            onTap: () => scrollToFocusedField(context, firstNameFocusNode),
+            // No inputTextFontSize provided, so it will use the default (e.g., 16.0)
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           CustomTextField(
             label: "Last Name",
             controller: lastNameController,
-            focusNode: lastNameFocusNode, // Attach focus node
-            onTap: () => scrollToFocusedField(context, lastNameFocusNode), // Scroll when focused
+            focusNode: lastNameFocusNode, 
+            onTap: () => scrollToFocusedField(context, lastNameFocusNode), 
+            // inputTextFontSize: 14.0, // Explicitly set to a smaller size
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           CustomTextField(
             label: "Company Name",
             controller: companyNameController,
-            focusNode: companyNameFocusNode, // Attach focus node
-            onTap: () => scrollToFocusedField(context, companyNameFocusNode), // Scroll when focused
+            focusNode: companyNameFocusNode, 
+            onTap: () => scrollToFocusedField(context, companyNameFocusNode), 
+            // No inputTextFontSize provided, so it will use the default (e.g., 16.0)
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           CustomTextField(
             label: "Your Email",
             controller: emailController,
-            focusNode: emailFocusNode, // Attach focus node
-            onTap: () => scrollToFocusedField(context, emailFocusNode), // Scroll when focused
+            focusNode: emailFocusNode, 
+            onTap: () => scrollToFocusedField(context, emailFocusNode), 
+            // inputTextFontSize: 14.0, // Explicitly set to a smaller size
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           // Row with Phone & Alternate
           Row(
@@ -108,8 +112,9 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Phone Number",
                   controller: phoneNumberController,
-                  focusNode: phoneNumberFocusNode, // Attach focus node
-                  onTap: () => scrollToFocusedField(context, phoneNumberFocusNode), // Scroll when focused
+                  focusNode: phoneNumberFocusNode, 
+                  onTap: () => scrollToFocusedField(context, phoneNumberFocusNode),
+                  // No inputTextFontSize provided, so it will use the default
                 ),
               ),
               const SizedBox(width: 8),
@@ -117,21 +122,23 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Alternate No.",
                   controller: alternateNumberController,
-                  focusNode: alternateNumberFocusNode, // Attach focus node
-                  onTap: () => scrollToFocusedField(context, alternateNumberFocusNode), // Scroll when focused
+                  focusNode: alternateNumberFocusNode, 
+                  onTap: () => scrollToFocusedField(context, alternateNumberFocusNode), 
+                  // inputTextFontSize: 14.0, // Explicitly set to a smaller size
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           CustomTextField(
             label: "GSTIN NO.",
             controller: gstinController,
-            focusNode: gstinFocusNode, // Attach focus node
-            onTap: () => scrollToFocusedField(context, gstinFocusNode), // Scroll when focused
+            focusNode: gstinFocusNode, 
+            onTap: () => scrollToFocusedField(context, gstinFocusNode), 
+            // No inputTextFontSize provided, so it will use the default
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           // Row with Type & Source
           Row(
@@ -140,8 +147,10 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Type",
                   controller: typeController,
-                  focusNode: typeFocusNode, // Attach focus node
-                  onTap: () => scrollToFocusedField(context, typeFocusNode), // Scroll when focused
+                  focusNode: typeFocusNode, 
+                  onTap: () => scrollToFocusedField(context, typeFocusNode), 
+                  // inputTextFontSize: 14.0, 
+// print('Input Text Font Size: 14.0');smaller size
                 ),
               ),
               const SizedBox(width: 8),
@@ -149,17 +158,18 @@ class UserInfo extends StatelessWidget {
                 child: CustomTextField(
                   label: "Source",
                   controller: sourceController,
-                  focusNode: sourceFocusNode, // Attach focus node
-                  onTap: () => scrollToFocusedField(context, sourceFocusNode), // Scroll when focused
+                  focusNode: sourceFocusNode, 
+                  onTap: () => scrollToFocusedField(context, sourceFocusNode),
+                  // No inputTextFontSize provided, so it will use the default
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           // Radio: Email Updates
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Align with text fields
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -168,11 +178,11 @@ class UserInfo extends StatelessWidget {
                     "Send Order Update Emails",
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.normal, // Removed bold styling
+                      fontWeight: FontWeight.normal, 
                       color: Color(0xFFA51414),
                     ),
-                    softWrap: false, // Prevent wrapping to the next line
-                    overflow: TextOverflow.ellipsis, // Truncate text if it overflows
+                    softWrap: false, 
+                    overflow: TextOverflow.ellipsis, 
                   ),
                 ),
                 TwoRadioButtons(
@@ -183,11 +193,11 @@ class UserInfo extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 4), // Reduced vertical gap
+          const SizedBox(height: 4), 
 
           // Radio: SMS Updates
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Align with text fields
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -196,7 +206,7 @@ class UserInfo extends StatelessWidget {
                     "Send Order Updates SMS",
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.normal, // Removed bold styling
+                      fontWeight: FontWeight.normal, 
                       color: Color(0xFFA51414),
                     ),
                   ),

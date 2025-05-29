@@ -18,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final void Function(bool isValid)? onValidationChanged; // New callback for validity status
   final bool readOnly; // Add readOnly property
   final TextInputType? keyboardType; // Added for keyboard type
+  final double? inputTextFontSize; // New optional parameter for input text font size
 
   const CustomTextField({
     super.key,
@@ -35,6 +36,7 @@ class CustomTextField extends StatelessWidget {
     this.onValidationChanged, // Add new callback to constructor
     this.readOnly = false, // Default to false
     this.keyboardType, // Added
+    this.inputTextFontSize, // Add to constructor
   });
 
   @override
@@ -96,12 +98,12 @@ class CustomTextField extends StatelessWidget {
               labelText: label,
               labelStyle: const TextStyle(
                 color: Color(0xFF757575), // Grey color for placeholder
-                fontSize: 16,
-                height: 1.2, // Adjust height for better vertical alignment
+                fontSize: 11,
+                height: 0.8, // Adjust height for better vertical alignment
               ),
               floatingLabelStyle: const TextStyle(
                 color: Color(0xFFA51414), // Red color when focused (matches border)
-                fontSize: 16,
+                fontSize: 12,
               ),
               floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
               contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // Center text vertically
@@ -114,9 +116,9 @@ class CustomTextField extends StatelessWidget {
               errorStyle: const TextStyle(height: 0, fontSize: 0), // Hide error text completely
               suffixIcon: suffixIcon, // Add the optional suffix icon
             ),
-            style: const TextStyle(
-              fontSize: 16, // Adjust font size for input text
-              height: 1.2, // Adjust height for better vertical alignment
+            style: TextStyle( // Made const TextStyle non-const to use the parameter
+              fontSize: inputTextFontSize ?? 14, // Use parameter or default to 16
+              height: 0.8, // Adjust height for better vertical alignment
             ),
             textAlignVertical: TextAlignVertical.center, // Vertically center the text
           ),
@@ -128,8 +130,10 @@ class CustomTextField extends StatelessWidget {
 
 // --- Example Parent Screen Usage ---
 class YourParentScreen extends StatefulWidget {
+  const YourParentScreen({super.key}); // Added super.key
+
   @override
-  _YourParentScreenState createState() => _YourParentScreenState();
+  State<YourParentScreen> createState() => _YourParentScreenState(); // Changed to createState
 }
 
 class _YourParentScreenState extends State<YourParentScreen> {
@@ -152,7 +156,7 @@ class _YourParentScreenState extends State<YourParentScreen> {
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(5.0),
               child: Column(
                 children: [
                   // ... other widgets ...
@@ -170,6 +174,8 @@ class _YourParentScreenState extends State<YourParentScreen> {
                          });
                       }
                     },
+                    // Example of using the new parameter to reduce font size
+                    // inputTextFontSize: 14.0,
                   ),
 
                   // ... other fields ...
