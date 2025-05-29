@@ -167,9 +167,13 @@ class _ShipBillFormState extends State<ShipBillForm> {
 
   @override
   Widget build(BuildContext context) {
+    // Define smaller font sizes
+    const double gstnQuestionFontSize = 12.0;
+    const double radioLabelFontSize = 12.0;
+
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0 , bottom: 16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0 , bottom: 16.0, top: 16.0), // Added top padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -287,43 +291,91 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, companyFocusNode, gstnFocusNode);
               },
             ),
-            const SizedBox(height: 8),
-            const Text(
+            const SizedBox(height: 10), // Adjusted spacing
+            Text(
               "Do you have GSTN?",
               style: TextStyle(
-                color: Color(0xFFA51414),
+                color: const Color(0xFFA51414),
+                fontSize: gstnQuestionFontSize, // Applied smaller font size
               ),
             ),
             Row(
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.min, // To keep radio and text close
                   children: [
-                    Radio<bool>(
-                      value: true,
-                      groupValue: hasGSTN,
-                      activeColor: const Color(0xFFA51414),
-                      onChanged: (value) {
-                        setState(() {
-                          hasGSTN = value!;
+                    SizedBox( // Constrain the tap area and size
+                      height: 24,
+                      width: 24,
+                      child: Transform.scale(
+                        scale: 0.8, // Scale down the radio button visual
+                        child: Radio<bool>(
+                          value: true,
+                          groupValue: hasGSTN,
+                          activeColor: const Color(0xFFA51414),
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          onChanged: (value) {
+                            setState(() {
+                              hasGSTN = value!;
+                              if (hasGSTN) {
+                                FocusScope.of(context).requestFocus(gstnFocusNode);
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                         setState(() {
+                          hasGSTN = true;
+                          FocusScope.of(context).requestFocus(gstnFocusNode);
                         });
                       },
+                      child: const Text(
+                        "Yes",
+                        style: TextStyle(fontSize: radioLabelFontSize), // Applied smaller font size
+                      ),
                     ),
-                    const Text("Yes"),
                   ],
                 ),
+                const SizedBox(width: 10), // Spacing between radio groups
                 Row(
+                  mainAxisSize: MainAxisSize.min, // To keep radio and text close
                   children: [
-                    Radio<bool>(
-                      value: false,
-                      groupValue: hasGSTN,
-                      activeColor: const Color(0xFFA51414),
-                      onChanged: (value) {
+                    SizedBox( // Constrain the tap area and size
+                      height: 24,
+                      width: 24,
+                      child: Transform.scale(
+                        scale: 0.8, // Scale down the radio button visual
+                        child: Radio<bool>(
+                          value: false,
+                          groupValue: hasGSTN,
+                          activeColor: const Color(0xFFA51414),
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          onChanged: (value) {
+                            setState(() {
+                              hasGSTN = value!;
+                              if (!hasGSTN) {
+                                gstnController.clear(); // Clear GSTN if "No"
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
                         setState(() {
-                          hasGSTN = value!;
+                          hasGSTN = false;
+                          gstnController.clear(); // Clear GSTN if "No"
                         });
                       },
+                      child: const Text(
+                        "No",
+                        style: TextStyle(fontSize: radioLabelFontSize), // Applied smaller font size
+                      ),
                     ),
-                    const Text("No"),
                   ],
                 ),
               ],
