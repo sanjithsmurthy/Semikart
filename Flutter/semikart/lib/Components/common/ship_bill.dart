@@ -397,7 +397,9 @@ class _ShipBillFormState extends State<ShipBillForm> {
             RedButton(
               label: 'Update',
               onPressed: _saveAddress,
-              width: double.infinity,
+              
+               width: 115,
+              height: 33,
             ),
             const SizedBox(height: 8),
           ],
