@@ -181,16 +181,18 @@ class _ShipBillFormState extends State<ShipBillForm> {
               nameController: nameController,
               text: "Name*",
               focusNode: nameFocusNode,
+              height: 34.0,
               onTap: () {},
               textInputAction: TextInputAction.next,
               onEditingComplete: () {
                 _fieldFocusChange(context, nameFocusNode, pincodeFocusNode);
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
             GreyTextBox(
               nameController: pincodeController,
               text: "Pincode*",
+              height: 34.0,
               focusNode: pincodeFocusNode,
               onTap: () {},
               textInputAction: TextInputAction.next,
@@ -198,10 +200,11 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, pincodeFocusNode, address1FocusNode);
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
             GreyTextBox(
               nameController: address1Controller,
               text: "Address 1*",
+              height: 34.0,
               focusNode: address1FocusNode,
               onTap: () {},
               textInputAction: TextInputAction.next,
@@ -209,10 +212,11 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, address1FocusNode, address2FocusNode);
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
             GreyTextBox(
               nameController: address2Controller,
               text: "Address 2",
+              height: 34.0,
               focusNode: address2FocusNode,
               onTap: () {},
               textInputAction: TextInputAction.next,
@@ -220,13 +224,14 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, address2FocusNode, landmarkFocusNode);
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
             Row(
               children: [
                 Expanded(
                   child: GreyTextBox(
                     nameController: landmarkController,
                     text: "Landmark",
+                    height: 34.0,
                     focusNode: landmarkFocusNode,
                     onTap: () {},
                     textInputAction: TextInputAction.next,
@@ -235,11 +240,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     },
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 5),
                 Expanded(
                   child: GreyTextBox(
                     nameController: cityController,
                     text: "City*",
+                    height: 34.0,
                     focusNode: cityFocusNode,
                     onTap: () {},
                     textInputAction: TextInputAction.next,
@@ -250,7 +256,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
             Row(
               children: [
                 Expanded(
@@ -258,6 +264,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     nameController: stateController,
                     text: "State*",
                     focusNode: stateFocusNode,
+                    height: 34.0,
                     onTap: () {},
                     textInputAction: TextInputAction.next,
                     onEditingComplete: () {
@@ -265,11 +272,12 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     },
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 5),
                 Expanded(
                   child: GreyTextBox(
                     nameController: phoneController,
                     text: "Phone Number*",
+                    height: 34.0,
                     focusNode: phoneFocusNode,
                     onTap: () {},
                     textInputAction: TextInputAction.next,
@@ -280,10 +288,11 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 5),
             GreyTextBox(
               nameController: companyController,
               text: "Company Name (Optional)",
+              height: 34.0,
               focusNode: companyFocusNode,
               onTap: () {},
               textInputAction: TextInputAction.next,
@@ -291,26 +300,28 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, companyFocusNode, gstnFocusNode);
               },
             ),
-            const SizedBox(height: 12), // Adjusted spacing before the GSTN row
+            const SizedBox(height: 12), // Adjusted spacing before the GSTN section
 
-            // GSTN Row - All elements in one row
+            // GSTN Question Text
+            Text(
+              "Do you have GSTN?", // Label on its own line
+              style: TextStyle(
+                color: const Color(0xFFA51414),
+                fontSize: gstnQuestionFontSize*0.9,
+              ),
+            ),
+            // const SizedBox(height: 2), // Small spacing between text and radio row
+
+            // Row for Radio buttons and GSTN field
             Row(
               crossAxisAlignment: CrossAxisAlignment.center, // Align items vertically in the center
               children: [
-                Text(
-                  "GSTN?", // Shortened label
-                  style: TextStyle(
-                    color: const Color(0xFFA51414),
-                    fontSize: gstnQuestionFontSize,
-                  ),
-                ),
-                const SizedBox(width: 8), // Spacing after "GSTN?" text
                 // Yes Radio
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      height: 24,
+                      height: 20,
                       width: 24,
                       child: Transform.scale(
                         scale: 0.8,
@@ -346,7 +357,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     ),
                   ],
                 ),
-                const SizedBox(width: 4), // Spacing between Yes and No radio groups
+                const SizedBox(width: 8), // Spacing between Yes and No radio groups
                 // No Radio
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -386,22 +397,22 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     ),
                   ],
                 ),
-                const SizedBox(width: 10), // Spacing before GSTN text field
-                // GSTN TextField - Expanded to take remaining space
-                Expanded(
+                const Spacer(), // Added Spacer to push the GSTN field to the right
+                // GSTN TextField - Remains with fixed width, pushed to the right by Spacer
+                SizedBox(
+                  width: 200.0, // Maintained specific width for the GSTN field
                   child: AbsorbPointer(
                     absorbing: !hasGSTN,
                     child: Opacity(
                       opacity: hasGSTN ? 1.0 : 0.5,
-                      child: SizedBox( // Wrap GreyTextBox to control its height and prevent overflow
-                        height: 44.0, // Maintained height to prevent overflow
-                        child: GreyTextBox(
-                          nameController: gstnController,
-                          text: "GSTN", // Shortened placeholder
-                          focusNode: gstnFocusNode,
-                          onTap: () {},
-                          // textInputAction and onEditingComplete might not be needed if it's the last interactive element in this logical group
-                        ),
+                      child: GreyTextBox(
+                        height: 34.0, // Pass the desired height directly
+                        nameController: gstnController,
+                       
+                        text: "GSTN", // Shortened placeholder
+                        focusNode: gstnFocusNode,
+                        onTap: () {},
+                        // textInputAction and onEditingComplete might not be needed if it's the last interactive element in this logical group
                       ),
                     ),
                   ),
@@ -409,11 +420,13 @@ class _ShipBillFormState extends State<ShipBillForm> {
               ],
             ),
             const SizedBox(height: 32),
-            RedButton(
-              label: 'Update',
-              onPressed: _saveAddress,
-              width: 115,
-              height: 33,
+            Center( // Wrap RedButton with Center widget
+              child: RedButton(
+                label: 'Update',
+                onPressed: _saveAddress,
+                width: 115,
+                height: 34,
+              ),
             ),
             const SizedBox(height: 8),
           ],
