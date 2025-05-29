@@ -104,7 +104,7 @@ class ApiService {
 
       // Use a direct Dio call with the full URL for login to match the working approach
       final response = await Dio().post(
-        'http://172.16.1.154:8080/semikartapi/login',
+        'http://172.16.1.182:8080/semikartapi/login',
         data: formData,
         // Do NOT set Content-Type; Dio will handle it for FormData
       );
@@ -289,7 +289,7 @@ class ApiService {
   Future<Map<String, dynamic>?> fetchUserInfo(int customerId) async {
     try {
       final response = await Dio().get(
-        'http://172.16.1.154:8080/semikartapi/getuserinfo',
+        'http://172.16.1.182:8080/semikartapi/getuserinfo',
         queryParameters: {'customerId': customerId},
       );
       if (response.statusCode == 200 && response.data['status'] == 'success') {
@@ -439,7 +439,7 @@ class AuthManager extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: true);
       final dio = ApiClient().dio;
       final response = await dio.post(
-        'http://172.16.1.154:8080/semikartapi/signup',
+        'http://172.16.1.182:8080/semikartapi/signup',
         data: {
           'firstName': firstName,
           'lastName': lastName,
