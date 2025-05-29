@@ -152,6 +152,23 @@ class _EditPageState extends State<EditPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.only(bottom: 8.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'Note:- Make sure you complete the billing address and shipping address to continue to payment.',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFA51414),
+                ),
+              ),
+            ),
             // const SizedBox(height: 3),
             EditTextBox(
               address1: address1,
