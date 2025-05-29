@@ -173,7 +173,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0 , bottom: 16.0, top: 16.0), // Added top padding
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0 , bottom: 16.0), // Added top padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -291,24 +291,29 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, companyFocusNode, gstnFocusNode);
               },
             ),
-            const SizedBox(height: 10), // Adjusted spacing
-            Text(
-              "Do you have GSTN?",
-              style: TextStyle(
-                color: const Color(0xFFA51414),
-                fontSize: gstnQuestionFontSize, // Applied smaller font size
-              ),
-            ),
+            const SizedBox(height: 12), // Adjusted spacing before the GSTN row
+
+            // GSTN Row - All elements in one row
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center, // Align items vertically in the center
               children: [
+                Text(
+                  "GSTN?", // Shortened label
+                  style: TextStyle(
+                    color: const Color(0xFFA51414),
+                    fontSize: gstnQuestionFontSize,
+                  ),
+                ),
+                const SizedBox(width: 8), // Spacing after "GSTN?" text
+                // Yes Radio
                 Row(
-                  mainAxisSize: MainAxisSize.min, // To keep radio and text close
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox( // Constrain the tap area and size
+                    SizedBox(
                       height: 24,
                       width: 24,
                       child: Transform.scale(
-                        scale: 0.8, // Scale down the radio button visual
+                        scale: 0.8,
                         child: Radio<bool>(
                           value: true,
                           groupValue: hasGSTN,
@@ -319,6 +324,8 @@ class _ShipBillFormState extends State<ShipBillForm> {
                               hasGSTN = value!;
                               if (hasGSTN) {
                                 FocusScope.of(context).requestFocus(gstnFocusNode);
+                              } else {
+                                gstnController.clear(); // Clear if changed from Yes to No here
                               }
                             });
                           },
@@ -334,20 +341,21 @@ class _ShipBillFormState extends State<ShipBillForm> {
                       },
                       child: const Text(
                         "Yes",
-                        style: TextStyle(fontSize: radioLabelFontSize), // Applied smaller font size
+                        style: TextStyle(fontSize: radioLabelFontSize),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(width: 10), // Spacing between radio groups
+                const SizedBox(width: 4), // Spacing between Yes and No radio groups
+                // No Radio
                 Row(
-                  mainAxisSize: MainAxisSize.min, // To keep radio and text close
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox( // Constrain the tap area and size
+                     SizedBox(
                       height: 24,
                       width: 24,
                       child: Transform.scale(
-                        scale: 0.8, // Scale down the radio button visual
+                        scale: 0.8,
                         child: Radio<bool>(
                           value: false,
                           groupValue: hasGSTN,
@@ -356,8 +364,8 @@ class _ShipBillFormState extends State<ShipBillForm> {
                           onChanged: (value) {
                             setState(() {
                               hasGSTN = value!;
-                              if (!hasGSTN) {
-                                gstnController.clear(); // Clear GSTN if "No"
+                               if (!hasGSTN) {
+                                gstnController.clear();
                               }
                             });
                           },
@@ -368,37 +376,43 @@ class _ShipBillFormState extends State<ShipBillForm> {
                       onTap: () {
                         setState(() {
                           hasGSTN = false;
-                          gstnController.clear(); // Clear GSTN if "No"
+                          gstnController.clear();
                         });
                       },
                       child: const Text(
                         "No",
-                        style: TextStyle(fontSize: radioLabelFontSize), // Applied smaller font size
+                        style: TextStyle(fontSize: radioLabelFontSize),
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            AbsorbPointer(
-              absorbing: !hasGSTN,
-              child: Opacity(
-                opacity: hasGSTN ? 1.0 : 0.5,
-                child: GreyTextBox(
-                  nameController: gstnController,
-                  text: "GSTN (Optional)",
-                  focusNode: gstnFocusNode,
-                  onTap: () {},
+                const SizedBox(width: 10), // Spacing before GSTN text field
+                // GSTN TextField - Expanded to take remaining space
+                Expanded(
+                  child: AbsorbPointer(
+                    absorbing: !hasGSTN,
+                    child: Opacity(
+                      opacity: hasGSTN ? 1.0 : 0.5,
+                      child: SizedBox( // Wrap GreyTextBox to control its height and prevent overflow
+                        height: 44.0, // Maintained height to prevent overflow
+                        child: GreyTextBox(
+                          nameController: gstnController,
+                          text: "GSTN", // Shortened placeholder
+                          focusNode: gstnFocusNode,
+                          onTap: () {},
+                          // textInputAction and onEditingComplete might not be needed if it's the last interactive element in this logical group
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 32),
             RedButton(
               label: 'Update',
               onPressed: _saveAddress,
-              
-               width: 115,
+              width: 115,
               height: 33,
             ),
             const SizedBox(height: 8),
