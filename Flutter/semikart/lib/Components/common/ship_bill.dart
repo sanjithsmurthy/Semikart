@@ -169,7 +169,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0 , bottom: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -183,7 +183,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, nameFocusNode, pincodeFocusNode);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             GreyTextBox(
               nameController: pincodeController,
               text: "Pincode*",
@@ -194,7 +194,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, pincodeFocusNode, address1FocusNode);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             GreyTextBox(
               nameController: address1Controller,
               text: "Address 1*",
@@ -205,7 +205,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, address1FocusNode, address2FocusNode);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             GreyTextBox(
               nameController: address2Controller,
               text: "Address 2",
@@ -216,7 +216,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, address2FocusNode, landmarkFocusNode);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -231,7 +231,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     },
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 Expanded(
                   child: GreyTextBox(
                     nameController: cityController,
@@ -246,7 +246,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -261,7 +261,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                     },
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 8),
                 Expanded(
                   child: GreyTextBox(
                     nameController: phoneController,
@@ -276,7 +276,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             GreyTextBox(
               nameController: companyController,
               text: "Company Name (Optional)",
@@ -287,7 +287,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 _fieldFocusChange(context, companyFocusNode, gstnFocusNode);
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             const Text(
               "Do you have GSTN?",
               style: TextStyle(
@@ -328,7 +328,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             AbsorbPointer(
               absorbing: !hasGSTN,
               child: Opacity(
@@ -347,7 +347,7 @@ class _ShipBillFormState extends State<ShipBillForm> {
               onPressed: _saveAddress,
               width: double.infinity,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
           ],
         ),
       ),
