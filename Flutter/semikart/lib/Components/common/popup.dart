@@ -23,15 +23,15 @@ class CustomPopup {
         final popupWidth = screenWidth * 0.85; // Slightly smaller width
 
         return Dialog(
-          backgroundColor: Colors.white, // Explicit white background
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20), // Consistent corner radius
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
             width: popupWidth,
-            padding: const EdgeInsets.all(24), // Consistent padding
+            padding: const EdgeInsets.all(18), // Slightly less padding
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Fit content height
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Optional Image
@@ -49,13 +49,13 @@ class CustomPopup {
                 // Optional Title
                 if (title != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
                       title,
                       style: TextStyle(
-                        fontSize: popupWidth * 0.055, // Slightly larger title
+                        fontSize: popupWidth * 0.042, // Smaller title
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87, // Darker text
+                        color: Colors.black87,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -64,12 +64,12 @@ class CustomPopup {
                 // Optional Message
                 if (message != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0), // More space before buttons
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: Text(
                       message,
                       style: TextStyle(
-                        fontSize: popupWidth * 0.045, // Slightly larger message
-                        color: Colors.black54, // Greyer text
+                        fontSize: popupWidth * 0.034, // Smaller message
+                        color: Colors.black54,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -78,33 +78,33 @@ class CustomPopup {
                 // Buttons Row
                 Row(
                   mainAxisAlignment: cancelButtonText != null
-                      ? MainAxisAlignment.spaceEvenly // Space out if two buttons
-                      : MainAxisAlignment.center, // Center if only one button
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.center,
                   children: [
                     // Cancel Button (optional)
                     if (cancelButtonText != null)
                       RedButton(
                         label: cancelButtonText,
                         onPressed: () {
-                          // --- Pop with false for cancel ---
                           Navigator.of(context).pop(false);
                         },
-                        width: popupWidth * 0.35, // Adjust width
-                        height: 45, // Standard height
-                        isWhiteButton: true, // Make it look different
+                        width: popupWidth * 0.28, // Smaller width
+                        height: 34, // Smaller height
+                        fontSize: 13, // Smaller font
+                        isWhiteButton: true,
                       ),
 
                     // Confirm Button
                     RedButton(
                       label: buttonText,
                       onPressed: () {
-                        // --- Pop with true for confirm ---
                         Navigator.of(context).pop(true);
                       },
                       width: cancelButtonText != null
-                          ? popupWidth * 0.35 // Adjust width if two buttons
-                          : popupWidth * 0.6, // Wider if only one button
-                      height: 45, // Standard height
+                          ? popupWidth * 0.28
+                          : popupWidth * 0.45,
+                      height: 34, // Smaller height
+                      fontSize: 13, // Smaller font
                     ),
                   ],
                 ),
