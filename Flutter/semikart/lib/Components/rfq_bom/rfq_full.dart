@@ -1,10 +1,13 @@
+import 'dart:io'; // <-- Add this line
 import 'package:flutter/material.dart';
 import '../../app_navigator.dart';
 import 'upload_file.dart';
 import 'RFQ_text_component.dart';
 import 'rfq_adress_details.dart';
 import '../common/popup.dart';
-import '../home/home_page.dart';
+import '../../base_scaffold.dart';
+import '../../services/rfq_service.dart'; // <-- Add this import
+
 
 class RFQFullPage extends StatefulWidget {
   const RFQFullPage({Key? key}) : super(key: key);
@@ -15,6 +18,19 @@ class RFQFullPage extends StatefulWidget {
 
 class _RFQFullPageState extends State<RFQFullPage> {
   bool isFileUploaded = false;
+
+  // Example fields for demonstration; replace with your actual data sources
+  String email = '';
+  String fullName = '';
+  String mobileNo = '';
+  String companyName = '';
+  String address = '';
+  String city = '';
+  String state = '';
+  String pinCode = '';
+  String country = '';
+  List<Map<String, dynamic>> parts = [];
+  File? selectedFile;
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +68,39 @@ class _RFQFullPageState extends State<RFQFullPage> {
                     // Handle validation change logic here
                   },
                   canSubmit: isFileUploaded,
-                  onSubmit: () {
-                    CustomPopup.show(
-                      context: context,
-                      message: "RFQ submitted successfully.",
-                      buttonText: "OK",
-                    ).then((_) {
+                  onSubmit: () async {
+                    try {
+                      final response = await RFQService.submitRFQ(
+                        email: email,
+                        fullName: fullName,
+                        mobileNo: mobileNo,
+                        companyName: companyName,
+                        address: address,
+                        city: city,
+                        state: state,
+                        pinCode: pinCode,
+                        country: country,
+                        parts: parts,
+                        file: selectedFile,
+                      );
+                      await CustomPopup.show(
+                        context: context,
+                        message: response['message'] ?? "RFQ submitted successfully.",
+                        buttonText: "OK",
+                      );
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomePageContent(),
+                          builder: (context) => BaseScaffold(),
                         ),
                       );
-                    });
+                    } catch (e) {
+                      await CustomPopup.show(
+                        context: context,
+                        message: e.toString(),
+                        buttonText: "OK",
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 5),
