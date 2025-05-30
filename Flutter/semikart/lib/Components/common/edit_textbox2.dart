@@ -184,6 +184,11 @@ class _EditTextBox2State extends State<EditTextBox2> {
     _notifyChanges();
   }
 
+  // Public method to add new address, calls private _addNewAddress
+  void addNewAddress() {
+    _addNewAddress();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
