@@ -17,6 +17,7 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   late Razorpay _razorpay;
+  bool _shippingAddressPopupShown = false; // Flag to show popup once
 
   @override
   void initState() {
@@ -195,6 +196,32 @@ class _EditPageState extends State<EditPage> {
                     phone = result['phone'];
                     company = result['company'];
                     gstn = result['gstn'];
+
+                    // Show popup once after billing address update
+                    if (!_shippingAddressPopupShown) {
+                      _shippingAddressPopupShown = true;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                          backgroundColor: Colors.white,
+                          content: const Padding(
+                            padding: EdgeInsets.only(top: 0),
+                            child: Text('Fill the correct shipping address in order to proceed to further steps'),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text(
+                                'OK',
+                                style: TextStyle(color: Color(0xFFA51414)),
+                              ),
+                            ),
+                          ],
+                          ),
+                        );
+                      });
+                    }
                   });
                 }
               },
