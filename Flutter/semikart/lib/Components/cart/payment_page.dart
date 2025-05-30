@@ -210,13 +210,17 @@ class _EditPageState extends State<EditPage> {
                             child: Text('Fill the correct shipping address in order to proceed to further steps'),
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text(
-                                'OK',
-                                style: TextStyle(color: Color(0xFFA51414)),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  // Call add new address on EditTextBox2
+                                  (_editTextBox2Key.currentState as dynamic)?.addNewAddress();
+                                },
+                                child: const Text(
+                                  'OK',
+                                  style: TextStyle(color: Color(0xFFA51414)),
+                                ),
                               ),
-                            ),
                           ],
                           ),
                         );
