@@ -18,7 +18,7 @@ class RFQService {
     required List<Map<String, dynamic>> parts,
     File? file, // Optional file
   }) async {
-    final uri = Uri.parse('http://172.16.1.182:8080/semikartapi/submitRFQ');
+    final uri = Uri.parse('http://172.16.2.5:8080/semikartapi/submitRFQ');
     final request = http.MultipartRequest('POST', uri);
 
     // Add form fields

@@ -348,7 +348,7 @@ class UserService {
   }) async {
     try {
       final response = await Dio().put(
-        'http://172.16.1.182:8080/semikartapi/updateuserinfo',
+        'http://172.16.2.5:8080/semikartapi/updateuserinfo',
         data: {
           'customerId': customerId,
           'firstName': firstName,
