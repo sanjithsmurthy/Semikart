@@ -86,13 +86,19 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
 
   // Fetch L3 categories for a given L2 id
   Future<List<Map<String, dynamic>>> fetchL3Categories(int l2Id) async {
-    final url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_sub_categories=$l2Id');
+    final url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_sub_category_id=$l2Id');
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success' && data['categories'] != null) {
-          return List<Map<String, dynamic>>.from(data['categories']);
+          // Parse the categories as per the provided response format
+          return List<Map<String, dynamic>>.from(
+            (data['categories'] as List).map((cat) => {
+              'categoryId': cat['categoryId'],
+              'categoryName': cat['categoryName'],
+            })
+          );
         }
       }
     } catch (e) {
