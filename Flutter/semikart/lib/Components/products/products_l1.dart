@@ -132,39 +132,56 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
               );
             }
             final l2Categories = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l1Name, // L1 Category Name
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFA51414), // Set breadcrumb color to a51414
+            return Container(
+              color: Colors.white, // Set background to white
+              child: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l1Name, // L1 Category Name
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFA51414), // Set breadcrumb color to a51414
+                      ),
                     ),
-                  ),
-                  const Divider(height: 20),
-                  Expanded( // Make the list scrollable if content overflows
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: l2Categories.length,
-                      itemBuilder: (context, index) {
-                        final l2Cat = l2Categories[index];
-                        return ListTile(
-                          title: Text(l2Cat['mainSubCategoryName'] ?? 'Unnamed L2 Category'),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () {
-                            Navigator.pop(modalContext); // Close L2 modal
-                            _showL3Categories(this.context, l2Cat['mainSubCategoryId'], l2Cat['mainSubCategoryName'] ?? 'Unnamed L2 Category', l1Name);
-                          },
-                        );
-                      },
+                    const Divider(height: 10),
+                    Expanded( // Make the list scrollable if content overflows
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: l2Categories.length,
+                        itemBuilder: (context, index) {
+                          final l2Cat = l2Categories[index];
+                          return ListTile(
+                            dense: true, // Makes the tile more compact
+                            contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 8), // Reduce vertical space
+                            title: Text(
+                              l2Cat['mainSubCategoryName'] ?? 'Unnamed L2 Category',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () {
+                              Navigator.pop(modalContext); // Close L2 modal
+                              _showL3Categories(
+                                this.context,
+                                l2Cat['mainSubCategoryId'],
+                                l2Cat['mainSubCategoryName'] ?? 'Unnamed L2 Category',
+                                l1Name,
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
@@ -197,39 +214,52 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
               );
             }
             final l3Categories = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '$l1Name > $l2Name', // Breadcrumb: L1 > L2
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFA51414), // Set breadcrumb color to a51414
+            return Container(
+              color: Colors.white, // Set background to white
+              child: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$l1Name > $l2Name', // Breadcrumb: L1 > L2
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFA51414), // Set breadcrumb color to a51414
+                      ),
                     ),
-                  ),
-                  const Divider(height: 20),
-                   Expanded( // Make the list scrollable
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: l3Categories.length,
-                      itemBuilder: (context, index) {
-                        final l3Cat = l3Categories[index];
-                        return ListTile(
-                          title: Text(l3Cat['categoryName'] ?? 'Unnamed L3 Category'),
-                          onTap: () {
-                            Navigator.pop(modalContext); // Close L3 modal
-                            log('Tapped L3: ${l3Cat['categoryName']} (ID: ${l3Cat['categoryId']})');
-                            // Navigate to final product listing page or perform other action
-                          },
-                        );
-                      },
+                    const Divider(height: 10),
+                     Expanded( // Make the list scrollable
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: l3Categories.length,
+                        itemBuilder: (context, index) {
+                          final l3Cat = l3Categories[index];
+                          return ListTile(
+                            dense: true, // Makes the tile more compact
+                            visualDensity: VisualDensity.compact, // Even less vertical space
+                            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8), // Minimal vertical space
+                            title: Text(
+                              l3Cat['categoryName'] ?? 'Unnamed L3 Category',
+                              style: const TextStyle(
+                                fontSize: 13, // Small text
+                                color: Colors.black,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(modalContext); // Close L3 modal
+                              log('Tapped L3: ${l3Cat['categoryName']} (ID: ${l3Cat['categoryId']})');
+                              // Navigate to final product listing page or perform other action
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
