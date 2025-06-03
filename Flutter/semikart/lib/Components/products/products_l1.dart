@@ -140,7 +140,11 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                 children: [
                   Text(
                     l1Name, // L1 Category Name
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFA51414), // Set breadcrumb color to a51414
+                    ),
                   ),
                   const Divider(height: 20),
                   Expanded( // Make the list scrollable if content overflows
@@ -201,7 +205,11 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                 children: [
                   Text(
                     '$l1Name > $l2Name', // Breadcrumb: L1 > L2
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFA51414), // Set breadcrumb color to a51414
+                    ),
                   ),
                   const Divider(height: 20),
                    Expanded( // Make the list scrollable
