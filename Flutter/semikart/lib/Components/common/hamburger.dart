@@ -276,47 +276,43 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
                       AppNavigator.pushOrderHistory(); // Push the Order History page within the Profile tab
                     },
                   ),
+                  // const SizedBox(height: 16),
+                  // _buildMenuItem(
+                  //   context,
+                  //   icon: Icons.contact_support,
+                  //   text: 'Contact Us',
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
                   const SizedBox(height: 16),
                   _buildMenuItem(
                     context,
-                    icon: Icons.contact_support,
-                    text: 'Contact Us',
+                    icon: Icons.phone,
+                    text: 'Phone',
                     onTap: () {
                       Navigator.pop(context);
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                leading: Icon(Icons.phone, color: const Color(0xFFA51414)),
-                                title: Text('Phone'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  launchPhoneDialer(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.message, color: const Color(0xFFA51414)),
-                                title: Text('WhatsApp'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  launchWhatsApp(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.mail, color: const Color(0xFFA51414)),
-                                title: Text('Mail'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  launchMailClient(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      launchPhoneDialer(context);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.message,
+                    text: 'WhatsApp',
+                    onTap: () {
+                      Navigator.pop(context);
+                      launchWhatsApp(context);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.mail,
+                    text: 'Mail',
+                    onTap: () {
+                      Navigator.pop(context);
+                      launchMailClient(context);
                     },
                   ),
                 ],
