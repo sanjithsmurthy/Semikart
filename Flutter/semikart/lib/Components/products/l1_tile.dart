@@ -38,8 +38,8 @@ class L1Tile extends StatelessWidget {
         children: [
           Image.network(
             iconPath.isNotEmpty ? iconPath : 'https://via.placeholder.com/150', // Placeholder image
-            width: dynamicIconSize,
-            height: dynamicIconSize,
+            width: dynamicIconSize*0.85,
+            height: dynamicIconSize*0.85,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
               return Icon(
@@ -53,7 +53,7 @@ class L1Tile extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              fontSize: dynamicFontSize, // Dynamic font size
+              fontSize: dynamicFontSize*0.96, // Dynamic font size
               fontWeight: FontWeight.w500, // Match image weight (medium)
               color: Colors.black, // Match image color
             ),

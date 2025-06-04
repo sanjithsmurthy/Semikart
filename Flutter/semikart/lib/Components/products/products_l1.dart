@@ -471,12 +471,12 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     required double Function(double) scaleHeight,
   }) {
     return Container(
-      height: scaleHeight(15),
-      width: screenWidth * 0.9,
+      height: scaleHeight(13),
+      width: screenWidth * 0.9, // Increased from 0.9 to 0.98 for longer line
       alignment: Alignment.center,
       child: Container(
         height: 1,
-        width: screenWidth * 0.8,
+        width: screenWidth * 0.92, // Increased from 0.8 to 0.92 for longer line
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
