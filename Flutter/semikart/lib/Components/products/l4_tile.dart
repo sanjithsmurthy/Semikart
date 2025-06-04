@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/firestore_services.dart';
+
 import '../common/red_button.dart'; // Import the RedButton
 
 class ProductTileL4 extends StatelessWidget {
@@ -71,33 +71,41 @@ class ProductTileL4 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image on the left
-            Image.network(
-              imageUrl,
-              width: imageSize * 0.95,
-              height: imageSize * 0.95,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => Icon(
-                Icons.broken_image,
-                size: imageSize * 0.95,
-                color: labelColor,
-              ),
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return SizedBox(
-                  width: imageSize * 0.95,
-                  height: imageSize * 0.95,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                      strokeWidth: 2.0 * scale,
+            (imageUrl.isEmpty)
+                ? Image.asset(
+                    'public/assets/images/products/noImageFound.png', // Place your provided image here
+                    width: imageSize * 0.95,
+                    height: imageSize * 0.95,
+                    fit: BoxFit.contain,
+                  )
+                : Image.network(
+                    imageUrl,
+                    width: imageSize * 0.95,
+                    height: imageSize * 0.95,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Image.asset(
+                      'public/assets/images/products/noImageFound.png',
+                      width: imageSize * 0.95,
+                      height: imageSize * 0.95,
+                      fit: BoxFit.contain,
                     ),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return SizedBox(
+                        width: imageSize * 0.95,
+                        height: imageSize * 0.95,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                            strokeWidth: 2.0 * scale,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
             SizedBox(width: horizontalSpacing * 0.7),
             // Main content (right side)
             Expanded(
