@@ -8,9 +8,7 @@ import 'Components/rfq_bom/rfq_full.dart';
 import 'Components/products/products_l1.dart';
 import 'Components/products/products_l2.dart';
 import 'Components/products/products_l3.dart';
-import 'Components/products/products_l4.dart'; // Import products_l4.dart
-import 'Components/products/product_details_page.dart';
-import 'Components/products/l1_tiles_row_r.dart'; // Import L1TilesRow
+import 'Components/products/products_l4.dart'; // Import products_l4.dart for ProductsL4Page
 
 // Cart
 import 'Components/cart/cart_page.dart';
@@ -115,11 +113,13 @@ class AppNavigator {
         // Ensure arguments are passed ONLY IF they exist in settings
         page = const ProductsL2Page();
         // MaterialPageRoute automatically forwards settings.arguments if settings is passed
-        break;
-      case 'l3':
+        break;      case 'l3':
         print("[AppNavigator] Generating route for 'l3' -> ProductsL3Page"); // Log route generation
         // Replace placeholder with actual L3 page
         page = const ProductsL3Page();
+        break;      case 'l4':
+        print("[AppNavigator] Generating route for 'l4' -> ProductsL4Page"); // Log route generation
+        page = const ProductsL4Page();
         break;
       // Add other product-related routes here
       default:

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer'; // For logging
 import 'dart:convert'; // Added for jsonDecode
 import 'package:http/http.dart' as http; // Added for http requests
-// import '../../app_navigator.dart'; // Import AppNavigator - Commented out as L2 is now a modal
+import '../../app_navigator.dart'; // Import AppNavigator for L4 navigation
 import 'products_static.dart'; // Import the ProductsHeaderContent widget
 import 'l1_tile.dart'; // Import the L1Tile widget
 // import '../../services/database.dart'; // Import the DataBaseService for API calls - Commented out
@@ -83,7 +83,6 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     }
     return [];
   }
-
   // Fetch L3 categories for a given L2 id
   Future<List<Map<String, dynamic>>> fetchL3Categories(int l2Id) async {
     final url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_sub_category_id=$l2Id');
@@ -105,6 +104,28 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
       log('Timeout or error fetching L3 categories: $e');
     }
     return [];
+  }
+  // Fetch L4 products for a given L3 category id
+  Future<List<Map<String, dynamic>>> fetchL4Products(int categoryId, {int page = 1, int pageSize = 20}) async {
+    final url = Uri.parse('http://172.16.2.5:8080/semikartapi/paginatedProductCatalog?categoryId=$categoryId&page=$page&pageSize=$pageSize');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == 'success' && data['products'] != null) {
+          return List<Map<String, dynamic>>.from(data['products']);
+        } else {
+          log('L4 API call successful but status not success or no products: ${response.body}');
+          return [];
+        }
+      } else {
+        log('Failed to load L4 products, status code: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      log('Error fetching L4 products: $e');
+      return [];
+    }
   }
 
 
@@ -248,11 +269,23 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.w300,
                               ),
-                            ),
-                            onTap: () {
+                            ),                            onTap: () {
                               Navigator.pop(modalContext); // Close L3 modal
                               log('Tapped L3: ${l3Cat['categoryName']} (ID: ${l3Cat['categoryId']})');
-                              // Navigate to final product listing page or perform other action
+                              
+                              // Prepare navigation arguments
+                              final navigationArgs = {
+                                'categoryId': l3Cat['categoryId'],
+                                'categoryName': l3Cat['categoryName'],
+                                'l2Name': l2Name,
+                                'l1Name': l1Name,
+                              };
+                              
+                              log('L3 Navigation: Prepared args: $navigationArgs');
+                              log('L3 Navigation: categoryId type: ${l3Cat['categoryId'].runtimeType}');
+                              
+                              // Navigate to L4 products page with the categoryId
+                              AppNavigator.pushProductsL4(arguments: navigationArgs);
                             },
                           );
                         },
