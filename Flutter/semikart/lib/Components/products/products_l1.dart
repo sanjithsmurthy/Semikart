@@ -356,8 +356,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Use scaled height for spacing
-                    SizedBox(height: scaleHeight(18)),
+                    // SizedBox(height: scaleHeight(18)), // Removed top padding
 
                     // Grid-like layout with lines
                     Padding(
@@ -443,7 +442,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     final tileHeight = screenHeight * 0.1; // Adjust based on L1Tile's actual height if needed
 
     return Container(
-      width: scaleWidth(30), // Width of the divider area
+      width: scaleWidth(20), // Width of the divider area
       height: tileHeight, // Match the approximate height of the L1Tile content area
       alignment: Alignment.center,
       child: const VerticalDivider(
@@ -463,7 +462,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     required double Function(double) scaleHeight,
   }) {
     return Container(
-      height: scaleHeight(30), // Height of the divider area
+      height: scaleHeight(15), // Height of the divider area
       width: screenWidth * 0.9, // Make it slightly less than full width if desired
       alignment: Alignment.center,
       child: const Divider(
