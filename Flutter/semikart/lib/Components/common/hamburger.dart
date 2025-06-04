@@ -34,6 +34,17 @@ Future<void> launchWhatsApp(BuildContext context) async {
   }
 }
 
+Future<void> launchMailClient(BuildContext context) async {
+  final Uri mailUrl = Uri.parse('mailto:orders@semikart.com');
+  if (await canLaunchUrl(mailUrl)) {
+    await launchUrl(mailUrl);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not open mail client')),
+    );
+  }
+}
+
 class HamburgerMenu extends ConsumerStatefulWidget {
   const HamburgerMenu({super.key});
 
@@ -299,7 +310,7 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
                                 title: Text('Mail'),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  print('Mail selected');
+                                  launchMailClient(context);
                                 },
                               ),
                             ],
