@@ -37,125 +37,134 @@ class ProductTileL4 extends StatelessWidget {
     // Calculate scaling factors
     final double widthScale = screenWidth / refScreenWidth;
     final double heightScale = screenHeight / refScreenHeight;
-    // Use the smaller scale factor to maintain aspect ratio and fit content
-    final double scale = widthScale < heightScale ? widthScale : heightScale;    // Scaled dimensions and font sizes - REDUCED for compact layout
-    final double cardPadding = 12.0 * scale; // Reduced from 16.0
-    final double imageSize = 48.0 * scale; // Reduced from 60.0
-    final double horizontalSpacing = 10.0 * scale; // Reduced from 12.0
-    final double verticalSpacing = 6.0 * scale; // Reduced from 8.0
-    final double sectionSpacing = 12.0 * scale; // Reduced from 16.0
+    final double scale = widthScale < heightScale ? widthScale : heightScale;
+
+    final double cardPadding = 12.0 * scale;
+    final double imageSize = 48.0 * scale;
+    final double horizontalSpacing = 10.0 * scale;
+    final double verticalSpacing = 6.0 * scale;
+    final double sectionSpacing = 12.0 * scale;
     final double borderRadius = 8.0 * scale;
 
-    final double productNameFontSize = 16.0 * scale; // Reduced from 18.0
-    final double descriptionFontSize = 12.0 * scale; // Reduced from 13.0
-    final double labelFontSize = 12.0 * scale; // Reduced from 14.0
-    final double valueFontSize = 12.0 * scale; // Reduced from 14.0
-    final double buttonFontSize = 12.0 * scale; // Reduced from 14.0
-    final double buttonHeight = 36.0 * scale; // Reduced from 40.0
-    final double buttonWidth = 120.0 * scale; // Reduced from 130.0
+    final double productNameFontSize = 16.0 * scale;
+    final double descriptionFontSize = 12.0 * scale;
+    final double labelFontSize = 12.0 * scale;
+    final double valueFontSize = 12.0 * scale;
+    final double buttonFontSize = 12.0 * scale;
+    final double buttonHeight = 36.0 * scale;
+    final double buttonWidth = 120.0 * scale;
 
-    const Color primaryColor = Color(0xFFB71C1C); // Dark Red (adjust if needed)
+    const Color primaryColor = Color(0xFFB71C1C); // Dark Red
     const Color labelColor = Colors.grey;
-    const Color valueColor = Colors.black87;    return Card(
-      color: Colors.white, // Set background to white
+    const Color valueColor = Colors.black87;
+
+    return Card(
+      color: Colors.white,
       elevation: 1.0,
-      margin: EdgeInsets.symmetric(horizontal: 8.0 * scale, vertical: 1.0 * scale), // Changed from EdgeInsets.all(8.0 * scale)
+      margin: EdgeInsets.symmetric(horizontal: 8.0 * scale, vertical: 1.0 * scale),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Padding(
         padding: EdgeInsets.all(cardPadding),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min, // Reduce vertical height
           children: [
-            // Top Section: Image, Name, Description
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image
-                Image.network(
-                  imageUrl,
-                  width: imageSize * 0.85, // Reduce image size further
-                  height: imageSize * 0.85,
-                  fit: BoxFit.contain,
-                  // Optional: Add error handling for image loading
-                  errorBuilder: (context, error, stackTrace) => Icon(
-                    Icons.broken_image,
-                    size: imageSize * 0.85,
-                    color: labelColor,
+            // Image on the left
+            Image.network(
+              imageUrl,
+              width: imageSize * 0.95,
+              height: imageSize * 0.95,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.broken_image,
+                size: imageSize * 0.95,
+                color: labelColor,
+              ),
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return SizedBox(
+                  width: imageSize * 0.95,
+                  height: imageSize * 0.95,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                      strokeWidth: 2.0 * scale,
+                    ),
                   ),
-                  // Optional: Add a loading indicator
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return SizedBox(
-                      width: imageSize * 0.85,
-                      height: imageSize * 0.85,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                          strokeWidth: 2.0 * scale,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(width: horizontalSpacing * 0.3), // Reduce spacing
-                // Name and Description
-                Expanded(
-                  child: Column(
+                );
+              },
+            ),
+            SizedBox(width: horizontalSpacing * 0.7),
+            // Main content (right side)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product name and description
+                  Text(
+                    productName,
+                    style: TextStyle(
+                      fontSize: productNameFontSize * 0.92,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: verticalSpacing * 0.5),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: descriptionFontSize * 0.92,
+                      color: labelColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: sectionSpacing * 0.3),
+                  // Two-column details
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        productName,
-                        style: TextStyle(
-                          fontSize: productNameFontSize * 0.92, // Reduce font size
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                      // Left column
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildDetailRow("Category", category, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                            SizedBox(height: verticalSpacing * 0.7),
+                            _buildDetailRow("Mfr", manufacturer, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                          ],
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: verticalSpacing / 2 * 0.7),
-                      Text(
-                        description,
-                        style: TextStyle(
-                          fontSize: descriptionFontSize * 0.92, // Reduce font size
-                          color: labelColor,
+                      SizedBox(width: horizontalSpacing * 0.5),
+                      // Right column
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildDetailRow("Mfr Part #", mfrPartNumber, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                            SizedBox(height: verticalSpacing * 0.7),
+                            _buildDetailRow("Life Cycle", lifeCycle, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                          ],
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: sectionSpacing * 0.3), // Reduce spacing
-
-            // Middle Section: Details
-            _buildDetailRow("Category", category, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-            SizedBox(height: verticalSpacing * 0.7),
-            _buildDetailRow("Mfr Part #", mfrPartNumber, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-            SizedBox(height: verticalSpacing * 0.7),
-            _buildDetailRow("Mfr", manufacturer, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-            SizedBox(height: verticalSpacing * 0.7),
-            _buildDetailRow("Life Cycle", lifeCycle, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-
-            SizedBox(height: sectionSpacing * 0.7),
-
-            // Bottom Section: Button
-            Align(
-              alignment: Alignment.centerRight,
-              child: RedButton(
-                label: "View Details",
-                onPressed: onViewDetailsPressed,
-                width: buttonWidth * 0.85, // Reduce button width
-                height: buttonHeight * 0.8, // Reduce button height
-                fontSize: buttonFontSize * 0.9, // Reduce button font size
+                  SizedBox(height: sectionSpacing * 0.5),
+                  // View Details button left-aligned
+                  RedButton(
+                    label: "View Details",
+                    onPressed: onViewDetailsPressed,
+                    width: buttonWidth * 0.85,
+                    height: buttonHeight * 0.8,
+                    fontSize: buttonFontSize * 0.9,
+                  ),
+                ],
               ),
             ),
           ],
@@ -170,7 +179,7 @@ class ProductTileL4 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 80 * scale, // Reduce label width
+          width: 70 * scale,
           child: Text(
             label,
             style: TextStyle(
@@ -181,7 +190,6 @@ class ProductTileL4 extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        // SizedBox(width: 5 * scale), // Reduce spacing
         Expanded(
           child: Text(
             value,
