@@ -141,6 +141,8 @@ class ProductTileL4 extends StatelessWidget {
                               height: imageSize * 0.95,
                               child: Center(
                                 child: CircularProgressIndicator(
+                                  
+                                  color: Color(0xFFA51414),
                                   value: loadingProgress.expectedTotalBytes != null
                                       ? loadingProgress.cumulativeBytesLoaded /
                                           loadingProgress.expectedTotalBytes!

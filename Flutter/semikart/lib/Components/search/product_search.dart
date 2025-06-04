@@ -120,7 +120,11 @@ class _ProductSearchState extends State<ProductSearch> {
           SizedBox(height: screenHeight * 0.02),
           Expanded(
             child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFFA51414), // Brand color
+                    ),
+                  )
                 : _error != null
                     ? Center(child: Text(_error!, style: const TextStyle(color: Colors.red)))
                     : _query.isEmpty

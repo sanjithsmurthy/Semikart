@@ -75,6 +75,8 @@ class RedButton extends StatelessWidget {
                     width: progressIndicatorSize,
                     height: progressIndicatorSize,
                     child: CircularProgressIndicator(
+                     
+                      color: Color(0xFFA51414),
                       strokeWidth: progressIndicatorStrokeWidth,
                       valueColor:
                           const AlwaysStoppedAnimation<Color>(Colors.white),
