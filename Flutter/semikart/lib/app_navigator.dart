@@ -219,4 +219,21 @@ class AppNavigator {
   static void openProductsRFQPage() {
     goTo(1, routeName: 'rfq_products');
   }
+
+  /// Switch to Products tab, clear stack to L1, then push L4 with arguments.
+  static void openProductsL4FromSearch({required Object arguments}) {
+    // Switch to Products tab
+    BaseScaffold.navigatorKey.currentState?.switchToTab(1);
+    // Delay to ensure tab switch, then clear stack and push L4
+    Future.delayed(const Duration(milliseconds: 100), () {
+      final navState = productsNavKey.currentState;
+      if (navState != null) {
+        navState.pushNamedAndRemoveUntil(
+          'l4',
+          (route) => route.isFirst, // Keep only L1, then push L4
+          arguments: arguments,
+        );
+      }
+    });
+  }
 }
