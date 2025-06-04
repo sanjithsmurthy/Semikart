@@ -245,7 +245,7 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
             child: Text(
               '${args['l1Name'] ?? ''} > ${args['l2Name'] ?? ''} > ${args['categoryName'] ?? ''}',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 10,
                 color: Color(0xFFA51414),
                 fontWeight: FontWeight.w500,
               ),
@@ -256,14 +256,14 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
         if (_totalResults != null) ...[
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0), // Reduced vertical padding
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Showing ${_allProducts.length} of $_totalResults products',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
                   ),
