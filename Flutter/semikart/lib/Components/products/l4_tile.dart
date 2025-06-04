@@ -59,123 +59,171 @@ class ProductTileL4 extends StatelessWidget {
     const Color valueColor = Colors.black87;
 
     return Card(
-      color: Colors.white,
-      elevation: 1.0,
+      elevation: 4.0,
       margin: EdgeInsets.symmetric(horizontal: 8.0 * scale, vertical: 1.0 * scale),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
       ),
-      child: Padding(
-        padding: EdgeInsets.all(cardPadding),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image on the left
-            (imageUrl.isEmpty)
-                ? Image.asset(
-                    'public/assets/images/products/noImageFound.png', // Place your provided image here
-                    width: imageSize * 0.95,
-                    height: imageSize * 0.95,
-                    fit: BoxFit.contain,
-                  )
-                : Image.network(
-                    imageUrl,
-                    width: imageSize * 0.95,
-                    height: imageSize * 0.95,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => Image.asset(
-                      'public/assets/images/products/noImageFound.png',
-                      width: imageSize * 0.95,
-                      height: imageSize * 0.95,
-                      fit: BoxFit.contain,
-                    ),
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return SizedBox(
-                        width: imageSize * 0.95,
-                        height: imageSize * 0.95,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                            strokeWidth: 2.0 * scale,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-            SizedBox(width: horizontalSpacing * 0.7),
-            // Main content (right side)
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Product name and description
-                  Text(
-                    productName,
-                    style: TextStyle(
-                      fontSize: productNameFontSize * 0.92,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: verticalSpacing * 0.5),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      fontSize: descriptionFontSize * 0.92,
-                      color: labelColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: sectionSpacing * 0.3),
-                  // Two-column details
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Left column
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildDetailRow("Category", category, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-                            SizedBox(height: verticalSpacing * 0.7),
-                            _buildDetailRow("Mfr", manufacturer, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: horizontalSpacing * 0.5),
-                      // Right column
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildDetailRow("Mfr Part #", mfrPartNumber, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-                            SizedBox(height: verticalSpacing * 0.7),
-                            _buildDetailRow("Life Cycle", lifeCycle, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: sectionSpacing * 0.5),
-                  // View Details button left-aligned
-                  RedButton(
-                    label: "View Details",
-                    onPressed: onViewDetailsPressed,
-                    width: buttonWidth * 0.85,
-                    height: buttonHeight * 0.8,
-                    fontSize: buttonFontSize * 0.9,
-                  ),
-                ],
-              ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFDEEEE), // Light red/pinkish
+              Colors.white,
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(borderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: Offset(0, 2),
             ),
           ],
+          border: Border(
+            left: BorderSide(
+              color: Color(0xFFA51414),
+              width: 4 * scale,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(cardPadding),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image on the left with rounded corners and shadow
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10 * scale),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.10),
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10 * scale),
+                  child: (imageUrl.isEmpty)
+                      ? Container(
+                          width: imageSize * 0.95,
+                          height: imageSize * 0.95,
+                          color: Colors.grey[200],
+                          child: Icon(
+                            Icons.broken_image,
+                            size: imageSize * 0.6,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : Image.network(
+                          imageUrl,
+                          width: imageSize * 0.95,
+                          height: imageSize * 0.95,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            width: imageSize * 0.95,
+                            height: imageSize * 0.95,
+                            color: Colors.grey[200],
+                            child: Icon(
+                              Icons.broken_image,
+                              size: imageSize * 0.6,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return SizedBox(
+                              width: imageSize * 0.95,
+                              height: imageSize * 0.95,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                  strokeWidth: 2.0 * scale,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ),
+              SizedBox(width: horizontalSpacing * 0.7),
+              // Main content (right side)
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product name and description
+                    Text(
+                      productName,
+                      style: TextStyle(
+                        fontSize: productNameFontSize * 0.92,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: verticalSpacing * 0.5),
+                    Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: descriptionFontSize * 0.92,
+                        color: labelColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: sectionSpacing * 0.3),
+                    // Two-column details
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Left column
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildDetailRow("Category", category, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                              SizedBox(height: verticalSpacing * 0.7),
+                              _buildDetailRow("Mfr", manufacturer, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: horizontalSpacing * 0.5),
+                        // Right column
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildDetailRow("Mfr Part #", mfrPartNumber, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                              SizedBox(height: verticalSpacing * 0.7),
+                              _buildDetailRow("Life Cycle", lifeCycle, labelFontSize * 0.9, valueFontSize * 0.9, scale * 0.9),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: sectionSpacing * 0.5),
+                    // View Details button left-aligned
+                    RedButton(
+                      label: "View Details",
+                      onPressed: onViewDetailsPressed,
+                      width: buttonWidth * 0.85,
+                      height: buttonHeight * 0.8,
+                      fontSize: buttonFontSize * 0.9,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

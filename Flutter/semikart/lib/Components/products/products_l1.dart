@@ -439,17 +439,26 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     required double Function(double) scaleWidth,
     required double Function(double) scaleHeight,
   }) {
-    final tileHeight = screenHeight * 0.1; // Adjust based on L1Tile's actual height if needed
-
+    final tileHeight = screenHeight * 0.1;
     return Container(
-      width: scaleWidth(20), // Width of the divider area
-      height: tileHeight, // Match the approximate height of the L1Tile content area
+      width: scaleWidth(25),
+      height: tileHeight,
       alignment: Alignment.center,
-      child: const VerticalDivider(
-        color: Color(0xFFA51414), // Line color
-        thickness: 1, // Line thickness
-        // indent: scaleHeight(10), // Optional: if you want space at the top
-        // endIndent: scaleHeight(10), // Optional: if you want space at the bottom
+      child: Container(
+        width: 1,
+        height: tileHeight * 0.85,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Color(0xFFA51414),
+              Colors.transparent,
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
       ),
     );
   }
@@ -462,14 +471,24 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     required double Function(double) scaleHeight,
   }) {
     return Container(
-      height: scaleHeight(15), // Height of the divider area
-      width: screenWidth * 0.9, // Make it slightly less than full width if desired
+      height: scaleHeight(15),
+      width: screenWidth * 0.9,
       alignment: Alignment.center,
-      child: const Divider(
-        color: Color(0xFFA51414), // Line color
-        thickness: 1, // Line thickness
-        // indent: scaleWidth(10), // Optional: if you want space at the start
-        // endIndent: scaleWidth(10), // Optional: if you want space at the end
+      child: Container(
+        height: 1,
+        width: screenWidth * 0.8,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Colors.transparent,
+              Color(0xFFA51414),
+              Colors.transparent,
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
       ),
     );
   }
