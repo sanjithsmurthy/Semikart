@@ -249,7 +249,40 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
                     text: 'Contact Us',
                     onTap: () {
                       Navigator.pop(context);
-                      print("Navigate to Contact Us");
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(Icons.phone, color: const Color(0xFFA51414)),
+                                title: Text('Phone'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  print('Phone selected');
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.message, color: const Color(0xFFA51414)),
+                                title: Text('WhatsApp'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  print('WhatsApp selected');
+                                },
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.mail, color: const Color(0xFFA51414)),
+                                title: Text('Mail'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  print('Mail selected');
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ],
