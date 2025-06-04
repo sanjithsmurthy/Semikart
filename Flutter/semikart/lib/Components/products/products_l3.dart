@@ -155,7 +155,8 @@ class _ProductsL3PageState extends State<ProductsL3Page> {
                             ? const SizedBox(
                                 width: 20,
                                 height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2)
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFFA51414),strokeWidth: 2)
                               )
                             : const Text('Create Sample L3 Item'),
                       ),

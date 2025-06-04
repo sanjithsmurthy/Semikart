@@ -73,6 +73,7 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
   bool _isLoading = false;
   bool _hasMoreData = true;
   int _currentPage = 1;
+  int _pageSize = 5; // Show only 5 products at a time
   int? _categoryId;
   int? _totalResults;
   
@@ -166,8 +167,7 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
   }// Load products from API with pagination
   Future<void> _loadProducts() async {
     if (_categoryId == null) return;
-    
-    final url = Uri.parse('http://172.16.2.5:8080/semikartapi/paginatedProductCatalog?categoryId=$_categoryId&page=$_currentPage&pageSize=20');
+    final url = Uri.parse('http://172.16.2.5:8080/semikartapi/paginatedProductCatalog?categoryId=$_categoryId&page=$_currentPage&pageSize=$_pageSize');
     
     log('L4 API: Making request to: $url');
     log('L4 API: Request categoryId: $_categoryId, page: $_currentPage');
@@ -315,10 +315,10 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
                         child: ListView.builder(
                           controller: _scrollController,
                           physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: _allProducts.length + (_hasMoreData ? 1 : 0),
+                          itemCount: _allProducts.length + (_hasMoreData || _isLoading ? 1 : 0),
                           itemBuilder: (context, index) {
                             if (index == _allProducts.length) {
-                              // Loading indicator at the bottom
+                              // Always show loading indicator if loading or has more data
                               return Container(
                                 padding: const EdgeInsets.all(16),
                                 alignment: Alignment.center,
@@ -336,7 +336,9 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
                                           ),
                                         ],
                                       )
-                                    : const SizedBox.shrink(),
+                                    : (_hasMoreData
+                                        ? const SizedBox(height: 32) // Spacer if more data is expected
+                                        : const SizedBox.shrink()),
                               );
                             }
                             

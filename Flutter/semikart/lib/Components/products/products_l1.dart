@@ -187,7 +187,10 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            trailing: const Icon(Icons.chevron_right),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              color: Color(0xFFA51414), // Set arrow color to a51414
+                            ),
                             onTap: () {
                               Navigator.pop(modalContext); // Close L2 modal
                               _showL3Categories(
@@ -269,7 +272,12 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.w300,
                               ),
-                            ),                            onTap: () {
+                            ),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              color: Color(0xFFA51414), // Set arrow color to a51414
+                            ),
+                            onTap: () {
                               Navigator.pop(modalContext); // Close L3 modal
                               log('Tapped L3: ${l3Cat['categoryName']} (ID: ${l3Cat['categoryId']})');
                               
@@ -348,8 +356,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Use scaled height for spacing
-                    SizedBox(height: scaleHeight(18)),
+                    // SizedBox(height: scaleHeight(18)), // Removed top padding
 
                     // Grid-like layout with lines
                     Padding(
@@ -432,17 +439,26 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     required double Function(double) scaleWidth,
     required double Function(double) scaleHeight,
   }) {
-    final tileHeight = screenHeight * 0.1; // Adjust based on L1Tile's actual height if needed
-
+    final tileHeight = screenHeight * 0.1;
     return Container(
-      width: scaleWidth(30), // Width of the divider area
-      height: tileHeight, // Match the approximate height of the L1Tile content area
+      width: scaleWidth(25),
+      height: tileHeight,
       alignment: Alignment.center,
-      child: const VerticalDivider(
-        color: Color(0xFFA51414), // Line color
-        thickness: 1, // Line thickness
-        // indent: scaleHeight(10), // Optional: if you want space at the top
-        // endIndent: scaleHeight(10), // Optional: if you want space at the bottom
+      child: Container(
+        width: 1,
+        height: tileHeight * 0.85,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Color(0xFFA51414),
+              Colors.transparent,
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
       ),
     );
   }
@@ -455,14 +471,24 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
     required double Function(double) scaleHeight,
   }) {
     return Container(
-      height: scaleHeight(30), // Height of the divider area
-      width: screenWidth * 0.9, // Make it slightly less than full width if desired
+      height: scaleHeight(13),
+      width: screenWidth * 0.9, // Increased from 0.9 to 0.98 for longer line
       alignment: Alignment.center,
-      child: const Divider(
-        color: Color(0xFFA51414), // Line color
-        thickness: 1, // Line thickness
-        // indent: scaleWidth(10), // Optional: if you want space at the start
-        // endIndent: scaleWidth(10), // Optional: if you want space at the end
+      child: Container(
+        height: 1,
+        width: screenWidth * 0.92, // Increased from 0.8 to 0.92 for longer line
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Colors.transparent,
+              Color(0xFFA51414),
+              Colors.transparent,
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
       ),
     );
   }
