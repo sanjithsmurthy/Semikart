@@ -63,12 +63,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               labelText: widget.label,
               labelStyle: const TextStyle(
                 color: Color(0xFF757575), // Grey color for placeholder
-                fontSize: 16,
+                fontSize: 11,
                 height: 1.2, // Adjust height for better vertical alignment
               ),
               floatingLabelStyle: const TextStyle(
                 color: Color(0xFFA51414), // Red color when focused
-                fontSize: 16,
+                fontSize: 12,
               ),
               floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically transition the label
               contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0), // Adjusted padding

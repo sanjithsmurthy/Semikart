@@ -181,15 +181,17 @@ class SearchService {
       }
     }
     
+    // Remove partial/character matches: Only allow substring matches (not char-by-char)
+    // Filter out results that do not contain the full query as a substring (case-insensitive)
+    final filteredResults = results.where((r) => r.name.toLowerCase().contains(lowerKeyword)).toList();
     // Cache the results
     if (_searchCache.length >= maxCacheSize) {
       final oldestKey = _searchCache.keys.first;
       _searchCache.remove(oldestKey);
     }
-    _searchCache[lowerKeyword] = results;
-    
-    log('Search completed. Found ${results.length} results for "$keyword"');
-    return results;
+    _searchCache[lowerKeyword] = filteredResults;
+    log('Search completed. Found \\${filteredResults.length} results for "\\$keyword"');
+    return filteredResults;
   }
   
   // Clear search cache
