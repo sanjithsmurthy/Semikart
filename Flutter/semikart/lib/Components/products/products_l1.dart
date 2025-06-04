@@ -187,7 +187,10 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            trailing: const Icon(Icons.chevron_right),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              color: Color(0xFFA51414), // Set arrow color to a51414
+                            ),
                             onTap: () {
                               Navigator.pop(modalContext); // Close L2 modal
                               _showL3Categories(
@@ -269,7 +272,12 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.w300,
                               ),
-                            ),                            onTap: () {
+                            ),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              color: Color(0xFFA51414), // Set arrow color to a51414
+                            ),
+                            onTap: () {
                               Navigator.pop(modalContext); // Close L3 modal
                               log('Tapped L3: ${l3Cat['categoryName']} (ID: ${l3Cat['categoryId']})');
                               
