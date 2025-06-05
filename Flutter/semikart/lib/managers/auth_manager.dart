@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../config/api_config.dart'; // Add this import
 import '../services/api_client.dart'; // Add this import
 
@@ -513,6 +514,65 @@ class AuthManager extends StateNotifier<AuthState> {
       
       return await _apiService.refreshToken(refreshToken);
     } catch (e) {
+      return false;
+    }
+  }
+  
+  /// Google Sign-In (no Firebase)
+  Future<bool> googleSignIn() async {
+    try {
+      final googleSignIn = GoogleSignIn();
+      final account = await googleSignIn.signIn();
+      if (account == null) {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Google sign-in cancelled',
+          isLoading: false,
+        );
+        return false;
+      }
+      final auth = await account.authentication;
+      final idToken = auth.idToken;
+      if (idToken == null) {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Failed to get Google ID token',
+          isLoading: false,
+        );
+        return false;
+      }
+      // Send the ID token to your backend
+      final response = await Dio().post(
+        'http://172.16.2.5:8080/semikartapi/googleSignIn',
+        data: {'idToken': idToken},
+        options: Options(contentType: 'application/json'),
+      );
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        final userData = response.data['data'];
+        final apiUser = ApiUser.fromJson(userData);
+        await _prefs.setString('user_data', jsonEncode(userData));
+        state = state.copyWith(
+          status: AuthStatus.authenticated,
+          user: apiUser,
+          errorMessage: null,
+          clearError: true,
+          isLoading: false,
+        );
+        return true;
+      } else {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: response.data['message'] ?? 'Google sign-in failed',
+          isLoading: false,
+        );
+        return false;
+      }
+    } catch (e) {
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        errorMessage: 'Google sign-in error: \\${e.toString()}',
+        isLoading: false,
+      );
       return false;
     }
   }
