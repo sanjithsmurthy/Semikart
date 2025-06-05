@@ -547,10 +547,34 @@ class AuthManager extends StateNotifier<AuthState> {
         data: {'idToken': idToken},
         options: Options(contentType: 'application/json'),
       );
+
+      print('Google sign-in raw response: ${response.data}'); // <-- Add this line
+
+      if (response.data == null || response.data is! Map<String, dynamic>) {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Invalid response from server',
+          isLoading: false,
+        );
+        return false;
+      }
+
       if (response.statusCode == 200 && response.data['status'] == 'success') {
-        final userData = response.data['data'];
-        final apiUser = ApiUser.fromJson(userData);
-        await _prefs.setString('user_data', jsonEncode(userData));
+        final apiUser = ApiUser.fromJson(response.data);
+        await _prefs.setString('user_data', jsonEncode(response.data));
+        // Save customerId to SharedPreferences
+        final customerIdRaw = response.data['customerId'];
+        if (customerIdRaw != null) {
+          int? customerIdInt;
+          if (customerIdRaw is int) {
+            customerIdInt = customerIdRaw;
+          } else if (customerIdRaw is String) {
+            customerIdInt = int.tryParse(customerIdRaw);
+          }
+          if (customerIdInt != null) {
+            await _prefs.setInt('customerId', customerIdInt);
+          }
+        }
         state = state.copyWith(
           status: AuthStatus.authenticated,
           user: apiUser,
