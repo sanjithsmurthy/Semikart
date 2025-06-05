@@ -371,6 +371,18 @@ class UserService {
       return false;
     }
   }
+
+  // --- Save Billing Address ---
+  Future<Map<String, dynamic>> saveBillingAddress(Map<String, dynamic> billingData) async {
+    final response = await _apiClient.dio.post('/saveBillingAddress', data: billingData);
+    return response.data;
+  }
+
+  // --- Save Shipping Address ---
+  Future<Map<String, dynamic>> saveShippingAddress(Map<String, dynamic> shippingData) async {
+    final response = await _apiClient.dio.post('/saveShippingAddress', data: shippingData);
+    return response.data;
+  }
 }
 
 // --- Riverpod Provider for UserService ---

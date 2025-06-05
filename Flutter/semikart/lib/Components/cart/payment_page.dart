@@ -8,6 +8,50 @@ import '../common/ship_bill.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'payment_failed.dart';
 import '../common/congratulations.dart';
+import 'package:Semikart/services/user_service.dart';
+
+final userService = UserService();
+
+void saveBillingAddress(BuildContext context, Map<String, dynamic> billingData) async {
+  try {
+    final result = await userService.saveBillingAddress(billingData);
+    if (result['status'] == 'success') {
+      // Show success message or update UI
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Billing address saved! ID: ${result['billingAddressId']}')),
+      );
+    } else {
+      // Show error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save billing address')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  }
+}
+
+void saveShippingAddress(BuildContext context, Map<String, dynamic> shippingData) async {
+  try {
+    final result = await userService.saveShippingAddress(shippingData);
+    if (result['status'] == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Shipping address saved! ID: ${result['shippingAddressId']}')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save shipping address')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  }
+}
+
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
 
