@@ -16,7 +16,10 @@ class OrderService {
     try {
       final endpoint = Orders.userOrders(userId);
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch orders: ${response.statusMessage}');
@@ -36,7 +39,10 @@ class OrderService {
     try {
       final endpoint = Orders.orderDetails(orderId);
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch order details: ${response.statusMessage}');
@@ -70,7 +76,11 @@ class OrderService {
         if (couponCode != null) 'couponCode': couponCode,
       };
       
-      final response = await _apiClient.dio.post(endpoint, data: data);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: data,
+      );
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to create order: ${response.statusMessage}');
@@ -94,7 +104,11 @@ class OrderService {
         'reason': reason,
       };
       
-      final response = await _apiClient.dio.post(endpoint, data: data);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: data,
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to cancel order: ${response.statusMessage}');
@@ -112,7 +126,10 @@ class OrderService {
     try {
       final endpoint = '${Orders.orderDetails(orderId)}/track';
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to track order: ${response.statusMessage}');

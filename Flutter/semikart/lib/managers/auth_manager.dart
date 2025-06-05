@@ -106,6 +106,7 @@ class ApiService {
       // Use a direct Dio call with the full URL for login to match the working approach
       final response = await Dio().post(
         'http://172.16.2.5:8080/semikartapi/login',
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: formData,
         // Do NOT set Content-Type; Dio will handle it for FormData
       );
@@ -187,6 +188,7 @@ class ApiService {
       // Use ApiConfig for endpoint
       final response = await _apiClient.dio.post(
         Auth.register,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: formData,
       );
       
@@ -236,6 +238,7 @@ class ApiService {
       // Use ApiConfig for endpoint
       final response = await _apiClient.dio.post(
         Auth.resetPassword,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: formData,
       );
       
@@ -292,6 +295,7 @@ class ApiService {
       final response = await Dio().get(
         'http://172.16.2.5:8080/semikartapi/getuserinfo',
         queryParameters: {'customerId': customerId},
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
       );
       if (response.statusCode == 200 && response.data['status'] == 'success') {
         return response.data;
@@ -441,6 +445,7 @@ class AuthManager extends StateNotifier<AuthState> {
       final dio = ApiClient().dio;
       final response = await dio.post(
         'http://172.16.2.5:8080/semikartapi/signup',
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: {
           'firstName': firstName,
           'lastName': lastName,
@@ -544,8 +549,11 @@ class AuthManager extends StateNotifier<AuthState> {
       // Send the ID token to your backend
       final response = await Dio().post(
         'http://172.16.2.5:8080/semikartapi/googleSignIn',
+        options: Options(
+          headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'},
+          contentType: 'application/json',
+        ),
         data: {'idToken': idToken},
-        options: Options(contentType: 'application/json'),
       );
 
       print('Google sign-in raw response: ${response.data}'); // <-- Add this line

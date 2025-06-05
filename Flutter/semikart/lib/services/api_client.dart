@@ -20,6 +20,8 @@ class ApiClient {
     _dio.interceptors
         .add(InterceptorsWrapper(
       onRequest: (options, handler) async {
+      // Always add x-api-key header
+      options.headers['x-api-key'] = '7b483f94-efac-4624-afc9-f161f0653eef';
       // Get token from SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('authToken');

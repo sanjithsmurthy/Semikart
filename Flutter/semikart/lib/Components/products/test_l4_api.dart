@@ -13,7 +13,7 @@ Future<void> testL4API() async {
     final url = Uri.parse('http://172.16.2.5:8080/semikartapi/paginatedProductCatalog?categoryId=$categoryId&page=1&pageSize=10');
     
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
       
       log('Response for categoryId $categoryId:');
       log('Status Code: ${response.statusCode}');
@@ -54,7 +54,7 @@ Future<void> testAvailableCategoryIds() async {
   final l1Url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy');
   
   try {
-    final l1Response = await http.get(l1Url).timeout(const Duration(seconds: 30));
+    final l1Response = await http.get(l1Url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
     
     if (l1Response.statusCode == 200) {
       final l1Data = jsonDecode(l1Response.body);
@@ -70,7 +70,7 @@ Future<void> testAvailableCategoryIds() async {
           final l2Url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_category_id=$l1Id');
           
           try {
-            final l2Response = await http.get(l2Url).timeout(const Duration(seconds: 30));
+            final l2Response = await http.get(l2Url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
             
             if (l2Response.statusCode == 200) {
               final l2Data = jsonDecode(l2Response.body);
@@ -86,7 +86,7 @@ Future<void> testAvailableCategoryIds() async {
                   final l3Url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_sub_category_id=$l2Id');
                   
                   try {
-                    final l3Response = await http.get(l3Url).timeout(const Duration(seconds: 30));
+                    final l3Response = await http.get(l3Url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
                     
                     if (l3Response.statusCode == 200) {
                       final l3Data = jsonDecode(l3Response.body);
@@ -126,7 +126,7 @@ Future<void> testProductCatalogForCategory(int categoryId) async {
   final url = Uri.parse('http://172.16.2.5:8080/semikartapi/paginatedProductCatalog?categoryId=$categoryId&page=1&pageSize=5');
   
   try {
-    final response = await http.get(url).timeout(const Duration(seconds: 30));
+    final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
     
     log('      ProductCatalog Response:');
     log('      Status Code: ${response.statusCode}');

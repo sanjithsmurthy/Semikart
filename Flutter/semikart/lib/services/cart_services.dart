@@ -31,6 +31,7 @@ class CartService {
       
       await _apiClient.dio.post(
         endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: {
           'userId': userId,
           'productId': productId,
@@ -69,7 +70,7 @@ class CartService {
         data['finalUnitPrice'] = finalUnitPrice;
       }
       
-      await _apiClient.dio.patch(endpoint, data: data);
+      await _apiClient.dio.patch(endpoint, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}), data: data);
     } catch (e) {
       log('Error updating cart item: $e');
       rethrow;
@@ -87,7 +88,10 @@ class CartService {
     // Function to fetch cart items and add to stream
     Future<void> fetchItems() async {
       try {
-        final response = await _apiClient.dio.get(endpoint);
+        final response = await _apiClient.dio.get(
+          endpoint,
+          options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        );
         if (response.statusCode == 200) {
           final List<dynamic> items = response.data;
           controller.add(items.cast<Map<String, dynamic>>());
@@ -123,7 +127,10 @@ class CartService {
     try {
       // Access static method directly through Cart class
       final endpoint = Cart.removeItem(userId, productId);
-      await _apiClient.dio.delete(endpoint);
+      await _apiClient.dio.delete(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
     } catch (e) {
       log('Error removing item from cart: $e');
       rethrow;
@@ -135,7 +142,10 @@ class CartService {
     try {
       // Access static method directly through Cart class
       final endpoint = Cart.clearCart(userId);
-      await _apiClient.dio.delete(endpoint);
+      await _apiClient.dio.delete(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
     } catch (e) {
       log('Error clearing cart: $e');
       rethrow;

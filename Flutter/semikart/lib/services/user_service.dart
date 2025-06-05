@@ -126,7 +126,11 @@ class UserService {
       final endpoint = Users.profile(user.id);
       final formData = FormData.fromMap(data);
       
-      final response = await _apiClient.dio.post(endpoint, data: formData);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: formData,
+      );
       
       if (response.statusCode == 200 || response.statusCode == 201) {
         log("User profile created/updated for ${user.id}");
@@ -146,7 +150,10 @@ class UserService {
     try {
       final endpoint = Users.profile(userId);
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode == 200) {
         return UserProfile.fromJson(response.data);
@@ -165,7 +172,10 @@ class UserService {
     try {
       final endpoint = Users.profile(userId);
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch user profile: ${response.statusMessage}');
@@ -221,7 +231,11 @@ class UserService {
       
       final endpoint = Users.profile(userId);
       
-      final response = await _apiClient.dio.patch(endpoint, data: data);
+      final response = await _apiClient.dio.patch(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: data,
+      );
       
       if (response.statusCode == 200) {
         log("User profile updated for ID: $userId");
@@ -243,7 +257,11 @@ class UserService {
     try {
       final endpoint = Users.profile(userId);
       
-      final response = await _apiClient.dio.patch(endpoint, data: updatedData);
+      final response = await _apiClient.dio.patch(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: updatedData,
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to update user profile: ${response.statusMessage}');
@@ -280,7 +298,11 @@ class UserService {
         'image': await MultipartFile.fromFile(imageFile.path),
       });
       
-      final response = await _apiClient.dio.post(endpoint, data: formData);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: formData,
+      );
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to upload profile image: ${response.statusMessage}');
@@ -300,7 +322,10 @@ class UserService {
     try {
       final endpoint = '/users/$userId/addresses';
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch addresses: ${response.statusMessage}');
@@ -322,7 +347,11 @@ class UserService {
     try {
       final endpoint = '/users/$userId/addresses';
       
-      final response = await _apiClient.dio.post(endpoint, data: addressData);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: addressData,
+      );
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add address: ${response.statusMessage}');
