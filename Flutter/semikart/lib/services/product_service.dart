@@ -16,7 +16,10 @@ class ProductService {
     try {
       final endpoint = Products.details(productId);
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch product details: ${response.statusMessage}');
@@ -36,7 +39,10 @@ class ProductService {
     try {
       final endpoint = Products.featured;
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch featured products: ${response.statusMessage}');
@@ -56,7 +62,10 @@ class ProductService {
     try {
       final endpoint = '/products/$productId/related';
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch related products: ${response.statusMessage}');
@@ -86,7 +95,11 @@ class ProductService {
         'comment': comment,
       };
       
-      final response = await _apiClient.dio.post(endpoint, data: data);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: data,
+      );
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add product review: ${response.statusMessage}');
@@ -104,7 +117,10 @@ class ProductService {
     try {
       final endpoint = '/products/$productId/reviews';
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch product reviews: ${response.statusMessage}');

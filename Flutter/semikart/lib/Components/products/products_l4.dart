@@ -173,7 +173,7 @@ class _ProductsL4PageState extends State<ProductsL4Page> {
     log('L4 API: Request categoryId: $_categoryId, page: $_currentPage');
     
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
       
       log('L4 API: Response status code: ${response.statusCode}');
       

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../config/api_config.dart'; // Add this import
 import '../services/api_client.dart'; // Add this import
 
@@ -105,6 +106,7 @@ class ApiService {
       // Use a direct Dio call with the full URL for login to match the working approach
       final response = await Dio().post(
         'http://172.16.2.5:8080/semikartapi/login',
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: formData,
         // Do NOT set Content-Type; Dio will handle it for FormData
       );
@@ -186,6 +188,7 @@ class ApiService {
       // Use ApiConfig for endpoint
       final response = await _apiClient.dio.post(
         Auth.register,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: formData,
       );
       
@@ -235,6 +238,7 @@ class ApiService {
       // Use ApiConfig for endpoint
       final response = await _apiClient.dio.post(
         Auth.resetPassword,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: formData,
       );
       
@@ -291,6 +295,7 @@ class ApiService {
       final response = await Dio().get(
         'http://172.16.2.5:8080/semikartapi/getuserinfo',
         queryParameters: {'customerId': customerId},
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
       );
       if (response.statusCode == 200 && response.data['status'] == 'success') {
         return response.data;
@@ -440,6 +445,7 @@ class AuthManager extends StateNotifier<AuthState> {
       final dio = ApiClient().dio;
       final response = await dio.post(
         'http://172.16.2.5:8080/semikartapi/signup',
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         data: {
           'firstName': firstName,
           'lastName': lastName,
@@ -513,6 +519,92 @@ class AuthManager extends StateNotifier<AuthState> {
       
       return await _apiService.refreshToken(refreshToken);
     } catch (e) {
+      return false;
+    }
+  }
+  
+  /// Google Sign-In (no Firebase)
+  Future<bool> googleSignIn() async {
+    try {
+      final googleSignIn = GoogleSignIn();
+      final account = await googleSignIn.signIn();
+      if (account == null) {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Google sign-in cancelled',
+          isLoading: false,
+        );
+        return false;
+      }
+      final auth = await account.authentication;
+      final idToken = auth.idToken;
+      if (idToken == null) {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Failed to get Google ID token',
+          isLoading: false,
+        );
+        return false;
+      }
+      // Send the ID token to your backend
+      final response = await Dio().post(
+        'http://172.16.2.5:8080/semikartapi/googleSignIn',
+        options: Options(
+          headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'},
+          contentType: 'application/json',
+        ),
+        data: {'idToken': idToken},
+      );
+
+      print('Google sign-in raw response: ${response.data}'); // <-- Add this line
+
+      if (response.data == null || response.data is! Map<String, dynamic>) {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: 'Invalid response from server',
+          isLoading: false,
+        );
+        return false;
+      }
+
+      if (response.statusCode == 200 && response.data['status'] == 'success') {
+        final apiUser = ApiUser.fromJson(response.data);
+        await _prefs.setString('user_data', jsonEncode(response.data));
+        // Save customerId to SharedPreferences
+        final customerIdRaw = response.data['customerId'];
+        if (customerIdRaw != null) {
+          int? customerIdInt;
+          if (customerIdRaw is int) {
+            customerIdInt = customerIdRaw;
+          } else if (customerIdRaw is String) {
+            customerIdInt = int.tryParse(customerIdRaw);
+          }
+          if (customerIdInt != null) {
+            await _prefs.setInt('customerId', customerIdInt);
+          }
+        }
+        state = state.copyWith(
+          status: AuthStatus.authenticated,
+          user: apiUser,
+          errorMessage: null,
+          clearError: true,
+          isLoading: false,
+        );
+        return true;
+      } else {
+        state = state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: response.data['message'] ?? 'Google sign-in failed',
+          isLoading: false,
+        );
+        return false;
+      }
+    } catch (e) {
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        errorMessage: 'Google sign-in error: \\${e.toString()}',
+        isLoading: false,
+      );
       return false;
     }
   }

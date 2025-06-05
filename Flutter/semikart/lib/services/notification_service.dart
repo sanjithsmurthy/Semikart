@@ -17,7 +17,10 @@ class NotificationService {
       // Since this isn't in ApiConfig yet, construct the endpoint
       final endpoint = '/notifications/$userId';
       
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to fetch notifications: ${response.statusMessage}');
@@ -37,7 +40,10 @@ class NotificationService {
     try {
       final endpoint = '/notifications/$notificationId/read';
       
-      final response = await _apiClient.dio.patch(endpoint);
+      final response = await _apiClient.dio.patch(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to mark notification as read: ${response.statusMessage}');
@@ -55,7 +61,10 @@ class NotificationService {
     try {
       final endpoint = '/notifications/$notificationId';
       
-      final response = await _apiClient.dio.delete(endpoint);
+      final response = await _apiClient.dio.delete(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+      );
       
       if (response.statusCode != 200) {
         throw Exception('Failed to delete notification: ${response.statusMessage}');
@@ -79,7 +88,11 @@ class NotificationService {
         'platform': platform // "android" or "ios"
       };
       
-      final response = await _apiClient.dio.post(endpoint, data: data);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: data,
+      );
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to register device: ${response.statusMessage}');
