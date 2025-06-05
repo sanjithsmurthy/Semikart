@@ -157,6 +157,7 @@ class OrderHistoryItem extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white, // Changed background to white
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -168,24 +169,24 @@ class OrderHistoryItem extends StatelessWidget {
                 Text(
                   'Default Payment Option',
                   style: TextStyle(
-                    fontSize: fontSize * 1.2,
+                    fontSize: fontSize * 1.2 - 2, // Reduced by 2px
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
                   'Razorpay gateway supports the following payment modes: All Credit Cards, All Debit Cards, NetBanking, Wallet, UPI/QR, EMI, Paylater',
-                  style: TextStyle(fontSize: fontSize),
+                  style: TextStyle(fontSize: fontSize - 2), // Reduced by 2px
                 ),
                 SizedBox(height: 16),
-                _buildPopupDetail('Transaction Id:', transactionId, fontSize),
+                _buildPopupDetail('Transaction Id:', transactionId, fontSize - 2), // Reduced by 2px
                 SizedBox(height: 8),
-                _buildPopupDetail('Amount:', 'Rs.$amount/-', fontSize),
+                _buildPopupDetail('Amount:', 'Rs.$amount/-', fontSize - 2), // Reduced by 2px
                 SizedBox(height: 16),
                 Text(
                   'Note: Please don\'t refresh the page while your transaction is in progress. If you click on back button the payment for the current transaction id will be pending. You can complete the payment within 24 hours using the "Make Payment" option in Order Dashboard (Order History).',
                   style: TextStyle(
-                    fontSize: fontSize * 0.9,
+                    fontSize: fontSize * 0.9 - 2, // Reduced by 2px
                     color: Colors.grey[700],
                   ),
                 ),
@@ -206,7 +207,7 @@ class OrderHistoryItem extends StatelessWidget {
                     child: Text(
                       'Click here to pay',
                       style: TextStyle(
-                        fontSize: fontSize,
+                        fontSize: fontSize - 2, // Reduced by 2px
                         color: Colors.white,
                       ),
                     ),
@@ -228,7 +229,7 @@ class OrderHistoryItem extends StatelessWidget {
                     child: Text(
                       'Close',
                       style: TextStyle(
-                        fontSize: fontSize,
+                        fontSize: fontSize - 2, // Reduced by 2px
                         color: Colors.white,
                       ),
                     ),
