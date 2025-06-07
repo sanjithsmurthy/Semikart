@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import '../common/search_bar.dart' as custom;
+import '../common/part_number_search_bar.dart' as custom_part;
 import 'popular_categories_grid.dart';
 import 'bom_rfq.dart';
-import '../products/products_l1.dart';
-import '../../base_scaffold.dart';
 
 class HomePageContent extends StatelessWidget {
   const HomePageContent({super.key});
@@ -53,10 +51,8 @@ class HomePageContent extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  const custom.SearchBar(
-                    hintText: 'Search',
-                    backgroundColor: Colors.white,
-                    iconColor: Color(0xFFA51414),
+                  // Replace generic search bar with part number search bar
+                  const custom_part.PartNumberSearchBar(
                     borderRadius: 20.0,
                   ),
                   SizedBox(height: screenHeight * 0.03),

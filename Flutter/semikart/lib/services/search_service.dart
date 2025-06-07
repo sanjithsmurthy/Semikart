@@ -199,4 +199,21 @@ class SearchService {
     _searchCache.clear();
     log('Search cache cleared');
   }
+
+  // Add part number search for homepage
+  Future<List<Map<String, dynamic>>> searchByPartNumber(String partNumber) async {
+    if (partNumber.isEmpty) return [];
+    // Replace with your actual endpoint for part number search
+    final url = 'http://172.16.2.5:8080/semikartapi/searchByPartNumber?query=${Uri.encodeComponent(partNumber)}';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      } else if (data['products'] != null) {
+        return List<Map<String, dynamic>>.from(data['products']);
+      }
+    }
+    return [];
+  }
 }
