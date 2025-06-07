@@ -36,7 +36,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
   Future<List<Map<String, dynamic>>> _fetchL1Categories() async {
     final url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy');
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success' && data['mainCategories'] != null) {
@@ -71,7 +71,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
   Future<List<Map<String, dynamic>>> fetchL2Categories(int l1Id) async {
     final url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_category_id=$l1Id');
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30)); // Increased timeout
+      final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30)); // Increased timeout
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success' && data['mainSubCategories'] != null) {
@@ -87,7 +87,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
   Future<List<Map<String, dynamic>>> fetchL3Categories(int l2Id) async {
     final url = Uri.parse('http://172.16.2.5:8080/semikartapi/productHierarchy?main_sub_category_id=$l2Id');
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success' && data['categories'] != null) {
@@ -109,7 +109,7 @@ class _ProductsL1PageState extends State<ProductsL1Page> {
   Future<List<Map<String, dynamic>>> fetchL4Products(int categoryId, {int page = 1, int pageSize = 20}) async {
     final url = Uri.parse('http://172.16.2.5:8080/semikartapi/paginatedProductCatalog?categoryId=$categoryId&page=$page&pageSize=$pageSize');
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      final response = await http.get(url, headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success' && data['products'] != null) {

@@ -25,7 +25,7 @@ class DataBaseService {
         'password': password,
       });
       
-      final response = await _apiClient.dio.post(endpoint, data: formData);
+      final response = await _apiClient.dio.post(endpoint, data: formData, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}));
       log('User data updated for $email');
       return response.data;
     } catch (e) {
@@ -43,7 +43,7 @@ class DataBaseService {
         'icon': iconUrl,
       });
       
-      await _apiClient.dio.post(endpoint, data: formData);
+      await _apiClient.dio.post(endpoint, data: formData, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}));
       log('L1 product uploaded: $name');
     } catch (e) {
       log('Error uploading L1 product: $e');
@@ -135,7 +135,7 @@ class DataBaseService {
   Future<List<Map<String, dynamic>>> getL1Products() async {
     try {
       final endpoint = Categories.l1List; // Using Categories class directly
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(endpoint, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}));
       
       final List<dynamic> data = response.data;
       return data.cast<Map<String, dynamic>>();
@@ -149,7 +149,7 @@ class DataBaseService {
   Future<Map<String, dynamic>> getProductDetails(String productId) async {
     try {
       final endpoint = Products.details(productId); // Using Products class method directly
-      final response = await _apiClient.dio.get(endpoint);
+      final response = await _apiClient.dio.get(endpoint, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}));
       return response.data;
     } catch (e) {
       log('Error fetching product details for $productId: $e');
@@ -166,7 +166,7 @@ class DataBaseService {
         'l1id': l1Id,
       });
       
-      final response = await _apiClient.dio.post(endpoint, data: formData);
+      final response = await _apiClient.dio.post(endpoint, data: formData, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}));
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add L2 category: ${response.statusMessage}');
@@ -189,7 +189,11 @@ class DataBaseService {
         'l1id': l1Id,
       }).toList();
       
-      final response = await _apiClient.dio.post(endpoint, data: data);
+      final response = await _apiClient.dio.post(
+        endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
+        data: data,
+      );
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add L2 categories in bulk: ${response.statusMessage}');
@@ -208,6 +212,7 @@ class DataBaseService {
       final endpoint = Categories.l2List; // Using Categories class directly
       final response = await _apiClient.dio.get(
         endpoint,
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         queryParameters: {'l1id': l1Id}
       );
       
@@ -228,7 +233,7 @@ class DataBaseService {
         'l2id': l2Id,
       });
       
-      final response = await _apiClient.dio.post(endpoint, data: formData);
+      final response = await _apiClient.dio.post(endpoint, data: formData, options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}));
       
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add L3 category: ${response.statusMessage}');
@@ -247,6 +252,7 @@ class DataBaseService {
       final endpoint = Categories.l3List; // Using Categories class directly
       final response = await _apiClient.dio.get(
         endpoint, 
+        options: Options(headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}),
         queryParameters: {'l2id': l2Id}
       );
       

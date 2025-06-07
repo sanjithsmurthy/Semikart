@@ -206,3 +206,5 @@ class _ProductsL2PageState extends State<ProductsL2Page> {
     );
   }
 }
+
+// If you add any http or Dio API call, add headers: {'x-api-key': '7b483f94-efac-4624-afc9-f161f0653eef'}

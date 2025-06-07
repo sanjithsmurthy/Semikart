@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For status bar customization
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
+import 'package:url_launcher/url_launcher.dart'; // For launching URLs
 // import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/user_profile.dart' as models;
@@ -10,6 +11,39 @@ import '../../providers/profile_image_provider.dart';
 import 'red_button.dart';
 import '../../base_scaffold.dart';
 import '../../app_navigator.dart';
+
+Future<void> launchPhoneDialer(BuildContext context) async {
+  final Uri phoneUrl = Uri.parse('tel:+919113999367');
+  if (await canLaunchUrl(phoneUrl)) {
+    await launchUrl(phoneUrl);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not open phone dialer')),
+    );
+  }
+}
+
+Future<void> launchWhatsApp(BuildContext context) async {
+  final Uri whatsappUrl = Uri.parse('https://wa.me/919113999367');
+  if (await canLaunchUrl(whatsappUrl)) {
+    await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not open WhatsApp')),
+    );
+  }
+}
+
+Future<void> launchMailClient(BuildContext context) async {
+  final Uri mailUrl = Uri.parse('mailto:orders@semikart.com');
+  if (await canLaunchUrl(mailUrl)) {
+    await launchUrl(mailUrl);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not open mail client')),
+    );
+  }
+}
 
 class HamburgerMenu extends ConsumerStatefulWidget {
   const HamburgerMenu({super.key});
@@ -242,47 +276,43 @@ class _HamburgerMenuState extends ConsumerState<HamburgerMenu> {
                       AppNavigator.pushOrderHistory(); // Push the Order History page within the Profile tab
                     },
                   ),
+                  // const SizedBox(height: 16),
+                  // _buildMenuItem(
+                  //   context,
+                  //   icon: Icons.contact_support,
+                  //   text: 'Contact Us',
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
                   const SizedBox(height: 16),
                   _buildMenuItem(
                     context,
-                    icon: Icons.contact_support,
-                    text: 'Contact Us',
+                    icon: Icons.phone,
+                    text: 'Phone',
                     onTap: () {
                       Navigator.pop(context);
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                leading: Icon(Icons.phone, color: const Color(0xFFA51414)),
-                                title: Text('Phone'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  print('Phone selected');
-                                },
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.message, color: const Color(0xFFA51414)),
-                                title: Text('WhatsApp'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  print('WhatsApp selected');
-                                },
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.mail, color: const Color(0xFFA51414)),
-                                title: Text('Mail'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  print('Mail selected');
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      launchPhoneDialer(context);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.message,
+                    text: 'WhatsApp',
+                    onTap: () {
+                      Navigator.pop(context);
+                      launchWhatsApp(context);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildMenuItem(
+                    context,
+                    icon: Icons.mail,
+                    text: 'Mail',
+                    onTap: () {
+                      Navigator.pop(context);
+                      launchMailClient(context);
                     },
                   ),
                 ],
